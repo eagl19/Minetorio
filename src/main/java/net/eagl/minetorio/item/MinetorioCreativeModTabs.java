@@ -1,6 +1,7 @@
 package net.eagl.minetorio.item;
 
 import net.eagl.minetorio.Minetorio;
+import net.eagl.minetorio.block.MinetorioBlocks;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
@@ -20,6 +21,7 @@ public class MinetorioCreativeModTabs {
                     .displayItems((pParameters,pOutput) ->{
                         pOutput.accept(MinetorioItems.SAPPHIRE.get());
                         pOutput.accept(Items.DIAMOND);
+                        pOutput.accept(MinetorioBlocks.SAPPHIRE_BLOCK.get());
                     })
                     .build());
 

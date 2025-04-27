@@ -1,6 +1,7 @@
 package net.eagl.minetorio;
 
 import com.mojang.logging.LogUtils;
+import net.eagl.minetorio.block.MinetorioBlocks;
 import net.eagl.minetorio.item.MinetorioCreativeModTabs;
 import net.eagl.minetorio.item.MinetorioItems;
 import net.minecraft.client.Minecraft;
@@ -32,6 +33,7 @@ public class Minetorio
         IEventBus modEventBus = context.getModEventBus();
 
         MinetorioItems.register(modEventBus);
+        MinetorioBlocks.register(modEventBus);
 
         MinetorioCreativeModTabs.register(modEventBus);
 
