@@ -7,5 +7,6 @@
   "block.minetorio.end_stone_sapphire_ore":"Block of End Stone Sapphire Ore",
   "creativetab.minetorio_tab": "Minetorio",
   "item.minetorio.sapphire": "Sapphire",
-  "item.minetorio.raw_sapphire": "Raw Sapphire"
+  "item.minetorio.raw_sapphire": "Raw Sapphire",
+  "item.minetorio.metal_detector": "Metal Detector"
 }

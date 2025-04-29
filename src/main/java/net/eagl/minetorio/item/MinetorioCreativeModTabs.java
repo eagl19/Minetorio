@@ -20,6 +20,7 @@ public class MinetorioCreativeModTabs {
                     .displayItems((pParameters,pOutput) ->{
                         pOutput.accept(MinetorioItems.SAPPHIRE.get());
                         pOutput.accept(MinetorioItems.RAW_SAPPHIRE.get());
+                        pOutput.accept(MinetorioItems.METAL_DETECTOR.get());
                         pOutput.accept(MinetorioBlocks.SAPPHIRE_BLOCK.get());
                         pOutput.accept(MinetorioBlocks.RAW_SAPPHIRE_BLOCK.get());
                         pOutput.accept(MinetorioBlocks.SAPPHIRE_ORE.get());
