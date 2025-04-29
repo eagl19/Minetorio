@@ -1,0 +1,10 @@
+{
+  "values": [
+    "minetorio:sapphire_block",
+    "minetorio:raw_sapphire_block",
+    "minetorio:sapphire_ore",
+    "minetorio:deepslate_sapphire_ore",
+    "minetorio:end_stone_sapphire_ore",
+    "minetorio:nether_sapphire_ore"
+  ]
+}

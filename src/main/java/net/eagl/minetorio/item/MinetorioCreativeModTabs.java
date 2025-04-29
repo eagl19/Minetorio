@@ -22,6 +22,10 @@ public class MinetorioCreativeModTabs {
                         pOutput.accept(MinetorioItems.RAW_SAPPHIRE.get());
                         pOutput.accept(MinetorioBlocks.SAPPHIRE_BLOCK.get());
                         pOutput.accept(MinetorioBlocks.RAW_SAPPHIRE_BLOCK.get());
+                        pOutput.accept(MinetorioBlocks.SAPPHIRE_ORE.get());
+                        pOutput.accept(MinetorioBlocks.DEEPSLATE_SAPPHIRE_ORE.get());
+                        pOutput.accept(MinetorioBlocks.NETHER_SAPPHIRE_ORE.get());
+                        pOutput.accept(MinetorioBlocks.END_STONE_SAPPHIRE_ORE.get());
                     })
                     .build());
 
