@@ -6,7 +6,6 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
@@ -20,8 +19,9 @@ public class MinetorioCreativeModTabs {
                     .title(Component.translatable("creativetab.minetorio_tab"))
                     .displayItems((pParameters,pOutput) ->{
                         pOutput.accept(MinetorioItems.SAPPHIRE.get());
-                        pOutput.accept(Items.DIAMOND);
+                        pOutput.accept(MinetorioItems.RAW_SAPPHIRE.get());
                         pOutput.accept(MinetorioBlocks.SAPPHIRE_BLOCK.get());
+                        pOutput.accept(MinetorioBlocks.RAW_SAPPHIRE_BLOCK.get());
                     })
                     .build());
 

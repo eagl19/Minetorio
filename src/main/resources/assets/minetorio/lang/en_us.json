@@ -1,5 +1,7 @@
 {
   "block.minetorio.sapphire_block":"Block of Sapphire",
+  "block.minetorio.raw_sapphire_block":"Block of Raw Sapphire",
   "creativetab.minetorio_tab": "Minetorio",
-  "item.minetorio.sapphire": "Sapphire"
+  "item.minetorio.sapphire": "Sapphire",
+  "item.minetorio.raw_sapphire": "Raw Sapphire"
 }
