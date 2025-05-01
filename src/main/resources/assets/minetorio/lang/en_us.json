@@ -11,5 +11,7 @@
   "item.minetorio.raw_sapphire": "Raw Sapphire",
   "item.minetorio.sapphire": "Sapphire",
   "item.minetorio.strawberry": "Strawberry",
-  "item.minetorio.pine_cone": "Pine Cone"
+  "item.minetorio.pine_cone": "Pine Cone",
+  "tooltip.minetorio.metal_detector.tooltip": "Find underground valuables",
+  "tooltip.minetorio.duplicator_block.tooltip": "When pressed, it places a block in front. The placed block disappears after 10 seconds."
 }
