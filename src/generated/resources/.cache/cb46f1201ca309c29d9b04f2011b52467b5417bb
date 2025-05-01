@@ -1,0 +1,8 @@
+// 1.20.1	2025-05-01T22:09:53.9335506	Tags for minecraft:block mod id minetorio
+398f5525c37cc9c35d0ab89e97e490cf1a7b40da data/forge/tags/blocks/needs_netherite_tool.json
+c2991d529a9c6b5b21624d8def77ebf47cc103ea data/minecraft/tags/blocks/mineable/pickaxe.json
+545f48a201480eee4780262f27bbbfadf23a53a8 data/minecraft/tags/blocks/needs_diamond_tool.json
+9a213c79dffccc34c190bf3d084e621ef218f2b8 data/minecraft/tags/blocks/needs_iron_tool.json
+46eecd26bbceb75376b64118a3749686eff7a5f7 data/minecraft/tags/blocks/needs_stone_tool.json
+7192a04fed9d4fd20156041f6b1bc702d22b803a data/minetorio/tags/blocks/metal_detector_valuables.json
+92833533084e321fe85b5ccfee5339d7d43cabaf data/minetorio/tags/blocks/ores.json
