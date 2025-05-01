@@ -19,7 +19,6 @@ public class ModItemModelProvider extends ItemModelProvider {
     protected void registerModels() {
         simpleItem(MinetorioItems.SAPPHIRE);
         simpleItem(MinetorioItems.RAW_SAPPHIRE);
-
         simpleItem(MinetorioItems.METAL_DETECTOR);
         simpleItem(MinetorioItems.PINE_CONE);
         simpleItem(MinetorioItems.STRAWBERRY);
