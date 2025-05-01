@@ -1,7 +1,7 @@
 package net.eagl.minetorio.block;
 
 import net.eagl.minetorio.Minetorio;
-import net.eagl.minetorio.block.custom.SoundBlock;
+import net.eagl.minetorio.block.custom.DuplicatorBlock;
 import net.eagl.minetorio.item.MinetorioItems;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.item.BlockItem;
@@ -40,8 +40,8 @@ public class MinetorioBlocks {
             ()-> new DropExperienceBlock(BlockBehaviour.Properties.copy(Blocks.STONE)
                     .strength(5f).requiresCorrectToolForDrops(), UniformInt.of(3,7)));
 
-    public static final RegistryObject<Block> SOUND_BLOCK = registerBlock("sound_block",
-            ()-> new SoundBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)));
+    public static final RegistryObject<Block> DUPLICATOR_BLOCK = registerBlock("duplicator_block",
+            ()-> new DuplicatorBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)));
 
     private static <T extends Block> RegistryObject<T> registerBlock(String name, Supplier<T> block){
         RegistryObject<T> toReturn = BLOCKS.register(name,block);

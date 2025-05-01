@@ -1,13 +1,15 @@
 {
-  "block.minetorio.sapphire_block":"Block of Sapphire",
-  "block.minetorio.raw_sapphire_block":"Block of Raw Sapphire",
-  "block.minetorio.sapphire_ore":"Block of Sapphire Ore",
-  "block.minetorio.deepslate_sapphire_ore":"Block of Deepslate Sapphire Ore",
-  "block.minetorio.nether_sapphire_ore":"Block of Nether Sapphire Ore",
-  "block.minetorio.end_stone_sapphire_ore":"Block of End Stone Sapphire Ore",
-  "block.minetorio.sound_block":"Sound Block",
+  "block.minetorio.deepslate_sapphire_ore": "Block of Deepslate Sapphire Ore",
+  "block.minetorio.duplicator_block": "Duplicator Block",
+  "block.minetorio.end_stone_sapphire_ore": "Block of End Stone Sapphire Ore",
+  "block.minetorio.nether_sapphire_ore": "Block of Nether Sapphire Ore",
+  "block.minetorio.raw_sapphire_block": "Block of Raw Sapphire",
+  "block.minetorio.sapphire_block": "Block of Sapphire",
+  "block.minetorio.sapphire_ore": "Block of Sapphire Ore",
   "creativetab.minetorio_tab": "Minetorio",
-  "item.minetorio.sapphire": "Sapphire",
+  "item.minetorio.metal_detector": "Metal Detector",
   "item.minetorio.raw_sapphire": "Raw Sapphire",
-  "item.minetorio.metal_detector": "Metal Detector"
+  "item.minetorio.sapphire": "Sapphire",
+  "item.minetorio.strawberry": "Strawberry",
+  "item.minetorio.pine_cone": "Pine Cone"
 }
