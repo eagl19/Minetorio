@@ -26,8 +26,11 @@ public class ModItemModelProvider extends ItemModelProvider {
     }
 
     private ItemModelBuilder simpleItem(RegistryObject<Item> item) {
+        if (item.getId() == null) {
+            throw new IllegalStateException("Item ID is null — item might not be registered yet: " + item);
+        }
         return withExistingParent(item.getId().getPath(),
-                new ResourceLocation("item/generated")).texture("layer0",
-                new ResourceLocation(Minetorio.MOD_ID,"item/" + item.getId().getPath()));
+                ResourceLocation.fromNamespaceAndPath("minecraft", "item/generated")).texture("layer0",
+                ResourceLocation.fromNamespaceAndPath(Minetorio.MOD_ID,"item/" + item.getId().getPath()));
     }
 }
