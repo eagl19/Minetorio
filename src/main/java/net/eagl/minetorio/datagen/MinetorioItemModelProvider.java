@@ -105,7 +105,7 @@ public class MinetorioItemModelProvider extends ItemModelProvider {
                         .texture("layer0", armorItemResLoc)
                         .texture("layer1", trimResLoc);
 
-                this.withExistingParent(itemRegistryObject.getId().getPath(),
+                this.withExistingParent(Objects.requireNonNull(itemRegistryObject.getId()).getPath(),
                                 mcLoc("item/generated"))
                         .override()
                         .model(new ModelFile.UncheckedModelFile(trimNameResLoc))
