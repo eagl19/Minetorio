@@ -12,6 +12,16 @@
   "item.minetorio.sapphire": "Sapphire",
   "item.minetorio.strawberry": "Strawberry",
   "item.minetorio.pine_cone": "Pine Cone",
+  "item.minetorio.sapphire_staff": "Sapphire Staff",
   "tooltip.minetorio.metal_detector.tooltip": "Find underground valuables",
-  "tooltip.minetorio.duplicator_block.tooltip": "When pressed, it places a block in front. The placed block disappears after 10 seconds."
+  "tooltip.minetorio.duplicator_block.tooltip": "When pressed, it places a block in front. The placed block disappears after 10 seconds.",
+  "block.minetorio.sapphire_stairs": "Sapphire Stairs",
+  "block.minetorio.sapphire_slab": "Sapphire Slab",
+  "block.minetorio.sapphire_button": "Sapphire Button",
+  "block.minetorio.sapphire_pressure_plate": "Sapphire Pressure Plate",
+  "block.minetorio.sapphire_fence": "Sapphire Fence",
+  "block.minetorio.sapphire_fence_gate": "Sapphire Fence Gate",
+  "block.minetorio.sapphire_wall": "Sapphire Wall",
+  "block.minetorio.sapphire_door": "Sapphire Door",
+  "block.minetorio.sapphire_trapdoor": "Sapphire Trapdoor"
 }

@@ -1,8 +1,0 @@
-// 1.20.1	2025-05-01T22:09:53.9335506	Loot Tables
-2b8158eff045b2c5bbc97f354728072584c26262 data/minetorio/loot_tables/blocks/deepslate_sapphire_ore.json
-1edf53fc586218046966968c762289b9fc260e9a data/minetorio/loot_tables/blocks/duplicator_block.json
-38d24faba8fb377bad1711609f0e09c872b82ba8 data/minetorio/loot_tables/blocks/end_stone_sapphire_ore.json
-6ab772c77a3cdb0d88e47f9fef9aea2f15e32baf data/minetorio/loot_tables/blocks/nether_sapphire_ore.json
-b1c7eb703065591ede25294e51d3fbab095cba84 data/minetorio/loot_tables/blocks/raw_sapphire_block.json
-54547197dfbade5b34d27d6c0508a4ec78e35334 data/minetorio/loot_tables/blocks/sapphire_block.json
-fae06d4f5a231e7028e83c47d9999e90d5299275 data/minetorio/loot_tables/blocks/sapphire_ore.json

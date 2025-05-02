@@ -37,6 +37,18 @@ public class ModBlockLootTables extends BlockLootSubProvider {
         this.add(MinetorioBlocks.END_STONE_SAPPHIRE_ORE.get(),
                 block -> createSapphireOreDrops(MinetorioBlocks.END_STONE_SAPPHIRE_ORE.get(), MinetorioItems.RAW_SAPPHIRE.get()));
 
+        this.dropSelf(MinetorioBlocks.SAPPHIRE_STAIRS.get());
+        this.dropSelf(MinetorioBlocks.SAPPHIRE_BUTTON.get());
+        this.dropSelf(MinetorioBlocks.SAPPHIRE_PRESSURE_PLATE.get());
+        this.dropSelf(MinetorioBlocks.SAPPHIRE_TRAPDOOR.get());
+        this.dropSelf(MinetorioBlocks.SAPPHIRE_FENCE.get());
+        this.dropSelf(MinetorioBlocks.SAPPHIRE_FENCE_GATE.get());
+        this.dropSelf(MinetorioBlocks.SAPPHIRE_WALL.get());
+
+        this.add(MinetorioBlocks.SAPPHIRE_SLAB.get(),
+                block -> createSlabItemTable(MinetorioBlocks.SAPPHIRE_SLAB.get()));
+        this.add(MinetorioBlocks.SAPPHIRE_DOOR.get(),
+                block -> createDoorTable(MinetorioBlocks.SAPPHIRE_DOOR.get()));
     }
 
     protected LootTable.Builder createSapphireOreDrops(Block pBlock, Item item) {

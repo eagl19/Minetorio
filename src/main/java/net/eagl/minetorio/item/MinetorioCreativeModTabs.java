@@ -23,6 +23,8 @@ public class MinetorioCreativeModTabs {
                         pOutput.accept(MinetorioItems.METAL_DETECTOR.get());
                         pOutput.accept(MinetorioItems.STRAWBERRY.get());
                         pOutput.accept(MinetorioItems.PINE_CONE.get());
+                        pOutput.accept(MinetorioItems.SAPPHIRE_STAFF.get());
+
                         pOutput.accept(MinetorioBlocks.SAPPHIRE_BLOCK.get());
                         pOutput.accept(MinetorioBlocks.RAW_SAPPHIRE_BLOCK.get());
                         pOutput.accept(MinetorioBlocks.SAPPHIRE_ORE.get());
@@ -30,6 +32,16 @@ public class MinetorioCreativeModTabs {
                         pOutput.accept(MinetorioBlocks.NETHER_SAPPHIRE_ORE.get());
                         pOutput.accept(MinetorioBlocks.END_STONE_SAPPHIRE_ORE.get());
                         pOutput.accept(MinetorioBlocks.DUPLICATOR_BLOCK.get());
+
+                        pOutput.accept(MinetorioBlocks.SAPPHIRE_BUTTON.get());
+                        pOutput.accept(MinetorioBlocks.SAPPHIRE_DOOR.get());
+                        pOutput.accept(MinetorioBlocks.SAPPHIRE_FENCE.get());
+                        pOutput.accept(MinetorioBlocks.SAPPHIRE_FENCE_GATE.get());
+                        pOutput.accept(MinetorioBlocks.SAPPHIRE_PRESSURE_PLATE.get());
+                        pOutput.accept(MinetorioBlocks.SAPPHIRE_SLAB.get());
+                        pOutput.accept(MinetorioBlocks.SAPPHIRE_STAIRS.get());
+                        pOutput.accept(MinetorioBlocks.SAPPHIRE_TRAPDOOR.get());
+                        pOutput.accept(MinetorioBlocks.SAPPHIRE_WALL.get());
                     })
                     .build());
 
