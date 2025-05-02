@@ -6,6 +6,7 @@ import net.eagl.minetorio.util.MinetorioTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.ItemTagsProvider;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.NotNull;
@@ -28,6 +29,12 @@ public class MinetorioItemTagGenerator extends ItemTagsProvider {
 
         this.tag(MinetorioTags.Items.FUELS)
                 .add(MinetorioItems.PINE_CONE.get());
+
+        this.tag(ItemTags.TRIMMABLE_ARMOR)
+                .add(MinetorioItems.SAPPHIRE_HELMET.get(),
+                        MinetorioItems.SAPPHIRE_CHESTPLATE.get(),
+                        MinetorioItems.SAPPHIRE_LEGGINGS.get(),
+                        MinetorioItems.SAPPHIRE_BOOTS.get());
 
     }
 }
