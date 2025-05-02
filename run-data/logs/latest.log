@@ -1,29 +1,29 @@
-[02трав.2025 13:48:15.435] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher running: args [--launchTarget, forgedatauserdev, --assetIndex, 5, --assetsDir, C:\Users\Eagl\.gradle\caches\forge_gradle\assets, --gameDir, ., --fml.forgeVersion, 47.4.0, --fml.mcVersion, 1.20.1, --fml.forgeGroup, net.minecraftforge, --fml.mcpVersion, 20230612.114412, --mod, minetorio, --all, --output, D:\Instal\Minetorio\src\generated\resources, --existing, D:\Instal\Minetorio\src\main\resources]
-[02трав.2025 13:48:15.452] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher 10.0.9+10.0.9+main.dcd20f30 starting: java version 17.0.15 by Eclipse Adoptium; OS Windows 10 arch amd64 version 10.0
-[02трав.2025 13:48:15.853] [main/INFO] [net.minecraftforge.fml.loading.ImmediateWindowHandler/]: ImmediateWindowProvider not loading because launch target is forgedatauserdev
-[02трав.2025 13:48:16.148] [main/INFO] [mixin/]: SpongePowered MIXIN Subsystem Version=0.8.5 Source=union:/C:/Users/Eagl/.gradle/caches/modules-2/files-2.1/org.spongepowered/mixin/0.8.5/9d1c0c3a304ae6697ecd477218fa61b850bf57fc/mixin-0.8.5.jar%23128!/ Service=ModLauncher Env=CLIENT
-[02трав.2025 13:48:17.185] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\Eagl\.gradle\caches\modules-2\files-2.1\net.minecraftforge\javafmllanguage\1.20.1-47.4.0\f0c0b352173d0a378cbdcec9cfc4ba65899a721\javafmllanguage-1.20.1-47.4.0.jar is missing mods.toml file
-[02трав.2025 13:48:17.207] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\Eagl\.gradle\caches\modules-2\files-2.1\net.minecraftforge\lowcodelanguage\1.20.1-47.4.0\e862740d8c84d08dbfedea412bef88fe42e727c5\lowcodelanguage-1.20.1-47.4.0.jar is missing mods.toml file
-[02трав.2025 13:48:17.216] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\Eagl\.gradle\caches\modules-2\files-2.1\net.minecraftforge\mclanguage\1.20.1-47.4.0\5719b3a297a33f877ed5dde4cb4bd75c859096af\mclanguage-1.20.1-47.4.0.jar is missing mods.toml file
-[02трав.2025 13:48:17.232] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\Eagl\.gradle\caches\modules-2\files-2.1\net.minecraftforge\fmlcore\1.20.1-47.4.0\235975dafa4309945b59c56b53f31dc5b65a6051\fmlcore-1.20.1-47.4.0.jar is missing mods.toml file
-[02трав.2025 13:48:17.434] [main/INFO] [net.minecraftforge.fml.loading.moddiscovery.JarInJarDependencyLocator/]: No dependencies to load found. Skipping!
-[02трав.2025 13:48:21.689] [main/INFO] [cpw.mods.modlauncher.LaunchServiceHandler/MODLAUNCHER]: Launching target 'forgedatauserdev' with arguments [--gameDir, ., --assetsDir, C:\Users\Eagl\.gradle\caches\forge_gradle\assets, --assetIndex, 5, --mod, minetorio, --all, --output, D:\Instal\Minetorio\src\generated\resources, --existing, D:\Instal\Minetorio\src\main\resources]
-[02трав.2025 13:48:23.042] [main/INFO] [net.minecraftforge.data.loading.DatagenModLoader/]: Initializing Data Gatherer for mods [minetorio]
-[02трав.2025 13:48:35.886] [modloading-worker-0/INFO] [net.minecraftforge.common.ForgeMod/FORGEMOD]: Forge mod loading, version 47.4.0, for MC 1.20.1 with MCP 20230612.114412
-[02трав.2025 13:48:35.899] [modloading-worker-0/INFO] [net.minecraftforge.common.MinecraftForge/FORGE]: MinecraftForge v47.4.0 Initialized
-[02трав.2025 13:48:37.001] [main/WARN] [net.minecraft.server.packs.VanillaPackResourcesBuilder/]: Assets URL 'union:/C:/Users/Eagl/.gradle/caches/forge_gradle/minecraft_user_repo/net/minecraftforge/forge/1.20.1-47.4.0_mapped_parchment_2023.06.26-1.20.1/forge-1.20.1-47.4.0_mapped_parchment_2023.06.26-1.20.1.jar%23191!/assets/.mcassetsroot' uses unexpected schema
-[02трав.2025 13:48:37.004] [main/WARN] [net.minecraft.server.packs.VanillaPackResourcesBuilder/]: Assets URL 'union:/C:/Users/Eagl/.gradle/caches/forge_gradle/minecraft_user_repo/net/minecraftforge/forge/1.20.1-47.4.0_mapped_parchment_2023.06.26-1.20.1/forge-1.20.1-47.4.0_mapped_parchment_2023.06.26-1.20.1.jar%23191!/data/.mcassetsroot' uses unexpected schema
-[02трав.2025 13:48:37.364] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Recipes
-[02трав.2025 13:48:37.459] [main/INFO] [net.minecraft.data.DataGenerator/]: Recipes finished after 93 ms
-[02трав.2025 13:48:37.460] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Loot Tables
-[02трав.2025 13:48:37.668] [main/INFO] [net.minecraft.data.DataGenerator/]: Loot Tables finished after 208 ms
-[02трав.2025 13:48:37.669] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Block States: minetorio
-[02трав.2025 13:48:38.114] [main/INFO] [net.minecraft.data.DataGenerator/]: Block States: minetorio finished after 444 ms
-[02трав.2025 13:48:38.115] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Item Models: minetorio
-[02трав.2025 13:48:38.145] [main/INFO] [net.minecraft.data.DataGenerator/]: Item Models: minetorio finished after 30 ms
-[02трав.2025 13:48:38.145] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Tags for minecraft:block mod id minetorio
-[02трав.2025 13:48:38.182] [main/INFO] [net.minecraft.data.DataGenerator/]: Tags for minecraft:block mod id minetorio finished after 36 ms
-[02трав.2025 13:48:38.183] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Tags for minecraft:item mod id minetorio
-[02трав.2025 13:48:38.201] [main/INFO] [net.minecraft.data.DataGenerator/]: Tags for minecraft:item mod id minetorio finished after 16 ms
-[02трав.2025 13:48:38.201] [main/INFO] [net.minecraft.data.DataGenerator/]: All providers took: 837 ms
-[02трав.2025 13:48:38.225] [main/INFO] [net.minecraft.data.HashCache/]: Caching: total files: 125, old count: 124, new count: 126, removed stale: 0, written: 1
+[02мая2025 19:20:01.993] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher running: args [--launchTarget, forgedatauserdev, --assetIndex, 5, --assetsDir, C:\Users\111111\.gradle\caches\forge_gradle\assets, --gameDir, ., --fml.forgeVersion, 47.4.0, --fml.mcVersion, 1.20.1, --fml.forgeGroup, net.minecraftforge, --fml.mcpVersion, 20230612.114412, --mod, minetorio, --all, --output, D:\Minetorio\src\generated\resources, --existing, D:\Minetorio\src\main\resources]
+[02мая2025 19:20:02.003] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher 10.0.9+10.0.9+main.dcd20f30 starting: java version 17.0.15 by Eclipse Adoptium; OS Windows 10 arch amd64 version 10.0
+[02мая2025 19:20:02.318] [main/INFO] [net.minecraftforge.fml.loading.ImmediateWindowHandler/]: ImmediateWindowProvider not loading because launch target is forgedatauserdev
+[02мая2025 19:20:02.494] [main/INFO] [mixin/]: SpongePowered MIXIN Subsystem Version=0.8.5 Source=union:/C:/Users/111111/.gradle/caches/modules-2/files-2.1/org.spongepowered/mixin/0.8.5/9d1c0c3a304ae6697ecd477218fa61b850bf57fc/mixin-0.8.5.jar%23128!/ Service=ModLauncher Env=CLIENT
+[02мая2025 19:20:03.358] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\111111\.gradle\caches\modules-2\files-2.1\net.minecraftforge\javafmllanguage\1.20.1-47.4.0\f0c0b352173d0a378cbdcec9cfc4ba65899a721\javafmllanguage-1.20.1-47.4.0.jar is missing mods.toml file
+[02мая2025 19:20:03.371] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\111111\.gradle\caches\modules-2\files-2.1\net.minecraftforge\lowcodelanguage\1.20.1-47.4.0\e862740d8c84d08dbfedea412bef88fe42e727c5\lowcodelanguage-1.20.1-47.4.0.jar is missing mods.toml file
+[02мая2025 19:20:03.380] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\111111\.gradle\caches\modules-2\files-2.1\net.minecraftforge\mclanguage\1.20.1-47.4.0\5719b3a297a33f877ed5dde4cb4bd75c859096af\mclanguage-1.20.1-47.4.0.jar is missing mods.toml file
+[02мая2025 19:20:03.391] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\111111\.gradle\caches\modules-2\files-2.1\net.minecraftforge\fmlcore\1.20.1-47.4.0\235975dafa4309945b59c56b53f31dc5b65a6051\fmlcore-1.20.1-47.4.0.jar is missing mods.toml file
+[02мая2025 19:20:03.603] [main/INFO] [net.minecraftforge.fml.loading.moddiscovery.JarInJarDependencyLocator/]: No dependencies to load found. Skipping!
+[02мая2025 19:20:07.133] [main/INFO] [cpw.mods.modlauncher.LaunchServiceHandler/MODLAUNCHER]: Launching target 'forgedatauserdev' with arguments [--gameDir, ., --assetsDir, C:\Users\111111\.gradle\caches\forge_gradle\assets, --assetIndex, 5, --mod, minetorio, --all, --output, D:\Minetorio\src\generated\resources, --existing, D:\Minetorio\src\main\resources]
+[02мая2025 19:20:09.231] [main/INFO] [net.minecraftforge.data.loading.DatagenModLoader/]: Initializing Data Gatherer for mods [minetorio]
+[02мая2025 19:20:22.074] [modloading-worker-0/INFO] [net.minecraftforge.common.ForgeMod/FORGEMOD]: Forge mod loading, version 47.4.0, for MC 1.20.1 with MCP 20230612.114412
+[02мая2025 19:20:22.081] [modloading-worker-0/INFO] [net.minecraftforge.common.MinecraftForge/FORGE]: MinecraftForge v47.4.0 Initialized
+[02мая2025 19:20:23.625] [main/WARN] [net.minecraft.server.packs.VanillaPackResourcesBuilder/]: Assets URL 'union:/C:/Users/111111/.gradle/caches/forge_gradle/minecraft_user_repo/net/minecraftforge/forge/1.20.1-47.4.0_mapped_parchment_2023.06.26-1.20.1/forge-1.20.1-47.4.0_mapped_parchment_2023.06.26-1.20.1.jar%23191!/assets/.mcassetsroot' uses unexpected schema
+[02мая2025 19:20:23.626] [main/WARN] [net.minecraft.server.packs.VanillaPackResourcesBuilder/]: Assets URL 'union:/C:/Users/111111/.gradle/caches/forge_gradle/minecraft_user_repo/net/minecraftforge/forge/1.20.1-47.4.0_mapped_parchment_2023.06.26-1.20.1/forge-1.20.1-47.4.0_mapped_parchment_2023.06.26-1.20.1.jar%23191!/data/.mcassetsroot' uses unexpected schema
+[02мая2025 19:20:24.160] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Recipes
+[02мая2025 19:20:24.469] [main/INFO] [net.minecraft.data.DataGenerator/]: Recipes finished after 307 ms
+[02мая2025 19:20:24.469] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Loot Tables
+[02мая2025 19:20:24.683] [main/INFO] [net.minecraft.data.DataGenerator/]: Loot Tables finished after 214 ms
+[02мая2025 19:20:24.684] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Block States: minetorio
+[02мая2025 19:20:25.169] [main/INFO] [net.minecraft.data.DataGenerator/]: Block States: minetorio finished after 483 ms
+[02мая2025 19:20:25.169] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Item Models: minetorio
+[02мая2025 19:20:25.199] [main/INFO] [net.minecraft.data.DataGenerator/]: Item Models: minetorio finished after 30 ms
+[02мая2025 19:20:25.199] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Tags for minecraft:block mod id minetorio
+[02мая2025 19:20:25.232] [main/INFO] [net.minecraft.data.DataGenerator/]: Tags for minecraft:block mod id minetorio finished after 33 ms
+[02мая2025 19:20:25.232] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Tags for minecraft:item mod id minetorio
+[02мая2025 19:20:25.237] [main/INFO] [net.minecraft.data.DataGenerator/]: Tags for minecraft:item mod id minetorio finished after 3 ms
+[02мая2025 19:20:25.237] [main/INFO] [net.minecraft.data.DataGenerator/]: All providers took: 1078 ms
+[02мая2025 19:20:25.264] [main/INFO] [net.minecraft.data.HashCache/]: Caching: total files: 131, old count: 0, new count: 132, removed stale: 0, written: 131
