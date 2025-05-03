@@ -29,5 +29,7 @@ public class DataGenerators {
         MinetorioBlockTagGenerator blockTagGenerator = generator.addProvider(event.includeServer(),
                 new MinetorioBlockTagGenerator(packOutput, lookupProvider, existingFileHelper));
         generator.addProvider(event.includeServer(), new MinetorioItemTagGenerator(packOutput, lookupProvider, blockTagGenerator.contentsGetter(), existingFileHelper));
+
+        generator.addProvider(event.includeServer(), new MinetorioGlobalLootModifiersProvider(packOutput));
     }
 }

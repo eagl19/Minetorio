@@ -3,6 +3,7 @@ package net.eagl.minetorio.item;
 import net.eagl.minetorio.Minetorio;
 import net.eagl.minetorio.item.custom.FuelItem;
 import net.eagl.minetorio.item.custom.MetalDetectorItem;
+import net.eagl.minetorio.item.custom.MinetorioArmorItem;
 import net.minecraft.world.item.*;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
@@ -37,7 +38,7 @@ public class MinetorioItems {
             () -> new HoeItem(MinetorioToolTiers.SAPPHIRE, 0, 0, new Item.Properties()));
 
     public static final RegistryObject<Item> SAPPHIRE_HELMET = ITEMS.register("sapphire_helmet",
-            () -> new ArmorItem(MinetorioArmorMaterials.SAPPHIRE, ArmorItem.Type.HELMET, new Item.Properties()));
+            () -> new MinetorioArmorItem(MinetorioArmorMaterials.SAPPHIRE, ArmorItem.Type.HELMET, new Item.Properties()));
     public static final RegistryObject<Item> SAPPHIRE_CHESTPLATE = ITEMS.register("sapphire_chestplate",
             () -> new ArmorItem(MinetorioArmorMaterials.SAPPHIRE, ArmorItem.Type.CHESTPLATE, new Item.Properties()));
     public static final RegistryObject<Item> SAPPHIRE_LEGGINGS = ITEMS.register("sapphire_leggings",

@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/outer_stairs",
-  "textures": {
-    "bottom": "minetorio:block/sapphire_block",
-    "side": "minetorio:block/sapphire_block",
-    "top": "minetorio:block/sapphire_block"
-  }
-}

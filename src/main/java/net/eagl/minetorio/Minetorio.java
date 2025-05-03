@@ -4,6 +4,7 @@ import com.mojang.logging.LogUtils;
 import net.eagl.minetorio.block.MinetorioBlocks;
 import net.eagl.minetorio.item.MinetorioCreativeModTabs;
 import net.eagl.minetorio.item.MinetorioItems;
+import net.eagl.minetorio.loot.MinetorioLootModifiers;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
@@ -35,6 +36,7 @@ public class Minetorio
         MinetorioBlocks.register(modEventBus);
 
         MinetorioCreativeModTabs.register(modEventBus);
+        MinetorioLootModifiers.register(modEventBus);
 
         modEventBus.addListener(this::commonSetup);
 
