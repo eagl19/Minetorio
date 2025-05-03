@@ -1,6 +1,7 @@
 package net.eagl.minetorio.item;
 
 import net.eagl.minetorio.Minetorio;
+import net.eagl.minetorio.block.MinetorioBlocks;
 import net.eagl.minetorio.item.custom.FuelItem;
 import net.eagl.minetorio.item.custom.MetalDetectorItem;
 import net.eagl.minetorio.item.custom.MinetorioArmorItem;
@@ -45,6 +46,13 @@ public class MinetorioItems {
             () -> new ArmorItem(MinetorioArmorMaterials.SAPPHIRE, ArmorItem.Type.LEGGINGS, new Item.Properties()));
     public static final RegistryObject<Item> SAPPHIRE_BOOTS = ITEMS.register("sapphire_boots",
             () -> new ArmorItem(MinetorioArmorMaterials.SAPPHIRE, ArmorItem.Type.BOOTS, new Item.Properties()));
+    public static final RegistryObject<Item> STRAWBERRY_SEEDS = ITEMS.register("strawberry_seeds",
+            () -> new ItemNameBlockItem(MinetorioBlocks.STRAWBERRY_CROP.get(), new Item.Properties()));
+
+    public static final RegistryObject<Item> CORN_SEEDS = ITEMS.register("corn_seeds",
+            () -> new ItemNameBlockItem(MinetorioBlocks.CORN_CROP.get(), new Item.Properties()));
+    public static final RegistryObject<Item> CORN = ITEMS.register("corn",
+            () -> new Item(new Item.Properties()));
 
 
     public static void register(IEventBus eventBus){

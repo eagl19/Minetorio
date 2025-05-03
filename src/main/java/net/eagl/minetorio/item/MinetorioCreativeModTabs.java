@@ -22,6 +22,9 @@ public class MinetorioCreativeModTabs {
                         pOutput.accept(MinetorioItems.RAW_SAPPHIRE.get());
                         pOutput.accept(MinetorioItems.METAL_DETECTOR.get());
                         pOutput.accept(MinetorioItems.STRAWBERRY.get());
+                        pOutput.accept(MinetorioItems.STRAWBERRY_SEEDS.get());
+                        pOutput.accept(MinetorioItems.CORN.get());
+                        pOutput.accept(MinetorioItems.CORN_SEEDS.get());
                         pOutput.accept(MinetorioItems.PINE_CONE.get());
                         pOutput.accept(MinetorioItems.SAPPHIRE_STAFF.get());
 

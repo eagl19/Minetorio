@@ -31,6 +31,9 @@
   "item.minetorio.sapphire_chestplate": "Sapphire Chestplate",
   "item.minetorio.sapphire_leggings": "Sapphire Leggings",
   "item.minetorio.sapphire_boots": "Sapphire Boots",
+  "item.minetorio.strawberry_seeds": "Strawberry Seeds",
+  "item.minetorio.corn": "Corn",
+  "item.minetorio.corn_seeds": "Corn Seeds",
   "tooltip.minetorio.duplicator_block.tooltip": "When pressed, it places a block in front. The placed block disappears after 10 seconds.",
   "tooltip.minetorio.metal_detector.tooltip": "Find underground valuables"
 }

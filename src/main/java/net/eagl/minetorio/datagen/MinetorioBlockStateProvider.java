@@ -2,11 +2,18 @@ package net.eagl.minetorio.datagen;
 
 import net.eagl.minetorio.Minetorio;
 import net.eagl.minetorio.block.MinetorioBlocks;
+import net.eagl.minetorio.block.custom.CornCropBlock;
+import net.eagl.minetorio.block.custom.StrawberryCropBlock;
 import net.minecraft.data.PackOutput;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
+import net.minecraftforge.client.model.generators.ConfiguredModel;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.RegistryObject;
+
+import java.util.function.Function;
 
 public class MinetorioBlockStateProvider extends BlockStateProvider {
     public MinetorioBlockStateProvider(PackOutput output, ExistingFileHelper exFileHelper) {
@@ -37,6 +44,38 @@ public class MinetorioBlockStateProvider extends BlockStateProvider {
 
         doorBlockWithRenderType(((DoorBlock) MinetorioBlocks.SAPPHIRE_DOOR.get()), modLoc("block/sapphire_door_bottom"), modLoc("block/sapphire_door_top"), "cutout");
         trapdoorBlockWithRenderType(((TrapDoorBlock) MinetorioBlocks.SAPPHIRE_TRAPDOOR.get()), modLoc("block/sapphire_trapdoor"), true, "cutout");
+
+        makeStrawberryCrop((CropBlock) MinetorioBlocks.STRAWBERRY_CROP.get(), "strawberry_stage", "strawberry_stage");
+
+        makeCornCrop(((CropBlock) MinetorioBlocks.CORN_CROP.get()), "corn_stage_", "corn_stage_");
+    }
+
+    public void makeStrawberryCrop(CropBlock block, String modelName, String textureName) {
+        Function<BlockState, ConfiguredModel[]> function = state -> strawberryStates(state, block, modelName, textureName);
+
+        getVariantBuilder(block).forAllStates(function);
+    }
+
+    private ConfiguredModel[] strawberryStates(BlockState state, CropBlock block, String modelName, String textureName) {
+        ConfiguredModel[] models = new ConfiguredModel[1];
+        models[0] = new ConfiguredModel(models().crop(modelName + state.getValue(((StrawberryCropBlock) block).getAgeProperty()),
+                ResourceLocation.fromNamespaceAndPath(Minetorio.MOD_ID, "block/" + textureName + state.getValue(((StrawberryCropBlock) block).getAgeProperty()))).renderType("cutout"));
+
+        return models;
+    }
+
+    public void makeCornCrop(CropBlock block, String modelName, String textureName) {
+        Function<BlockState, ConfiguredModel[]> function = state -> cornStates(state, block, modelName, textureName);
+
+        getVariantBuilder(block).forAllStates(function);
+    }
+
+    private ConfiguredModel[] cornStates(BlockState state, CropBlock block, String modelName, String textureName) {
+        ConfiguredModel[] models = new ConfiguredModel[1];
+        models[0] = new ConfiguredModel(models().crop(modelName + state.getValue(((CornCropBlock) block).getAgeProperty()),
+                ResourceLocation.fromNamespaceAndPath(Minetorio.MOD_ID, "block/" + textureName + state.getValue(((CornCropBlock) block).getAgeProperty()))).renderType("cutout"));
+
+        return models;
     }
 
     private void blockWithItem(RegistryObject<Block> blockRegistryObject) {
