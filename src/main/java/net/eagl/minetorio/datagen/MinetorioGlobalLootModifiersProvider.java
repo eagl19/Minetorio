@@ -3,6 +3,7 @@ package net.eagl.minetorio.datagen;
 import net.eagl.minetorio.Minetorio;
 import net.eagl.minetorio.item.MinetorioItems;
 import net.eagl.minetorio.loot.AddItemModifier;
+import net.eagl.minetorio.loot.AddSusSandItemModifier;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Blocks;
@@ -29,6 +30,8 @@ public class MinetorioGlobalLootModifiersProvider extends GlobalLootModifierProv
         add("metal_detector_from_jungle_temples", new AddItemModifier(new LootItemCondition[] {
                 new LootTableIdCondition.Builder(ResourceLocation.fromNamespaceAndPath("minecraft","chests/jungle_temple")).build() }, MinetorioItems.METAL_DETECTOR.get()));
 
+        add("metal_detector_from_suspicious_sand", new AddSusSandItemModifier(new LootItemCondition[] {
+                new LootTableIdCondition.Builder(ResourceLocation.fromNamespaceAndPath("minecraft","archaeology/desert_pyramid")).build() }, MinetorioItems.METAL_DETECTOR.get()));
 
     }
 }
