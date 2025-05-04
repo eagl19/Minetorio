@@ -36,5 +36,11 @@ public class MinetorioItemTagGenerator extends ItemTagsProvider {
                         MinetorioItems.SAPPHIRE_LEGGINGS.get(),
                         MinetorioItems.SAPPHIRE_BOOTS.get());
 
+        this.tag(ItemTags.MUSIC_DISCS)
+                .add(MinetorioItems.BAR_BRAWL_MUSIC_DISC.get());
+
+        this.tag(ItemTags.CREEPER_DROP_MUSIC_DISCS)
+                .add(MinetorioItems.BAR_BRAWL_MUSIC_DISC.get());
+
     }
 }

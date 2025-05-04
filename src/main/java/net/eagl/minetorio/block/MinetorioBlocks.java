@@ -6,6 +6,7 @@ import net.eagl.minetorio.block.custom.DuplicatorBlock;
 import net.eagl.minetorio.block.custom.SoundBlock;
 import net.eagl.minetorio.block.custom.StrawberryCropBlock;
 import net.eagl.minetorio.item.MinetorioItems;
+import net.eagl.minetorio.sound.MinetorioSounds;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.effect.MobEffects;
@@ -47,7 +48,7 @@ public class MinetorioBlocks {
             ()-> new DuplicatorBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)));
 
     public static final RegistryObject<Block> SOUND_BLOCK = registerBlock("sound_block",
-            ()-> new SoundBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)));
+            ()-> new SoundBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).sound(MinetorioSounds.SOUND_BLOCK_SOUNDS)));
 
 
     public static final RegistryObject<Block> SAPPHIRE_STAIRS = registerBlock("sapphire_stairs",

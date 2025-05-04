@@ -5,6 +5,7 @@ import net.eagl.minetorio.block.MinetorioBlocks;
 import net.eagl.minetorio.item.MinetorioCreativeModTabs;
 import net.eagl.minetorio.item.MinetorioItems;
 import net.eagl.minetorio.loot.MinetorioLootModifiers;
+import net.eagl.minetorio.sound.MinetorioSounds;
 import net.eagl.minetorio.villager.MinetorioVillagers;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTabs;
@@ -44,6 +45,7 @@ public class Minetorio
         MinetorioCreativeModTabs.register(modEventBus);
         MinetorioLootModifiers.register(modEventBus);
         MinetorioVillagers.register(modEventBus);
+        MinetorioSounds.register(modEventBus);
 
         modEventBus.addListener(this::commonSetup);
 

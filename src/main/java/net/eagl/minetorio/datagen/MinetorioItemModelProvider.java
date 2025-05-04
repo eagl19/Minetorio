@@ -52,6 +52,7 @@ public class MinetorioItemModelProvider extends ItemModelProvider {
         simpleItem(MinetorioItems.STRAWBERRY_SEEDS);
         simpleItem(MinetorioItems.CORN);
         simpleItem(MinetorioItems.CORN_SEEDS);
+        simpleItem(MinetorioItems.BAR_BRAWL_MUSIC_DISC);
 
         simpleBlockItem(MinetorioBlocks.SAPPHIRE_DOOR);
 
