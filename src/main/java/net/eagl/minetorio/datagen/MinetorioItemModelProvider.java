@@ -171,7 +171,7 @@ public class MinetorioItemModelProvider extends ItemModelProvider {
     }
 
     private ItemModelBuilder simpleBlockItemBlockTexture(RegistryObject<Block> item) {
-        return withExistingParent(item.getId().getPath(),
+        return withExistingParent(Objects.requireNonNull(item.getId()).getPath(),
                 ResourceLocation.fromNamespaceAndPath("minecraft","item/generated")).texture("layer0",
                 Minetorio.resourceLocation("block/" + item.getId().getPath()));
     }
