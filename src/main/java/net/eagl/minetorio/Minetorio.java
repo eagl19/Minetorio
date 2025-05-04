@@ -5,7 +5,11 @@ import net.eagl.minetorio.block.MinetorioBlocks;
 import net.eagl.minetorio.item.MinetorioCreativeModTabs;
 import net.eagl.minetorio.item.MinetorioItems;
 import net.eagl.minetorio.loot.MinetorioLootModifiers;
+import net.eagl.minetorio.villager.MinetorioVillagers;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.CreativeModeTabs;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.FlowerPotBlock;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
@@ -17,6 +21,8 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
+
+import java.util.Objects;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(Minetorio.MOD_ID)
@@ -37,6 +43,7 @@ public class Minetorio
 
         MinetorioCreativeModTabs.register(modEventBus);
         MinetorioLootModifiers.register(modEventBus);
+        MinetorioVillagers.register(modEventBus);
 
         modEventBus.addListener(this::commonSetup);
 
@@ -46,19 +53,21 @@ public class Minetorio
 
     }
 
-    public static ResourceLocation id(String path) {
+    public static ResourceLocation resourceLocation(String path) {
         return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
     }
 
     private void commonSetup(final FMLCommonSetupEvent event)
     {
-
-
+        event.enqueueWork(() -> ((FlowerPotBlock) Blocks.FLOWER_POT)
+                .addPlant(Objects.requireNonNull(MinetorioBlocks.CATMINT.getId()), MinetorioBlocks.POTTED_CATMINT));
     }
 
-    // Add the example block item to the building blocks tab
     private void addCreative(BuildCreativeModeTabContentsEvent event){
-
+        if(event.getTabKey() == CreativeModeTabs.INGREDIENTS) {
+            event.accept(MinetorioItems.SAPPHIRE);
+            event.accept(MinetorioItems.RAW_SAPPHIRE);
+        }
     }
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call

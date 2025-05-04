@@ -31,6 +31,7 @@ public class MinetorioBlockStateProvider extends BlockStateProvider {
         blockWithItem(MinetorioBlocks.NETHER_SAPPHIRE_ORE);
 
         blockWithItem(MinetorioBlocks.DUPLICATOR_BLOCK);
+        blockWithItem(MinetorioBlocks.SOUND_BLOCK);
 
         stairsBlock(((StairBlock) MinetorioBlocks.SAPPHIRE_STAIRS.get()), blockTexture(MinetorioBlocks.SAPPHIRE_BLOCK.get()));
         slabBlock(((SlabBlock) MinetorioBlocks.SAPPHIRE_SLAB.get()), blockTexture(MinetorioBlocks.SAPPHIRE_BLOCK.get()), blockTexture(MinetorioBlocks.SAPPHIRE_BLOCK.get()));
@@ -48,6 +49,11 @@ public class MinetorioBlockStateProvider extends BlockStateProvider {
         makeStrawberryCrop((CropBlock) MinetorioBlocks.STRAWBERRY_CROP.get(), "strawberry_stage", "strawberry_stage");
 
         makeCornCrop(((CropBlock) MinetorioBlocks.CORN_CROP.get()), "corn_stage_", "corn_stage_");
+
+        simpleBlockWithItem(MinetorioBlocks.CATMINT.get(), models().cross(blockTexture(MinetorioBlocks.CATMINT.get()).getPath(),
+                blockTexture(MinetorioBlocks.CATMINT.get())).renderType("cutout"));
+        simpleBlockWithItem(MinetorioBlocks.POTTED_CATMINT.get(), models().singleTexture("potted_catmint", ResourceLocation.fromNamespaceAndPath("minecraft","flower_pot_cross"), "plant",
+                blockTexture(MinetorioBlocks.CATMINT.get())).renderType("cutout"));
     }
 
     public void makeStrawberryCrop(CropBlock block, String modelName, String textureName) {
@@ -59,7 +65,7 @@ public class MinetorioBlockStateProvider extends BlockStateProvider {
     private ConfiguredModel[] strawberryStates(BlockState state, CropBlock block, String modelName, String textureName) {
         ConfiguredModel[] models = new ConfiguredModel[1];
         models[0] = new ConfiguredModel(models().crop(modelName + state.getValue(((StrawberryCropBlock) block).getAgeProperty()),
-                ResourceLocation.fromNamespaceAndPath(Minetorio.MOD_ID, "block/" + textureName + state.getValue(((StrawberryCropBlock) block).getAgeProperty()))).renderType("cutout"));
+               Minetorio.resourceLocation("block/" + textureName + state.getValue(((StrawberryCropBlock) block).getAgeProperty()))).renderType("cutout"));
 
         return models;
     }
@@ -73,7 +79,7 @@ public class MinetorioBlockStateProvider extends BlockStateProvider {
     private ConfiguredModel[] cornStates(BlockState state, CropBlock block, String modelName, String textureName) {
         ConfiguredModel[] models = new ConfiguredModel[1];
         models[0] = new ConfiguredModel(models().crop(modelName + state.getValue(((CornCropBlock) block).getAgeProperty()),
-                ResourceLocation.fromNamespaceAndPath(Minetorio.MOD_ID, "block/" + textureName + state.getValue(((CornCropBlock) block).getAgeProperty()))).renderType("cutout"));
+                Minetorio.resourceLocation("block/" + textureName + state.getValue(((CornCropBlock) block).getAgeProperty()))).renderType("cutout"));
 
         return models;
     }

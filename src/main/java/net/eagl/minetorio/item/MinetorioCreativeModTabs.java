@@ -46,6 +46,7 @@ public class MinetorioCreativeModTabs {
                         pOutput.accept(MinetorioBlocks.NETHER_SAPPHIRE_ORE.get());
                         pOutput.accept(MinetorioBlocks.END_STONE_SAPPHIRE_ORE.get());
                         pOutput.accept(MinetorioBlocks.DUPLICATOR_BLOCK.get());
+                        pOutput.accept(MinetorioBlocks.SOUND_BLOCK.get());
 
                         pOutput.accept(MinetorioBlocks.SAPPHIRE_BUTTON.get());
                         pOutput.accept(MinetorioBlocks.SAPPHIRE_DOOR.get());
@@ -56,6 +57,8 @@ public class MinetorioCreativeModTabs {
                         pOutput.accept(MinetorioBlocks.SAPPHIRE_STAIRS.get());
                         pOutput.accept(MinetorioBlocks.SAPPHIRE_TRAPDOOR.get());
                         pOutput.accept(MinetorioBlocks.SAPPHIRE_WALL.get());
+
+                        pOutput.accept(MinetorioBlocks.CATMINT.get());
                     })
                     .build());
 

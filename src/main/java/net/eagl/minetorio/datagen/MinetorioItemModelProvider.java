@@ -76,10 +76,11 @@ public class MinetorioItemModelProvider extends ItemModelProvider {
         trimmedArmorItem(MinetorioItems.SAPPHIRE_CHESTPLATE);
         trimmedArmorItem(MinetorioItems.SAPPHIRE_LEGGINGS);
         trimmedArmorItem(MinetorioItems.SAPPHIRE_BOOTS);
+
+        simpleBlockItemBlockTexture(MinetorioBlocks.CATMINT);
     }
 
     private void trimmedArmorItem(RegistryObject<Item> itemRegistryObject) {
-        final String MOD_ID = Minetorio.MOD_ID;
 
         if(itemRegistryObject.get() instanceof ArmorItem armorItem) {
             trimMaterials.forEach((trimMaterial, value) -> {
@@ -97,9 +98,9 @@ public class MinetorioItemModelProvider extends ItemModelProvider {
                 String armorItemPath = "item/" + armorItem;
                 String trimPath = "trims/items/" + armorType + "_trim_" + trimMaterial.location().getPath();
                 String currentTrimName = armorItemPath + "_" + trimMaterial.location().getPath() + "_trim";
-                ResourceLocation armorItemResLoc = ResourceLocation.fromNamespaceAndPath(MOD_ID, armorItemPath);
+                ResourceLocation armorItemResLoc = Minetorio.resourceLocation(armorItemPath);
                 ResourceLocation trimResLoc = ResourceLocation.fromNamespaceAndPath("minecraft", trimPath); // minecraft namespace
-                ResourceLocation trimNameResLoc = ResourceLocation.fromNamespaceAndPath(MOD_ID, currentTrimName);
+                ResourceLocation trimNameResLoc = Minetorio.resourceLocation(currentTrimName);
 
                 existingFileHelper.trackGenerated(trimResLoc, PackType.CLIENT_RESOURCES, ".png", "textures");
 
@@ -113,9 +114,7 @@ public class MinetorioItemModelProvider extends ItemModelProvider {
                         .override()
                         .model(new ModelFile.UncheckedModelFile(trimNameResLoc))
                         .predicate(mcLoc("trim_type"), trimValue).end()
-                        .texture("layer0",
-                                ResourceLocation.fromNamespaceAndPath(MOD_ID,
-                                        "item/" + itemRegistryObject.getId().getPath()));
+                        .texture("layer0", Minetorio.resourceLocation("item/" + itemRegistryObject.getId().getPath()));
             });
         }
     }
@@ -124,13 +123,13 @@ public class MinetorioItemModelProvider extends ItemModelProvider {
     private ItemModelBuilder handheldItem(RegistryObject<Item> item) {
         return withExistingParent(itemPath(item),
                 ResourceLocation.fromNamespaceAndPath("minecraft","item/handheld")).texture("layer0",
-                ResourceLocation.fromNamespaceAndPath(Minetorio.MOD_ID,"item/" + itemPath(item)));
+                Minetorio.resourceLocation("item/" + itemPath(item)));
     }
 
     private ItemModelBuilder simpleItem(RegistryObject<Item> item) {
         return withExistingParent(itemPath(item),
                 ResourceLocation.fromNamespaceAndPath("minecraft", "item/generated")).texture("layer0",
-                ResourceLocation.fromNamespaceAndPath(Minetorio.MOD_ID,"item/" + itemPath(item)));
+                Minetorio.resourceLocation("item/" + itemPath(item)));
     }
     public void evenSimplerBlockItem(RegistryObject<Block> block) {
         this.withExistingParent(Minetorio.MOD_ID + ":" + blockPath(block),
@@ -144,17 +143,17 @@ public class MinetorioItemModelProvider extends ItemModelProvider {
 
     public void fenceItem(RegistryObject<Block> block, RegistryObject<Block> baseBlock) {
         this.withExistingParent(blockPath(block), mcLoc("block/fence_inventory"))
-                .texture("texture",  ResourceLocation.fromNamespaceAndPath(Minetorio.MOD_ID, "block/" + blockPath(baseBlock)));
+                .texture("texture",  Minetorio.resourceLocation("block/" + blockPath(baseBlock)));
     }
 
     public void buttonItem(RegistryObject<Block> block, RegistryObject<Block> baseBlock) {
        this.withExistingParent(blockPath(block), mcLoc("block/button_inventory"))
-                .texture("texture",  ResourceLocation.fromNamespaceAndPath(Minetorio.MOD_ID, "block/" + blockPath(baseBlock)));
+                .texture("texture",  Minetorio.resourceLocation( "block/" + blockPath(baseBlock)));
     }
 
     public void wallItem(RegistryObject<Block> block, RegistryObject<Block> baseBlock) {
         this.withExistingParent(blockPath(block), mcLoc("block/wall_inventory"))
-                .texture("wall",  ResourceLocation.fromNamespaceAndPath(Minetorio.MOD_ID, "block/" + blockPath(baseBlock)));
+                .texture("wall",  Minetorio.resourceLocation("block/" + blockPath(baseBlock)));
     }
 
     private String blockPath(RegistryObject<Block> block){
@@ -168,6 +167,12 @@ public class MinetorioItemModelProvider extends ItemModelProvider {
     private ItemModelBuilder simpleBlockItem(RegistryObject<Block> item) {
         return withExistingParent(itemPath(item),
                 ResourceLocation.fromNamespaceAndPath("minecraft","item/generated")).texture("layer0",
-                ResourceLocation.fromNamespaceAndPath(Minetorio.MOD_ID,"item/" + itemPath(item)));
+                Minetorio.resourceLocation("item/" + itemPath(item)));
+    }
+
+    private ItemModelBuilder simpleBlockItemBlockTexture(RegistryObject<Block> item) {
+        return withExistingParent(item.getId().getPath(),
+                ResourceLocation.fromNamespaceAndPath("minecraft","item/generated")).texture("layer0",
+                Minetorio.resourceLocation("block/" + item.getId().getPath()));
     }
 }

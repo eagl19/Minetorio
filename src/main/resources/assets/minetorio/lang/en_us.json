@@ -1,6 +1,7 @@
 {
   "block.minetorio.deepslate_sapphire_ore": "Block of Deepslate Sapphire Ore",
   "block.minetorio.duplicator_block": "Duplicator Block",
+  "block.minetorio.sound_block": "Sound Block",
   "block.minetorio.end_stone_sapphire_ore": "Block of End Stone Sapphire Ore",
   "block.minetorio.nether_sapphire_ore": "Block of Nether Sapphire Ore",
   "block.minetorio.raw_sapphire_block": "Block of Raw Sapphire",
@@ -15,6 +16,7 @@
   "block.minetorio.sapphire_stairs": "Sapphire Stairs",
   "block.minetorio.sapphire_trapdoor": "Sapphire Trapdoor",
   "block.minetorio.sapphire_wall": "Sapphire Wall",
+  "block.minetorio.catmint": "Catmint",
   "creativetab.minetorio_tab": "Minetorio",
   "item.minetorio.metal_detector": "Metal Detector",
   "item.minetorio.pine_cone": "Pine Cone",
@@ -35,5 +37,6 @@
   "item.minetorio.corn": "Corn",
   "item.minetorio.corn_seeds": "Corn Seeds",
   "tooltip.minetorio.duplicator_block.tooltip": "When pressed, it places a block in front. The placed block disappears after 10 seconds.",
-  "tooltip.minetorio.metal_detector.tooltip": "Find underground valuables"
+  "tooltip.minetorio.metal_detector.tooltip": "Find underground valuables",
+  "entity.minecraft.villager.minetorio.soundmaster": "Sound Master"
 }

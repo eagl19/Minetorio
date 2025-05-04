@@ -31,5 +31,6 @@ public class DataGenerators {
         generator.addProvider(event.includeServer(), new MinetorioItemTagGenerator(packOutput, lookupProvider, blockTagGenerator.contentsGetter(), existingFileHelper));
 
         generator.addProvider(event.includeServer(), new MinetorioGlobalLootModifiersProvider(packOutput));
+        generator.addProvider(event.includeServer(), new MinetorioPoiTypeTagsProvider(packOutput, lookupProvider, existingFileHelper));
     }
 }

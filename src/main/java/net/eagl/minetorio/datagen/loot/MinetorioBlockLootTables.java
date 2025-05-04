@@ -32,6 +32,7 @@ public class MinetorioBlockLootTables extends BlockLootSubProvider {
         this.dropSelf(MinetorioBlocks.SAPPHIRE_BLOCK.get());
         this.dropSelf(MinetorioBlocks.RAW_SAPPHIRE_BLOCK.get());
         this.dropSelf(MinetorioBlocks.DUPLICATOR_BLOCK.get());
+        this.dropSelf(MinetorioBlocks.SOUND_BLOCK.get());
 
         this.add(MinetorioBlocks.SAPPHIRE_ORE.get(),
                 block -> createSapphireOreDrops(MinetorioBlocks.SAPPHIRE_ORE.get(), MinetorioItems.RAW_SAPPHIRE.get()));
@@ -75,6 +76,9 @@ public class MinetorioBlockLootTables extends BlockLootSubProvider {
 
         this.add(MinetorioBlocks.CORN_CROP.get(), createCropDrops(MinetorioBlocks.CORN_CROP.get(), MinetorioItems.CORN.get(),
                 MinetorioItems.CORN_SEEDS.get(), lootitemcondition$builder2));
+
+        this.dropSelf(MinetorioBlocks.CATMINT.get());
+        this.add(MinetorioBlocks.POTTED_CATMINT.get(), createPotFlowerItemTable(MinetorioBlocks.CATMINT.get()));
 
     }
 

@@ -15,7 +15,7 @@ public class MinetorioTags {
 
 
         private static TagKey<Block> tag(String name){
-            return TagKey.create(Registries.BLOCK, Minetorio.id(name));
+            return TagKey.create(Registries.BLOCK, Minetorio.resourceLocation(name));
         }
 
     }
@@ -25,7 +25,7 @@ public class MinetorioTags {
         public static final TagKey<Item> FUELS = tag("fuels");
 
         private static TagKey<Item> tag(String name){
-            return TagKey.create(Registries.ITEM, Minetorio.id(name));
+            return TagKey.create(Registries.ITEM, Minetorio.resourceLocation(name));
         }
     }
 }
