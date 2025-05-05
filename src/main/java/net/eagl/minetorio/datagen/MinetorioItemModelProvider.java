@@ -79,6 +79,8 @@ public class MinetorioItemModelProvider extends ItemModelProvider {
         trimmedArmorItem(MinetorioItems.SAPPHIRE_BOOTS);
 
         simpleBlockItemBlockTexture(MinetorioBlocks.CATMINT);
+
+        withExistingParent(Objects.requireNonNull(MinetorioItems.RHINO_SPANW_EGG.getId()).getPath(), mcLoc("item/template_spawn_egg"));
     }
 
     private void trimmedArmorItem(RegistryObject<Item> itemRegistryObject) {

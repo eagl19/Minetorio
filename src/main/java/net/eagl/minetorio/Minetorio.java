@@ -2,11 +2,14 @@ package net.eagl.minetorio;
 
 import com.mojang.logging.LogUtils;
 import net.eagl.minetorio.block.MinetorioBlocks;
+import net.eagl.minetorio.entity.MinetorioEntities;
 import net.eagl.minetorio.item.MinetorioCreativeModTabs;
 import net.eagl.minetorio.item.MinetorioItems;
 import net.eagl.minetorio.loot.MinetorioLootModifiers;
 import net.eagl.minetorio.sound.MinetorioSounds;
 import net.eagl.minetorio.villager.MinetorioVillagers;
+import net.eagl.minetorio.entity.client.RhinoRenderer;
+import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.level.block.Blocks;
@@ -46,7 +49,7 @@ public class Minetorio
         MinetorioLootModifiers.register(modEventBus);
         MinetorioVillagers.register(modEventBus);
         MinetorioSounds.register(modEventBus);
-
+        MinetorioEntities.register(modEventBus);
         modEventBus.addListener(this::commonSetup);
 
         MinecraftForge.EVENT_BUS.register(this);
@@ -86,6 +89,7 @@ public class Minetorio
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event)
         {
+            EntityRenderers.register(MinetorioEntities.RHINO.get(), RhinoRenderer::new);
         }
     }
 

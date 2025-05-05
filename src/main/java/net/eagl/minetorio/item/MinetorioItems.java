@@ -2,11 +2,13 @@ package net.eagl.minetorio.item;
 
 import net.eagl.minetorio.Minetorio;
 import net.eagl.minetorio.block.MinetorioBlocks;
+import net.eagl.minetorio.entity.MinetorioEntities;
 import net.eagl.minetorio.item.custom.FuelItem;
 import net.eagl.minetorio.item.custom.MetalDetectorItem;
 import net.eagl.minetorio.item.custom.MinetorioArmorItem;
 import net.eagl.minetorio.sound.MinetorioSounds;
 import net.minecraft.world.item.*;
+import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -57,6 +59,9 @@ public class MinetorioItems {
 
     public static final RegistryObject<Item> BAR_BRAWL_MUSIC_DISC = ITEMS.register("bar_brawl_music_disc",
             () -> new RecordItem(6, MinetorioSounds.BAR_BRAWL, new Item.Properties().stacksTo(1), 2440));
+
+    public static final RegistryObject<Item> RHINO_SPANW_EGG = ITEMS.register("rhino_spawn_egg",
+            () -> new ForgeSpawnEggItem(MinetorioEntities.RHINO, 0x7e9680, 0xc5d1c5, new Item.Properties()));
 
     public static void register(IEventBus eventBus){
         ITEMS.register(eventBus);

@@ -36,6 +36,8 @@ public class MinetorioCreativeModTabs {
 
                         pOutput.accept(MinetorioItems.BAR_BRAWL_MUSIC_DISC.get());
 
+                        pOutput.accept(MinetorioItems.RHINO_SPANW_EGG.get());
+
                         pOutput.accept(MinetorioItems.SAPPHIRE_HELMET.get());
                         pOutput.accept(MinetorioItems.SAPPHIRE_CHESTPLATE.get());
                         pOutput.accept(MinetorioItems.SAPPHIRE_LEGGINGS.get());
