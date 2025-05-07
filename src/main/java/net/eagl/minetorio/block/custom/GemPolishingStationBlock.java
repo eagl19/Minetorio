@@ -29,6 +29,7 @@ public class GemPolishingStationBlock extends BaseEntityBlock {
     public GemPolishingStationBlock(Properties pProperties) {
         super(pProperties);
     }
+
     @SuppressWarnings("deprecation")
     @Override
     public @NotNull VoxelShape getShape(@NotNull BlockState pState, @NotNull BlockGetter pLevel, @NotNull BlockPos pPos, @NotNull CollisionContext pContext) {
@@ -39,6 +40,7 @@ public class GemPolishingStationBlock extends BaseEntityBlock {
     public @NotNull RenderShape getRenderShape(@NotNull BlockState pState) {
         return RenderShape.MODEL;
     }
+
 
     @SuppressWarnings("deprecation")
     @Override
@@ -52,6 +54,7 @@ public class GemPolishingStationBlock extends BaseEntityBlock {
 
         super.onRemove(pState, pLevel, pPos, pNewState, pIsMoving);
     }
+
 
     @SuppressWarnings("deprecation")
     @Override

@@ -1,5 +1,6 @@
 package net.eagl.minetorio;
 
+import net.eagl.minetorio.recipe.ModRecipes;
 import net.eagl.minetorio.screen.GemPolishingStationScreen;
 import com.mojang.logging.LogUtils;
 import net.eagl.minetorio.block.MinetorioBlocks;
@@ -56,6 +57,8 @@ public class Minetorio
         MinetorioEntities.register(modEventBus);
         MinetorioBlockEntities.register(modEventBus);
         MinetorioMenuTypes.register(modEventBus);
+        ModRecipes.register(modEventBus);
+
         modEventBus.addListener(this::commonSetup);
 
         MinecraftForge.EVENT_BUS.register(this);
