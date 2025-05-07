@@ -10,6 +10,7 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
+import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.RegistryObject;
 
@@ -54,6 +55,9 @@ public class MinetorioBlockStateProvider extends BlockStateProvider {
                 blockTexture(MinetorioBlocks.CATMINT.get())).renderType("cutout"));
         simpleBlockWithItem(MinetorioBlocks.POTTED_CATMINT.get(), models().singleTexture("potted_catmint", ResourceLocation.fromNamespaceAndPath("minecraft","flower_pot_cross"), "plant",
                 blockTexture(MinetorioBlocks.CATMINT.get())).renderType("cutout"));
+
+        simpleBlockWithItem(MinetorioBlocks.GEM_POLISHING_STATION.get(),
+                new ModelFile.UncheckedModelFile(modLoc("block/gem_polishing_station")));
     }
 
     public void makeStrawberryCrop(CropBlock block, String modelName, String textureName) {

@@ -1,14 +1,18 @@
 package net.eagl.minetorio;
 
+import net.eagl.minetorio.screen.GemPolishingStationScreen;
 import com.mojang.logging.LogUtils;
 import net.eagl.minetorio.block.MinetorioBlocks;
+import net.eagl.minetorio.block.entity.MinetorioBlockEntities;
 import net.eagl.minetorio.entity.MinetorioEntities;
 import net.eagl.minetorio.item.MinetorioCreativeModTabs;
 import net.eagl.minetorio.item.MinetorioItems;
 import net.eagl.minetorio.loot.MinetorioLootModifiers;
+import net.eagl.minetorio.screen.MinetorioMenuTypes;
 import net.eagl.minetorio.sound.MinetorioSounds;
 import net.eagl.minetorio.villager.MinetorioVillagers;
 import net.eagl.minetorio.entity.client.RhinoRenderer;
+import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTabs;
@@ -50,6 +54,8 @@ public class Minetorio
         MinetorioVillagers.register(modEventBus);
         MinetorioSounds.register(modEventBus);
         MinetorioEntities.register(modEventBus);
+        MinetorioBlockEntities.register(modEventBus);
+        MinetorioMenuTypes.register(modEventBus);
         modEventBus.addListener(this::commonSetup);
 
         MinecraftForge.EVENT_BUS.register(this);
@@ -90,6 +96,8 @@ public class Minetorio
         public static void onClientSetup(FMLClientSetupEvent event)
         {
             EntityRenderers.register(MinetorioEntities.RHINO.get(), RhinoRenderer::new);
+
+            MenuScreens.register(MinetorioMenuTypes.GEM_POLISHING_MENU.get(), GemPolishingStationScreen::new);
         }
     }
 

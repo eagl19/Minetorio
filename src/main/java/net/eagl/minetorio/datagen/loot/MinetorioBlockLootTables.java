@@ -70,15 +70,13 @@ public class MinetorioBlockLootTables extends BlockLootSubProvider {
                         .hasBlockStateProperties(MinetorioBlocks.CORN_CROP.get())
                         .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(CornCropBlock.AGE, 8)));
 
-        // LootItemCondition.Builder lootitemcondition$builder2 = LootItemBlockStatePropertyCondition
-        //         .hasBlockStateProperties(ModBlocks.CORN_CROP.get())
-        //         .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(CornCropBlock.AGE, 8));
 
         this.add(MinetorioBlocks.CORN_CROP.get(), createCropDrops(MinetorioBlocks.CORN_CROP.get(), MinetorioItems.CORN.get(),
                 MinetorioItems.CORN_SEEDS.get(), lootitemcondition$builder2));
 
         this.dropSelf(MinetorioBlocks.CATMINT.get());
         this.add(MinetorioBlocks.POTTED_CATMINT.get(), createPotFlowerItemTable(MinetorioBlocks.CATMINT.get()));
+        this.dropSelf(MinetorioBlocks.GEM_POLISHING_STATION.get());
 
     }
 

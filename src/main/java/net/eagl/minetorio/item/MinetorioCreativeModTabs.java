@@ -63,6 +63,8 @@ public class MinetorioCreativeModTabs {
                         pOutput.accept(MinetorioBlocks.SAPPHIRE_WALL.get());
 
                         pOutput.accept(MinetorioBlocks.CATMINT.get());
+
+                        pOutput.accept(MinetorioBlocks.GEM_POLISHING_STATION.get());
                     })
                     .build());
 
