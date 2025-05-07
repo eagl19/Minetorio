@@ -40,6 +40,7 @@ public class Minetorio
     // Define mod id in a common place for everything to reference
     public static final String MOD_ID = "minetorio";
     // Directly reference a slf4j logger
+    @SuppressWarnings("unused")
     private static final Logger LOGGER = LogUtils.getLogger();
 
 
@@ -85,6 +86,7 @@ public class Minetorio
     }
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call
+    @SuppressWarnings("unused")
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event)
     {
@@ -92,6 +94,7 @@ public class Minetorio
     }
 
     // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
+    @SuppressWarnings("unused")
     @Mod.EventBusSubscriber(modid = MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
     public static class ClientModEvents
     {

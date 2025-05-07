@@ -14,6 +14,7 @@ public class MinetorioCreativeModTabs {
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS =
             DeferredRegister.create(Registries.CREATIVE_MODE_TAB, Minetorio.MOD_ID);
 
+    @SuppressWarnings("unused")
     public static final RegistryObject<CreativeModeTab> MINETORIO_TAB = CREATIVE_MODE_TABS.register("minetorio_tab",
             ()-> CreativeModeTab.builder().icon( () -> new ItemStack(MinetorioItems.SAPPHIRE.get()))
                     .title(Component.translatable("creativetab.minetorio_tab"))
