@@ -11,6 +11,7 @@ public class ModRecipes {
     public static final DeferredRegister<RecipeSerializer<?>> SERIALIZERS =
             DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, Minetorio.MOD_ID);
 
+    @SuppressWarnings("unused")
     public static final RegistryObject<RecipeSerializer<GemPolishingRecipe>> GEM_POLISHING_SERIALIZER =
             SERIALIZERS.register("gem_polishing", () -> GemPolishingRecipe.Serializer.INSTANCE);
 

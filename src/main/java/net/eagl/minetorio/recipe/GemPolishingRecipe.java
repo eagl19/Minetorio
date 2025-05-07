@@ -71,11 +71,13 @@ public class GemPolishingRecipe implements Recipe<SimpleContainer> {
 
     public static class Type implements RecipeType<GemPolishingRecipe> {
         public static final Type INSTANCE = new Type();
+        @SuppressWarnings("unused")
         public static final String ID = "gem_polishing";
     }
 
     public static class Serializer implements RecipeSerializer<GemPolishingRecipe> {
         public static final Serializer INSTANCE = new Serializer();
+        @SuppressWarnings("unused")
         public static final ResourceLocation ID = Minetorio.resourceLocation("gem_polishing");
 
         @Override
