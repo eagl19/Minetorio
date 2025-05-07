@@ -20,6 +20,7 @@ import net.minecraftforge.fml.common.Mod;
 
 import java.util.List;
 
+@SuppressWarnings("unused")
 @Mod.EventBusSubscriber(modid = Minetorio.MOD_ID)
 public class MinetorioEvents {
 

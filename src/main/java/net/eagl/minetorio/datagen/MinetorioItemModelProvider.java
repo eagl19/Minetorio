@@ -122,7 +122,6 @@ public class MinetorioItemModelProvider extends ItemModelProvider {
         }
     }
 
-
     private ItemModelBuilder handheldItem(RegistryObject<Item> item) {
         return withExistingParent(itemPath(item),
                 ResourceLocation.fromNamespaceAndPath("minecraft","item/handheld")).texture("layer0",

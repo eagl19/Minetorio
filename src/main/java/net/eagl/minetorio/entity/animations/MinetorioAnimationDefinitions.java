@@ -273,6 +273,7 @@ public class MinetorioAnimationDefinitions {
                                     AnimationChannel.Interpolations.LINEAR),
                             new Keyframe(4f, KeyframeAnimations.degreeVec(0f, 0f, 0f),
                                     AnimationChannel.Interpolations.LINEAR))).build();
+    @SuppressWarnings("unused")
     public static final AnimationDefinition RHINO_SIT = AnimationDefinition.Builder.withLength(2f).looping()
             .addAnimation("rhino",
                     new AnimationChannel(AnimationChannel.Targets.POSITION,

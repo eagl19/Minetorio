@@ -96,6 +96,7 @@ public class MinetorioBlocks {
     }
 
     private static <T extends Block> RegistryObject<Item> registerBlockItem(String name, RegistryObject<T> block){
+
         return MinetorioItems.ITEMS.register(name, ()-> new BlockItem(block.get(), new Item.Properties()));
     }
 

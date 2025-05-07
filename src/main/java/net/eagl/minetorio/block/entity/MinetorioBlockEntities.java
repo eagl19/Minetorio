@@ -12,6 +12,7 @@ public class MinetorioBlockEntities {
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES =
             DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, Minetorio.MOD_ID);
 
+    @SuppressWarnings("DataFlowIssue")
     public static final RegistryObject<BlockEntityType<GemPolishingStationBlockEntity>> GEM_POLISHING_BE =
             BLOCK_ENTITIES.register("gem_polishing_be", () ->
                     BlockEntityType.Builder.of(GemPolishingStationBlockEntity::new,
