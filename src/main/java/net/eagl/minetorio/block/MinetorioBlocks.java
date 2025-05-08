@@ -4,6 +4,7 @@ import net.eagl.minetorio.Minetorio;
 import net.eagl.minetorio.block.custom.*;
 import net.eagl.minetorio.item.MinetorioItems;
 import net.eagl.minetorio.sound.MinetorioSounds;
+import net.eagl.minetorio.util.MinetorioWoodTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
@@ -142,6 +143,16 @@ public class MinetorioBlocks {
                     return 30;
                 }
             });
+
+    public static final RegistryObject<Block> PINE_SIGN = BLOCKS.register("pine_sign",
+            () -> new MinetorioStandingSignBlock(BlockBehaviour.Properties.copy(Blocks.OAK_SIGN), MinetorioWoodTypes.PINE));
+    public static final RegistryObject<Block> PINE_WALL_SIGN = BLOCKS.register("pine_wall_sign",
+            () -> new MinetorioWallSignBlock(BlockBehaviour.Properties.copy(Blocks.OAK_WALL_SIGN), MinetorioWoodTypes.PINE));
+
+    public static final RegistryObject<Block> PINE_HANGING_SIGN = BLOCKS.register("pine_hanging_sign",
+            () -> new MinetorioHangingSignBlock(BlockBehaviour.Properties.copy(Blocks.OAK_HANGING_SIGN), MinetorioWoodTypes.PINE));
+    public static final RegistryObject<Block> PINE_WALL_HANGING_SIGN = BLOCKS.register("pine_wall_hanging_sign",
+            () -> new MinetorioWallHangingSignBlock(BlockBehaviour.Properties.copy(Blocks.OAK_WALL_HANGING_SIGN), MinetorioWoodTypes.PINE));
 
 
     private static <T extends Block> RegistryObject<Item> registerBlockItem(String name, RegistryObject<T> block){

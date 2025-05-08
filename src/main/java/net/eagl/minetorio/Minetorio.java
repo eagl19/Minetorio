@@ -11,9 +11,11 @@ import net.eagl.minetorio.item.MinetorioItems;
 import net.eagl.minetorio.loot.MinetorioLootModifiers;
 import net.eagl.minetorio.screen.MinetorioMenuTypes;
 import net.eagl.minetorio.sound.MinetorioSounds;
+import net.eagl.minetorio.util.MinetorioWoodTypes;
 import net.eagl.minetorio.villager.MinetorioVillagers;
 import net.eagl.minetorio.entity.client.RhinoRenderer;
 import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTabs;
@@ -101,6 +103,8 @@ public class Minetorio
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event)
         {
+            Sheets.addWoodType(MinetorioWoodTypes.PINE);
+
             EntityRenderers.register(MinetorioEntities.RHINO.get(), RhinoRenderer::new);
 
             MenuScreens.register(MinetorioMenuTypes.GEM_POLISHING_MENU.get(), GemPolishingStationScreen::new);

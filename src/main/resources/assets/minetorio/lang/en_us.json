@@ -24,6 +24,8 @@
   "block.minetorio.stripped_pine_log": "Stripped Pine Log",
   "block.minetorio.stripped_pine_wood": "Stripped Pine Wood",
   "block.minetorio.pine_leaves": "Pine Leaves",
+  "block.minetorio.pine_sign": "Pine Sign",
+  "block.minetorio.pine_hanging_sign": "Pine Hanging Sign",
   "creativetab.minetorio_tab": "Minetorio",
   "item.minetorio.metal_detector": "Metal Detector",
   "item.minetorio.pine_cone": "Pine Cone",

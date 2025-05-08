@@ -44,6 +44,9 @@ public class MinetorioCreativeModTabs {
                         pOutput.accept(MinetorioItems.SAPPHIRE_LEGGINGS.get());
                         pOutput.accept(MinetorioItems.SAPPHIRE_BOOTS.get());
 
+                        pOutput.accept(MinetorioItems.PINE_SIGN.get());
+                        pOutput.accept(MinetorioItems.PINE_HANGING_SIGN.get());
+
                         pOutput.accept(MinetorioBlocks.SAPPHIRE_BLOCK.get());
                         pOutput.accept(MinetorioBlocks.RAW_SAPPHIRE_BLOCK.get());
                         pOutput.accept(MinetorioBlocks.SAPPHIRE_ORE.get());

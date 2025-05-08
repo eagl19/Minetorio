@@ -18,6 +18,16 @@ public class MinetorioBlockEntities {
                     BlockEntityType.Builder.of(GemPolishingStationBlockEntity::new,
                             MinetorioBlocks.GEM_POLISHING_STATION.get()).build(null));
 
+    public static final RegistryObject<BlockEntityType<MinetorioSignBlockEntity>> MOD_SIGN =
+            BLOCK_ENTITIES.register("mod_sign", () ->
+                    BlockEntityType.Builder.of(MinetorioSignBlockEntity::new,
+                            MinetorioBlocks.PINE_SIGN.get(), MinetorioBlocks.PINE_WALL_SIGN.get()).build(null));
+
+    public static final RegistryObject<BlockEntityType<MinetorioHangingSignBlockEntity>> MOD_HANGING_SIGN =
+            BLOCK_ENTITIES.register("mod_hanging_sign", () ->
+                    BlockEntityType.Builder.of(MinetorioHangingSignBlockEntity::new,
+                            MinetorioBlocks.PINE_HANGING_SIGN.get(), MinetorioBlocks.PINE_WALL_HANGING_SIGN.get()).build(null));
+
 
     public static void register(IEventBus eventBus) {
         BLOCK_ENTITIES.register(eventBus);

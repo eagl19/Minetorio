@@ -77,6 +77,29 @@ public class MinetorioBlockStateProvider extends BlockStateProvider {
         blockWithItem(MinetorioBlocks.PINE_PLANKS);
 
         leavesBlock(MinetorioBlocks.PINE_LEAVES);
+
+        signBlock(((StandingSignBlock) MinetorioBlocks.PINE_SIGN.get()), ((WallSignBlock) MinetorioBlocks.PINE_WALL_SIGN.get()),
+                blockTexture(MinetorioBlocks.PINE_PLANKS.get()));
+
+        hangingSignBlock(MinetorioBlocks.PINE_HANGING_SIGN.get(), MinetorioBlocks.PINE_WALL_HANGING_SIGN.get(), blockTexture(MinetorioBlocks.PINE_PLANKS.get()));
+    }
+
+    public void hangingSignBlock(Block signBlock, Block wallSignBlock, ResourceLocation texture) {
+        ModelFile sign = models().sign(name(signBlock), texture);
+        hangingSignBlock(signBlock, wallSignBlock, sign);
+    }
+
+    public void hangingSignBlock(Block signBlock, Block wallSignBlock, ModelFile sign) {
+        simpleBlock(signBlock, sign);
+        simpleBlock(wallSignBlock, sign);
+    }
+
+    private String name(Block block) {
+        return key(block).getPath();
+    }
+
+    private ResourceLocation key(Block block) {
+        return ForgeRegistries.BLOCKS.getKey(block);
     }
 
     private void leavesBlock(RegistryObject<Block> blockRegistryObject) {

@@ -81,6 +81,9 @@ public class MinetorioItemModelProvider extends ItemModelProvider {
         simpleBlockItemBlockTexture(MinetorioBlocks.CATMINT);
 
         withExistingParent(Objects.requireNonNull(MinetorioItems.RHINO_SPANW_EGG.getId()).getPath(), mcLoc("item/template_spawn_egg"));
+
+        simpleItem(MinetorioItems.PINE_SIGN);
+        simpleItem(MinetorioItems.PINE_HANGING_SIGN);
     }
 
     private void trimmedArmorItem(RegistryObject<Item> itemRegistryObject) {
