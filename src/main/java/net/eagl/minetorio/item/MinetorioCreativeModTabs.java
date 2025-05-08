@@ -50,6 +50,8 @@ public class MinetorioCreativeModTabs {
                         pOutput.accept(MinetorioItems.PINE_BOAT.get());
                         pOutput.accept(MinetorioItems.PINE_CHEST_BOAT.get());
 
+                        pOutput.accept(MinetorioItems.DICE.get());
+
                         pOutput.accept(MinetorioBlocks.SAPPHIRE_BLOCK.get());
                         pOutput.accept(MinetorioBlocks.RAW_SAPPHIRE_BLOCK.get());
                         pOutput.accept(MinetorioBlocks.SAPPHIRE_ORE.get());

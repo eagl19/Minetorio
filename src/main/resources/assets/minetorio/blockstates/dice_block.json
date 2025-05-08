@@ -1,0 +1,22 @@
+{
+  "variants": {
+    "number=up": {
+      "model": "minetorio:block/dice_1"
+    },
+    "number=north": {
+      "model": "minetorio:block/dice_2"
+    },
+    "number=east": {
+      "model": "minetorio:block/dice_3"
+    },
+    "number=south": {
+      "model": "minetorio:block/dice_5"
+    },
+    "number=west": {
+      "model": "minetorio:block/dice_4"
+    },
+    "number=down": {
+      "model": "minetorio:block/dice_6"
+    }
+  }
+}

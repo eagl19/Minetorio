@@ -32,6 +32,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import org.slf4j.Logger;
 
 import java.util.Objects;
@@ -109,6 +110,8 @@ public class Minetorio
             EntityRenderers.register(MinetorioEntities.RHINO.get(), RhinoRenderer::new);
             EntityRenderers.register(MinetorioEntities.MOD_BOAT.get(), pContext -> new MinetorioBoatRenderer(pContext, false));
             EntityRenderers.register(MinetorioEntities.MOD_CHEST_BOAT.get(), pContext -> new MinetorioBoatRenderer(pContext, true));
+
+            EntityRenderers.register(MinetorioEntities.DICE_PROJECTILE.get(), ThrownItemRenderer::new);
 
             MenuScreens.register(MinetorioMenuTypes.GEM_POLISHING_MENU.get(), GemPolishingStationScreen::new);
         }

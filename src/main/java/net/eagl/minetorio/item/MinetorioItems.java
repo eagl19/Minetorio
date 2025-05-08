@@ -3,10 +3,7 @@ package net.eagl.minetorio.item;
 import net.eagl.minetorio.Minetorio;
 import net.eagl.minetorio.block.MinetorioBlocks;
 import net.eagl.minetorio.entity.MinetorioEntities;
-import net.eagl.minetorio.item.custom.FuelItem;
-import net.eagl.minetorio.item.custom.MetalDetectorItem;
-import net.eagl.minetorio.item.custom.MinetorioArmorItem;
-import net.eagl.minetorio.item.custom.MinetorioBoatItem;
+import net.eagl.minetorio.item.custom.*;
 import net.eagl.minetorio.sound.MinetorioSounds;
 import net.minecraft.world.item.*;
 import net.minecraftforge.common.ForgeSpawnEggItem;
@@ -74,6 +71,9 @@ public class MinetorioItems {
             () -> new MinetorioBoatItem(false, MinetorioBoatEntity.Type.PINE, new Item.Properties()));
     public static final RegistryObject<Item> PINE_CHEST_BOAT = ITEMS.register("pine_chest_boat",
             () -> new MinetorioBoatItem(true, MinetorioBoatEntity.Type.PINE, new Item.Properties()));
+
+    public static final RegistryObject<Item> DICE = ITEMS.register("dice",
+            () -> new DiceItem(new Item.Properties()));
 
 
     public static void register(IEventBus eventBus){
