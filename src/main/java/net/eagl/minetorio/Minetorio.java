@@ -1,5 +1,6 @@
 package net.eagl.minetorio;
 
+import net.eagl.minetorio.entity.client.MinetorioBoatRenderer;
 import net.eagl.minetorio.recipe.ModRecipes;
 import net.eagl.minetorio.screen.GemPolishingStationScreen;
 import com.mojang.logging.LogUtils;
@@ -106,6 +107,8 @@ public class Minetorio
             Sheets.addWoodType(MinetorioWoodTypes.PINE);
 
             EntityRenderers.register(MinetorioEntities.RHINO.get(), RhinoRenderer::new);
+            EntityRenderers.register(MinetorioEntities.MOD_BOAT.get(), pContext -> new MinetorioBoatRenderer(pContext, false));
+            EntityRenderers.register(MinetorioEntities.MOD_CHEST_BOAT.get(), pContext -> new MinetorioBoatRenderer(pContext, true));
 
             MenuScreens.register(MinetorioMenuTypes.GEM_POLISHING_MENU.get(), GemPolishingStationScreen::new);
         }

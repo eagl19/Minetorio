@@ -84,6 +84,9 @@ public class MinetorioItemModelProvider extends ItemModelProvider {
 
         simpleItem(MinetorioItems.PINE_SIGN);
         simpleItem(MinetorioItems.PINE_HANGING_SIGN);
+
+        simpleItem(MinetorioItems.PINE_BOAT);
+        simpleItem(MinetorioItems.PINE_CHEST_BOAT);
     }
 
     private void trimmedArmorItem(RegistryObject<Item> itemRegistryObject) {

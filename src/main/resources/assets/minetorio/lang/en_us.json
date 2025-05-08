@@ -48,8 +48,11 @@
   "item.minetorio.corn_seeds": "Corn Seeds",
   "item.minetorio.bar_brawl_music_disc": "Bar Brawl Music Disc",
   "item.minetorio.bar_brawl_music_disc.desc": "Bryan Tech - Bar Brawl (CC0)",
+  "item.minetorio.pine_boat": "Pine Boat",
+  "item.minetorio.pine_chest_boat": "Pine Chest Boat",
   "tooltip.minetorio.duplicator_block.tooltip": "When pressed, it places a block in front. The placed block disappears after 10 seconds.",
   "tooltip.minetorio.metal_detector.tooltip": "Find underground valuables",
   "sounds.minetorio.metal_detector_found_ore": "Metal Detector Jingle",
-  "entity.minecraft.villager.minetorio.soundmaster": "Sound Master"
+  "entity.minecraft.villager.minetorio.soundmaster": "Sound Master",
+  "entity.minetorio.mod_chest_boat": "Boat with Chest"
 }

@@ -6,6 +6,7 @@ import net.eagl.minetorio.entity.MinetorioEntities;
 import net.eagl.minetorio.item.custom.FuelItem;
 import net.eagl.minetorio.item.custom.MetalDetectorItem;
 import net.eagl.minetorio.item.custom.MinetorioArmorItem;
+import net.eagl.minetorio.item.custom.MinetorioBoatItem;
 import net.eagl.minetorio.sound.MinetorioSounds;
 import net.minecraft.world.item.*;
 import net.minecraftforge.common.ForgeSpawnEggItem;
@@ -13,6 +14,7 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import net.eagl.minetorio.entity.custom.MinetorioBoatEntity;
 
 public class MinetorioItems {
     public static final DeferredRegister<Item> ITEMS =
@@ -67,6 +69,11 @@ public class MinetorioItems {
             () -> new SignItem(new Item.Properties().stacksTo(16), MinetorioBlocks.PINE_SIGN.get(), MinetorioBlocks.PINE_WALL_SIGN.get()));
     public static final RegistryObject<Item> PINE_HANGING_SIGN = ITEMS.register("pine_hanging_sign",
             () -> new HangingSignItem(MinetorioBlocks.PINE_HANGING_SIGN.get(), MinetorioBlocks.PINE_WALL_HANGING_SIGN.get(), new Item.Properties().stacksTo(16)));
+
+    public static final RegistryObject<Item> PINE_BOAT = ITEMS.register("pine_boat",
+            () -> new MinetorioBoatItem(false, MinetorioBoatEntity.Type.PINE, new Item.Properties()));
+    public static final RegistryObject<Item> PINE_CHEST_BOAT = ITEMS.register("pine_chest_boat",
+            () -> new MinetorioBoatItem(true, MinetorioBoatEntity.Type.PINE, new Item.Properties()));
 
 
     public static void register(IEventBus eventBus){

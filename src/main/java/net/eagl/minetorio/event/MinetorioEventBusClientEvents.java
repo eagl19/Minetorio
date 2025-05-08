@@ -4,6 +4,8 @@ import net.eagl.minetorio.Minetorio;
 import net.eagl.minetorio.block.entity.MinetorioBlockEntities;
 import net.eagl.minetorio.entity.client.MinetorioModelLayers;
 import net.eagl.minetorio.entity.client.RhinoModel;
+import net.minecraft.client.model.BoatModel;
+import net.minecraft.client.model.ChestBoatModel;
 import net.minecraft.client.renderer.blockentity.HangingSignRenderer;
 import net.minecraft.client.renderer.blockentity.SignRenderer;
 import net.minecraftforge.api.distmarker.Dist;
@@ -18,6 +20,9 @@ public class MinetorioEventBusClientEvents {
     @SubscribeEvent
     public static void registerLayer(EntityRenderersEvent.RegisterLayerDefinitions event) {
         event.registerLayerDefinition(MinetorioModelLayers.RHINO_LAYER, RhinoModel::createBodyLayer);
+
+        event.registerLayerDefinition(MinetorioModelLayers.PINE_BOAT_LAYER, BoatModel::createBodyModel);
+        event.registerLayerDefinition(MinetorioModelLayers.PINE_CHEST_BOAT_LAYER, ChestBoatModel::createBodyModel);
     }
 
     @SubscribeEvent

@@ -1,6 +1,8 @@
 package net.eagl.minetorio.entity;
 
 import net.eagl.minetorio.Minetorio;
+import net.eagl.minetorio.entity.custom.MinetorioBoatEntity;
+import net.eagl.minetorio.entity.custom.MinetorioChestBoatEntity;
 import net.eagl.minetorio.entity.custom.RhinoEntity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -16,6 +18,13 @@ public class MinetorioEntities {
     public static final RegistryObject<EntityType<RhinoEntity>> RHINO =
             ENTITY_TYPES.register("rhino", () -> EntityType.Builder.of(RhinoEntity::new, MobCategory.CREATURE)
                     .sized(2.5f, 2.5f).build("rhino"));
+
+    public static final RegistryObject<EntityType<MinetorioBoatEntity>> MOD_BOAT =
+            ENTITY_TYPES.register("mod_boat", () -> EntityType.Builder.<MinetorioBoatEntity>of(MinetorioBoatEntity::new, MobCategory.MISC)
+                    .sized(1.375f, 0.5625f).build("mod_boat"));
+    public static final RegistryObject<EntityType<MinetorioChestBoatEntity>> MOD_CHEST_BOAT =
+            ENTITY_TYPES.register("mod_chest_boat", () -> EntityType.Builder.<MinetorioChestBoatEntity>of(MinetorioChestBoatEntity::new, MobCategory.MISC)
+                    .sized(1.375f, 0.5625f).build("mod_chest_boat"));
 
 
     public static void register(IEventBus eventBus) {
