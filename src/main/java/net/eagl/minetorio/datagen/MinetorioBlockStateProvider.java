@@ -12,8 +12,10 @@ import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.util.Objects;
 import java.util.function.Function;
 
 public class MinetorioBlockStateProvider extends BlockStateProvider {
@@ -58,6 +60,34 @@ public class MinetorioBlockStateProvider extends BlockStateProvider {
 
         simpleBlockWithItem(MinetorioBlocks.GEM_POLISHING_STATION.get(),
                 new ModelFile.UncheckedModelFile(modLoc("block/gem_polishing_station")));
+
+        logBlock(((RotatedPillarBlock) MinetorioBlocks.PINE_LOG.get()));
+        axisBlock(((RotatedPillarBlock) MinetorioBlocks.PINE_WOOD.get()), blockTexture(MinetorioBlocks.PINE_LOG.get()), blockTexture(MinetorioBlocks.PINE_LOG.get()));
+
+        axisBlock(((RotatedPillarBlock) MinetorioBlocks.STRIPPED_PINE_LOG.get()), blockTexture(MinetorioBlocks.STRIPPED_PINE_LOG.get()),
+                Minetorio.resourceLocation("block/stripped_pine_log_top"));
+        axisBlock(((RotatedPillarBlock) MinetorioBlocks.STRIPPED_PINE_WOOD.get()), blockTexture(MinetorioBlocks.STRIPPED_PINE_LOG.get()),
+                blockTexture(MinetorioBlocks.STRIPPED_PINE_LOG.get()));
+
+        blockItem(MinetorioBlocks.PINE_LOG);
+        blockItem(MinetorioBlocks.PINE_WOOD);
+        blockItem(MinetorioBlocks.STRIPPED_PINE_LOG);
+        blockItem(MinetorioBlocks.STRIPPED_PINE_WOOD);
+
+        blockWithItem(MinetorioBlocks.PINE_PLANKS);
+
+        leavesBlock(MinetorioBlocks.PINE_LEAVES);
+    }
+
+    private void leavesBlock(RegistryObject<Block> blockRegistryObject) {
+        simpleBlockWithItem(blockRegistryObject.get(),
+                models().singleTexture(Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(blockRegistryObject.get())).getPath(), ResourceLocation.fromNamespaceAndPath("minecraft","block/leaves"),
+                        "all", blockTexture(blockRegistryObject.get())).renderType("cutout"));
+    }
+
+    private void blockItem(RegistryObject<Block> blockRegistryObject) {
+        simpleBlockItem(blockRegistryObject.get(), new ModelFile.UncheckedModelFile(Minetorio.MOD_ID +
+                ":block/" + Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(blockRegistryObject.get())).getPath()));
     }
 
     public void makeStrawberryCrop(CropBlock block, String modelName, String textureName) {

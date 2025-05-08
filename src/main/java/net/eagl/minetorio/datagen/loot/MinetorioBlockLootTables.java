@@ -78,6 +78,16 @@ public class MinetorioBlockLootTables extends BlockLootSubProvider {
         this.add(MinetorioBlocks.POTTED_CATMINT.get(), createPotFlowerItemTable(MinetorioBlocks.CATMINT.get()));
         this.dropSelf(MinetorioBlocks.GEM_POLISHING_STATION.get());
 
+        this.dropSelf(MinetorioBlocks.PINE_LOG.get());
+        this.dropSelf(MinetorioBlocks.PINE_WOOD.get());
+        this.dropSelf(MinetorioBlocks.STRIPPED_PINE_LOG.get());
+        this.dropSelf(MinetorioBlocks.STRIPPED_PINE_WOOD.get());
+        this.dropSelf(MinetorioBlocks.PINE_PLANKS.get());
+
+        this.add(MinetorioBlocks.PINE_LEAVES.get(), block ->
+                createLeavesDrops(block, MinetorioBlocks.SAPPHIRE_BLOCK.get(), NORMAL_LEAVES_SAPLING_CHANCES)); // TODO: Change to Sapling!
+
+
     }
 
     protected LootTable.Builder createSapphireOreDrops(Block pBlock, Item item) {

@@ -1,6 +1,7 @@
 package net.eagl.minetorio.datagen;
 
 import net.eagl.minetorio.Minetorio;
+import net.eagl.minetorio.block.MinetorioBlocks;
 import net.eagl.minetorio.item.MinetorioItems;
 import net.eagl.minetorio.util.MinetorioTags;
 import net.minecraft.core.HolderLookup;
@@ -41,6 +42,15 @@ public class MinetorioItemTagGenerator extends ItemTagsProvider {
 
         this.tag(ItemTags.CREEPER_DROP_MUSIC_DISCS)
                 .add(MinetorioItems.BAR_BRAWL_MUSIC_DISC.get());
+
+        this.tag(ItemTags.LOGS_THAT_BURN)
+                .add(MinetorioBlocks.PINE_LOG.get().asItem())
+                .add(MinetorioBlocks.PINE_WOOD.get().asItem())
+                .add(MinetorioBlocks.STRIPPED_PINE_LOG.get().asItem())
+                .add(MinetorioBlocks.STRIPPED_PINE_WOOD.get().asItem());
+
+        this.tag(ItemTags.PLANKS)
+                .add(MinetorioBlocks.PINE_PLANKS.get().asItem());
 
     }
 }

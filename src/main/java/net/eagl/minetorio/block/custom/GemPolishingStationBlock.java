@@ -36,6 +36,7 @@ public class GemPolishingStationBlock extends BaseEntityBlock {
         return SHAPE;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public @NotNull RenderShape getRenderShape(@NotNull BlockState pState) {
         return RenderShape.MODEL;

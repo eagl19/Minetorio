@@ -63,5 +63,14 @@ public class MinetorioBlockTagGenerator extends BlockTagsProvider {
 
         this.tag(MinetorioTags.Blocks.NEEDS_SAPPHIRE_TOOL)
                 .add(MinetorioBlocks.DUPLICATOR_BLOCK.get());
+
+        this.tag(BlockTags.LOGS_THAT_BURN)
+                .add(MinetorioBlocks.PINE_LOG.get())
+                .add(MinetorioBlocks.PINE_WOOD.get())
+                .add(MinetorioBlocks.STRIPPED_PINE_LOG.get())
+                .add(MinetorioBlocks.STRIPPED_PINE_WOOD.get());
+
+        this.tag(BlockTags.PLANKS)
+                .add(MinetorioBlocks.PINE_PLANKS.get());
     }
 }

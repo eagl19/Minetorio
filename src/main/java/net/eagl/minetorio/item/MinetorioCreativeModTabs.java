@@ -66,6 +66,14 @@ public class MinetorioCreativeModTabs {
                         pOutput.accept(MinetorioBlocks.CATMINT.get());
 
                         pOutput.accept(MinetorioBlocks.GEM_POLISHING_STATION.get());
+
+                        pOutput.accept(MinetorioBlocks.PINE_LOG.get());
+                        pOutput.accept(MinetorioBlocks.PINE_WOOD.get());
+                        pOutput.accept(MinetorioBlocks.STRIPPED_PINE_LOG.get());
+                        pOutput.accept(MinetorioBlocks.STRIPPED_PINE_WOOD.get());
+
+                        pOutput.accept(MinetorioBlocks.PINE_PLANKS.get());
+                        pOutput.accept(MinetorioBlocks.PINE_LEAVES.get());
                     })
                     .build());
 
