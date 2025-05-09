@@ -15,6 +15,8 @@ import net.eagl.minetorio.sound.MinetorioSounds;
 import net.eagl.minetorio.util.MinetorioWoodTypes;
 import net.eagl.minetorio.villager.MinetorioVillagers;
 import net.eagl.minetorio.entity.client.RhinoRenderer;
+import net.eagl.minetorio.worldgen.tree.MinetorioTrunkPlacerTypes;
+import net.eagl.minetorio.worldgen.tree.MinetorioFoliagePlacers;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.entity.EntityRenderers;
@@ -62,6 +64,8 @@ public class Minetorio
         MinetorioEntities.register(modEventBus);
         MinetorioBlockEntities.register(modEventBus);
         MinetorioMenuTypes.register(modEventBus);
+        MinetorioTrunkPlacerTypes.register(modEventBus);
+        MinetorioFoliagePlacers.register(modEventBus);
         ModRecipes.register(modEventBus);
 
         modEventBus.addListener(this::commonSetup);

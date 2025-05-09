@@ -1,10 +1,13 @@
 package net.eagl.minetorio.worldgen;
 
 import net.eagl.minetorio.Minetorio;
+import net.eagl.minetorio.block.MinetorioBlocks;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.placement.PlacementUtils;
+import net.minecraft.data.worldgen.placement.VegetationPlacements;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
@@ -19,6 +22,8 @@ public class MinetorioPlacedFeatures {
     public static final ResourceKey<PlacedFeature> NETHER_SAPPHIRE_ORE_PLACED_KEY = registerKey("nether_sapphire_ore_placed");
     public static final ResourceKey<PlacedFeature> END_SAPPHIRE_ORE_PLACED_KEY = registerKey("end_sapphire_ore_placed");
 
+    public static final ResourceKey<PlacedFeature> PINE_PLACED_KEY = registerKey("pine_placed");
+
     public static void bootstrap(BootstapContext<PlacedFeature> context) {
         HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
 
@@ -31,6 +36,10 @@ public class MinetorioPlacedFeatures {
         register(context, END_SAPPHIRE_ORE_PLACED_KEY, configuredFeatures.getOrThrow(MinetorioConfiguredFeatures.END_SAPPHIRE_ORE_KEY),
                 MinetorioOrePlacement.commonOrePlacement(12,
                         HeightRangePlacement.uniform(VerticalAnchor.absolute(-64), VerticalAnchor.absolute(80))));
+
+        register(context, PINE_PLACED_KEY, configuredFeatures.getOrThrow(MinetorioConfiguredFeatures.PINE_KEY),
+                VegetationPlacements.treePlacement(PlacementUtils.countExtra(3, 0.1f, 2),
+                        MinetorioBlocks.PINE_SAPLING.get()));
     }
 
 

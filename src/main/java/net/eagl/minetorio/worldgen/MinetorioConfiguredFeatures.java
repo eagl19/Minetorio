@@ -2,6 +2,8 @@ package net.eagl.minetorio.worldgen;
 
 import net.eagl.minetorio.Minetorio;
 import net.eagl.minetorio.block.MinetorioBlocks;
+import net.eagl.minetorio.worldgen.tree.custom.PineFoliagePlacer;
+import net.eagl.minetorio.worldgen.tree.custom.PineTrunkPlacer;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstapContext;
 import net.minecraft.resources.ResourceKey;
@@ -33,7 +35,7 @@ public class MinetorioConfiguredFeatures {
     public static void bootstrap(BootstapContext<ConfiguredFeature<?, ?>> context) {
         RuleTest stoneReplaceable = new TagMatchTest(BlockTags.STONE_ORE_REPLACEABLES);
         RuleTest deepslateReplaceables = new TagMatchTest(BlockTags.DEEPSLATE_ORE_REPLACEABLES);
-        RuleTest netherrackReplacables = new BlockMatchTest(Blocks.NETHERRACK);
+        RuleTest netherrackReplaceables = new BlockMatchTest(Blocks.NETHERRACK);
         RuleTest endReplaceables = new BlockMatchTest(Blocks.END_STONE);
 
         List<OreConfiguration.TargetBlockState> overworldSapphireOres = List.of(OreConfiguration.target(stoneReplaceable,
@@ -41,17 +43,17 @@ public class MinetorioConfiguredFeatures {
                 OreConfiguration.target(deepslateReplaceables, MinetorioBlocks.DEEPSLATE_SAPPHIRE_ORE.get().defaultBlockState()));
 
         register(context, OVERWORLD_SAPPHIRE_ORE_KEY, Feature.ORE, new OreConfiguration(overworldSapphireOres, 9));
-        register(context, NETHER_SAPPHIRE_ORE_KEY, Feature.ORE, new OreConfiguration(netherrackReplacables,
+        register(context, NETHER_SAPPHIRE_ORE_KEY, Feature.ORE, new OreConfiguration(netherrackReplaceables,
                 MinetorioBlocks.NETHER_SAPPHIRE_ORE.get().defaultBlockState(), 9));
         register(context, END_SAPPHIRE_ORE_KEY, Feature.ORE, new OreConfiguration(endReplaceables,
                 MinetorioBlocks.END_STONE_SAPPHIRE_ORE.get().defaultBlockState(), 9));
 
         register(context, PINE_KEY, Feature.TREE, new TreeConfiguration.TreeConfigurationBuilder(
                 BlockStateProvider.simple(MinetorioBlocks.PINE_LOG.get()),
-                new StraightTrunkPlacer(5, 4, 3),
+                new PineTrunkPlacer(5, 4, 3),
 
                 BlockStateProvider.simple(MinetorioBlocks.PINE_LEAVES.get()),
-                new BlobFoliagePlacer(ConstantInt.of(3), ConstantInt.of(2), 3),
+                new PineFoliagePlacer(ConstantInt.of(3), ConstantInt.of(2), 3),
 
                 new TwoLayersFeatureSize(1, 0, 2)).build());
 
