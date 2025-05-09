@@ -33,5 +33,7 @@ public class DataGenerators {
 
         generator.addProvider(event.includeServer(), new MinetorioGlobalLootModifiersProvider(packOutput));
         generator.addProvider(event.includeServer(), new MinetorioPoiTypeTagsProvider(packOutput, lookupProvider, existingFileHelper));
+
+        generator.addProvider(event.includeServer(), new MinetorioWorldGenProvider(packOutput, lookupProvider));
     }
 }
