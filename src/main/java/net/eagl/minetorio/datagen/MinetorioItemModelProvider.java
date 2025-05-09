@@ -89,6 +89,8 @@ public class MinetorioItemModelProvider extends ItemModelProvider {
         simpleItem(MinetorioItems.PINE_CHEST_BOAT);
 
         simpleItem(MinetorioItems.DICE);
+
+        saplingItem(MinetorioBlocks.PINE_SAPLING);
     }
 
     private void trimmedArmorItem(RegistryObject<Item> itemRegistryObject) {
@@ -128,6 +130,12 @@ public class MinetorioItemModelProvider extends ItemModelProvider {
                         .texture("layer0", Minetorio.resourceLocation("item/" + itemRegistryObject.getId().getPath()));
             });
         }
+    }
+
+    private ItemModelBuilder saplingItem(RegistryObject<Block> item) {
+        return withExistingParent(item.getId().getPath(),
+                ResourceLocation.fromNamespaceAndPath("minecraft","item/generated")).texture("layer0",
+                Minetorio.resourceLocation("block/" + item.getId().getPath()));
     }
 
     private ItemModelBuilder handheldItem(RegistryObject<Item> item) {

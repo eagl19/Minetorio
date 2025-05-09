@@ -82,6 +82,13 @@ public class MinetorioBlockStateProvider extends BlockStateProvider {
                 blockTexture(MinetorioBlocks.PINE_PLANKS.get()));
 
         hangingSignBlock(MinetorioBlocks.PINE_HANGING_SIGN.get(), MinetorioBlocks.PINE_WALL_HANGING_SIGN.get(), blockTexture(MinetorioBlocks.PINE_PLANKS.get()));
+
+        saplingBlock(MinetorioBlocks.PINE_SAPLING);
+    }
+
+    private void saplingBlock(RegistryObject<Block> blockRegistryObject) {
+        simpleBlock(blockRegistryObject.get(),
+                models().cross(ForgeRegistries.BLOCKS.getKey(blockRegistryObject.get()).getPath(), blockTexture(blockRegistryObject.get())).renderType("cutout"));
     }
 
     public void hangingSignBlock(Block signBlock, Block wallSignBlock, ResourceLocation texture) {

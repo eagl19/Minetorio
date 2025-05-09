@@ -85,7 +85,7 @@ public class MinetorioBlockLootTables extends BlockLootSubProvider {
         this.dropSelf(MinetorioBlocks.PINE_PLANKS.get());
 
         this.add(MinetorioBlocks.PINE_LEAVES.get(), block ->
-                createLeavesDrops(block, MinetorioBlocks.SAPPHIRE_BLOCK.get(), NORMAL_LEAVES_SAPLING_CHANCES)); // TODO: Change to Sapling!
+                createLeavesDrops(block, MinetorioBlocks.PINE_SAPLING.get(), NORMAL_LEAVES_SAPLING_CHANCES));
 
         this.add(MinetorioBlocks.PINE_SIGN.get(), block ->
                 createSingleItemTable(MinetorioItems.PINE_SIGN.get()));
@@ -95,6 +95,8 @@ public class MinetorioBlockLootTables extends BlockLootSubProvider {
                 createSingleItemTable(MinetorioItems.PINE_HANGING_SIGN.get()));
         this.add(MinetorioBlocks.PINE_WALL_HANGING_SIGN.get(), block ->
                 createSingleItemTable(MinetorioItems.PINE_HANGING_SIGN.get()));
+
+        this.dropSelf(MinetorioBlocks.PINE_SAPLING.get());
 
 
     }

@@ -5,6 +5,7 @@ import net.eagl.minetorio.block.custom.*;
 import net.eagl.minetorio.item.MinetorioItems;
 import net.eagl.minetorio.sound.MinetorioSounds;
 import net.eagl.minetorio.util.MinetorioWoodTypes;
+import net.eagl.minetorio.worldgen.tree.PineTreeGrower;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
@@ -156,6 +157,9 @@ public class MinetorioBlocks {
 
     public static final RegistryObject<Block> DICE_BLOCK = BLOCKS.register("dice_block",
             () -> new DiceBlock(BlockBehaviour.Properties.copy(Blocks.STONE).noLootTable()));
+
+    public static final RegistryObject<Block> PINE_SAPLING = registerBlock("pine_sapling",
+            () -> new SaplingBlock(new PineTreeGrower(), BlockBehaviour.Properties.copy(Blocks.OAK_SAPLING)));
 
 
     private static <T extends Block> RegistryObject<Item> registerBlockItem(String name, RegistryObject<T> block){
