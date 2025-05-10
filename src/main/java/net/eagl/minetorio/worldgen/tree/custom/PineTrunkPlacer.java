@@ -1,6 +1,5 @@
 package net.eagl.minetorio.worldgen.tree.custom;
 
-import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.eagl.minetorio.worldgen.tree.MinetorioTrunkPlacerTypes;
@@ -44,11 +43,13 @@ public class PineTrunkPlacer extends TrunkPlacer {
         int height = pFreeTreeHeight + pRandom.nextInt(heightRandA, heightRandA + 3) +
                 pRandom.nextInt(Math.max(heightRandB, 1), heightRandB + 2);
 
+        List<FoliagePlacer.FoliageAttachment> foliageAttachments = new ArrayList<>();
+
         for (int i = 0; i < height; i++) {
             BlockPos trunkPos = pPos.above(i);
             placeLog(pLevel, pBlockSetter, pRandom, trunkPos, pConfig);
 
-            if (i % 2 == 0 && pRandom.nextBoolean()) {
+            if (i>=3 && i % 2 == 0 && pRandom.nextBoolean()) {
 
                 List<Direction> directions = new ArrayList<>(List.of(Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST));
                 Random javaRandom = new Random(pRandom.nextLong());
@@ -58,20 +59,56 @@ public class PineTrunkPlacer extends TrunkPlacer {
 
                 for (int j = 0; j < branchesThisLevel; j++) {
                     Direction dir = directions.get(j);
-                    int branchLength = pRandom.nextInt(1, 4); // Довжина 1–3 блоки
+                    int branchLength = pRandom.nextInt(1, 4);
                     int verticalOffset = pRandom.nextBoolean() ? 0 : (pRandom.nextBoolean() ? -1 : 1);
 
                     Direction.Axis axis = (dir.getAxis() == Direction.Axis.X) ? Direction.Axis.X : Direction.Axis.Z;
                     BlockState branchState = pConfig.trunkProvider.getState(pRandom, pPos).setValue(RotatedPillarBlock.AXIS, axis);
 
+                    BlockPos lastBranchPos = null;
                     for (int x = 1; x <= branchLength; x++) {
                         BlockPos branchPos = trunkPos.above(verticalOffset).relative(dir, x);
                         pBlockSetter.accept(branchPos, branchState);
+
+                        lastBranchPos = branchPos;
+                    }
+                    if (lastBranchPos != null) {
+
+                        foliageAttachments.add(new FoliagePlacer.FoliageAttachment(lastBranchPos, 0, false));
+
+                        Direction tipDir;
+                        if(pRandom.nextBoolean()){
+                            tipDir=dir;
+                        }else {
+                            if (dir == Direction.NORTH || dir == Direction.SOUTH) {
+                                if (pRandom.nextBoolean()) {
+                                    tipDir = Direction.EAST;
+                                } else {
+                                    tipDir = Direction.WEST;
+                                }
+                            } else {
+                                if (pRandom.nextBoolean()) {
+                                    tipDir = Direction.NORTH;
+                                } else {
+                                    tipDir = Direction.SOUTH;
+                                }
+                            }
+                        }
+
+                        BlockPos tipPos = lastBranchPos.above(1).relative(tipDir);
+
+                        pBlockSetter.accept(tipPos, pConfig.trunkProvider.getState(pRandom, pPos).setValue(RotatedPillarBlock.AXIS, Direction.Axis.Y));
+
+                        tipPos = lastBranchPos.above(2).relative(tipDir);
+                        pBlockSetter.accept(tipPos, pConfig.trunkProvider.getState(pRandom, pPos).setValue(RotatedPillarBlock.AXIS, Direction.Axis.Y));
+
+                        foliageAttachments.add(new FoliagePlacer.FoliageAttachment(tipPos, 0, false));
+
                     }
                 }
             }
         }
-
-        return ImmutableList.of(new FoliagePlacer.FoliageAttachment(pPos.above(height), 0, false));
+        foliageAttachments.add(new FoliagePlacer.FoliageAttachment(pPos.above(height), 0, false));
+        return foliageAttachments;
     }
 }
