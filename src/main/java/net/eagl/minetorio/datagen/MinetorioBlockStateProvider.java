@@ -84,6 +84,8 @@ public class MinetorioBlockStateProvider extends BlockStateProvider {
         hangingSignBlock(MinetorioBlocks.PINE_HANGING_SIGN.get(), MinetorioBlocks.PINE_WALL_HANGING_SIGN.get(), blockTexture(MinetorioBlocks.PINE_PLANKS.get()));
 
         saplingBlock(MinetorioBlocks.PINE_SAPLING);
+
+        blockWithItem(MinetorioBlocks.PORTAL);
     }
 
     private void saplingBlock(RegistryObject<Block> blockRegistryObject) {

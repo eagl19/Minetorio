@@ -85,6 +85,8 @@ public class MinetorioCreativeModTabs {
 
                         pOutput.accept(MinetorioBlocks.PINE_SAPLING.get());
 
+                        pOutput.accept(MinetorioBlocks.PORTAL.get());
+
                     })
                     .build());
 

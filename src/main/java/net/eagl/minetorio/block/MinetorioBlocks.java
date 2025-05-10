@@ -95,6 +95,9 @@ public class MinetorioBlocks {
     public static final RegistryObject<Block> GEM_POLISHING_STATION = registerBlock("gem_polishing_station",
             () -> new GemPolishingStationBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).noOcclusion()));
 
+    public static final RegistryObject<Block> PORTAL = registerBlock("portal",
+            () -> new MinetorioPortalBlock(BlockBehaviour.Properties.copy(Blocks.STONE).noLootTable().noOcclusion().noCollission()));
+
     private static <T extends Block> RegistryObject<T> registerBlock(String name, Supplier<T> block){
         RegistryObject<T> toReturn = BLOCKS.register(name,block);
         registerBlockItem(name,toReturn);

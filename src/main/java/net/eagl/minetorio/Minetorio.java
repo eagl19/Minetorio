@@ -15,6 +15,8 @@ import net.eagl.minetorio.sound.MinetorioSounds;
 import net.eagl.minetorio.util.MinetorioWoodTypes;
 import net.eagl.minetorio.villager.MinetorioVillagers;
 import net.eagl.minetorio.entity.client.RhinoRenderer;
+import net.eagl.minetorio.worldgen.biome.MinetorioTerrablender;
+import net.eagl.minetorio.worldgen.biome.surface.MinetorioSurfaceRules;
 import net.eagl.minetorio.worldgen.tree.MinetorioTrunkPlacerTypes;
 import net.eagl.minetorio.worldgen.tree.MinetorioFoliagePlacers;
 import net.minecraft.client.gui.screens.MenuScreens;
@@ -36,6 +38,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import org.slf4j.Logger;
+import terrablender.api.SurfaceRuleManager;
 
 import java.util.Objects;
 
@@ -66,6 +69,8 @@ public class Minetorio
         MinetorioMenuTypes.register(modEventBus);
         MinetorioTrunkPlacerTypes.register(modEventBus);
         MinetorioFoliagePlacers.register(modEventBus);
+        MinetorioTerrablender.registerBiomes();
+
         ModRecipes.register(modEventBus);
 
         modEventBus.addListener(this::commonSetup);
@@ -82,8 +87,12 @@ public class Minetorio
 
     private void commonSetup(final FMLCommonSetupEvent event)
     {
-        event.enqueueWork(() -> ((FlowerPotBlock) Blocks.FLOWER_POT)
-                .addPlant(Objects.requireNonNull(MinetorioBlocks.CATMINT.getId()), MinetorioBlocks.POTTED_CATMINT));
+        event.enqueueWork(() -> {
+            ((FlowerPotBlock) Blocks.FLOWER_POT).addPlant(Objects.requireNonNull(MinetorioBlocks.CATMINT.getId()), MinetorioBlocks.POTTED_CATMINT);
+
+            SurfaceRuleManager.addSurfaceRules(SurfaceRuleManager.RuleCategory.OVERWORLD, MOD_ID, MinetorioSurfaceRules.makeRules());
+        });
+
     }
 
     private void addCreative(BuildCreativeModeTabContentsEvent event){
@@ -118,6 +127,7 @@ public class Minetorio
             EntityRenderers.register(MinetorioEntities.DICE_PROJECTILE.get(), ThrownItemRenderer::new);
 
             MenuScreens.register(MinetorioMenuTypes.GEM_POLISHING_MENU.get(), GemPolishingStationScreen::new);
+
         }
     }
 
