@@ -87,6 +87,7 @@ public class Minetorio
 
     private void commonSetup(final FMLCommonSetupEvent event)
     {
+
         event.enqueueWork(() -> {
             ((FlowerPotBlock) Blocks.FLOWER_POT).addPlant(Objects.requireNonNull(MinetorioBlocks.CATMINT.getId()), MinetorioBlocks.POTTED_CATMINT);
 
