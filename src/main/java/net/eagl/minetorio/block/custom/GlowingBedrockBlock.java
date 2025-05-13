@@ -11,6 +11,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.MapColor;
@@ -27,19 +28,6 @@ public class GlowingBedrockBlock extends Block {
                 .lightLevel(state -> 15)
                 .noOcclusion()
         );
-    }
-
-
-    @SuppressWarnings("deprecation")
-    @Override
-    public @NotNull InteractionResult use(@NotNull BlockState pState, @NotNull Level pLevel, @NotNull BlockPos pPos,
-                                          @NotNull Player pPlayer, @NotNull InteractionHand pHand, @NotNull BlockHitResult pHit) {
-        if (!pLevel.isClientSide && pPlayer instanceof ServerPlayer serverPlayer && pLevel instanceof ServerLevel serverLevel) {
-            PlayerTimers.addTimer(serverPlayer, pPos, 200);
-            pPlayer.displayClientMessage(Component.literal("Блок зміниться через 10 секунд!"), true);
-            return InteractionResult.SUCCESS;
-        }
-        return InteractionResult.SUCCESS;
     }
 
 }

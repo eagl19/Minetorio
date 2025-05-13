@@ -3,6 +3,7 @@ package net.eagl.minetorio;
 
 import com.mojang.logging.LogUtils;
 import net.eagl.minetorio.block.MinetorioBlocks;
+import net.eagl.minetorio.event.BlockInteractionEvents;
 import net.eagl.minetorio.event.PlayerJoinHandler;
 import net.eagl.minetorio.item.MinetorioCreativeModTabs;
 import net.eagl.minetorio.item.MinetorioItems;
@@ -11,6 +12,7 @@ import net.eagl.minetorio.worldgen.biome.surface.MinetorioSurfaceRules;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -41,11 +43,13 @@ public class Minetorio
         MinetorioBlocks.register(modEventBus);
         MinetorioItems.register(modEventBus);
         MinetorioCreativeModTabs.register(modEventBus);
+
+
         MinecraftForge.EVENT_BUS.register(PlayerJoinHandler.class);
+        MinecraftForge.EVENT_BUS.register(BlockInteractionEvents.class);
+
         modEventBus.addListener(this::commonSetup);
-
         MinecraftForge.EVENT_BUS.register(this);
-
         modEventBus.addListener(this::addCreative);
 
     }
