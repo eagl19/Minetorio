@@ -21,18 +21,18 @@ public class DataGenerators {
         ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
         CompletableFuture<HolderLookup.Provider> lookupProvider = event.getLookupProvider();
 
-        generator.addProvider(event.includeServer(), new MinetorioRecipeProvider(packOutput));
-        generator.addProvider(event.includeServer(), MinetorioLootTableProvider.create(packOutput));
+       // generator.addProvider(event.includeServer(), new MinetorioRecipeProvider(packOutput));
+       // generator.addProvider(event.includeServer(), MinetorioLootTableProvider.create(packOutput));
 
         generator.addProvider(event.includeClient(), new MinetorioBlockStateProvider(packOutput, existingFileHelper));
         generator.addProvider(event.includeClient(), new MinetorioItemModelProvider(packOutput, existingFileHelper));
 
-        MinetorioBlockTagGenerator blockTagGenerator = generator.addProvider(event.includeServer(),
-                new MinetorioBlockTagGenerator(packOutput, lookupProvider, existingFileHelper));
-        generator.addProvider(event.includeServer(), new MinetorioItemTagGenerator(packOutput, lookupProvider, blockTagGenerator.contentsGetter(), existingFileHelper));
+      //  MinetorioBlockTagGenerator blockTagGenerator = generator.addProvider(event.includeServer(),
+      //          new MinetorioBlockTagGenerator(packOutput, lookupProvider, existingFileHelper));
+       // generator.addProvider(event.includeServer(), new MinetorioItemTagGenerator(packOutput, lookupProvider, blockTagGenerator.contentsGetter(), existingFileHelper));
 
-        generator.addProvider(event.includeServer(), new MinetorioGlobalLootModifiersProvider(packOutput));
-        generator.addProvider(event.includeServer(), new MinetorioPoiTypeTagsProvider(packOutput, lookupProvider, existingFileHelper));
+      //  generator.addProvider(event.includeServer(), new MinetorioGlobalLootModifiersProvider(packOutput));
+      //  generator.addProvider(event.includeServer(), new MinetorioPoiTypeTagsProvider(packOutput, lookupProvider, existingFileHelper));
 
         generator.addProvider(event.includeServer(), new MinetorioWorldGenProvider(packOutput, lookupProvider));
     }

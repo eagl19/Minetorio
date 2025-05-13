@@ -1,15 +1,14 @@
 package net.eagl.minetorio.worldgen.biome;
 
 import net.eagl.minetorio.Minetorio;
-import net.eagl.minetorio.entity.MinetorioEntities;
-import net.eagl.minetorio.sound.MinetorioSounds;
-import net.eagl.minetorio.worldgen.MinetorioPlacedFeatures;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BiomeDefaultFeatures;
 import net.minecraft.data.worldgen.BootstapContext;
 import net.minecraft.data.worldgen.placement.VegetationPlacements;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.Musics;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.biome.*;
@@ -17,7 +16,7 @@ import net.minecraft.world.level.levelgen.GenerationStep;
 
 public class MinetorioBiomes {
     public static final ResourceKey<Biome> TEST_BIOME = ResourceKey.create(Registries.BIOME,
-            Minetorio.resourceLocation("test_biome"));
+            ResourceLocation.fromNamespaceAndPath(Minetorio.MOD_ID,"test_biome"));
 
     public static void boostrap(BootstapContext<Biome> context) {
         context.register(TEST_BIOME, testBiome(context));
@@ -34,7 +33,7 @@ public class MinetorioBiomes {
 
     public static Biome testBiome(BootstapContext<Biome> context) {
         MobSpawnSettings.Builder spawnBuilder = new MobSpawnSettings.Builder();
-        spawnBuilder.addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(MinetorioEntities.RHINO.get(), 2, 3, 5));
+        spawnBuilder.addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(EntityType.COW, 2, 3, 5));
 
         spawnBuilder.addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(EntityType.WOLF, 5, 4, 4));
 
@@ -55,7 +54,6 @@ public class MinetorioBiomes {
 
         BiomeDefaultFeatures.addDefaultMushrooms(biomeBuilder);
         BiomeDefaultFeatures.addDefaultExtraVegetation(biomeBuilder);
-        biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MinetorioPlacedFeatures.PINE_PLACED_KEY);
 
         return new Biome.BiomeBuilder()
                 .hasPrecipitation(true)
@@ -71,7 +69,8 @@ public class MinetorioBiomes {
                         .foliageColorOverride(0xd203fc)
                         .fogColor(0x22a1e6)
                         .ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS)
-                        .backgroundMusic(Musics.createGameMusic(MinetorioSounds.BAR_BRAWL.getHolder().get())).build())
+                       // .backgroundMusic(Musics.createGameMusic(SoundEvents.MUSIC_BIOME_MEADOW))
+                        .build())
                 .build();
     }
 }

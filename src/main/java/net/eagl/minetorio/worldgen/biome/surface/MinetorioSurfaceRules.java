@@ -1,6 +1,5 @@
 package net.eagl.minetorio.worldgen.biome.surface;
 
-import net.eagl.minetorio.block.MinetorioBlocks;
 import net.eagl.minetorio.worldgen.biome.MinetorioBiomes;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -9,8 +8,6 @@ import net.minecraft.world.level.levelgen.SurfaceRules;
 public class MinetorioSurfaceRules {
     private static final SurfaceRules.RuleSource DIRT = makeStateRule(Blocks.DIRT);
     private static final SurfaceRules.RuleSource GRASS_BLOCK = makeStateRule(Blocks.GRASS_BLOCK);
-    private static final SurfaceRules.RuleSource SAPPHIRE = makeStateRule(MinetorioBlocks.SAPPHIRE_BLOCK.get());
-    private static final SurfaceRules.RuleSource RAW_SAPPHIRE = makeStateRule(MinetorioBlocks.RAW_SAPPHIRE_BLOCK.get());
 
 
     public static SurfaceRules.RuleSource makeRules() {
@@ -20,8 +17,8 @@ public class MinetorioSurfaceRules {
 
         return SurfaceRules.sequence(
                 SurfaceRules.sequence(SurfaceRules.ifTrue(SurfaceRules.isBiome(MinetorioBiomes.TEST_BIOME),
-                                SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR, RAW_SAPPHIRE)),
-                        SurfaceRules.ifTrue(SurfaceRules.ON_CEILING, SAPPHIRE)),
+                                SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR, GRASS_BLOCK)),
+                        SurfaceRules.ifTrue(SurfaceRules.ON_CEILING, DIRT)),
 
 
                 // Default to a grass and dirt surface
