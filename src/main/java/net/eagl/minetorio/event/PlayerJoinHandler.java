@@ -44,8 +44,9 @@ public class PlayerJoinHandler {
         int index = 0;
 
         for (int dx = 2; dx >= -3; dx--) {
-            int numberValue = states[index % states.length];
+            int numberValue;
             for (int dz = 2; dz >= -3; dz--) {
+                numberValue = states[(index+4+dz) % states.length];
                 BlockPos pos = spawnPos.offset(dx, -1, dz);
                 BlockState state = block.defaultBlockState().setValue(GlowingBedrockBlock.NUMBER, numberValue);
                 minetorioLevel.setBlockAndUpdate(pos, state);
