@@ -1,0 +1,20 @@
+{
+  "variants": {
+    "number=0": { "model": "minetorio:block/glowing_bedrock_0" },
+    "number=1": { "model": "minetorio:block/glowing_bedrock_1" },
+    "number=2": { "model": "minetorio:block/glowing_bedrock_2" },
+    "number=3": { "model": "minetorio:block/glowing_bedrock_3" },
+    "number=4": { "model": "minetorio:block/glowing_bedrock_4" },
+    "number=5": { "model": "minetorio:block/glowing_bedrock_5" },
+    "number=6": { "model": "minetorio:block/glowing_bedrock_6" },
+    "number=7": { "model": "minetorio:block/glowing_bedrock_7" },
+    "number=8": { "model": "minetorio:block/glowing_bedrock_8" },
+    "number=9": { "model": "minetorio:block/glowing_bedrock_9" },
+    "number=10": { "model": "minetorio:block/glowing_bedrock_10" },
+    "number=11": { "model": "minetorio:block/glowing_bedrock_11" },
+    "number=12": { "model": "minetorio:block/glowing_bedrock_12" },
+    "number=13": { "model": "minetorio:block/glowing_bedrock_13" },
+    "number=14": { "model": "minetorio:block/glowing_bedrock_14" },
+    "number=15": { "model": "minetorio:block/glowing_bedrock_15" }
+  }
+}

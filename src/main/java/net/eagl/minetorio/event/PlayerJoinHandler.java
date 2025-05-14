@@ -1,10 +1,14 @@
 package net.eagl.minetorio.event;
 
 import net.eagl.minetorio.Minetorio;
+import net.eagl.minetorio.block.MinetorioBlocks;
+import net.eagl.minetorio.block.custom.GlowingBedrockBlock;
 import net.eagl.minetorio.worldgen.dimension.MinetorioDimensions;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -33,6 +37,21 @@ public class PlayerJoinHandler {
                 spawnPos.getZ() + 0.5,
                 player.getYRot(),
                 player.getXRot());
+
+        // Генерація платформи
+        int[] states = {0, 3, 6, 9, 12, 15};
+        Block block = MinetorioBlocks.GLOWING_BEDROCK.get();
+        int index = 0;
+
+        for (int dx = 2; dx >= -3; dx--) {
+            int numberValue = states[index % states.length];
+            for (int dz = 2; dz >= -3; dz--) {
+                BlockPos pos = spawnPos.offset(dx, -1, dz);
+                BlockState state = block.defaultBlockState().setValue(GlowingBedrockBlock.NUMBER, numberValue);
+                minetorioLevel.setBlockAndUpdate(pos, state);
+            }
+            index++;
+        }
 
         // Позначаємо, що телепортація вже виконана
         player.getPersistentData().putBoolean("minetorio_teleported", true);

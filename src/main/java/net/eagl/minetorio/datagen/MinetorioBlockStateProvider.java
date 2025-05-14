@@ -17,7 +17,8 @@ public class MinetorioBlockStateProvider extends BlockStateProvider {
 
     @Override
     protected void registerStatesAndModels() {
-        blockWithItem(MinetorioBlocks.GLOWING_BEDROCK);
+
+       // blockWithItem(MinetorioBlocks.GLOWING_BEDROCK);
     }
 
     private void blockWithItem(RegistryObject<Block> blockRegistryObject) {

@@ -6,6 +6,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -20,7 +21,7 @@ public class BlockInteractionEvents {
         BlockPos pos = event.getPos();
         BlockState state = level.getBlockState(pos);
 
-        if (state.is(MinetorioBlocks.GLOWING_BEDROCK.get())) {
+        if (state.is(Blocks.IRON_BLOCK)) {
             if (event.getEntity() instanceof ServerPlayer serverPlayer) {
                 InteractionResult result = GlowingBlockUseHandler.handle(state, level, pos, serverPlayer, event.getHand(), event.getHitVec());
                 event.setCancellationResult(result);
