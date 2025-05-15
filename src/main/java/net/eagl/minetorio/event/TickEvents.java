@@ -14,7 +14,7 @@ public class TickEvents {
         if (event.phase == TickEvent.Phase.END) {
             MinecraftServer server = event.getServer();
             for (ServerLevel level : server.getAllLevels()) {
-                PlayerTimers.tick(level);
+                BlockTimers.tick(level);
             }
         }
     }

@@ -1,7 +1,5 @@
 package net.eagl.minetorio.block.custom;
 
-
-
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
@@ -11,7 +9,7 @@ import net.minecraft.world.level.material.MapColor;
 
 public class GlowingBedrockBlock extends Block {
 
-    public static IntegerProperty NUMBER = IntegerProperty.create("number",0,15);
+    public static IntegerProperty NUMBER = IntegerProperty.create("number",0,1);
 
     public GlowingBedrockBlock() {
         super(BlockBehaviour.Properties.of()

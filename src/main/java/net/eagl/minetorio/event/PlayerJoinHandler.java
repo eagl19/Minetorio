@@ -39,19 +39,14 @@ public class PlayerJoinHandler {
                 player.getXRot());
 
         // Генерація платформи
-        int[] states = {0, 3, 6, 9, 12, 15};
         Block block = MinetorioBlocks.GLOWING_BEDROCK.get();
-        int index = 0;
+        BlockState state = block.defaultBlockState().setValue(GlowingBedrockBlock.NUMBER, 0);
 
         for (int dx = 2; dx >= -3; dx--) {
-            int numberValue;
             for (int dz = 2; dz >= -3; dz--) {
-                numberValue = states[(index+4+dz) % states.length];
                 BlockPos pos = spawnPos.offset(dx, -1, dz);
-                BlockState state = block.defaultBlockState().setValue(GlowingBedrockBlock.NUMBER, numberValue);
                 minetorioLevel.setBlockAndUpdate(pos, state);
             }
-            index++;
         }
 
         // Позначаємо, що телепортація вже виконана

@@ -2,11 +2,14 @@ package net.eagl.minetorio.event;
 
 import net.eagl.minetorio.Minetorio;
 import net.eagl.minetorio.block.MinetorioBlocks;
+import net.eagl.minetorio.block.custom.GlowingBedrockBlock;
+import net.eagl.minetorio.item.MinetorioItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -21,11 +24,21 @@ public class BlockInteractionEvents {
         BlockPos pos = event.getPos();
         BlockState state = level.getBlockState(pos);
 
-        if (state.is(Blocks.IRON_BLOCK)) {
-            if (event.getEntity() instanceof ServerPlayer serverPlayer) {
-                InteractionResult result = GlowingBlockUseHandler.handle(state, level, pos, serverPlayer, event.getHand(), event.getHitVec());
-                event.setCancellationResult(result);
-                event.setCanceled(true);
+        if (event.getEntity() instanceof ServerPlayer serverPlayer && !level.isClientSide) {
+            if (event.getHand() == InteractionHand.MAIN_HAND) return;
+            if (state.is(MinetorioBlocks.GLOWING_BEDROCK.get())) {
+                if (state.getValue(GlowingBedrockBlock.NUMBER) != 0) {
+
+                    serverPlayer.getInventory().add(new ItemStack(MinetorioItems.SAPPHIRE.get(), 1));
+                    event.setCanceled(true);
+
+                } else {
+
+                    InteractionResult result = GlowingBlockUseHandler.handle(state, level, pos, serverPlayer, event.getHand(), event.getHitVec());
+                    event.setCancellationResult(result);
+                    event.setCanceled(true);
+
+                }
             }
         }
     }

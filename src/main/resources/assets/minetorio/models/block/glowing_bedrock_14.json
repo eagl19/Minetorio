@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:block/cube_all",
-  "textures": {
-    "all": "minetorio:block/glowing_bedrock_14"
-  }
-}
