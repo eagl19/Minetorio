@@ -7,19 +7,23 @@ import net.minecraft.data.worldgen.BootstapContext;
 import net.minecraft.data.worldgen.placement.VegetationPlacements;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.Musics;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.biome.*;
 import net.minecraft.world.level.levelgen.GenerationStep;
+import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 
 public class MinetorioBiomes {
     public static final ResourceKey<Biome> TEST_BIOME = ResourceKey.create(Registries.BIOME,
             ResourceLocation.fromNamespaceAndPath(Minetorio.MOD_ID,"test_biome"));
 
+    public static final ResourceKey<Biome> EMPTY_BIOME = ResourceKey.create(Registries.BIOME,
+            ResourceLocation.fromNamespaceAndPath(Minetorio.MOD_ID,"empty_biome"));
+
+
     public static void boostrap(BootstapContext<Biome> context) {
         context.register(TEST_BIOME, testBiome(context));
+        context.register(EMPTY_BIOME, emptyBiome(context));
     }
 
     public static void globalOverworldGeneration(BiomeGenerationSettings.Builder builder) {
@@ -69,8 +73,30 @@ public class MinetorioBiomes {
                         .foliageColorOverride(0xd203fc)
                         .fogColor(0x22a1e6)
                         .ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS)
-                       // .backgroundMusic(Musics.createGameMusic(SoundEvents.MUSIC_BIOME_MEADOW))
                         .build())
+                .build();
+    }
+
+    public static Biome emptyBiome(BootstapContext<Biome> context) {
+        MobSpawnSettings.Builder spawnBuilder = new MobSpawnSettings.Builder();
+
+        BiomeGenerationSettings.Builder biomeBuilder =
+                new BiomeGenerationSettings.Builder(context.lookup(Registries.PLACED_FEATURE), context.lookup(Registries.CONFIGURED_CARVER));
+
+        BiomeSpecialEffects effects = new BiomeSpecialEffects.Builder()
+                .fogColor(0xAAAAAA)
+                .waterColor(0x444444)
+                .waterFogColor(0x222222)
+                .skyColor(0x777777)
+                .build();
+
+        return new Biome.BiomeBuilder()
+                .hasPrecipitation(false)
+                .temperature(0.5f)
+                .downfall(0f)
+                .generationSettings(biomeBuilder.build())
+                .mobSpawnSettings(spawnBuilder.build())
+                .specialEffects(effects)
                 .build();
     }
 }

@@ -24,7 +24,7 @@ public class PlayerJoinHandler {
         if (player.getPersistentData().getBoolean("minetorio_teleported")) return;
 
         // Отримуємо кастомний вимір
-        ServerLevel minetorioLevel = player.server.getLevel(MinetorioDimensions.MINETORIO_DIM_LEVEL_KEY);
+        ServerLevel minetorioLevel = player.server.getLevel(MinetorioDimensions.MINETORIO_DIM_EMPTY_LEVEL_KEY);
         if (minetorioLevel == null) return;
 
         // Спавн позиція (можеш змінити на власну логіку або генерацію структури)

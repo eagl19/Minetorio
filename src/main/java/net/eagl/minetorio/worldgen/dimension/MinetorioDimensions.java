@@ -3,6 +3,7 @@ package net.eagl.minetorio.worldgen.dimension;
 import com.mojang.datafixers.util.Pair;
 import net.eagl.minetorio.Minetorio;
 import net.eagl.minetorio.worldgen.biome.MinetorioBiomes;
+import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstapContext;
@@ -22,10 +23,23 @@ import java.util.List;
 import java.util.OptionalLong;
 
 public class MinetorioDimensions {
-    public static final ResourceKey<LevelStem> MINETORIO_DIM_KEY = ResourceKey.create(Registries.LEVEL_STEM,
+    public static final ResourceKey<LevelStem> MINETORIO_DIM_KEY = ResourceKey.create(
+            Registries.LEVEL_STEM,
             ResourceLocation.fromNamespaceAndPath(Minetorio.MOD_ID,"minetorio_dim"));
+
+    public static final ResourceKey<LevelStem> MINETORIO_DIM_EMPTY_KEY = ResourceKey.create(
+            Registries.LEVEL_STEM,
+            ResourceLocation.fromNamespaceAndPath(Minetorio.MOD_ID, "minetorio_dim_empty")
+    );
+
     public static final ResourceKey<Level> MINETORIO_DIM_LEVEL_KEY = ResourceKey.create(Registries.DIMENSION,
             ResourceLocation.fromNamespaceAndPath(Minetorio.MOD_ID,"minetorio_dim"));
+
+    public static final ResourceKey<Level> MINETORIO_DIM_EMPTY_LEVEL_KEY = ResourceKey.create(
+            Registries.DIMENSION,
+            ResourceLocation.fromNamespaceAndPath(Minetorio.MOD_ID, "minetorio_dim_empty")
+    );
+
     public static final ResourceKey<DimensionType> MINETORIO_DIM_DIM_TYPE = ResourceKey.create(Registries.DIMENSION_TYPE,
             ResourceLocation.fromNamespaceAndPath(Minetorio.MOD_ID,"minetorio_dim_type"));
 
@@ -67,5 +81,17 @@ public class MinetorioDimensions {
         LevelStem stem = new LevelStem(dimTypes.getOrThrow(MinetorioDimensions.MINETORIO_DIM_DIM_TYPE), noiseBasedChunkGenerator);
 
         context.register(MINETORIO_DIM_KEY, stem);
+
+        NoiseBasedChunkGenerator emptyBiomeChunkGen = new NoiseBasedChunkGenerator(
+                new FixedBiomeSource(biomeRegistry.getOrThrow(MinetorioBiomes.EMPTY_BIOME)),
+                noiseGenSettings.getOrThrow(NoiseGeneratorSettings.AMPLIFIED));
+
+
+        LevelStem emptyBiomeStem = new LevelStem(
+                dimTypes.getOrThrow(MINETORIO_DIM_DIM_TYPE),
+                emptyBiomeChunkGen);
+
+        context.register(MINETORIO_DIM_EMPTY_KEY, emptyBiomeStem);
+
     }
 }
