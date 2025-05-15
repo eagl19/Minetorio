@@ -78,27 +78,23 @@ public class MinetorioBiomes {
 
     public static Biome emptyBiome(BootstapContext<Biome> context) {
         MobSpawnSettings.Builder spawnBuilder = new MobSpawnSettings.Builder();
-        // НЕ додаємо мобів, тому залишаємо порожнім
 
         BiomeGenerationSettings.Builder biomeBuilder =
                 new BiomeGenerationSettings.Builder(context.lookup(Registries.PLACED_FEATURE), context.lookup(Registries.CONFIGURED_CARVER));
-        // НЕ додаємо нічого до генерації — немає дерев, рослин, води і т.п.
-
-        BiomeSpecialEffects effects = new BiomeSpecialEffects.Builder()
-                .fogColor(0x1a1a1a)          // темно-сірий/чорний туман
-                .waterColor(0x000000)        // чорна вода
-                .waterFogColor(0x050533)     // темно-синя вода у тумані
-                .skyColor(0x000000)          // чорне небо
-                .ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS) // характерний звук енду
-                .build();
 
         return new Biome.BiomeBuilder()
-                .hasPrecipitation(false)    // без опадів
-                .temperature(0.5f)          // нейтральна температура
-                .downfall(0f)               // без опадів
+                .hasPrecipitation(false)                    // без опадів
+                .temperature(0.5f)                            // нейтральна температура
+                .downfall(0f)                                    // без опадів
                 .generationSettings(biomeBuilder.build())
                 .mobSpawnSettings(spawnBuilder.build())
-                .specialEffects(effects)
+                .specialEffects(new BiomeSpecialEffects.Builder()
+                        .fogColor(0x1a1a1a)                                     // темно-сірий/чорний туман
+                        .waterColor(0x000000)                                // чорна вода
+                        .waterFogColor(0x050533)                         // темно-синя вода у тумані
+                        .skyColor(0x000000)                                 // чорне небо
+                        .ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS) // характерний звук енду
+                        .build())
                 .build();
     }
 }
