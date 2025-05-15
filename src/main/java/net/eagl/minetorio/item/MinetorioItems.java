@@ -35,6 +35,10 @@ public class MinetorioItems {
             () -> new PickaxeItem(MinetorioToolTiers.SAPPHIRE, 1, 1, new Item.Properties()));
     public static final RegistryObject<Item> SAPPHIRE_AXE = ITEMS.register("sapphire_axe",
             () -> new AxeItem(MinetorioToolTiers.SAPPHIRE, 7, 1, new Item.Properties()));
+
+    public static final RegistryObject<Item> MACE = ITEMS.register("mace",
+            () -> new AxeItem(MinetorioToolTiers.SAPPHIRE, 7, 1, new Item.Properties()));
+
     public static final RegistryObject<Item> SAPPHIRE_SHOVEL = ITEMS.register("sapphire_shovel",
             () -> new ShovelItem(MinetorioToolTiers.SAPPHIRE, 0, 0, new Item.Properties()));
     public static final RegistryObject<Item> SAPPHIRE_HOE = ITEMS.register("sapphire_hoe",

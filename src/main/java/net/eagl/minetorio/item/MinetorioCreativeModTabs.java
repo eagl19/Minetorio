@@ -32,6 +32,7 @@ public class MinetorioCreativeModTabs {
                         pOutput.accept(MinetorioItems.SAPPHIRE_SWORD.get());
                         pOutput.accept(MinetorioItems.SAPPHIRE_PICKAXE.get());
                         pOutput.accept(MinetorioItems.SAPPHIRE_AXE.get());
+                        pOutput.accept(MinetorioItems.MACE.get());
                         pOutput.accept(MinetorioItems.SAPPHIRE_SHOVEL.get());
                         pOutput.accept(MinetorioItems.SAPPHIRE_HOE.get());
 
