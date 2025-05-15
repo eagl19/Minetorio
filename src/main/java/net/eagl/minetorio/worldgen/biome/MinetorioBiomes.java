@@ -11,7 +11,6 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.biome.*;
 import net.minecraft.world.level.levelgen.GenerationStep;
-import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 
 public class MinetorioBiomes {
     public static final ResourceKey<Biome> TEST_BIOME = ResourceKey.create(Registries.BIOME,
@@ -79,21 +78,24 @@ public class MinetorioBiomes {
 
     public static Biome emptyBiome(BootstapContext<Biome> context) {
         MobSpawnSettings.Builder spawnBuilder = new MobSpawnSettings.Builder();
+        // НЕ додаємо мобів, тому залишаємо порожнім
 
         BiomeGenerationSettings.Builder biomeBuilder =
                 new BiomeGenerationSettings.Builder(context.lookup(Registries.PLACED_FEATURE), context.lookup(Registries.CONFIGURED_CARVER));
+        // НЕ додаємо нічого до генерації — немає дерев, рослин, води і т.п.
 
         BiomeSpecialEffects effects = new BiomeSpecialEffects.Builder()
-                .fogColor(0xAAAAAA)
-                .waterColor(0x444444)
-                .waterFogColor(0x222222)
-                .skyColor(0x777777)
+                .fogColor(0x1a1a1a)          // темно-сірий/чорний туман
+                .waterColor(0x000000)        // чорна вода
+                .waterFogColor(0x050533)     // темно-синя вода у тумані
+                .skyColor(0x000000)          // чорне небо
+                .ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS) // характерний звук енду
                 .build();
 
         return new Biome.BiomeBuilder()
-                .hasPrecipitation(false)
-                .temperature(0.5f)
-                .downfall(0f)
+                .hasPrecipitation(false)    // без опадів
+                .temperature(0.5f)          // нейтральна температура
+                .downfall(0f)               // без опадів
                 .generationSettings(biomeBuilder.build())
                 .mobSpawnSettings(spawnBuilder.build())
                 .specialEffects(effects)
