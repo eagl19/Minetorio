@@ -7,6 +7,7 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
+@SuppressWarnings("unused")
 @Mod.EventBusSubscriber(modid = Minetorio.MOD_ID)
 public class TickEvents {
     @SubscribeEvent
@@ -14,7 +15,7 @@ public class TickEvents {
         if (event.phase == TickEvent.Phase.END) {
             MinecraftServer server = event.getServer();
             for (ServerLevel level : server.getAllLevels()) {
-                BlockTimers.tick(level);
+                Timer.tick(level);
             }
         }
     }

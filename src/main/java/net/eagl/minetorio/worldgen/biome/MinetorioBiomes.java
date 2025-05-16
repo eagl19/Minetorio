@@ -16,13 +16,9 @@ public class MinetorioBiomes {
     public static final ResourceKey<Biome> TEST_BIOME = ResourceKey.create(Registries.BIOME,
             ResourceLocation.fromNamespaceAndPath(Minetorio.MOD_ID,"test_biome"));
 
-    public static final ResourceKey<Biome> EMPTY_BIOME = ResourceKey.create(Registries.BIOME,
-            ResourceLocation.fromNamespaceAndPath(Minetorio.MOD_ID,"empty_biome"));
-
 
     public static void boostrap(BootstapContext<Biome> context) {
         context.register(TEST_BIOME, testBiome(context));
-        context.register(EMPTY_BIOME, emptyBiome(context));
     }
 
     public static void globalOverworldGeneration(BiomeGenerationSettings.Builder builder) {
@@ -76,25 +72,4 @@ public class MinetorioBiomes {
                 .build();
     }
 
-    public static Biome emptyBiome(BootstapContext<Biome> context) {
-        MobSpawnSettings.Builder spawnBuilder = new MobSpawnSettings.Builder();
-
-        BiomeGenerationSettings.Builder biomeBuilder =
-                new BiomeGenerationSettings.Builder(context.lookup(Registries.PLACED_FEATURE), context.lookup(Registries.CONFIGURED_CARVER));
-
-        return new Biome.BiomeBuilder()
-                .hasPrecipitation(false)                    // без опадів
-                .temperature(0.5f)                            // нейтральна температура
-                .downfall(0f)                                    // без опадів
-                .generationSettings(biomeBuilder.build())
-                .mobSpawnSettings(spawnBuilder.build())
-                .specialEffects(new BiomeSpecialEffects.Builder()
-                        .fogColor(0x1a1a1a)                                     // темно-сірий/чорний туман
-                        .waterColor(0x000000)                                // чорна вода
-                        .waterFogColor(0x050533)                         // темно-синя вода у тумані
-                        .skyColor(0x000000)                                 // чорне небо
-                        .ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS) // характерний звук енду
-                        .build())
-                .build();
-    }
 }

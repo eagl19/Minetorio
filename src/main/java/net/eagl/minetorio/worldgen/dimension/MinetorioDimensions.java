@@ -3,7 +3,6 @@ package net.eagl.minetorio.worldgen.dimension;
 import com.mojang.datafixers.util.Pair;
 import net.eagl.minetorio.Minetorio;
 import net.eagl.minetorio.worldgen.biome.MinetorioBiomes;
-import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstapContext;
@@ -16,10 +15,13 @@ import net.minecraft.world.level.biome.*;
 import net.minecraft.world.level.dimension.BuiltinDimensionTypes;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.dimension.LevelStem;
+import net.minecraft.world.level.levelgen.FlatLevelSource;
 import net.minecraft.world.level.levelgen.NoiseBasedChunkGenerator;
 import net.minecraft.world.level.levelgen.NoiseGeneratorSettings;
+import net.minecraft.world.level.levelgen.flat.FlatLevelGeneratorSettings;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.OptionalLong;
 
 public class MinetorioDimensions {
@@ -31,6 +33,7 @@ public class MinetorioDimensions {
             Registries.LEVEL_STEM,
             ResourceLocation.fromNamespaceAndPath(Minetorio.MOD_ID, "minetorio_dim_empty")
     );
+
 
     public static final ResourceKey<Level> MINETORIO_DIM_LEVEL_KEY = ResourceKey.create(Registries.DIMENSION,
             ResourceLocation.fromNamespaceAndPath(Minetorio.MOD_ID,"minetorio_dim"));
@@ -68,23 +71,29 @@ public class MinetorioDimensions {
         HolderGetter<DimensionType> dimTypes = context.lookup(Registries.DIMENSION_TYPE);
         HolderGetter<NoiseGeneratorSettings> noiseGenSettings = context.lookup(Registries.NOISE_SETTINGS);
 
-        NoiseBasedChunkGenerator wrappedChunkGenerator = new NoiseBasedChunkGenerator(
-                new FixedBiomeSource(biomeRegistry.getOrThrow(MinetorioBiomes.TEST_BIOME)),
-                noiseGenSettings.getOrThrow(NoiseGeneratorSettings.AMPLIFIED));
-
         NoiseBasedChunkGenerator noiseBasedChunkGenerator = new NoiseBasedChunkGenerator(
                 MultiNoiseBiomeSource.createFromList(
                         new Climate.ParameterList<>(List.of(Pair.of(
                                         Climate.parameters(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F), biomeRegistry.getOrThrow(MinetorioBiomes.TEST_BIOME))                        ))),
                 noiseGenSettings.getOrThrow(NoiseGeneratorSettings.AMPLIFIED));
 
-        LevelStem stem = new LevelStem(dimTypes.getOrThrow(MinetorioDimensions.MINETORIO_DIM_DIM_TYPE), noiseBasedChunkGenerator);
+        LevelStem stem = new LevelStem(
+                dimTypes.getOrThrow(MinetorioDimensions.MINETORIO_DIM_DIM_TYPE),
+                noiseBasedChunkGenerator);
 
         context.register(MINETORIO_DIM_KEY, stem);
 
-        NoiseBasedChunkGenerator emptyBiomeChunkGen = new NoiseBasedChunkGenerator(
-                new FixedBiomeSource(biomeRegistry.getOrThrow(MinetorioBiomes.EMPTY_BIOME)),
-                noiseGenSettings.getOrThrow(NoiseGeneratorSettings.AMPLIFIED));
+
+
+        FlatLevelGeneratorSettings flatSettings = new FlatLevelGeneratorSettings(
+                Optional.empty(),
+                biomeRegistry.getOrThrow(Biomes.THE_VOID),
+                List.of()
+        );
+        flatSettings.getLayersInfo().clear();
+        flatSettings.updateLayers();
+
+        FlatLevelSource emptyBiomeChunkGen = new FlatLevelSource(flatSettings);
 
 
         LevelStem emptyBiomeStem = new LevelStem(

@@ -21,7 +21,10 @@ public class MinetorioItemModelProvider extends ItemModelProvider {
 
     @Override
     protected void registerModels() {
+
         simpleItem(MinetorioItems.SAPPHIRE);
+        simpleItem(MinetorioItems.INFINITY);
+        simpleItem(MinetorioItems.VOID);
 
     }
 

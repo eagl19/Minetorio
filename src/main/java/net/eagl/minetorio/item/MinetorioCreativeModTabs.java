@@ -20,6 +20,8 @@ public class MinetorioCreativeModTabs {
                     .title(Component.translatable("creativetab.minetorio_tab"))
                     .displayItems((pParameters,pOutput) ->{
                         pOutput.accept(MinetorioItems.SAPPHIRE.get());
+                        pOutput.accept(MinetorioItems.INFINITY.get());
+                        pOutput.accept(MinetorioItems.VOID.get());
 
                         pOutput.accept(MinetorioBlocks.GLOWING_BEDROCK.get());
 

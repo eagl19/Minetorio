@@ -1,5 +1,7 @@
 {
   "block.minetorio.glowing_bedrock": "Minetorio Bedrock",
   "item.minetorio.sapphire": "Sapphire",
+  "item.minetorio.infinity": "Infinity",
+  "item.minetorio.void": "Void",
   "creativetab.minetorio_tab": "Minetorio"
 }

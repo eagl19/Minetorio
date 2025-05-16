@@ -4,12 +4,13 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.MapColor;
 
 public class GlowingBedrockBlock extends Block {
 
-    public static IntegerProperty NUMBER = IntegerProperty.create("number",0,1);
+
+    public static final EnumProperty<GlowingBedrockBlockState> STATE = EnumProperty.create("state", GlowingBedrockBlockState.class);
 
     public GlowingBedrockBlock() {
         super(BlockBehaviour.Properties.of()
@@ -22,7 +23,7 @@ public class GlowingBedrockBlock extends Block {
     }
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(NUMBER);
+        builder.add(STATE);
     }
 
 

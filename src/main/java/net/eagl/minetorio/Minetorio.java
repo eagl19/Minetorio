@@ -3,16 +3,14 @@ package net.eagl.minetorio;
 
 import com.mojang.logging.LogUtils;
 import net.eagl.minetorio.block.MinetorioBlocks;
-import net.eagl.minetorio.event.BlockInteractionEvents;
-import net.eagl.minetorio.event.PlayerJoinHandler;
+import net.eagl.minetorio.event.PlayerClickEvents;
+import net.eagl.minetorio.event.PlayerJoinEvents;
 import net.eagl.minetorio.item.MinetorioCreativeModTabs;
 import net.eagl.minetorio.item.MinetorioItems;
 import net.eagl.minetorio.worldgen.biome.MinetorioTerrablender;
-import net.eagl.minetorio.worldgen.biome.surface.MinetorioSurfaceRules;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
-import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -21,7 +19,6 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
-import terrablender.api.SurfaceRuleManager;
 
 
 // The value here should match an entry in the META-INF/mods.toml file
@@ -45,8 +42,8 @@ public class Minetorio
         MinetorioCreativeModTabs.register(modEventBus);
 
 
-        MinecraftForge.EVENT_BUS.register(PlayerJoinHandler.class);
-        MinecraftForge.EVENT_BUS.register(BlockInteractionEvents.class);
+        MinecraftForge.EVENT_BUS.register(PlayerJoinEvents.class);
+        MinecraftForge.EVENT_BUS.register(PlayerClickEvents.class);
 
         modEventBus.addListener(this::commonSetup);
         MinecraftForge.EVENT_BUS.register(this);
