@@ -1,7 +1,10 @@
 {
   "block.minetorio.glowing_bedrock": "Minetorio Bedrock",
   "item.minetorio.sapphire": "Sapphire",
-  "item.minetorio.infinity": "Infinity",
-  "item.minetorio.void": "Void",
+  "item.minetorio.pattern_cloud": "Cloud",
+  "item.minetorio.pattern_fire": "Fire",
+  "item.minetorio.pattern_infinity": "Infinity",
+  "item.minetorio.pattern_void": "Void",
+  "item.minetorio.pattern_water": "Water",
   "creativetab.minetorio_tab": "Minetorio"
 }

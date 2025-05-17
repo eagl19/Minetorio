@@ -5,7 +5,6 @@ import net.eagl.minetorio.item.MinetorioItems;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.client.model.generators.ItemModelBuilder;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.RegistryObject;
@@ -23,15 +22,26 @@ public class MinetorioItemModelProvider extends ItemModelProvider {
     protected void registerModels() {
 
         simpleItem(MinetorioItems.SAPPHIRE);
-        simpleItem(MinetorioItems.INFINITY);
-        simpleItem(MinetorioItems.VOID);
+
+        simplePatternItem(MinetorioItems.PATTERN_CLOUD);
+        simplePatternItem(MinetorioItems.PATTERN_FIRE);
+        simplePatternItem(MinetorioItems.PATTERN_INFINITY);
+        simplePatternItem(MinetorioItems.PATTERN_VOID);
+        simplePatternItem(MinetorioItems.PATTERN_WATER);
 
     }
 
-    private ItemModelBuilder simpleItem(RegistryObject<Item> item) {
-        return withExistingParent(itemPath(item),
+    private void simplePatternItem(RegistryObject<Item> item) {
+        withExistingParent(itemPath(item),
                 ResourceLocation.fromNamespaceAndPath("minecraft", "item/generated")).texture("layer0",
-                ResourceLocation.fromNamespaceAndPath(Minetorio.MOD_ID,"item/" + itemPath(item)));
+                ResourceLocation.fromNamespaceAndPath(Minetorio.MOD_ID, "item/patterns/" + itemPath(item).replaceFirst("pattern_","")));
+    }
+
+
+    private void simpleItem(RegistryObject<Item> item) {
+        withExistingParent(itemPath(item),
+                ResourceLocation.fromNamespaceAndPath("minecraft", "item/generated")).texture("layer0",
+                ResourceLocation.fromNamespaceAndPath(Minetorio.MOD_ID, "item/" + itemPath(item)));
     }
 
     private String itemPath(RegistryObject<?> item){

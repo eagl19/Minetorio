@@ -15,12 +15,20 @@ public class MinetorioItems {
     public static final RegistryObject<Item> SAPPHIRE = ITEMS.register("sapphire",
             ()-> new Item(new Item.Properties()));
 
-    public static final RegistryObject<Item> INFINITY = ITEMS.register("infinity",
+    public static final RegistryObject<Item> PATTERN_INFINITY = ITEMS.register("pattern_infinity",
             ()-> new Item(new Item.Properties()));
 
-    public static final RegistryObject<Item> VOID = ITEMS.register("void",
+    public static final RegistryObject<Item> PATTERN_VOID = ITEMS.register("pattern_void",
             ()-> new Item(new Item.Properties()));
 
+    public static final RegistryObject<Item> PATTERN_CLOUD = ITEMS.register("pattern_cloud",
+            ()-> new Item(new Item.Properties()));
+
+    public static final RegistryObject<Item> PATTERN_FIRE = ITEMS.register("pattern_fire",
+            ()-> new Item(new Item.Properties()));
+
+    public static final RegistryObject<Item> PATTERN_WATER = ITEMS.register("pattern_water",
+            ()-> new Item(new Item.Properties()));
 
     public static void register(IEventBus eventBus){
         ITEMS.register(eventBus);

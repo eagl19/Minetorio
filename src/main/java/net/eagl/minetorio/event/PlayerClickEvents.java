@@ -5,7 +5,9 @@ import net.eagl.minetorio.block.MinetorioBlocks;
 import net.eagl.minetorio.block.custom.GlowingBedrockBlock;
 import net.eagl.minetorio.block.custom.GlowingBedrockBlockState;
 import net.eagl.minetorio.item.MinetorioItems;
+import net.eagl.minetorio.worldgen.dimension.MinetorioDimensions;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -30,7 +32,23 @@ public class PlayerClickEvents {
         BlockState state = level.getBlockState(pos);
 
         if (event.getEntity() instanceof ServerPlayer serverPlayer && !level.isClientSide) {
+            if (!level.dimension().equals(MinetorioDimensions.MINETORIO_DIM_EMPTY_LEVEL_KEY)) return;
             if (event.getHand() == InteractionHand.MAIN_HAND) return;
+
+            // перевірка на SHIFT
+            if (serverPlayer.isCrouching()) {
+
+                if (serverPlayer.getItemInHand(InteractionHand.MAIN_HAND).getItem() == MinetorioItems.PATTERN_VOID.get() ) {
+
+                    serverPlayer.teleportTo((ServerLevel) level,
+                            1000 + 0.5,
+                            100,
+                            1000 + 0.5,
+                            serverPlayer.getYRot(),
+                            serverPlayer.getXRot());
+
+                }
+            }
             if (state.is(MinetorioBlocks.GLOWING_BEDROCK.get())) {
                 switch (state.getValue(GlowingBedrockBlock.STATE)) {
                     case BEDROCK -> {
@@ -53,13 +71,13 @@ public class PlayerClickEvents {
                     }
                     case INFINITY -> {
 
-                        addItemIfNotContains(serverPlayer, MinetorioItems.INFINITY.get());
+                        addItemIfNotContains(serverPlayer, MinetorioItems.PATTERN_INFINITY.get());
                         event.setCanceled(true);
 
                     }
                     case VOID -> {
 
-                        addItemIfNotContains(serverPlayer, MinetorioItems.VOID.get());
+                        addItemIfNotContains(serverPlayer, MinetorioItems.PATTERN_VOID.get());
                         event.setCanceled(true);
                     }
                 }
