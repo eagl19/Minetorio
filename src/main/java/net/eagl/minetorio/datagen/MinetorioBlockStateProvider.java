@@ -3,11 +3,9 @@ package net.eagl.minetorio.datagen;
 import net.eagl.minetorio.Minetorio;
 import net.eagl.minetorio.block.MinetorioBlocks;
 import net.eagl.minetorio.block.custom.GlowingBedrockBlock;
-import net.eagl.minetorio.block.custom.GlowingBedrockBlockState;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
-import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
 import net.minecraftforge.common.data.ExistingFileHelper;
@@ -26,6 +24,31 @@ public class MinetorioBlockStateProvider extends BlockStateProvider {
     protected void registerStatesAndModels() {
 
         blockWithStatesAndItem(MinetorioBlocks.GLOWING_BEDROCK.get(),GlowingBedrockBlock.STATE);
+
+        blockWithCustomSides(MinetorioBlocks.BEACON.get(),
+                "item/patterns/void",
+                "item/patterns/infinity",
+                "item/patterns/air",
+                "item/patterns/fire",
+                "item/patterns/earth",
+                "item/patterns/water");
+
+    }
+
+    private void blockWithCustomSides(Block block, String pDown,String pUp,String pNorth,String pSouth,String pWest,String pEst) {
+        String name = blockName(block);
+        models().withExistingParent(name, mcLoc("block/cube"))
+                .texture("down", modLoc(pDown))
+                .texture("up", modLoc(pUp))
+                .texture("north", modLoc(pNorth))
+                .texture("south", modLoc(pSouth))
+                .texture("west", modLoc(pWest))
+                .texture("east", modLoc(pEst));
+
+        simpleBlock(block, models().getExistingFile(modLoc("block/" + name)));
+
+        itemModels().getBuilder(name)
+                .parent(models().getExistingFile(modLoc("block/" + name)));
     }
 
     private void blockWithStatesAndItem(Block pBlock, EnumProperty<?> pValue) {

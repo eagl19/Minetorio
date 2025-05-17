@@ -64,7 +64,7 @@ public class WorldInitEvents {
 
             blockPos = new BlockPos(1000,100,1000);
 
-            level.setBlockAndUpdate(blockPos.offset(0, 8, 0), Blocks.BEACON.defaultBlockState());
+            level.setBlockAndUpdate(blockPos.offset(0, 8, 0), MinetorioBlocks.BEACON.get().defaultBlockState());
 
             for (int dx = 9; dx >= -9; dx--) {
                 for (int dz = 9; dz >= -9; dz--) {

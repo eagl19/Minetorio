@@ -21,13 +21,16 @@ public class MinetorioCreativeModTabs {
                     .displayItems((pParameters,pOutput) ->{
                         pOutput.accept(MinetorioItems.SAPPHIRE.get());
 
+                        pOutput.accept(MinetorioItems.PATTERN_AIR.get());
                         pOutput.accept(MinetorioItems.PATTERN_CLOUD.get());
+                        pOutput.accept(MinetorioItems.PATTERN_EARTH.get());
                         pOutput.accept(MinetorioItems.PATTERN_FIRE.get());
                         pOutput.accept(MinetorioItems.PATTERN_INFINITY.get());
                         pOutput.accept(MinetorioItems.PATTERN_VOID.get());
                         pOutput.accept(MinetorioItems.PATTERN_WATER.get());
 
                         pOutput.accept(MinetorioBlocks.GLOWING_BEDROCK.get());
+                        pOutput.accept(MinetorioBlocks.BEACON.get());
 
 
                     })

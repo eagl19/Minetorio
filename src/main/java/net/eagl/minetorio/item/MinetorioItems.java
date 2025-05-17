@@ -30,6 +30,11 @@ public class MinetorioItems {
     public static final RegistryObject<Item> PATTERN_WATER = ITEMS.register("pattern_water",
             ()-> new Item(new Item.Properties()));
 
+    public static final RegistryObject<Item> PATTERN_EARTH = ITEMS.register("pattern_earth",
+            ()-> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> PATTERN_AIR = ITEMS.register("pattern_air",
+            ()-> new Item(new Item.Properties()));
+
     public static void register(IEventBus eventBus){
         ITEMS.register(eventBus);
     }

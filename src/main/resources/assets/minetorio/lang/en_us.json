@@ -1,7 +1,10 @@
 {
   "block.minetorio.glowing_bedrock": "Minetorio Bedrock",
+  "block.minetorio.beacon": "Minetorio Beacon",
   "item.minetorio.sapphire": "Sapphire",
+  "item.minetorio.pattern_air": "Air",
   "item.minetorio.pattern_cloud": "Cloud",
+  "item.minetorio.pattern_earth": "Earth",
   "item.minetorio.pattern_fire": "Fire",
   "item.minetorio.pattern_infinity": "Infinity",
   "item.minetorio.pattern_void": "Void",

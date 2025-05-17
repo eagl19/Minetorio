@@ -3,6 +3,7 @@ package net.eagl.minetorio;
 
 import com.mojang.logging.LogUtils;
 import net.eagl.minetorio.block.MinetorioBlocks;
+import net.eagl.minetorio.block.entity.MinetorioBlockEntities;
 import net.eagl.minetorio.event.PlayerClickEvents;
 import net.eagl.minetorio.event.PlayerJoinEvents;
 import net.eagl.minetorio.item.MinetorioCreativeModTabs;
@@ -40,7 +41,7 @@ public class Minetorio
         MinetorioBlocks.register(modEventBus);
         MinetorioItems.register(modEventBus);
         MinetorioCreativeModTabs.register(modEventBus);
-
+        MinetorioBlockEntities.register(modEventBus);
 
         MinecraftForge.EVENT_BUS.register(PlayerJoinEvents.class);
         MinecraftForge.EVENT_BUS.register(PlayerClickEvents.class);

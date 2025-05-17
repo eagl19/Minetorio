@@ -1,11 +1,13 @@
 package net.eagl.minetorio.block;
 
 import net.eagl.minetorio.Minetorio;
+import net.eagl.minetorio.block.custom.MinetorioBeaconBlock;
 import net.eagl.minetorio.block.custom.GlowingBedrockBlock;
 import net.eagl.minetorio.item.MinetorioItems;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -19,6 +21,9 @@ public class MinetorioBlocks {
 
     public static final RegistryObject<Block> GLOWING_BEDROCK = registerBlock("glowing_bedrock",
              GlowingBedrockBlock::new);
+
+    public static final RegistryObject<Block> BEACON = registerBlock("beacon",
+            () -> new MinetorioBeaconBlock(BlockBehaviour.Properties.copy(Blocks.BEACON)));
 
 
     private static <T extends Block> RegistryObject<T> registerBlock(String name, Supplier<T> block){
