@@ -1,7 +1,7 @@
 package net.eagl.minetorio.block.custom;
 
 
-import net.eagl.minetorio.block.entity.MinetorioBeaconBlockEntity;
+import net.eagl.minetorio.block.entity.PatternsCollectorBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -13,15 +13,16 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 
-public class MinetorioBeaconBlock extends Block implements EntityBlock {
+public class PatternsCollectorBlock extends Block implements EntityBlock {
 
-    public MinetorioBeaconBlock(Properties pProperties) {
+    public PatternsCollectorBlock() {
         super(BlockBehaviour.Properties.of()
-                .strength(3.5F)
-                .lightLevel(state -> 15) // світиться
+                .strength(-1.0F, 3600000.0F)
+                .lightLevel(state -> 15)
                 .noOcclusion());
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public @NotNull RenderShape getRenderShape(@NotNull BlockState state) {
         return RenderShape.MODEL;
@@ -29,7 +30,7 @@ public class MinetorioBeaconBlock extends Block implements EntityBlock {
 
     @Override
     public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
-        return new MinetorioBeaconBlockEntity(pos, state);
+        return new PatternsCollectorBlockEntity(pos, state);
     }
 
     @Override
@@ -37,7 +38,6 @@ public class MinetorioBeaconBlock extends Block implements EntityBlock {
         if (!level.isClientSide) return;
 
         for (Direction direction : Direction.values()) {
-            BlockPos target = pos.relative(direction);
             double dx = direction.getStepX() * 0.5;
             double dy = direction.getStepY() * 0.5;
             double dz = direction.getStepZ() * 0.5;

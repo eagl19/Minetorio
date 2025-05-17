@@ -25,7 +25,7 @@ public class MinetorioBlockStateProvider extends BlockStateProvider {
 
         blockWithStatesAndItem(MinetorioBlocks.GLOWING_BEDROCK.get(),GlowingBedrockBlock.STATE);
 
-        blockWithCustomSides(MinetorioBlocks.BEACON.get(),
+        blockWithCustomSides(MinetorioBlocks.PATTERNS_COLLECTOR.get(),
                 "item/patterns/void",
                 "item/patterns/infinity",
                 "item/patterns/air",

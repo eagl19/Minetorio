@@ -30,7 +30,7 @@ public class MinetorioCreativeModTabs {
                         pOutput.accept(MinetorioItems.PATTERN_WATER.get());
 
                         pOutput.accept(MinetorioBlocks.GLOWING_BEDROCK.get());
-                        pOutput.accept(MinetorioBlocks.BEACON.get());
+                        pOutput.accept(MinetorioBlocks.PATTERNS_COLLECTOR.get());
 
 
                     })
