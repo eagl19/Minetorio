@@ -14,7 +14,7 @@ public class MinetorioBlockEntities {
             DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, Minetorio.MOD_ID);
 
     @SuppressWarnings("DataFlowIssue")
-    public static final RegistryObject<BlockEntityType<PatternsCollectorBlockEntity>> MINETORIO_BEACON =
+    public static final RegistryObject<BlockEntityType<PatternsCollectorBlockEntity>> PATTERNS_COLLECTOR =
             BLOCK_ENTITIES.register("minetorio_beacon", () ->
                     BlockEntityType.Builder.of(PatternsCollectorBlockEntity::new, MinetorioBlocks.PATTERNS_COLLECTOR.get()).build(null));
 
