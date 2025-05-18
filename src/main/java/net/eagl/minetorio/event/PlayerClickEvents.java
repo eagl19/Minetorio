@@ -22,6 +22,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
 
 @Mod.EventBusSubscriber(modid = Minetorio.MOD_ID)
@@ -45,9 +46,9 @@ public class PlayerClickEvents {
                 if (level.getBlockEntity(pos) instanceof PatternsCollectorBlockEntity collector) {
                     float yOffset = collector.getCurrentYOffset();
                     if (Math.abs(yOffset) < 0.1f) {
-                        serverPlayer.displayClientMessage(Component.literal("Клік по Patterns Collector!"), true);
 
-                        // TODO: Відкрити GUI
+                        NetworkHooks.openScreen(serverPlayer, collector, pos);
+
                         event.setCancellationResult(InteractionResult.SUCCESS);
                         event.setCanceled(true);
                         return;
