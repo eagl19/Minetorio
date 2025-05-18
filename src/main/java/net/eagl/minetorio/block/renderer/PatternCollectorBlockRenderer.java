@@ -18,13 +18,17 @@ public class PatternCollectorBlockRenderer implements BlockEntityRenderer<Patter
         public PatternCollectorBlockRenderer(BlockEntityRendererProvider.Context context) {}
 
         @Override
-        public void render(PatternsCollectorBlockEntity blockEntity, float partialTicks, PoseStack poseStack,
+        public void render(@NotNull PatternsCollectorBlockEntity blockEntity, float partialTicks, PoseStack poseStack,
                            @NotNull MultiBufferSource buffer, int packedLight, int packedOverlay) {
 
             poseStack.pushPose();
 
+            float currentYOffset = getCurrentYOffset(blockEntity);
 
-            poseStack.translate(0.5, 0.5, 0.5);
+            blockEntity.setCurrentYOffset(currentYOffset);
+
+            // Транслюємо з урахуванням currentYOffset
+            poseStack.translate(0.5, 0.5 - currentYOffset, 0.5);
 
             poseStack.scale(2.0f, 2.0f, 2.0f);
 
@@ -48,6 +52,38 @@ public class PatternCollectorBlockRenderer implements BlockEntityRenderer<Patter
 
             poseStack.popPose();
         }
+
+    private static float getCurrentYOffset(@NotNull PatternsCollectorBlockEntity blockEntity) {
+        Minecraft mc = Minecraft.getInstance();
+
+        float targetYOffset = -10f;
+
+        if (mc.player != null) {
+            double blockX = blockEntity.getBlockPos().getX() + 0.5;
+            double blockY = blockEntity.getBlockPos().getY() + 0.5;
+            double blockZ = blockEntity.getBlockPos().getZ() + 0.5;
+
+            double playerX = mc.player.getX();
+            double playerY = mc.player.getY() + mc.player.getEyeHeight();
+            double playerZ = mc.player.getZ();
+
+            double dx = Math.abs(blockX - playerX);
+            double dz = Math.abs(blockZ - playerZ);
+
+            boolean isUnder = dx < 1.0 && dz < 1.0 && playerY < blockY;
+
+            if (isUnder) {
+                targetYOffset = (float) ((blockY) - (playerY + 1.0));
+                if (targetYOffset < 0) targetYOffset = 0;
+            }
+        }
+
+        float currentYOffset = blockEntity.getCurrentYOffset();
+
+        float smoothing = 0.1f; // швидкість плавності (0.1 - повільно, 1 - миттєво)
+        currentYOffset += (targetYOffset - currentYOffset) * smoothing;
+        return currentYOffset;
+    }
 
 
 }

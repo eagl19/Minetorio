@@ -14,6 +14,7 @@ public class PatternsCollectorBlockEntity extends BlockEntity {
     private final float speedY;
     private final float speedZ;
 
+    private float currentYOffset = 0f;
     private float rotation =0;
 
     public PatternsCollectorBlockEntity(BlockPos pPos, BlockState pBlockState) {
@@ -25,16 +26,21 @@ public class PatternsCollectorBlockEntity extends BlockEntity {
         this.speedZ = 0.5f + rand.nextFloat();
     }
 
-
-
     public void tickClient() {
         rotation += 1.0f;
     }
 
     public void tickServer() {
-        rotation += 1.0f;
+
     }
 
+    public float getCurrentYOffset() {
+        return currentYOffset;
+    }
+
+    public void setCurrentYOffset(float yOffset) {
+        this.currentYOffset = yOffset;
+    }
 
     public float getSpeedX() {
         return speedX;
@@ -53,12 +59,14 @@ public class PatternsCollectorBlockEntity extends BlockEntity {
     protected void saveAdditional(@NotNull CompoundTag tag) {
         super.saveAdditional(tag);
         tag.putFloat("rotation", rotation);
+        tag.putFloat("currentYOffset", currentYOffset);
     }
 
     @Override
     public void load(@NotNull CompoundTag tag) {
         super.load(tag);
         this.rotation = tag.getFloat("rotation");
+        this.currentYOffset = tag.getFloat("currentYOffset");
     }
 
     public float getRotation() {

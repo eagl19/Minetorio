@@ -4,9 +4,12 @@ import net.eagl.minetorio.Minetorio;
 import net.eagl.minetorio.block.MinetorioBlocks;
 import net.eagl.minetorio.block.custom.GlowingBedrockBlock;
 import net.eagl.minetorio.block.custom.GlowingBedrockBlockState;
+import net.eagl.minetorio.block.custom.PatternsCollectorBlock;
+import net.eagl.minetorio.block.entity.PatternsCollectorBlockEntity;
 import net.eagl.minetorio.item.MinetorioItems;
 import net.eagl.minetorio.worldgen.dimension.MinetorioDimensions;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -32,8 +35,25 @@ public class PlayerClickEvents {
         BlockState state = level.getBlockState(pos);
 
         if (event.getEntity() instanceof ServerPlayer serverPlayer && !level.isClientSide) {
+
             if (!level.dimension().equals(MinetorioDimensions.MINETORIO_DIM_EMPTY_LEVEL_KEY)) return;
             if (event.getHand() == InteractionHand.MAIN_HAND) return;
+
+
+            //Pattern collector
+            if (state.getBlock() instanceof PatternsCollectorBlock) {
+                if (level.getBlockEntity(pos) instanceof PatternsCollectorBlockEntity collector) {
+                    float yOffset = collector.getCurrentYOffset();
+                    if (Math.abs(yOffset) < 0.1f) {
+                        serverPlayer.displayClientMessage(Component.literal("Клік по Patterns Collector!"), true);
+
+                        // TODO: Відкрити GUI
+                        event.setCancellationResult(InteractionResult.SUCCESS);
+                        event.setCanceled(true);
+                        return;
+                    }
+                }
+            }
 
             // перевірка на SHIFT
             if (serverPlayer.isCrouching()) {
