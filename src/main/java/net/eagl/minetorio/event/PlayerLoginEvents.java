@@ -53,7 +53,7 @@ public class PlayerLoginEvents {
                 for (var item : PatternItemsCollector.getPatternItems()) {
                     var id = ForgeRegistries.ITEMS.getKey(item);
                     if (id == null) continue;
-                    patternLearn.setLearned(id.toString(), false);
+                    patternLearn.setLearned(player, id.toString(), true);
                 }
             }
         });

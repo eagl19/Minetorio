@@ -1,6 +1,9 @@
 package net.eagl.minetorio.capability;
 
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerPlayer;
+
+import java.util.Map;
 
 public interface IPatternLearn {
     CompoundTag serializeNBT();
@@ -8,5 +11,8 @@ public interface IPatternLearn {
 
     // методи, наприклад
     boolean isLearned(String patternId);
-    void setLearned(String patternId, boolean learned);
+    void setLearned(ServerPlayer player, String patternId, boolean learned);
+    Map<String, Boolean> getLearnedPatterns();
+
+
 }

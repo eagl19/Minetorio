@@ -2,9 +2,11 @@ package net.eagl.minetorio.handler;
 
 import net.eagl.minetorio.util.PatternItemsCollector;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandlerModifiable;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -18,6 +20,24 @@ public class PatternItemsHandler implements IItemHandlerModifiable {
         for (Item item : PatternItemsCollector.getPatternItems()) {
             patternItems.put(item, false); // За замовчуванням — невивчено
         }
+    }
+
+    public static PatternInfo getPatternInfo(ItemStack itemStack) {
+        if (itemStack == null || itemStack.isEmpty()) {
+            return new PatternInfo("", "");
+        }
+
+        Item item = itemStack.getItem();
+        ResourceLocation key = ForgeRegistries.ITEMS.getKey(item);
+
+        if (key == null) {
+            return new PatternInfo("", "");
+        }
+
+        String benefitKey = "pattern.minetorio." + key.getPath() + ".benefit";
+        String howToLearnKey = "pattern.minetorio." + key.getPath() + ".how_to_learn";
+
+        return new PatternInfo(benefitKey, howToLearnKey);
     }
 
     @Override
@@ -63,7 +83,6 @@ public class PatternItemsHandler implements IItemHandlerModifiable {
 
     }
 
-    // Додаткові методи
 
     public void setLearned(Item item, boolean learned) {
         if (patternItems.containsKey(item)) {
@@ -90,3 +109,4 @@ public class PatternItemsHandler implements IItemHandlerModifiable {
         }
     }
 }
+

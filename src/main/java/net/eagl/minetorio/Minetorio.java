@@ -9,6 +9,7 @@ import net.eagl.minetorio.event.PlayerLoginEvents;
 import net.eagl.minetorio.gui.MinetorioMenus;
 import net.eagl.minetorio.item.MinetorioCreativeModTabs;
 import net.eagl.minetorio.item.MinetorioItems;
+import net.eagl.minetorio.network.MinetorioNetwork;
 import net.eagl.minetorio.worldgen.biome.MinetorioTerrablender;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
@@ -48,6 +49,7 @@ public class Minetorio
         MinecraftForge.EVENT_BUS.register(PlayerLoginEvents.class);
         MinecraftForge.EVENT_BUS.register(PlayerClickEvents.class);
 
+        MinetorioNetwork.register();
         modEventBus.addListener(this::commonSetup);
         MinecraftForge.EVENT_BUS.register(this);
         modEventBus.addListener(this::addCreative);

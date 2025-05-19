@@ -9,5 +9,27 @@
   "item.minetorio.pattern_infinity": "Infinity",
   "item.minetorio.pattern_void": "Void",
   "item.minetorio.pattern_water": "Water",
-  "creativetab.minetorio_tab": "Minetorio"
+  "creativetab.minetorio_tab": "Minetorio",
+
+  "tooltip.minetorio.learned": "Learned",
+  "tooltip.minetorio.unlearned":"Unlearned",
+  "tooltip.minetorio.learn_status":"Learn Status",
+  "tooltip.minetorio.benefit": "Benefit",
+  "tooltip.minetorio.how_to_learn": "How To Learn",
+
+  "pattern.minetorio.pattern_air.benefit": "Air Benefit",
+  "pattern.minetorio.pattern_cloud.benefit": "Cloud Benefit",
+  "pattern.minetorio.pattern_earth.benefit": "Earth Benefit",
+  "pattern.minetorio.pattern_fire.benefit": "Fire Benefit",
+  "pattern.minetorio.pattern_infinity.benefit": "Infinity Benefit",
+  "pattern.minetorio.pattern_void.benefit": "Void Benefit",
+  "pattern.minetorio.pattern_water.benefit": "Water Benefit",
+
+  "pattern.minetorio.pattern_air.how_to_learn": "Air How To Learn",
+  "pattern.minetorio.pattern_cloud.how_to_learn": "Cloud How To Learn",
+  "pattern.minetorio.pattern_earth.how_to_learn": "Earth How To Learn",
+  "pattern.minetorio.pattern_fire.how_to_learn": "Fire How To Learn",
+  "pattern.minetorio.pattern_infinity.how_to_learn": "Infinity How To Learn",
+  "pattern.minetorio.pattern_void.how_to_learn": "Void How To Learn",
+  "pattern.minetorio.pattern_water.how_to_learn": "Water How To Learn"
 }

@@ -1,9 +1,12 @@
 package net.eagl.minetorio.block.entity;
 
+import net.eagl.minetorio.capability.MinetorioCapabilities;
 import net.eagl.minetorio.gui.PatternsCollectorMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
@@ -13,6 +16,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Map;
 
 
 public class PatternsCollectorBlockEntity extends BlockEntity implements MenuProvider {
@@ -61,10 +66,12 @@ public class PatternsCollectorBlockEntity extends BlockEntity implements MenuPro
         return speedZ;
     }
 
+
     @Override
     public @NotNull Component getDisplayName() {
         return Component.literal("Patterns Collector");
     }
+
 
     @Override
     public @Nullable AbstractContainerMenu createMenu(int pContainerId, @NotNull Inventory pPlayerInventory, @NotNull Player pPlayer) {

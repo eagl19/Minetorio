@@ -2,7 +2,10 @@ package net.eagl.minetorio.gui;
 
 import net.eagl.minetorio.block.MinetorioBlocks;
 import net.eagl.minetorio.capability.MinetorioCapabilities;
+import net.eagl.minetorio.client.ClientPatternsData;
 import net.eagl.minetorio.handler.PatternItemsHandler;
+import net.eagl.minetorio.network.MinetorioNetwork;
+import net.eagl.minetorio.network.PatternLearnSyncPacket;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
@@ -15,10 +18,14 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public class PatternsCollectorMenu extends AbstractContainerMenu {
     private final ContainerLevelAccess access;
+    private final Map<String, Boolean> learnedMap = new HashMap<>();
+
 
     private static final int INVENTORY_ROWS = 3;
     private static final int INVENTORY_COLUMNS = 9;
@@ -26,6 +33,7 @@ public class PatternsCollectorMenu extends AbstractContainerMenu {
 
 
     public PatternsCollectorMenu(int id, Inventory playerInventory, BlockEntity entity) {
+
         super(MinetorioMenus.PATTERNS_COLLECTOR_MENU.get(), id);
         this.access = ContainerLevelAccess.create(Objects.requireNonNull(entity.getLevel()), entity.getBlockPos());
         PatternItemsHandler patternItemsHandler = new PatternItemsHandler();
@@ -49,25 +57,39 @@ public class PatternsCollectorMenu extends AbstractContainerMenu {
             this.addSlot(new Slot(playerInventory, col, inventoryStartX + col * 18, hotbarY));
         }
 
+        if (player instanceof ServerPlayer serverPlayer) {
+            player.getCapability(MinetorioCapabilities.PATTERN_LEARN).ifPresent(cap -> {
+                learnedMap.clear();
+                learnedMap.putAll(cap.getLearnedPatterns());
+                MinetorioNetwork.sendToClient(serverPlayer, new PatternLearnSyncPacket(learnedMap));
+            });
+        }
+
+
         int startX = 8;
         int startY = 18;
         for (int i = 0; i < patternItemsHandler.getSlots(); i++) {
             int x = startX + (i % 9) * 18;  // 9 слотів у ряд
             int y = startY + (i / 9) * 18;
             ItemStack stack = patternItemsHandler.getStackInSlot(i);
-            final boolean[] learned = {false};
 
-            if (player instanceof ServerPlayer serverPlayer) {
-                serverPlayer.getCapability(MinetorioCapabilities.PATTERN_LEARN).ifPresent(cap -> {
-                    if (!stack.isEmpty()) {
-                        String key = Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(stack.getItem())).toString();
-                        learned[0] = cap.isLearned(key);
+
+
+            boolean learned = false;
+            if (!stack.isEmpty()) {
+                var key = ForgeRegistries.ITEMS.getKey(stack.getItem());
+                if (key != null) {
+                    String keyStr = key.toString();
+                    if (player.level().isClientSide()) {
+                        learned = ClientPatternsData.isLearned(keyStr);
+
+                    } else {
+                        learned = learnedMap.getOrDefault(keyStr, false);
                     }
-                });
+                }
             }
+            this.addSlot(new PatternSlot(patternItemsHandler, i, x, y, learned));
 
-            // Передаємо у PatternSlot статус — вивчений чи ні
-            this.addSlot(new PatternSlot(patternItemsHandler, i, x, y, learned[0]));
         }
 
     }
