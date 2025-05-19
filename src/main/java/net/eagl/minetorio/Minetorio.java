@@ -5,7 +5,7 @@ import com.mojang.logging.LogUtils;
 import net.eagl.minetorio.block.MinetorioBlocks;
 import net.eagl.minetorio.block.entity.MinetorioBlockEntities;
 import net.eagl.minetorio.event.PlayerClickEvents;
-import net.eagl.minetorio.event.PlayerJoinEvents;
+import net.eagl.minetorio.event.PlayerLoginEvents;
 import net.eagl.minetorio.gui.MinetorioMenus;
 import net.eagl.minetorio.item.MinetorioCreativeModTabs;
 import net.eagl.minetorio.item.MinetorioItems;
@@ -45,7 +45,7 @@ public class Minetorio
         MinetorioBlockEntities.register(modEventBus);
         MinetorioMenus.register(modEventBus);
 
-        MinecraftForge.EVENT_BUS.register(PlayerJoinEvents.class);
+        MinecraftForge.EVENT_BUS.register(PlayerLoginEvents.class);
         MinecraftForge.EVENT_BUS.register(PlayerClickEvents.class);
 
         modEventBus.addListener(this::commonSetup);

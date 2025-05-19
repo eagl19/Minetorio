@@ -9,7 +9,6 @@ import net.eagl.minetorio.block.entity.PatternsCollectorBlockEntity;
 import net.eagl.minetorio.item.MinetorioItems;
 import net.eagl.minetorio.worldgen.dimension.MinetorioDimensions;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;

@@ -1,15 +1,19 @@
 package net.eagl.minetorio.event;
 
 import net.eagl.minetorio.Minetorio;
+import net.eagl.minetorio.capability.MinetorioCapabilities;
+import net.eagl.minetorio.util.PatternItemsCollector;
 import net.eagl.minetorio.worldgen.dimension.MinetorioDimensions;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.ForgeRegistries;
+
 
 @Mod.EventBusSubscriber(modid = Minetorio.MOD_ID)
-public class PlayerJoinEvents {
+public class PlayerLoginEvents {
 
     @SuppressWarnings("unused")
     @SubscribeEvent
@@ -32,6 +36,27 @@ public class PlayerJoinEvents {
 
         // Позначаємо, що телепортація вже виконана
         player.getPersistentData().putBoolean("minetorio_teleported", true);
+
+
+        player.getCapability(MinetorioCapabilities.PATTERN_LEARN).ifPresent(patternLearn -> {
+            boolean anyLearned = false;
+            for (var item : PatternItemsCollector.getPatternItems()) {
+                var id = ForgeRegistries.ITEMS.getKey(item);
+                if (id == null) continue;
+                if (patternLearn.isLearned(id.toString())) {
+                    anyLearned = true;
+                    break;
+                }
+            }
+
+            if (!anyLearned) {
+                for (var item : PatternItemsCollector.getPatternItems()) {
+                    var id = ForgeRegistries.ITEMS.getKey(item);
+                    if (id == null) continue;
+                    patternLearn.setLearned(id.toString(), false);
+                }
+            }
+        });
     }
 }
 
