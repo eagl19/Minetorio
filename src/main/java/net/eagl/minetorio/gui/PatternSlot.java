@@ -1,6 +1,5 @@
 package net.eagl.minetorio.gui;
 
-import net.eagl.minetorio.handler.PatternItemsHandler;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;

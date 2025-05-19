@@ -10,7 +10,8 @@ import net.minecraftforge.fml.common.Mod;
 @Mod.EventBusSubscriber(modid = "minetorio", bus = Mod.EventBusSubscriber.Bus.MOD)
 public class MinetorioCapabilities {
 
-    public static Capability<IPatternLearn> PATTERN_LEARN = CapabilityManager.get(new CapabilityToken<IPatternLearn>() {});
+    public static Capability<IPatternLearn> PATTERN_LEARN = CapabilityManager.get(new CapabilityToken<>() {
+    });
 
     @SubscribeEvent
     public static void onRegisterCapabilities(RegisterCapabilitiesEvent event) {
