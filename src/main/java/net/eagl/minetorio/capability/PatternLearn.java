@@ -3,12 +3,13 @@ package net.eagl.minetorio.capability;
 import net.eagl.minetorio.network.MinetorioNetwork;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraftforge.common.util.INBTSerializable;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PatternLearn implements IPatternLearn {
+public class PatternLearn implements IPatternLearn , INBTSerializable<CompoundTag> {
 
     private final Map<String, Boolean> learnedPatterns = new HashMap<>();
 

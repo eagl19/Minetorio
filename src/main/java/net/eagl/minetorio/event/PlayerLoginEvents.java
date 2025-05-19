@@ -20,23 +20,24 @@ public class PlayerLoginEvents {
     public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
         if (!(event.getEntity() instanceof ServerPlayer player)) return;
 
+
         // Уникаємо повторної телепортації
-        if (player.getPersistentData().getBoolean("minetorio_teleported")) return;
+        if (!player.getPersistentData().getBoolean("minetorio_teleported")) {
 
-        ServerLevel minetorioLevel = player.server.getLevel(MinetorioDimensions.MINETORIO_DIM_EMPTY_LEVEL_KEY);
+            ServerLevel minetorioLevel = player.server.getLevel(MinetorioDimensions.MINETORIO_DIM_EMPTY_LEVEL_KEY);
 
-        if (minetorioLevel == null) return;
+            if (minetorioLevel == null) return;
 
-        player.teleportTo(minetorioLevel,
-                0 + 0.5,
-                100,
-                0 + 0.5,
-                player.getYRot(),
-                player.getXRot());
+            player.teleportTo(minetorioLevel,
+                    0 + 0.5,
+                    100,
+                    0 + 0.5,
+                    player.getYRot(),
+                    player.getXRot());
 
-        // Позначаємо, що телепортація вже виконана
-        player.getPersistentData().putBoolean("minetorio_teleported", true);
-
+            // Позначаємо, що телепортація вже виконана
+            player.getPersistentData().putBoolean("minetorio_teleported", true);
+        }
 
         player.getCapability(MinetorioCapabilities.PATTERN_LEARN).ifPresent(patternLearn -> {
             boolean anyLearned = false;
