@@ -98,13 +98,14 @@ public class PatternsCollectorScreen extends AbstractContainerScreen<PatternsCol
                 if (isLearn) {
 
                     pGuiGraphics.setColor(1f, 1f, 1f, 1f);
-                    pGuiGraphics.renderItem(stack, leftPos + x, topPos + y);
+
                 } else {
 
-                    pGuiGraphics.setColor(0.5f, 0.5f, 0.5f, 1f);
-                    pGuiGraphics.renderFakeItem(stack, leftPos + x, topPos + y);
+                    pGuiGraphics.setColor(0.3f, 0.3f, 0.3f, 1f);
+
                 }
 
+                pGuiGraphics.renderItem(stack, leftPos + x, topPos + y);
 
 
                 pGuiGraphics.setColor(1f, 1f, 1f, 1f);
