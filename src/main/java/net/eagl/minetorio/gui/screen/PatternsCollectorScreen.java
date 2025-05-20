@@ -98,14 +98,15 @@ public class PatternsCollectorScreen extends AbstractContainerScreen<PatternsCol
                 if (isLearn) {
 
                     pGuiGraphics.setColor(1f, 1f, 1f, 1f);
+                    pGuiGraphics.renderItem(stack, leftPos + x, topPos + y);
 
                 } else {
 
-                    pGuiGraphics.setColor(0.3f, 0.3f, 0.3f, 1f);
+                    com.mojang.blaze3d.systems.RenderSystem.setShaderColor(0.3f, 0.3f, 0.3f, 1f);
+                    pGuiGraphics.renderItem(stack, leftPos + x, topPos + y);
+                    com.mojang.blaze3d.systems.RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
 
                 }
-
-                pGuiGraphics.renderItem(stack, leftPos + x, topPos + y);
 
 
                 pGuiGraphics.setColor(1f, 1f, 1f, 1f);
