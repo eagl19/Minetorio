@@ -12,7 +12,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -31,7 +30,8 @@ public class PatternsCollectorScreen extends AbstractContainerScreen<PatternsCol
     public void render(@NotNull GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
         renderBackground(pGuiGraphics);
         super.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
-        renderTooltip(pGuiGraphics, pMouseX, pMouseY);
+        renderTooltip(pGuiGraphics,pMouseX,pMouseY);
+
     }
 
     private boolean isHoveringSlot(Slot slot, int mouseX, int mouseY) {
@@ -49,10 +49,8 @@ public class PatternsCollectorScreen extends AbstractContainerScreen<PatternsCol
 
             ItemStack stack = slot.getItem();
             if (stack.isEmpty()) continue;
-            ResourceLocation key = ForgeRegistries.ITEMS.getKey(stack.getItem());
-            if (key== null) return;
 
-            boolean learned = ((PatternSlot) slot).isLearned(key.toString());
+            boolean learned = ((PatternSlot) slot).isLearned();
             Component learnedStatus = learned
                     ? Component.translatable("tooltip.minetorio.learned").withStyle(ChatFormatting.GREEN)
                     : Component.translatable("tooltip.minetorio.unlearned").withStyle(ChatFormatting.RED);
@@ -84,33 +82,27 @@ public class PatternsCollectorScreen extends AbstractContainerScreen<PatternsCol
         pGuiGraphics.blit(GUI_TEXTURE, leftPos, topPos, 0, 0, imageWidth, imageHeight);
 
         for (Slot slot : menu.slots) {
-            if (slot instanceof PatternSlot) {
-                int x = slot.x;
-                int y = slot.y;
+            if (!(slot instanceof PatternSlot)) continue;
 
-                ItemStack stack = slot.getItem();
-                if (stack.isEmpty()) continue;
-
-                ResourceLocation key = ForgeRegistries.ITEMS.getKey(stack.getItem());
-                if (key== null) return;
-
-                boolean isLearn=((PatternSlot) slot).isLearned(key.toString());
-                if (isLearn) {
-
-                    pGuiGraphics.setColor(1f, 1f, 1f, 1f);
-                    pGuiGraphics.renderItem(stack, leftPos + x, topPos + y);
-
-                } else {
-
-                    com.mojang.blaze3d.systems.RenderSystem.setShaderColor(0.3f, 0.3f, 0.3f, 1f);
-                    pGuiGraphics.renderItem(stack, leftPos + x, topPos + y);
-                    com.mojang.blaze3d.systems.RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
-
-                }
+            ItemStack stack = slot.getItem();
+            if (stack.isEmpty()) continue;
 
 
+
+            boolean learned = ((PatternSlot) slot).isLearned();
+            int x = leftPos + slot.x;
+            int y = topPos + slot.y;
+
+
+            if (learned) {
                 pGuiGraphics.setColor(1f, 1f, 1f, 1f);
+            } else {
+                pGuiGraphics.setColor(0.4f, 0.4f, 0.4f, 1f);
             }
+
+            pGuiGraphics.renderItem(stack, x, y);
+
+            pGuiGraphics.setColor(1f, 1f, 1f, 1f);
         }
 
     }

@@ -1,7 +1,6 @@
 package net.eagl.minetorio.event;
 
 import net.eagl.minetorio.Minetorio;
-import net.eagl.minetorio.capability.IPatternLearn;
 import net.eagl.minetorio.capability.MinetorioCapabilities;
 import net.eagl.minetorio.network.MinetorioNetwork;
 import net.eagl.minetorio.network.PatternLearnSyncPacket;
@@ -9,16 +8,11 @@ import net.eagl.minetorio.util.PatternItemsCollector;
 import net.eagl.minetorio.worldgen.dimension.MinetorioDimensions;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.registries.ForgeRegistries;
-
-import java.util.Map;
-
-import static net.eagl.minetorio.Minetorio.LOGGER;
 
 
 @Mod.EventBusSubscriber(modid = Minetorio.MOD_ID)
@@ -49,6 +43,7 @@ public class PlayerLoginEvents {
             player.getPersistentData().putBoolean("minetorio_teleported", true);
         }
 
+
         player.getCapability(MinetorioCapabilities.PATTERN_LEARN).ifPresent(patternLearn -> {
             boolean anyLearned = false;
             for (var item : PatternItemsCollector.getPatternItems()) {
@@ -64,7 +59,7 @@ public class PlayerLoginEvents {
                 for (var item : PatternItemsCollector.getPatternItems()) {
                     var id = ForgeRegistries.ITEMS.getKey(item);
                     if (id == null) continue;
-                    patternLearn.setLearned(id.toString(), false);
+                    patternLearn.setLearned(id.toString(), true);
                 }
             }
 

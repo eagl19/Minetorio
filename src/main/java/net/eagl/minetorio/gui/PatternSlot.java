@@ -1,8 +1,6 @@
 package net.eagl.minetorio.gui;
 
 import net.eagl.minetorio.client.ClientPatternsData;
-import net.eagl.minetorio.gui.screen.PatternsCollectorScreen;
-import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -18,8 +16,15 @@ public class PatternSlot extends SlotItemHandler {
         super(handler, index, x, y);
     }
 
-    public boolean isLearned(String key) {
-        return ClientPatternsData.isLearned(key);
+    public boolean isLearned() {
+        ResourceLocation key=ForgeRegistries.ITEMS.getKey(this.getItem().getItem());
+        if (key == null) return false;
+        return ClientPatternsData.isLearned(key.toString());
+    }
+
+    @Override
+    public boolean isActive() {
+        return false;
     }
 
     @Override

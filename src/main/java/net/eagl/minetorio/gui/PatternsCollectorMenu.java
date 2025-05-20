@@ -1,13 +1,8 @@
 package net.eagl.minetorio.gui;
 
 import net.eagl.minetorio.block.MinetorioBlocks;
-import net.eagl.minetorio.capability.MinetorioCapabilities;
-import net.eagl.minetorio.client.ClientPatternsData;
 import net.eagl.minetorio.handler.PatternItemsHandler;
-import net.eagl.minetorio.network.MinetorioNetwork;
-import net.eagl.minetorio.network.PatternLearnSyncPacket;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -15,11 +10,8 @@ import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 
 public class PatternsCollectorMenu extends AbstractContainerMenu {
@@ -36,7 +28,6 @@ public class PatternsCollectorMenu extends AbstractContainerMenu {
         super(MinetorioMenus.PATTERNS_COLLECTOR_MENU.get(), id);
         this.access = ContainerLevelAccess.create(Objects.requireNonNull(entity.getLevel()), entity.getBlockPos());
         PatternItemsHandler patternItemsHandler = new PatternItemsHandler();
-        Player player = playerInventory.player;
 
         // слоти основного інвентаря (3 ряди по 9 слотів)
         int inventoryStartX = 8;
