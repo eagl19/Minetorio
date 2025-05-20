@@ -32,7 +32,7 @@ public class Minetorio
     public static final String MOD_ID = "minetorio";
     // Directly reference a slf4j logger
     @SuppressWarnings("unused")
-    private static final Logger LOGGER = LogUtils.getLogger();
+    public static final Logger LOGGER = LogUtils.getLogger();
 
 
 

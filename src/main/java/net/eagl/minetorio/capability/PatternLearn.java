@@ -1,15 +1,12 @@
 package net.eagl.minetorio.capability;
 
-import net.eagl.minetorio.network.MinetorioNetwork;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.common.util.INBTSerializable;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PatternLearn implements IPatternLearn , INBTSerializable<CompoundTag> {
+public class PatternLearn implements IPatternLearn {
 
     private final Map<String, Boolean> learnedPatterns = new HashMap<>();
 
@@ -30,19 +27,18 @@ public class PatternLearn implements IPatternLearn , INBTSerializable<CompoundTa
         }
     }
 
-    public Map<String, Boolean> getLearnedPatterns() {
-        return Collections.unmodifiableMap(learnedPatterns);
-    }
-
     @Override
     public boolean isLearned(String patternId) {
         return learnedPatterns.getOrDefault(patternId, false);
     }
 
     @Override
-    public void setLearned(ServerPlayer player, String patternId, boolean learned) {
-
+    public void setLearned(String patternId, boolean learned) {
         learnedPatterns.put(patternId, learned);
-        MinetorioNetwork.syncPatternLearn(player);
+    }
+
+    @Override
+    public Map<String, Boolean> getPatterns() {
+        return new HashMap<>(learnedPatterns);
     }
 }

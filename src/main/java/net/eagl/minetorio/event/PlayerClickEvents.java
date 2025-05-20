@@ -6,7 +6,10 @@ import net.eagl.minetorio.block.custom.GlowingBedrockBlock;
 import net.eagl.minetorio.block.custom.GlowingBedrockBlockState;
 import net.eagl.minetorio.block.custom.PatternsCollectorBlock;
 import net.eagl.minetorio.block.entity.PatternsCollectorBlockEntity;
+import net.eagl.minetorio.capability.MinetorioCapabilities;
 import net.eagl.minetorio.item.MinetorioItems;
+import net.eagl.minetorio.network.MinetorioNetwork;
+import net.eagl.minetorio.network.PatternLearnSyncPacket;
 import net.eagl.minetorio.worldgen.dimension.MinetorioDimensions;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -22,6 +25,7 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.network.NetworkHooks;
+import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 
 @Mod.EventBusSubscriber(modid = Minetorio.MOD_ID)

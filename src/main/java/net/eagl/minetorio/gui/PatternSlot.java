@@ -1,22 +1,25 @@
 package net.eagl.minetorio.gui;
 
+import net.eagl.minetorio.client.ClientPatternsData;
+import net.eagl.minetorio.gui.screen.PatternsCollectorScreen;
+import net.minecraft.client.Minecraft;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 
 public class PatternSlot extends SlotItemHandler {
-    private final boolean learned;
 
-    public PatternSlot(IItemHandler handler, int index, int x, int y, boolean learned) {
+
+    public PatternSlot(IItemHandler handler, int index, int x, int y) {
         super(handler, index, x, y);
-        this.learned = learned;
     }
 
-    @Override
-    public boolean isActive() {
-        return learned; // слот неактивний, якщо не вивчено
+    public boolean isLearned(String key) {
+        return ClientPatternsData.isLearned(key);
     }
 
     @Override

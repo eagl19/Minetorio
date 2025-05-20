@@ -6,26 +6,19 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.common.util.LazyOptional;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class PatternLearnProvider implements ICapabilityProvider, INBTSerializable<CompoundTag> {
 
-    private final PatternLearn instance = new PatternLearn();
-    private final LazyOptional<PatternLearn> optional = LazyOptional.of(() -> instance);
+    // Вказуємо інтерфейс, а не реалізацію
+    private final IPatternLearn instance = new PatternLearn();
+    private final LazyOptional<IPatternLearn> optional = LazyOptional.of(() -> instance);
 
     @Override
     public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        if (cap == MinetorioCapabilities.PATTERN_LEARN) {
-            return optional.cast();
-        }
-        return LazyOptional.empty();
-    }
-
-    @Override
-    public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap) {
-        return ICapabilityProvider.super.getCapability(cap);
+        // Типи будуть сумісні
+        return cap == MinetorioCapabilities.PATTERN_LEARN ? optional.cast() : LazyOptional.empty();
     }
 
     public void invalidate() {
@@ -34,11 +27,17 @@ public class PatternLearnProvider implements ICapabilityProvider, INBTSerializab
 
     @Override
     public CompoundTag serializeNBT() {
-        return null;
+        // Cast до PatternLearn для доступу до реалізації
+        if (instance instanceof PatternLearn patternLearnImpl) {
+            return patternLearnImpl.serializeNBT();
+        }
+        return new CompoundTag(); // fallback
     }
 
     @Override
     public void deserializeNBT(CompoundTag nbt) {
-
+        if (instance instanceof PatternLearn patternLearnImpl) {
+            patternLearnImpl.deserializeNBT(nbt);
+        }
     }
 }

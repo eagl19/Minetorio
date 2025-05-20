@@ -1,6 +1,5 @@
 package net.eagl.minetorio.gui.screen;
 
-
 import net.eagl.minetorio.gui.PatternSlot;
 import net.eagl.minetorio.gui.PatternsCollectorMenu;
 import net.eagl.minetorio.handler.PatternInfo;
@@ -9,16 +8,14 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class PatternsCollectorScreen extends AbstractContainerScreen<PatternsCollectorMenu> {
 
@@ -52,13 +49,15 @@ public class PatternsCollectorScreen extends AbstractContainerScreen<PatternsCol
 
             ItemStack stack = slot.getItem();
             if (stack.isEmpty()) continue;
+            ResourceLocation key = ForgeRegistries.ITEMS.getKey(stack.getItem());
+            if (key== null) return;
 
-            boolean learned = stack.getOrCreateTag().getBoolean("Learned");
+            boolean learned = ((PatternSlot) slot).isLearned(key.toString());
             Component learnedStatus = learned
                     ? Component.translatable("tooltip.minetorio.learned").withStyle(ChatFormatting.GREEN)
                     : Component.translatable("tooltip.minetorio.unlearned").withStyle(ChatFormatting.RED);
 
-            PatternInfo info = PatternItemsHandler.getPatternInfo(stack); // або static, або екземпляр
+            PatternInfo info = PatternItemsHandler.getPatternInfo(stack);
             List<Component> componentList = new ArrayList<>();
             componentList.add( stack.getHoverName().copy().withStyle(ChatFormatting.GRAY));
             componentList.add(Component.literal(""));
@@ -79,7 +78,6 @@ public class PatternsCollectorScreen extends AbstractContainerScreen<PatternsCol
         }
     }
 
-
     @Override
     protected void renderBg(@NotNull GuiGraphics pGuiGraphics, float pPartialTick, int pMouseX, int pMouseY) {
         pGuiGraphics.setColor(1f, 1f, 1f, 1f);
@@ -89,25 +87,26 @@ public class PatternsCollectorScreen extends AbstractContainerScreen<PatternsCol
             if (slot instanceof PatternSlot) {
                 int x = slot.x;
                 int y = slot.y;
+
                 ItemStack stack = slot.getItem();
-
-                // Тут перевіряємо, чи предмет вивчений, наприклад через метод меню:
-                boolean isLearned = slot.isActive(); // припустимо, ти так визначаєш
-
                 if (stack.isEmpty()) continue;
 
-                // Якщо предмет невивчений — задаємо сірий колір
-                if (!isLearned) {
-                    // Сірий колір, наприклад 50% яскравості
-                    pGuiGraphics.setColor(0.5f, 0.5f, 0.5f, 1f);
-                } else {
-                    // Білий колір (звичайний)
+                ResourceLocation key = ForgeRegistries.ITEMS.getKey(stack.getItem());
+                if (key== null) return;
+
+                boolean isLearn=((PatternSlot) slot).isLearned(key.toString());
+                if (isLearn) {
+
                     pGuiGraphics.setColor(1f, 1f, 1f, 1f);
+                    pGuiGraphics.renderItem(stack, leftPos + x, topPos + y);
+                } else {
+
+                    pGuiGraphics.setColor(0.5f, 0.5f, 0.5f, 1f);
+                    pGuiGraphics.renderFakeItem(stack, leftPos + x, topPos + y);
                 }
 
-                pGuiGraphics.renderItem(stack, leftPos + x, topPos + y);
 
-                // Відновлюємо колір (щоб не впливати на наступні рендери)
+
                 pGuiGraphics.setColor(1f, 1f, 1f, 1f);
             }
         }

@@ -1,6 +1,5 @@
 package net.eagl.minetorio.network;
 
-import net.eagl.minetorio.capability.MinetorioCapabilities;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkRegistry;
@@ -8,8 +7,11 @@ import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
 import net.minecraft.server.level.ServerPlayer;
 
+import java.util.Optional;
+
 public class MinetorioNetwork {
     private static int packetId = 0;
+
     public static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(
             ResourceLocation.fromNamespaceAndPath("minetorio", "main"),
             () -> "1.0",
@@ -18,22 +20,19 @@ public class MinetorioNetwork {
     );
 
     public static void register() {
-        CHANNEL.registerMessage(packetId++,
-                SyncPatternLearnMessage.class,
-                SyncPatternLearnMessage::toBytes,
-                SyncPatternLearnMessage::new,
-                SyncPatternLearnMessage::handle
+        CHANNEL.registerMessage(
+                packetId++,
+                PatternLearnSyncPacket.class,
+                PatternLearnSyncPacket::toBytes,
+                PatternLearnSyncPacket::new,
+                PatternLearnSyncPacket::handle,
+                Optional.of(NetworkDirection.PLAY_TO_CLIENT)
         );
     }
 
-    public static void syncPatternLearn(ServerPlayer player) {
-        player.getCapability(MinetorioCapabilities.PATTERN_LEARN).ifPresent(cap -> {
-            CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), new SyncPatternLearnMessage(cap.serializeNBT()));
-        });
-    }
-
     public static void sendToClient(ServerPlayer player, PatternLearnSyncPacket packet) {
-        CHANNEL.sendTo(packet, player.connection.connection, NetworkDirection.PLAY_TO_CLIENT);
+        CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), packet);
     }
 }
+
 

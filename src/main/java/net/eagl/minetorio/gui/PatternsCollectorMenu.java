@@ -24,7 +24,6 @@ import java.util.Objects;
 
 public class PatternsCollectorMenu extends AbstractContainerMenu {
     private final ContainerLevelAccess access;
-    private final Map<String, Boolean> learnedMap = new HashMap<>();
 
 
     private static final int INVENTORY_ROWS = 3;
@@ -57,38 +56,12 @@ public class PatternsCollectorMenu extends AbstractContainerMenu {
             this.addSlot(new Slot(playerInventory, col, inventoryStartX + col * 18, hotbarY));
         }
 
-        if (player instanceof ServerPlayer serverPlayer) {
-            player.getCapability(MinetorioCapabilities.PATTERN_LEARN).ifPresent(cap -> {
-                learnedMap.clear();
-                learnedMap.putAll(cap.getLearnedPatterns());
-                MinetorioNetwork.sendToClient(serverPlayer, new PatternLearnSyncPacket(learnedMap));
-            });
-        }
-
-
         int startX = 8;
         int startY = 18;
         for (int i = 0; i < patternItemsHandler.getSlots(); i++) {
             int x = startX + (i % 9) * 18;  // 9 слотів у ряд
             int y = startY + (i / 9) * 18;
-            ItemStack stack = patternItemsHandler.getStackInSlot(i);
-
-
-
-            boolean learned = false;
-            if (!stack.isEmpty()) {
-                var key = ForgeRegistries.ITEMS.getKey(stack.getItem());
-                if (key != null) {
-                    String keyStr = key.toString();
-                    if (player.level().isClientSide()) {
-                        learned = ClientPatternsData.isLearned(keyStr);
-
-                    } else {
-                        learned = learnedMap.getOrDefault(keyStr, false);
-                    }
-                }
-            }
-            this.addSlot(new PatternSlot(patternItemsHandler, i, x, y, learned));
+            this.addSlot(new PatternSlot(patternItemsHandler, i, x, y));
 
         }
 

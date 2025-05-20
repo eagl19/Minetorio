@@ -2,6 +2,8 @@ package net.eagl.minetorio.network;
 
 import net.eagl.minetorio.client.ClientPatternsData;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkEvent;
 
 import java.util.HashMap;
@@ -33,14 +35,10 @@ public class PatternLearnSyncPacket {
         }
     }
 
-    public boolean handle(Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
-            // Тут треба оновити локальні дані клієнта,
-            // наприклад, зберегти у статичному синглтоні або в меню
-            ClientPatternsData.setLearnedMap(learnedMap);
-        });
+    public static void handle(PatternLearnSyncPacket msg, Supplier<NetworkEvent.Context> ctx) {
+        ctx.get().enqueueWork(() -> DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () ->
+                () -> ClientPatternsData.setLearnedMap(msg.learnedMap)
+        ));
         ctx.get().setPacketHandled(true);
-        return true;
     }
 }
-
