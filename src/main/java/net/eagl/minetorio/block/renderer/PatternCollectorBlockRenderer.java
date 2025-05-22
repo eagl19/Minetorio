@@ -58,7 +58,7 @@ public class PatternCollectorBlockRenderer implements BlockEntityRenderer<Patter
     public void render(@NotNull PatternsCollectorBlockEntity blockEntity, float partialTicks, @NotNull PoseStack poseStack,
                        @NotNull MultiBufferSource buffer, int packedLight, int packedOverlay) {
 
-        blockEntity.tickRotation();
+
         float offset = 7.0f;
 
         poseStack.pushPose();
@@ -68,9 +68,11 @@ public class PatternCollectorBlockRenderer implements BlockEntityRenderer<Patter
         ringYOffset = getCurrentYOffset(blockEntity, ringYOffset, offset);
 
         blockEntity.setCurrentOffset(ringYOffset);
-        float rotationX = blockEntity.getInterpolatedX(partialTicks);
-        float rotationY = blockEntity.getInterpolatedY(partialTicks);
-        float rotationZ = blockEntity.getInterpolatedZ(partialTicks);
+        float baseRotation = blockEntity.getRotation() + partialTicks;
+
+        float rotationX = (baseRotation * blockEntity.getSpeedX()) % 360.0f;
+        float rotationY = (baseRotation * blockEntity.getSpeedY()) % 360.0f;
+        float rotationZ = (baseRotation * blockEntity.getSpeedZ()) % 360.0f;
 
         renderScene(poseStack, buffer, packedLight, packedOverlay, rotationX, rotationY,rotationZ);
 
