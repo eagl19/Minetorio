@@ -11,7 +11,6 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
@@ -35,15 +34,6 @@ public class PatternCollectorBlockRenderer implements BlockEntityRenderer<Patter
             Direction.SOUTH, new ItemStack(MinetorioItems.PATTERN_CLOUD.get()),
             Direction.WEST,  ItemStack.EMPTY,
             Direction.EAST,  ItemStack.EMPTY
-    );
-
-    private static final Map<Direction, ItemStack> PATTERN_ITEMS_SN = Map.of(
-            Direction.UP,    new ItemStack(MinetorioItems.PATTERN_CLOUD.get()),
-            Direction.DOWN,  new ItemStack(MinetorioItems.PATTERN_CLOUD.get()),
-            Direction.NORTH, ItemStack.EMPTY,
-            Direction.SOUTH, ItemStack.EMPTY,
-            Direction.WEST,  new ItemStack(MinetorioItems.PATTERN_CLOUD.get()),
-            Direction.EAST,  new ItemStack(MinetorioItems.PATTERN_CLOUD.get())
     );
 
     private static final Map<Direction, ItemStack> PATTERN_ITEMS_UD = Map.of(
@@ -71,7 +61,7 @@ public class PatternCollectorBlockRenderer implements BlockEntityRenderer<Patter
         poseStack.pushPose();
         poseStack.translate(0.5, 5.5, 0.5);
 
-        // 🔄 Обчислення анімованого зсуву
+
         ringYOffset = getCurrentYOffset(blockEntity, ringYOffset);
 
         float baseRotation = partialTicks;
@@ -79,27 +69,63 @@ public class PatternCollectorBlockRenderer implements BlockEntityRenderer<Patter
             baseRotation = (blockEntity.getLevel().getGameTime() + partialTicks) * 2f;
         }
 
-        renderRing(poseStack, buffer, packedLight, packedOverlay, PATTERN_ITEMS_MAIN, new Vec3(0,0,baseRotation), 0.5, ringYOffset);
-        renderRing(poseStack, buffer, packedLight, packedOverlay, PATTERN_ITEMS_MAIN, new Vec3(0,0,-baseRotation), 1.0, ringYOffset);
-        renderRing(poseStack, buffer, packedLight, packedOverlay, PATTERN_ITEMS_MAIN, new Vec3(0,0,0),8.0, 0.0f);
-        renderRing(poseStack, buffer, packedLight, packedOverlay, PATTERN_ITEMS_EW, new Vec3(45,0,0),8.0, 0.0f);
-        renderRing(poseStack, buffer, packedLight, packedOverlay, PATTERN_ITEMS_SN, new Vec3(0,0,45),8.0, 0.0f);
-        renderRing(poseStack, buffer, packedLight, packedOverlay, PATTERN_ITEMS_UD, new Vec3(0,45,0),8.0, 0.0f);
-        renderRing(poseStack, buffer, packedLight, packedOverlay, PATTERN_ITEMS_SN, new Vec3(0,45,45),8.0, 0.0f);
+        renderScene(poseStack, buffer, packedLight, packedOverlay, 0, baseRotation,0);
 
 
         poseStack.popPose();
 
     }
 
-    private void renderRing(PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay,
-                            Map<Direction, ItemStack> itemMap, Vec3 rotation, double radius, float yOffset) {
+    private void renderScene (PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay, float rotationX, float rotationY, float rotationZ){
 
         poseStack.pushPose();
 
-        poseStack.mulPose(Axis.XP.rotationDegrees((float) (rotation.x % 360.0f)));
-        poseStack.mulPose(Axis.YP.rotationDegrees((float) (rotation.y % 360.0f)));
-        poseStack.mulPose(Axis.ZP.rotationDegrees((float) (rotation.z % 360.0f)));
+        renderRing(poseStack, buffer, packedLight, packedOverlay, PATTERN_ITEMS_MAIN, rotationX, rotationY, rotationZ, 1,  0.5, ringYOffset);
+        renderRing(poseStack, buffer, packedLight, packedOverlay, PATTERN_ITEMS_MAIN, rotationX, -rotationY, rotationZ, 1,  1, ringYOffset);
+
+        poseStack.mulPose(Axis.XP.rotationDegrees(rotationX % 360.0f));
+        poseStack.mulPose(Axis.YP.rotationDegrees(rotationY % 360.0f));
+        poseStack.mulPose(Axis.ZP.rotationDegrees(rotationZ % 360.0f));
+        renderSphere(poseStack, buffer, packedLight, packedOverlay);
+
+        poseStack.popPose();
+
+    }
+
+    private void renderSphere(PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay) {
+
+        double radius = 10;
+
+        poseStack.pushPose();
+        renderRing(poseStack, buffer, packedLight, packedOverlay, PATTERN_ITEMS_MAIN,0,0,0, 4f, radius ,0);
+        renderRing(poseStack, buffer, packedLight, packedOverlay, PATTERN_ITEMS_UD,0,45,0, 4f, radius ,0);
+        poseStack.pushPose();
+        renderRing(poseStack, buffer, packedLight, packedOverlay, PATTERN_ITEMS_EW,45,0,0, 4f, radius ,0);
+        poseStack.popPose();
+        poseStack.mulPose(Axis.YP.rotationDegrees(45));
+        poseStack.pushPose();
+        renderRing(poseStack, buffer, packedLight, packedOverlay, PATTERN_ITEMS_EW,45,0,0, 4f, radius ,0);
+        poseStack.popPose();
+        poseStack.mulPose(Axis.YP.rotationDegrees(45));
+        poseStack.pushPose();
+        renderRing(poseStack, buffer, packedLight, packedOverlay, PATTERN_ITEMS_EW,45,0,0, 4f, radius ,0);
+        poseStack.popPose();
+        poseStack.mulPose(Axis.YP.rotationDegrees(45));
+        poseStack.pushPose();
+        renderRing(poseStack, buffer, packedLight, packedOverlay, PATTERN_ITEMS_EW,45,0,0, 4f, radius ,0);
+        poseStack.popPose();
+        poseStack.popPose();
+    }
+
+
+    private void renderRing(PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay,
+                            Map<Direction, ItemStack> itemMap, float rotationX, float rotationY, float rotationZ, float scale, double radius, float yOffset) {
+
+        poseStack.pushPose();
+
+        poseStack.mulPose(Axis.XP.rotationDegrees(rotationX % 360.0f));
+        poseStack.mulPose(Axis.YP.rotationDegrees(rotationY % 360.0f));
+        poseStack.mulPose(Axis.ZP.rotationDegrees(rotationZ % 360.0f));
 
         for (Direction direction : Direction.values()) {
             ItemStack stack = getPatternItem(itemMap, direction);
@@ -107,14 +133,12 @@ public class PatternCollectorBlockRenderer implements BlockEntityRenderer<Patter
 
             poseStack.pushPose();
 
-            // Вектор зміщення
             double dx = direction.getStepX() * radius;
             double dy = direction.getStepY() * radius + yOffset;
             double dz = direction.getStepZ() * radius;
 
             poseStack.translate(dx, dy, dz);
 
-            // Орієнтація предмета
             switch (direction) {
                 case UP -> poseStack.mulPose(Axis.XP.rotationDegrees(90));
                 case DOWN -> poseStack.mulPose(Axis.XN.rotationDegrees(90));
@@ -123,10 +147,8 @@ public class PatternCollectorBlockRenderer implements BlockEntityRenderer<Patter
                 case EAST -> poseStack.mulPose(Axis.YN.rotationDegrees(90));
             }
 
-            // Масштаб тільки для зовнішнього кільця (8 блоків)
-            if (radius == 8.0) {
-                poseStack.scale(4.0f, 4.0f, 4.0f);
-            }
+            poseStack.scale(scale, scale, 1.0f);
+
 
             Minecraft.getInstance().getItemRenderer().renderStatic(
                     stack,
@@ -141,11 +163,8 @@ public class PatternCollectorBlockRenderer implements BlockEntityRenderer<Patter
 
             poseStack.popPose();
         }
-
         poseStack.popPose();
     }
-
-
 
     private static float getCurrentYOffset(@NotNull PatternsCollectorBlockEntity blockEntity, float previousYOffset) {
         Minecraft mc = Minecraft.getInstance();
