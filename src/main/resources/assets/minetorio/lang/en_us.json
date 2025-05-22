@@ -2,13 +2,19 @@
   "block.minetorio.glowing_bedrock": "Minetorio Bedrock",
   "block.minetorio.patterns_collector": "Patterns Collector",
   "item.minetorio.sapphire": "Sapphire",
+
   "item.minetorio.pattern_air": "Air",
   "item.minetorio.pattern_cloud": "Cloud",
   "item.minetorio.pattern_earth": "Earth",
   "item.minetorio.pattern_fire": "Fire",
   "item.minetorio.pattern_infinity": "Infinity",
+  "item.minetorio.pattern_rain": "Rain",
+  "item.minetorio.pattern_snow": "Snow",
+  "item.minetorio.pattern_snowflake": "Snowflake",
+  "item.minetorio.pattern_sun": "Sun",
   "item.minetorio.pattern_void": "Void",
   "item.minetorio.pattern_water": "Water",
+
   "creativetab.minetorio_tab": "Minetorio",
 
   "tooltip.minetorio.learned": "Learned",
@@ -22,6 +28,10 @@
   "pattern.minetorio.pattern_earth.benefit": "Earth Benefit",
   "pattern.minetorio.pattern_fire.benefit": "Fire Benefit",
   "pattern.minetorio.pattern_infinity.benefit": "Infinity Benefit",
+  "pattern.minetorio.pattern_rain": "Rain Benefit",
+  "pattern.minetorio.pattern_snow": "Snow Benefit",
+  "pattern.minetorio.pattern_snowflake": "Snowflake Benefit",
+  "pattern.minetorio.pattern_sun": "Sun Benefit",
   "pattern.minetorio.pattern_void.benefit": "Void Benefit",
   "pattern.minetorio.pattern_water.benefit": "Water Benefit",
 
@@ -30,6 +40,10 @@
   "pattern.minetorio.pattern_earth.how_to_learn": "Earth How To Learn",
   "pattern.minetorio.pattern_fire.how_to_learn": "Fire How To Learn",
   "pattern.minetorio.pattern_infinity.how_to_learn": "Infinity How To Learn",
+  "pattern.minetorio.pattern_rain.how_to_learn": "Rain How To Learn",
+  "pattern.minetorio.pattern_snow.how_to_learn": "Snow How To Learn",
+  "pattern.minetorio.pattern_snowflake.how_to_learn": "Snowflake How To Learn",
+  "pattern.minetorio.pattern_sun.how_to_learn": "Sun How To Learn",
   "pattern.minetorio.pattern_void.how_to_learn": "Void How To Learn",
   "pattern.minetorio.pattern_water.how_to_learn": "Water How To Learn"
 }

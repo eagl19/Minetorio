@@ -68,17 +68,17 @@ public class WorldInitEvents {
 
             for (int dx = 9; dx >= -9; dx--) {
                 for (int dz = 9; dz >= -9; dz--) {
-                    level.setBlockAndUpdate(blockPos.offset(dx, -1, dz), blockState);
-                    level.setBlockAndUpdate(blockPos.offset(dx, 17, dz), blockState);
+                    level.setBlockAndUpdate(blockPos.offset(dx, -1, dz), Blocks.BARRIER.defaultBlockState());
+                    level.setBlockAndUpdate(blockPos.offset(dx, 17, dz), Blocks.BARRIER.defaultBlockState());
                 }
             }
             for (int dx = 9; dx >= -9; dx--) {
                 for (int dy = 0; dy <= 16; dy++) {
-                    level.setBlockAndUpdate(blockPos.offset(dx, dy, 9), blockState);
-                    level.setBlockAndUpdate(blockPos.offset(dx, dy, -9), blockState);
+                    level.setBlockAndUpdate(blockPos.offset(dx, dy, 9), Blocks.BARRIER.defaultBlockState());
+                    level.setBlockAndUpdate(blockPos.offset(dx, dy, -9), Blocks.BARRIER.defaultBlockState());
 
-                    level.setBlockAndUpdate(blockPos.offset( 9, dy, dx), blockState);
-                    level.setBlockAndUpdate(blockPos.offset(-9, dy, dx), blockState);
+                    level.setBlockAndUpdate(blockPos.offset( 9, dy, dx), Blocks.BARRIER.defaultBlockState());
+                    level.setBlockAndUpdate(blockPos.offset(-9, dy, dx), Blocks.BARRIER.defaultBlockState());
                 }
 
             }

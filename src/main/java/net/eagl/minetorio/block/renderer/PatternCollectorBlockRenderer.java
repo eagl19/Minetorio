@@ -58,18 +58,21 @@ public class PatternCollectorBlockRenderer implements BlockEntityRenderer<Patter
     public void render(@NotNull PatternsCollectorBlockEntity blockEntity, float partialTicks, @NotNull PoseStack poseStack,
                        @NotNull MultiBufferSource buffer, int packedLight, int packedOverlay) {
 
+        blockEntity.tickRotation();
+        float offset = 7.0f;
+
         poseStack.pushPose();
-        poseStack.translate(0.5, 5.5, 0.5);
+        poseStack.translate(0.5, 0.5+ offset, 0.5);
 
 
-        ringYOffset = getCurrentYOffset(blockEntity, ringYOffset);
+        ringYOffset = getCurrentYOffset(blockEntity, ringYOffset, offset);
 
-        float baseRotation = partialTicks;
-        if (blockEntity.getLevel() != null) {
-            baseRotation = (blockEntity.getLevel().getGameTime() + partialTicks) * 2f;
-        }
+        blockEntity.setCurrentOffset(ringYOffset);
+        float rotationX = blockEntity.getInterpolatedX(partialTicks);
+        float rotationY = blockEntity.getInterpolatedY(partialTicks);
+        float rotationZ = blockEntity.getInterpolatedZ(partialTicks);
 
-        renderScene(poseStack, buffer, packedLight, packedOverlay, 0, baseRotation,0);
+        renderScene(poseStack, buffer, packedLight, packedOverlay, rotationX, rotationY,rotationZ);
 
 
         poseStack.popPose();
@@ -80,8 +83,11 @@ public class PatternCollectorBlockRenderer implements BlockEntityRenderer<Patter
 
         poseStack.pushPose();
 
-        renderRing(poseStack, buffer, packedLight, packedOverlay, PATTERN_ITEMS_MAIN, rotationX, rotationY, rotationZ, 1,  0.5, ringYOffset);
-        renderRing(poseStack, buffer, packedLight, packedOverlay, PATTERN_ITEMS_MAIN, rotationX, -rotationY, rotationZ, 1,  1, ringYOffset);
+        poseStack.pushPose();
+        poseStack.translate(0, ringYOffset, 0);
+        renderRing(poseStack, buffer, packedLight, packedOverlay, PATTERN_ITEMS_MAIN, rotationX, rotationY, rotationZ, 1,  0.5);
+        renderRing(poseStack, buffer, packedLight, packedOverlay, PATTERN_ITEMS_MAIN, -rotationX, -rotationY, -rotationZ, 1,  1);
+        poseStack.popPose();
 
         poseStack.mulPose(Axis.XP.rotationDegrees(rotationX % 360.0f));
         poseStack.mulPose(Axis.YP.rotationDegrees(rotationY % 360.0f));
@@ -94,32 +100,32 @@ public class PatternCollectorBlockRenderer implements BlockEntityRenderer<Patter
 
     private void renderSphere(PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay) {
 
-        double radius = 10;
+        double radius = 14;
 
         poseStack.pushPose();
-        renderRing(poseStack, buffer, packedLight, packedOverlay, PATTERN_ITEMS_MAIN,0,0,0, 4f, radius ,0);
-        renderRing(poseStack, buffer, packedLight, packedOverlay, PATTERN_ITEMS_UD,0,45,0, 4f, radius ,0);
+        renderRing(poseStack, buffer, packedLight, packedOverlay, PATTERN_ITEMS_MAIN,0,0,0, 4f, radius);
+        renderRing(poseStack, buffer, packedLight, packedOverlay, PATTERN_ITEMS_UD,0,45,0, 4f, radius);
         poseStack.pushPose();
-        renderRing(poseStack, buffer, packedLight, packedOverlay, PATTERN_ITEMS_EW,45,0,0, 4f, radius ,0);
+        renderRing(poseStack, buffer, packedLight, packedOverlay, PATTERN_ITEMS_EW,45,0,0, 4f, radius);
         poseStack.popPose();
         poseStack.mulPose(Axis.YP.rotationDegrees(45));
         poseStack.pushPose();
-        renderRing(poseStack, buffer, packedLight, packedOverlay, PATTERN_ITEMS_EW,45,0,0, 4f, radius ,0);
+        renderRing(poseStack, buffer, packedLight, packedOverlay, PATTERN_ITEMS_EW,45,0,0, 4f, radius);
         poseStack.popPose();
         poseStack.mulPose(Axis.YP.rotationDegrees(45));
         poseStack.pushPose();
-        renderRing(poseStack, buffer, packedLight, packedOverlay, PATTERN_ITEMS_EW,45,0,0, 4f, radius ,0);
+        renderRing(poseStack, buffer, packedLight, packedOverlay, PATTERN_ITEMS_EW,45,0,0, 4f, radius);
         poseStack.popPose();
         poseStack.mulPose(Axis.YP.rotationDegrees(45));
         poseStack.pushPose();
-        renderRing(poseStack, buffer, packedLight, packedOverlay, PATTERN_ITEMS_EW,45,0,0, 4f, radius ,0);
+        renderRing(poseStack, buffer, packedLight, packedOverlay, PATTERN_ITEMS_EW,45,0,0, 4f, radius);
         poseStack.popPose();
         poseStack.popPose();
     }
 
 
     private void renderRing(PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay,
-                            Map<Direction, ItemStack> itemMap, float rotationX, float rotationY, float rotationZ, float scale, double radius, float yOffset) {
+                            Map<Direction, ItemStack> itemMap, float rotationX, float rotationY, float rotationZ, float scale, double radius) {
 
         poseStack.pushPose();
 
@@ -134,7 +140,7 @@ public class PatternCollectorBlockRenderer implements BlockEntityRenderer<Patter
             poseStack.pushPose();
 
             double dx = direction.getStepX() * radius;
-            double dy = direction.getStepY() * radius + yOffset;
+            double dy = direction.getStepY() * radius;
             double dz = direction.getStepZ() * radius;
 
             poseStack.translate(dx, dy, dz);
@@ -147,7 +153,7 @@ public class PatternCollectorBlockRenderer implements BlockEntityRenderer<Patter
                 case EAST -> poseStack.mulPose(Axis.YN.rotationDegrees(90));
             }
 
-            poseStack.scale(scale, scale, 1.0f);
+            poseStack.scale(scale, scale, 0.1f);
 
 
             Minecraft.getInstance().getItemRenderer().renderStatic(
@@ -166,7 +172,7 @@ public class PatternCollectorBlockRenderer implements BlockEntityRenderer<Patter
         poseStack.popPose();
     }
 
-    private static float getCurrentYOffset(@NotNull PatternsCollectorBlockEntity blockEntity, float previousYOffset) {
+    private static float getCurrentYOffset(@NotNull PatternsCollectorBlockEntity blockEntity, float previousYOffset, float offset) {
         Minecraft mc = Minecraft.getInstance();
 
         float targetYOffset = 0f;
@@ -187,7 +193,7 @@ public class PatternCollectorBlockRenderer implements BlockEntityRenderer<Patter
             double distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
 
             if (distance < 3.0) {
-                targetYOffset = -5.0f;
+                targetYOffset = -offset;
             }
         }
 

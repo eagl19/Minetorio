@@ -26,6 +26,10 @@ public class MinetorioCreativeModTabs {
                         pOutput.accept(MinetorioItems.PATTERN_EARTH.get());
                         pOutput.accept(MinetorioItems.PATTERN_FIRE.get());
                         pOutput.accept(MinetorioItems.PATTERN_INFINITY.get());
+                        pOutput.accept(MinetorioItems.PATTERN_RAIN.get());
+                        pOutput.accept(MinetorioItems.PATTERN_SNOW.get());
+                        pOutput.accept(MinetorioItems.PATTERN_SNOWFLAKE.get());
+                        pOutput.accept(MinetorioItems.PATTERN_SUN.get());
                         pOutput.accept(MinetorioItems.PATTERN_VOID.get());
                         pOutput.accept(MinetorioItems.PATTERN_WATER.get());
 

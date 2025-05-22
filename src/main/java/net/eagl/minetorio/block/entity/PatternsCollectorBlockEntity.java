@@ -1,13 +1,9 @@
 package net.eagl.minetorio.block.entity;
 
-import net.eagl.minetorio.capability.MinetorioCapabilities;
 import net.eagl.minetorio.gui.PatternsCollectorMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -17,55 +13,71 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Map;
-
 
 public class PatternsCollectorBlockEntity extends BlockEntity implements MenuProvider {
 
-    private final float speedX;
-    private final float speedY;
-    private final float speedZ;
+    private float currentX = 0f, currentY = 0f, currentZ = 0f;
+    private float targetX = 0f, targetY = 0f, targetZ = 0f;
+    private float prevX, prevY, prevZ;
+    private float currentYOffset = 0;
 
-    private float currentYOffset = 0f;
-    private float rotation =0;
+    private int ticksSinceLastTargetUpdate = 0;
+    private static final int TARGET_UPDATE_INTERVAL = 40;
 
     public PatternsCollectorBlockEntity(BlockPos pPos, BlockState pBlockState) {
         super(MinetorioBlockEntities.PATTERNS_COLLECTOR.get(), pPos, pBlockState);
+    }
 
-        RandomSource rand = RandomSource.create(pPos.asLong()); // Детермінований для кожного блоку
-        this.speedX = 0.5f + rand.nextFloat(); // від 0.5 до 1.5
-        this.speedY = 0.5f + rand.nextFloat();
-        this.speedZ = 0.5f + rand.nextFloat();
+    public void tickRotation() {
+        ticksSinceLastTargetUpdate++;
+
+        if (this.level != null && ticksSinceLastTargetUpdate >= TARGET_UPDATE_INTERVAL) {
+            ticksSinceLastTargetUpdate = 0;
+
+            final float maxTargetChange = 10f; // максимум зміни цілі за раз
+
+            targetX = (targetX + (level.random.nextFloat() * 2f - 1f) * maxTargetChange) % 360f;
+            targetY = (targetY + (level.random.nextFloat() * 2f - 1f) * maxTargetChange) % 360f;
+            targetZ = (targetZ + (level.random.nextFloat() * 2f - 1f) * maxTargetChange) % 360f;
+        }
+
+        prevX = currentX;
+        prevY = currentY;
+        prevZ = currentZ;
+
+        // плавне наближення (speed = 0.05f-0.1f для плавного руху)
+        currentX = approachAngle(currentX, targetX, 0.08f);
+        currentY = approachAngle(currentY, targetY, 0.07f);
+        currentZ = approachAngle(currentZ, targetZ, 0.06f);
+    }
+
+    private float approachAngle(float current, float target, float speed) {
+        float diff = (target - current + 540f) % 360f - 180f;
+        return current + diff * speed;
+    }
+    public float getInterpolatedX(float partialTick) {
+        return prevX + (currentX - prevX) * partialTick;
+    }
+
+    public float getInterpolatedY(float partialTick) {
+        return prevY + (currentY - prevY) * partialTick;
+    }
+
+    public float getInterpolatedZ(float partialTick) {
+        return prevZ + (currentZ - prevZ) * partialTick;
+    }
+
+    public void setCurrentOffset(float offset) {
+        this.currentYOffset=offset;
     }
 
     public void tickClient() {
-        rotation += 1.0f;
+
     }
 
     public void tickServer() {
 
     }
-
-    public float getCurrentYOffset() {
-        return currentYOffset;
-    }
-
-    public void setCurrentYOffset(float yOffset) {
-        this.currentYOffset = yOffset;
-    }
-
-    public float getSpeedX() {
-        return speedX;
-    }
-
-    public float getSpeedY() {
-        return speedY;
-    }
-
-    public float getSpeedZ() {
-        return speedZ;
-    }
-
 
     @Override
     public @NotNull Component getDisplayName() {
@@ -81,18 +93,22 @@ public class PatternsCollectorBlockEntity extends BlockEntity implements MenuPro
     @Override
     protected void saveAdditional(@NotNull CompoundTag tag) {
         super.saveAdditional(tag);
-        tag.putFloat("rotation", rotation);
+        tag.putFloat("currentX", currentX);
+        tag.putFloat("currentY", currentY);
+        tag.putFloat("currentZ", currentZ);
         tag.putFloat("currentYOffset", currentYOffset);
     }
 
     @Override
     public void load(@NotNull CompoundTag tag) {
         super.load(tag);
-        this.rotation = tag.getFloat("rotation");
+        this.currentX = tag.getFloat("currentX");
+        this.currentY = tag.getFloat("currentY");
+        this.currentZ = tag.getFloat("currentZ");
         this.currentYOffset = tag.getFloat("currentYOffset");
     }
 
-    public float getRotation() {
-        return rotation;
+    public float getCurrentYOffset() {
+        return this.currentYOffset;
     }
 }
