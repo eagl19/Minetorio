@@ -16,6 +16,8 @@ import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
+import java.util.List;
+
 @SuppressWarnings("unused")
 @Mod.EventBusSubscriber(modid = Minetorio.MOD_ID)
 public class WorldInitEvents {
@@ -29,95 +31,97 @@ public class WorldInitEvents {
         MinetorioDimensionSavedData data = MinetorioDimensionSavedData.get(level);
 
         if (!data.isInitialized()) {
-            BlockState glowingBedrock = MinetorioBlocks.GLOWING_BEDROCK.get().defaultBlockState().setValue(GlowingBedrockBlock.STATE, GlowingBedrockBlockState.BEDROCK);
-            BlockState portal = MinetorioBlocks.PORTAL.get().defaultBlockState();
-            BlockPos teleportPos = new BlockPos(1000,100,1000);
 
+            spawnRoom(level, new BlockPos(0, 100, 0));
 
-
-            BlockEntity be;
-            BlockPos blockPos = new BlockPos(0, 100, 0);
-
-            for (int dx = 3; dx >= -3; dx--) {
-                for (int dz = 3; dz >= -3; dz--) {
-                    level.setBlockAndUpdate(blockPos.offset(dx, -1, dz), glowingBedrock);
-                    level.setBlockAndUpdate(blockPos.offset(dx,  0, dz), Blocks.AIR.defaultBlockState());
-                    level.setBlockAndUpdate(blockPos.offset(dx,  1, dz), Blocks.AIR.defaultBlockState());
-                    level.setBlockAndUpdate(blockPos.offset(dx,  2, dz), Blocks.AIR.defaultBlockState());
-                    level.setBlockAndUpdate(blockPos.offset(dx,  3, dz), Blocks.AIR.defaultBlockState());
-                    level.setBlockAndUpdate(blockPos.offset(dx,  4, dz), Blocks.BARRIER.defaultBlockState());
-                }
-            }
-            for(int dx = 3; dx >= -3; dx-- ) {
-                level.setBlockAndUpdate(blockPos.offset(dx,  0, 4), Blocks.BARRIER.defaultBlockState());
-                level.setBlockAndUpdate(blockPos.offset(dx,  1, 4), Blocks.BARRIER.defaultBlockState());
-                level.setBlockAndUpdate(blockPos.offset(dx,  2, 4), Blocks.BARRIER.defaultBlockState());
-                level.setBlockAndUpdate(blockPos.offset(dx,  3, 4), Blocks.BARRIER.defaultBlockState());
-
-
-
-                level.setBlockAndUpdate(blockPos.offset(dx,  0, 3), portal);
-                be = level.getBlockEntity(new BlockPos(dx,0,3));
-                if (be instanceof PortalBlockEntity portalBE) {
-                    portalBE.setTeleportTarget(teleportPos);
-                }
-
-                level.setBlockAndUpdate(blockPos.offset(dx,  1, 3), portal);
-                be = level.getBlockEntity(new BlockPos(dx,1,3));
-                if (be instanceof PortalBlockEntity portalBE) {
-                    portalBE.setTeleportTarget(teleportPos);
-                }
-
-                level.setBlockAndUpdate(blockPos.offset(dx,  2, 3), portal);
-                be = level.getBlockEntity(new BlockPos(dx,2,3));
-                if (be instanceof PortalBlockEntity portalBE) {
-                    portalBE.setTeleportTarget(teleportPos);
-                }
-
-                level.setBlockAndUpdate(blockPos.offset(dx,  3, 3), portal);
-                be = level.getBlockEntity(new BlockPos(dx,3,3));
-                if (be instanceof PortalBlockEntity portalBE) {
-                    portalBE.setTeleportTarget(teleportPos);
-                }
-
-                level.setBlockAndUpdate(blockPos.offset(dx,  0, -3), Blocks.BARRIER.defaultBlockState());
-                level.setBlockAndUpdate(blockPos.offset(dx,  1, -3), Blocks.BARRIER.defaultBlockState());
-                level.setBlockAndUpdate(blockPos.offset(dx,  2, -3), Blocks.BARRIER.defaultBlockState());
-                level.setBlockAndUpdate(blockPos.offset(dx,  3, -3), Blocks.BARRIER.defaultBlockState());
-
-                level.setBlockAndUpdate(blockPos.offset(3,  0, dx), Blocks.BARRIER.defaultBlockState());
-                level.setBlockAndUpdate(blockPos.offset(3,  1, dx), Blocks.BARRIER.defaultBlockState());
-                level.setBlockAndUpdate(blockPos.offset(3,  2, dx), Blocks.BARRIER.defaultBlockState());
-                level.setBlockAndUpdate(blockPos.offset(3,  3, dx), Blocks.BARRIER.defaultBlockState());
-
-                level.setBlockAndUpdate(blockPos.offset(-3,  0, dx), Blocks.BARRIER.defaultBlockState());
-                level.setBlockAndUpdate(blockPos.offset(-3,  1, dx), Blocks.BARRIER.defaultBlockState());
-                level.setBlockAndUpdate(blockPos.offset(-3,  2, dx), Blocks.BARRIER.defaultBlockState());
-                level.setBlockAndUpdate(blockPos.offset(-3,  3, dx), Blocks.BARRIER.defaultBlockState());
-            }
-
-            blockPos = new BlockPos(1000,100,1000);
-
-            level.setBlockAndUpdate(blockPos.offset(0, 2, 0), MinetorioBlocks.PATTERNS_COLLECTOR.get().defaultBlockState());
-
-            for (int dx = 9; dx >= -9; dx--) {
-                for (int dz = 9; dz >= -9; dz--) {
-                    level.setBlockAndUpdate(blockPos.offset(dx, -1, dz), Blocks.BARRIER.defaultBlockState());
-                    level.setBlockAndUpdate(blockPos.offset(dx, 17, dz), Blocks.BARRIER.defaultBlockState());
-                }
-            }
-            for (int dx = 9; dx >= -9; dx--) {
-                for (int dy = 0; dy <= 16; dy++) {
-                    level.setBlockAndUpdate(blockPos.offset(dx, dy, 9), Blocks.BARRIER.defaultBlockState());
-                    level.setBlockAndUpdate(blockPos.offset(dx, dy, -9), Blocks.BARRIER.defaultBlockState());
-
-                    level.setBlockAndUpdate(blockPos.offset( 9, dy, dx), Blocks.BARRIER.defaultBlockState());
-                    level.setBlockAndUpdate(blockPos.offset(-9, dy, dx), Blocks.BARRIER.defaultBlockState());
-                }
-
-            }
+            patternCollectorRoom(level, new BlockPos(1000,100,1000));
 
             data.markInitialized();
         }
     }
+
+    private static void setBlockPortalBlock(ServerLevel level, BlockPos blockPos, BlockPos teleportPos){
+
+        level.setBlockAndUpdate(blockPos, MinetorioBlocks.PORTAL.get().defaultBlockState());
+        BlockEntity be = level.getBlockEntity(blockPos);
+
+        if (be instanceof PortalBlockEntity portalBE) {
+            portalBE.setTeleportTarget(teleportPos);
+
+        }
+
+    }
+
+    private static  void  patternCollectorRoom(ServerLevel level, BlockPos blockPos){
+
+        final List<BlockPos> TELEPORT_POSITIONS = List.of(
+                new BlockPos(1000, 100, 1000),//TODO замінити
+                new BlockPos(1000, 100, 1000),//TODO замінити
+                new BlockPos(1000, 100, 1000),//TODO замінити
+                new BlockPos(1000, 100, 1000)//TODO замінити
+        );
+        level.setBlockAndUpdate(blockPos.offset(0, 2, 0), MinetorioBlocks.PATTERNS_COLLECTOR.get().defaultBlockState());
+
+        for (int dx = 10; dx >= -10; dx--) {
+            for (int dz = 10; dz >= -10; dz--) {
+                level.setBlockAndUpdate(blockPos.offset(dx, -1, dz), Blocks.BARRIER.defaultBlockState());
+                level.setBlockAndUpdate(blockPos.offset(dx, 17, dz), Blocks.BARRIER.defaultBlockState());
+            }
+        }
+        for (int dx = 8; dx >= -8; dx--) {
+            for (int dy = 0; dy <= 16; dy++) {
+                level.setBlockAndUpdate(blockPos.offset(dx, dy, 10),  Blocks.BARRIER.defaultBlockState());
+                level.setBlockAndUpdate(blockPos.offset(dx, dy, -10), Blocks.BARRIER.defaultBlockState());
+                level.setBlockAndUpdate(blockPos.offset(10, dy, dx),   Blocks.BARRIER.defaultBlockState());
+                level.setBlockAndUpdate(blockPos.offset(-10, dy, dx),  Blocks.BARRIER.defaultBlockState());
+
+                setBlockPortalBlock(level, blockPos.offset(dx,dy,9),    TELEPORT_POSITIONS.get(0));
+                setBlockPortalBlock(level, blockPos.offset(dx,dy,-9),   TELEPORT_POSITIONS.get(1));
+                setBlockPortalBlock(level, blockPos.offset(9,  dy, dx), TELEPORT_POSITIONS.get(2));
+                setBlockPortalBlock(level, blockPos.offset(-9, dy, dx), TELEPORT_POSITIONS.get(3));
+
+            }
+
+        }
+
+    }
+
+    private static void spawnRoom(ServerLevel level, BlockPos blockPos){
+
+        BlockState glowingBedrock = MinetorioBlocks.GLOWING_BEDROCK.get().defaultBlockState().setValue(GlowingBedrockBlock.STATE, GlowingBedrockBlockState.BEDROCK);
+
+        final List<BlockPos> TELEPORT_POSITIONS = List.of(
+                new BlockPos(1000, 100, 1000),
+                new BlockPos(1000, 100, 1000),//TODO замінити
+                new BlockPos(1000, 100, 1000),//TODO замінити
+                new BlockPos(1000, 100, 1000)//TODO замінити
+        );
+
+        for (int dx = 10; dx >= -10; dx--) {
+            for (int dz = 10; dz >= -10; dz--) {
+                level.setBlockAndUpdate(blockPos.offset(dx, -1, dz), glowingBedrock);
+                level.setBlockAndUpdate(blockPos.offset(dx,  0, dz), Blocks.AIR.defaultBlockState());
+                level.setBlockAndUpdate(blockPos.offset(dx,  1, dz), Blocks.AIR.defaultBlockState());
+                level.setBlockAndUpdate(blockPos.offset(dx,  2, dz), Blocks.AIR.defaultBlockState());
+                level.setBlockAndUpdate(blockPos.offset(dx,  3, dz), Blocks.AIR.defaultBlockState());
+                level.setBlockAndUpdate(blockPos.offset(dx,  4, dz), Blocks.BARRIER.defaultBlockState());
+            }
+        }
+
+        for(int dx = 9; dx >= -8; dx-- ) {
+            for (int dy=0; dy<=3; dy++) {
+                level.setBlockAndUpdate(blockPos.offset(dx, dy,  10), Blocks.BARRIER.defaultBlockState());
+                level.setBlockAndUpdate(blockPos.offset(dx, dy, -10), Blocks.BARRIER.defaultBlockState());
+                level.setBlockAndUpdate(blockPos.offset(10, dy, dx),  Blocks.BARRIER.defaultBlockState());
+                level.setBlockAndUpdate(blockPos.offset(-10, dy, dx), Blocks.BARRIER.defaultBlockState());
+
+                setBlockPortalBlock(level, blockPos.offset(dx, dy, 9),  TELEPORT_POSITIONS.get(0));
+                setBlockPortalBlock(level, blockPos.offset(dx, dy, -9), TELEPORT_POSITIONS.get(1));
+                setBlockPortalBlock(level, blockPos.offset(9, dy, dx),  TELEPORT_POSITIONS.get(2));
+                setBlockPortalBlock(level, blockPos.offset(-9, dy, dx), TELEPORT_POSITIONS.get(3));
+
+            }
+        }
+    }
 }
+

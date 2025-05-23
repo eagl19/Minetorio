@@ -2,11 +2,13 @@ package net.eagl.minetorio.block.custom;
 
 import net.eagl.minetorio.block.entity.PortalBlockEntity;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.NetherPortalBlock;
 import net.minecraft.world.level.block.RenderShape;
@@ -57,6 +59,12 @@ public class PortalBlock extends NetherPortalBlock implements EntityBlock {
     }
 
     @Override
+    public @NotNull BlockState updateShape(@NotNull BlockState pState, @NotNull Direction pFacing, @NotNull BlockState pFacingState, @NotNull LevelAccessor pLevel, @NotNull BlockPos pCurrentPos, @NotNull BlockPos pFacingPos) {
+        return pState;
+    }
+
+
+    @Override
     public void setPlacedBy(@NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState state,
                             @Nullable LivingEntity placer, @NotNull ItemStack stack) {
         super.setPlacedBy(level, pos, state, placer, stack);
@@ -67,9 +75,9 @@ public class PortalBlock extends NetherPortalBlock implements EntityBlock {
                 BlockPos playerPos = placer.blockPosition();
                 portalBE.setTeleportTarget(playerPos);
             }
-        }
     }
 
+}
     @Override
     public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
         return new PortalBlockEntity(pos, state);

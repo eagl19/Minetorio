@@ -19,7 +19,7 @@ public class PortalBlockEntity extends BlockEntity {
 
     public void setTeleportTarget(BlockPos target) {
         this.teleportTarget = target;
-        setChanged(); // позначаємо, що BlockEntity оновився
+        setChanged();
     }
 
     @Override
