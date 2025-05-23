@@ -4,11 +4,13 @@ import net.eagl.minetorio.Minetorio;
 import net.eagl.minetorio.block.MinetorioBlocks;
 import net.eagl.minetorio.block.custom.GlowingBedrockBlock;
 import net.eagl.minetorio.block.custom.GlowingBedrockBlockState;
+import net.eagl.minetorio.block.entity.PortalBlockEntity;
 import net.eagl.minetorio.data.MinetorioDimensionSavedData;
 import net.eagl.minetorio.worldgen.dimension.MinetorioDimensions;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -27,12 +29,18 @@ public class WorldInitEvents {
         MinetorioDimensionSavedData data = MinetorioDimensionSavedData.get(level);
 
         if (!data.isInitialized()) {
-            BlockState blockState = MinetorioBlocks.GLOWING_BEDROCK.get().defaultBlockState().setValue(GlowingBedrockBlock.STATE, GlowingBedrockBlockState.BEDROCK);
+            BlockState glowingBedrock = MinetorioBlocks.GLOWING_BEDROCK.get().defaultBlockState().setValue(GlowingBedrockBlock.STATE, GlowingBedrockBlockState.BEDROCK);
+            BlockState portal = MinetorioBlocks.PORTAL.get().defaultBlockState();
+            BlockPos teleportPos = new BlockPos(1000,100,1000);
+
+
+
+            BlockEntity be;
             BlockPos blockPos = new BlockPos(0, 100, 0);
 
             for (int dx = 3; dx >= -3; dx--) {
                 for (int dz = 3; dz >= -3; dz--) {
-                    level.setBlockAndUpdate(blockPos.offset(dx, -1, dz), blockState);
+                    level.setBlockAndUpdate(blockPos.offset(dx, -1, dz), glowingBedrock);
                     level.setBlockAndUpdate(blockPos.offset(dx,  0, dz), Blocks.AIR.defaultBlockState());
                     level.setBlockAndUpdate(blockPos.offset(dx,  1, dz), Blocks.AIR.defaultBlockState());
                     level.setBlockAndUpdate(blockPos.offset(dx,  2, dz), Blocks.AIR.defaultBlockState());
@@ -41,10 +49,36 @@ public class WorldInitEvents {
                 }
             }
             for(int dx = 3; dx >= -3; dx-- ) {
-                level.setBlockAndUpdate(blockPos.offset(dx,  0, 3), Blocks.BARRIER.defaultBlockState());
-                level.setBlockAndUpdate(blockPos.offset(dx,  1, 3), Blocks.BARRIER.defaultBlockState());
-                level.setBlockAndUpdate(blockPos.offset(dx,  2, 3), Blocks.BARRIER.defaultBlockState());
-                level.setBlockAndUpdate(blockPos.offset(dx,  3, 3), Blocks.BARRIER.defaultBlockState());
+                level.setBlockAndUpdate(blockPos.offset(dx,  0, 4), Blocks.BARRIER.defaultBlockState());
+                level.setBlockAndUpdate(blockPos.offset(dx,  1, 4), Blocks.BARRIER.defaultBlockState());
+                level.setBlockAndUpdate(blockPos.offset(dx,  2, 4), Blocks.BARRIER.defaultBlockState());
+                level.setBlockAndUpdate(blockPos.offset(dx,  3, 4), Blocks.BARRIER.defaultBlockState());
+
+
+
+                level.setBlockAndUpdate(blockPos.offset(dx,  0, 3), portal);
+                be = level.getBlockEntity(new BlockPos(dx,0,3));
+                if (be instanceof PortalBlockEntity portalBE) {
+                    portalBE.setTeleportTarget(teleportPos);
+                }
+
+                level.setBlockAndUpdate(blockPos.offset(dx,  1, 3), portal);
+                be = level.getBlockEntity(new BlockPos(dx,1,3));
+                if (be instanceof PortalBlockEntity portalBE) {
+                    portalBE.setTeleportTarget(teleportPos);
+                }
+
+                level.setBlockAndUpdate(blockPos.offset(dx,  2, 3), portal);
+                be = level.getBlockEntity(new BlockPos(dx,2,3));
+                if (be instanceof PortalBlockEntity portalBE) {
+                    portalBE.setTeleportTarget(teleportPos);
+                }
+
+                level.setBlockAndUpdate(blockPos.offset(dx,  3, 3), portal);
+                be = level.getBlockEntity(new BlockPos(dx,3,3));
+                if (be instanceof PortalBlockEntity portalBE) {
+                    portalBE.setTeleportTarget(teleportPos);
+                }
 
                 level.setBlockAndUpdate(blockPos.offset(dx,  0, -3), Blocks.BARRIER.defaultBlockState());
                 level.setBlockAndUpdate(blockPos.offset(dx,  1, -3), Blocks.BARRIER.defaultBlockState());

@@ -1,6 +1,7 @@
 package net.eagl.minetorio.block;
 
 import net.eagl.minetorio.Minetorio;
+import net.eagl.minetorio.block.custom.PortalBlock;
 import net.eagl.minetorio.block.custom.PatternsCollectorBlock;
 import net.eagl.minetorio.block.custom.GlowingBedrockBlock;
 import net.eagl.minetorio.item.MinetorioItems;
@@ -24,6 +25,8 @@ public class MinetorioBlocks {
     public static final RegistryObject<Block> PATTERNS_COLLECTOR = registerBlock("patterns_collector",
             PatternsCollectorBlock::new);
 
+    public static final RegistryObject<Block> PORTAL = registerBlock("portal",
+            PortalBlock::new);
 
     private static <T extends Block> RegistryObject<T> registerBlock(String name, Supplier<T> block){
         RegistryObject<T> toReturn = BLOCKS.register(name,block);

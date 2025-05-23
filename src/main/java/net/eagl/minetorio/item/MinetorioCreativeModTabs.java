@@ -26,6 +26,7 @@ public class MinetorioCreativeModTabs {
                         pOutput.accept(MinetorioItems.PATTERN_EARTH.get());
                         pOutput.accept(MinetorioItems.PATTERN_FIRE.get());
                         pOutput.accept(MinetorioItems.PATTERN_INFINITY.get());
+                        pOutput.accept(MinetorioItems.PATTERN_LIGHTNING.get());
                         pOutput.accept(MinetorioItems.PATTERN_RAIN.get());
                         pOutput.accept(MinetorioItems.PATTERN_SNOW.get());
                         pOutput.accept(MinetorioItems.PATTERN_SNOWFLAKE.get());
@@ -35,6 +36,7 @@ public class MinetorioCreativeModTabs {
 
                         pOutput.accept(MinetorioBlocks.GLOWING_BEDROCK.get());
                         pOutput.accept(MinetorioBlocks.PATTERNS_COLLECTOR.get());
+                        pOutput.accept(MinetorioBlocks.PORTAL.get());
 
 
                     })

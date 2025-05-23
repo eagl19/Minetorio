@@ -33,6 +33,8 @@ public class MinetorioBlockStateProvider extends BlockStateProvider {
                 "item/patterns/earth",
                 "item/patterns/water");
 
+
+        blockWithItem(MinetorioBlocks.PORTAL);
     }
 
     private void blockWithCustomSides(Block block, String pDown,String pUp,String pNorth,String pSouth,String pWest,String pEst) {

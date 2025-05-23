@@ -21,13 +21,22 @@ public class PatternsCollectorBlock extends Block implements EntityBlock {
                 .noCollission()
                 .strength(-1.0F, 3600000.0F)
                 .lightLevel(state -> 15)
-                .noOcclusion());
+                .noOcclusion()
+                .isViewBlocking((state, reader, pos) -> false)
+                .isSuffocating((state, world, pos) -> false));
+
     }
 
     @SuppressWarnings("deprecation")
     @Override
     public @NotNull RenderShape getRenderShape(@NotNull BlockState state) {
         return RenderShape.INVISIBLE;
+    }
+
+
+    @Override
+    public boolean propagatesSkylightDown(@NotNull BlockState state, @NotNull BlockGetter reader, @NotNull BlockPos pos) {
+        return true;
     }
 
     @Override

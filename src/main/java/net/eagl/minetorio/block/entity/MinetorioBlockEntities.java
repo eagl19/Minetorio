@@ -18,6 +18,10 @@ public class MinetorioBlockEntities {
             BLOCK_ENTITIES.register("minetorio_beacon", () ->
                     BlockEntityType.Builder.of(PatternsCollectorBlockEntity::new, MinetorioBlocks.PATTERNS_COLLECTOR.get()).build(null));
 
+    public static final RegistryObject<BlockEntityType<PortalBlockEntity>> PORTAL_BLOCK_ENTITY =
+            BLOCK_ENTITIES.register("portal", () ->
+                    BlockEntityType.Builder.of(PortalBlockEntity::new, MinetorioBlocks.PORTAL.get()).build(null));
+
     public static void register(IEventBus eventBus) {
         BLOCK_ENTITIES.register(eventBus);
     }
