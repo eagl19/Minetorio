@@ -16,9 +16,16 @@ public class PatternItemsHandler implements IItemHandlerModifiable {
     private final LinkedHashMap<Item, Boolean> patternItems; // Зберігаємо порядок
 
     public PatternItemsHandler() {
+
+        Set<Item> items = PatternItemsCollector.getPatternItems();
+
+        List<Item> sortedItems = items.stream()
+                .sorted(Comparator.comparing(item -> item.getName(ItemStack.EMPTY).getString()))
+                .toList();
+
         this.patternItems = new LinkedHashMap<>();
-        for (Item item : PatternItemsCollector.getPatternItems()) {
-            patternItems.put(item, false); // За замовчуванням — невивчено
+        for (Item item : sortedItems) {
+            patternItems.put(item, false);
         }
     }
 
