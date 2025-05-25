@@ -2,10 +2,12 @@ package net.eagl.minetorio.util;
 
 import net.eagl.minetorio.item.MinetorioItems;
 import net.minecraft.world.item.Item;
+import net.minecraftforge.registries.RegistryObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.lang.reflect.Field;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,31 +17,29 @@ public class PatternItemsCollector {
 
     public static Set<Item> getPatternItems() {
         if (patternItems == null) {
-            patternItems = new HashSet<>();
+            Set<Item> result = new HashSet<>();
             try {
-                // Отримуємо всі поля класу MinetorioItems
                 Field[] fields = MinetorioItems.class.getDeclaredFields();
 
                 for (Field field : fields) {
                     if (field.getName().startsWith("PATTERN_")) {
-                        // Поля у MinetorioItems, судячи з твого коду, це Lazy<Item>, тому дістанемо get()
                         field.setAccessible(true);
-                        Object obj = field.get(null); // статичне поле, тому null
+                        Object obj = field.get(null);
 
-                        if (obj instanceof net.minecraftforge.registries.RegistryObject<?>) {
-                            // RegistryObject<Item> - викликаємо get()
-                            Object item = ((net.minecraftforge.registries.RegistryObject<?>) obj).get();
+                        if (obj instanceof RegistryObject<?> registryObject) {
+                            Object item = registryObject.get();
                             if (item instanceof Item) {
-                                patternItems.add((Item) item);
+                                result.add((Item) item);
                             }
                         } else if (obj instanceof Item) {
-                            patternItems.add((Item) obj);
+                            result.add((Item) obj);
                         }
                     }
                 }
             } catch (IllegalAccessException e) {
                 LOGGER.error("Failed to access PATTERN_ items via reflection in MinetorioItems", e);
             }
+            patternItems = Collections.unmodifiableSet(result);
         }
         return patternItems;
     }
