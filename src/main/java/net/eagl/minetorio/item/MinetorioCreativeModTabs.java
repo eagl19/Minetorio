@@ -22,12 +22,14 @@ public class MinetorioCreativeModTabs {
                         pOutput.accept(MinetorioItems.SAPPHIRE.get());
 
                         pOutput.accept(MinetorioItems.PATTERN_AIR.get());
+                        pOutput.accept(MinetorioItems.PATTERN_BATTERY.get());
                         pOutput.accept(MinetorioItems.PATTERN_CLOUD.get());
                         pOutput.accept(MinetorioItems.PATTERN_EARTH.get());
                         pOutput.accept(MinetorioItems.PATTERN_FIRE.get());
                         pOutput.accept(MinetorioItems.PATTERN_INFINITY.get());
                         pOutput.accept(MinetorioItems.PATTERN_LIGHTNING.get());
                         pOutput.accept(MinetorioItems.PATTERN_RAIN.get());
+                        pOutput.accept(MinetorioItems.PATTERN_RESEARCH_BOOK.get());
                         pOutput.accept(MinetorioItems.PATTERN_SNOW.get());
                         pOutput.accept(MinetorioItems.PATTERN_SNOWFLAKE.get());
                         pOutput.accept(MinetorioItems.PATTERN_SUN.get());

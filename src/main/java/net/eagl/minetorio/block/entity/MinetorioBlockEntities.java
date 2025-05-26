@@ -23,6 +23,11 @@ public class MinetorioBlockEntities {
             BLOCK_ENTITIES.register("portal", () ->
                     BlockEntityType.Builder.of(PortalBlockEntity::new, MinetorioBlocks.PORTAL.get()).build(null));
 
+    @SuppressWarnings("DataFlowIssue")
+    public static final RegistryObject<BlockEntityType<PortalBlockEntity>> RESEARCH_BLOCK_ENTITY =
+            BLOCK_ENTITIES.register("researcher", () ->
+                    BlockEntityType.Builder.of(PortalBlockEntity::new, MinetorioBlocks.RESEARCHER.get()).build(null));
+
     public static void register(IEventBus eventBus) {
         BLOCK_ENTITIES.register(eventBus);
     }
