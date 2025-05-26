@@ -43,6 +43,8 @@ public class MinetorioItems {
             ()-> new Item(new Item.Properties()));
     public static final RegistryObject<Item> PATTERN_RESEARCH_BOOK = ITEMS.register("pattern_research_book",
             ()-> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> PATTERN_MINETORIO = ITEMS.register("pattern_minetorio",
+            ()-> new Item(new Item.Properties()));
 
 
 

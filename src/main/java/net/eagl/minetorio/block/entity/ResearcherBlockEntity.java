@@ -6,10 +6,10 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 
-public class ResearchBlockEntity extends BlockEntity {
+public class ResearcherBlockEntity extends BlockEntity {
 
-    public ResearchBlockEntity(BlockPos pPos, BlockState pBlockState) {
-        super(MinetorioBlockEntities.RESEARCH_BLOCK_ENTITY.get(), pPos, pBlockState);
+    public ResearcherBlockEntity(BlockPos pPos, BlockState pBlockState) {
+        super(MinetorioBlockEntities.RESEARCHER_BLOCK_ENTITY.get(), pPos, pBlockState);
     }
 
     @Override

@@ -1,6 +1,6 @@
 package net.eagl.minetorio.block.custom;
 
-import net.eagl.minetorio.block.entity.ResearchBlockEntity;
+import net.eagl.minetorio.block.entity.ResearcherBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
@@ -27,6 +27,6 @@ public class ResearchBlock extends Block implements EntityBlock {
 
     @Override
     public @Nullable BlockEntity newBlockEntity(@NotNull BlockPos pPos, @NotNull BlockState pState) {
-        return new ResearchBlockEntity(pPos, pState);
+        return new ResearcherBlockEntity(pPos, pState);
     }
 }

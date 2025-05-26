@@ -3,6 +3,7 @@ package net.eagl.minetorio.event;
 import net.eagl.minetorio.Minetorio;
 import net.eagl.minetorio.block.entity.MinetorioBlockEntities;
 import net.eagl.minetorio.block.renderer.PatternCollectorBlockRenderer;
+import net.eagl.minetorio.block.renderer.ResearcherBlockRenderer;
 import net.eagl.minetorio.gui.MinetorioMenus;
 import net.eagl.minetorio.gui.screen.PatternsCollectorScreen;
 import net.minecraft.client.gui.screens.MenuScreens;
@@ -18,9 +19,15 @@ public class ClientEvents {
 
     @SubscribeEvent
     public static void onRegisterRenderers(EntityRenderersEvent.RegisterRenderers event) {
+
         event.registerBlockEntityRenderer(
                 MinetorioBlockEntities.PATTERNS_COLLECTOR.get(),
                 PatternCollectorBlockRenderer::new
+        );
+
+        event.registerBlockEntityRenderer(
+                MinetorioBlockEntities.RESEARCHER_BLOCK_ENTITY.get(),
+                ResearcherBlockRenderer::new
         );
     }
 

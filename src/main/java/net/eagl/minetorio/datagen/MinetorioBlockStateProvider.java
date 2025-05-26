@@ -34,6 +34,15 @@ public class MinetorioBlockStateProvider extends BlockStateProvider {
                 "item/patterns/water");
 
 
+        blockWithCustomSides(MinetorioBlocks.RESEARCHER.get(),
+                "item/patterns/water",
+                "item/patterns/sun",
+                "item/patterns/research_book",
+                "item/patterns/minetorio",
+                "item/patterns/battery",
+                "item/patterns/lightning");
+
+
         blockWithItem(MinetorioBlocks.PORTAL);
     }
 
