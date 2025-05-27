@@ -29,7 +29,6 @@ public class PatternsCollectorMenu extends AbstractContainerMenu {
         this.access = ContainerLevelAccess.create(Objects.requireNonNull(entity.getLevel()), entity.getBlockPos());
         PatternItemsHandler patternItemsHandler = new PatternItemsHandler();
 
-        // слоти основного інвентаря (3 ряди по 9 слотів)
         int inventoryStartX = 8;
         int inventoryStartY = 140;
         for (int row = 0; row < INVENTORY_ROWS; row++) {
@@ -41,7 +40,6 @@ public class PatternsCollectorMenu extends AbstractContainerMenu {
             }
         }
 
-        // слоти хотбару (9 слотів)
         int hotbarY = inventoryStartY + INVENTORY_ROWS * 18 + 4;
         for (int col = 0; col < HOTBAR_SIZE; col++) {
             this.addSlot(new Slot(playerInventory, col, inventoryStartX + col * 18, hotbarY));
@@ -72,32 +70,28 @@ public class PatternsCollectorMenu extends AbstractContainerMenu {
 
 
         int playerInventoryStart = 0;
-        int playerInventoryEnd =INVENTORY_COLUMNS*INVENTORY_ROWS; // 3 ряди по 9
+        int playerInventoryEnd =INVENTORY_COLUMNS*INVENTORY_ROWS;
         int hotbarEnd = playerInventoryEnd + 9;
 
-        // Забороняємо взаємодію з read-only шаблонними слотами
+
         if (pIndex > hotbarEnd) {
             return ItemStack.EMPTY;
         }
 
-        // Якщо клікнули в основний інвентар — намагаємось перемістити в хотбар
         if (pIndex < playerInventoryEnd) {
             if (!moveItemStackTo(originalStack, playerInventoryEnd, hotbarEnd, false)) {
                 return ItemStack.EMPTY;
             }
         }
-        // Якщо клікнули в хотбар — намагаємось перемістити в основний інвентар
         else if (pIndex < hotbarEnd) {
             if (!moveItemStackTo(originalStack, playerInventoryStart, playerInventoryEnd, false)) {
                 return ItemStack.EMPTY;
             }
-            // Забороняємо взаємодію з read-only шаблонними слотами
         }
         if (slot instanceof PatternSlot) {
             return ItemStack.EMPTY;
         }
 
-        // Якщо стек повністю переміщено — очищаємо слот
         if (originalStack.isEmpty()) {
             slot.set(ItemStack.EMPTY);
         } else {
