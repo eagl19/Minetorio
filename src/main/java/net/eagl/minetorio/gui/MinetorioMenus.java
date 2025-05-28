@@ -18,6 +18,10 @@ public class MinetorioMenus {
             MENUS.register("patterns_collector_menu",
                     () -> IForgeMenuType.create(PatternsCollectorMenu::new));
 
+    public static final RegistryObject<MenuType<ResearcherMenu>> RESEARCHER_MENU =
+            MENUS.register("researcher_menu",
+                    () -> IForgeMenuType.create(ResearcherMenu::new));
+
     public static void register(IEventBus eventBus) {
         MENUS.register(eventBus);
     }

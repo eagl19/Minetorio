@@ -6,6 +6,7 @@ import net.eagl.minetorio.block.renderer.PatternCollectorBlockRenderer;
 import net.eagl.minetorio.block.renderer.ResearcherBlockRenderer;
 import net.eagl.minetorio.gui.MinetorioMenus;
 import net.eagl.minetorio.gui.screen.PatternsCollectorScreen;
+import net.eagl.minetorio.gui.screen.ResearcherScreen;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
@@ -33,6 +34,11 @@ public class ClientEvents {
 
     @SubscribeEvent
     public static void onClientSetup(FMLClientSetupEvent event) {
-        event.enqueueWork(() -> MenuScreens.register(MinetorioMenus.PATTERNS_COLLECTOR_MENU.get(), PatternsCollectorScreen::new));
+        event.enqueueWork(() -> {
+                    MenuScreens.register(MinetorioMenus.PATTERNS_COLLECTOR_MENU.get(), PatternsCollectorScreen::new);
+                    MenuScreens.register(MinetorioMenus.RESEARCHER_MENU.get(), ResearcherScreen::new);
+                }
+        );
+
     }
 }

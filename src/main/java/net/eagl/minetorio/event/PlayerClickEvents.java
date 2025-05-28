@@ -5,7 +5,9 @@ import net.eagl.minetorio.block.MinetorioBlocks;
 import net.eagl.minetorio.block.custom.GlowingBedrockBlock;
 import net.eagl.minetorio.block.custom.GlowingBedrockBlockState;
 import net.eagl.minetorio.block.custom.PatternsCollectorBlock;
+import net.eagl.minetorio.block.custom.ResearchBlock;
 import net.eagl.minetorio.block.entity.PatternsCollectorBlockEntity;
+import net.eagl.minetorio.block.entity.ResearcherBlockEntity;
 import net.eagl.minetorio.item.MinetorioItems;
 import net.eagl.minetorio.worldgen.dimension.MinetorioDimensions;
 import net.minecraft.core.BlockPos;
@@ -52,6 +54,18 @@ public class PlayerClickEvents {
                         event.setCanceled(true);
                         return;
                     }
+                }
+            }
+
+            //Researcher
+            if (state.getBlock() instanceof ResearchBlock) {
+                if (level.getBlockEntity(pos) instanceof ResearcherBlockEntity researcher) {
+
+                        NetworkHooks.openScreen(serverPlayer, researcher, pos);
+
+                        event.setCancellationResult(InteractionResult.SUCCESS);
+                        event.setCanceled(true);
+                        return;
                 }
             }
 
