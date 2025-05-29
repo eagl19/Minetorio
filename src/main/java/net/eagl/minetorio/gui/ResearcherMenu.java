@@ -4,14 +4,14 @@ import net.eagl.minetorio.block.MinetorioBlocks;
 import net.eagl.minetorio.block.entity.ResearcherBlockEntity;
 import net.eagl.minetorio.util.InventorySlotHelper;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerLevelAccess;
-import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.items.SlotItemHandler;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -19,7 +19,6 @@ import java.util.Objects;
 public class ResearcherMenu extends AbstractContainerMenu {
 
     private final ContainerLevelAccess access;
-    private final Container container;
 
 
     public ResearcherMenu(int id, Inventory playerInventory, BlockEntity entity) {
@@ -32,12 +31,12 @@ public class ResearcherMenu extends AbstractContainerMenu {
 
 
         if (entity instanceof ResearcherBlockEntity researcherEntity) {
-            this.container = researcherEntity.getContainer();
+            ItemStackHandler container = Objects.requireNonNull(researcherEntity.getContainer(), "Researcher container is null");
 
             for (int i = 0; i < 9; i++) {
-                this.addSlot(new Slot(container, i, 8 + i * 18, 12));
+                this.addSlot(new SlotItemHandler(container, i, 8 + i * 18, 12));
             }
-            this.addSlot(new Slot(container, 9, 80, 37));
+            this.addSlot(new SlotItemHandler(container, 9, 80, 37));
         } else {
             throw new IllegalStateException("Invalid block entity for ResearcherMenu");
         }
