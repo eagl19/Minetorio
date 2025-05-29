@@ -14,6 +14,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
@@ -28,15 +29,40 @@ public class ResearcherBlockEntity extends BlockEntity implements MenuProvider {
         return new ItemStackHandler(10) {
             @Override
             protected void onContentsChanged(int slot) {
-                setChanged(); // повідомляє, що дані змінились
+                setChanged();
+            }
+        };
+    }
+
+    private final EnergyStorage energyStorage = createEnergyStorage();
+    private final LazyOptional<EnergyStorage> optionalEnergy = LazyOptional.of(() -> energyStorage);
+
+    private EnergyStorage createEnergyStorage() {
+        return new EnergyStorage(10000, 10000, 100) {
+            @Override
+            public int receiveEnergy(int maxReceive, boolean simulate) {
+                int received = super.receiveEnergy(maxReceive, simulate);
+                if (received > 0 && !simulate) {
+                    setChanged();
+                }
+                return received;
+            }
+
+            @Override
+            public int extractEnergy(int maxExtract, boolean simulate) {
+                int extracted = super.extractEnergy(maxExtract, simulate);
+                if (extracted > 0 && !simulate) {
+                    setChanged();
+                }
+                return extracted;
             }
         };
     }
 
 
-
     public ResearcherBlockEntity(BlockPos pPos, BlockState pBlockState) {
         super(MinetorioBlockEntities.RESEARCHER_BLOCK_ENTITY.get(), pPos, pBlockState);
+        energyStorage.receiveEnergy(10000, false);
     }
 
 
@@ -46,6 +72,9 @@ public class ResearcherBlockEntity extends BlockEntity implements MenuProvider {
         if (cap == ForgeCapabilities.ITEM_HANDLER) {
             return optionalHandler.cast();
         }
+        if (cap == ForgeCapabilities.ENERGY) {
+            return optionalEnergy.cast();
+        }
         return super.getCapability(cap, side);
     }
 
@@ -53,6 +82,7 @@ public class ResearcherBlockEntity extends BlockEntity implements MenuProvider {
     public void invalidateCaps() {
         super.invalidateCaps();
         optionalHandler.invalidate();
+        optionalEnergy.invalidate();
     }
 
 
@@ -61,12 +91,14 @@ public class ResearcherBlockEntity extends BlockEntity implements MenuProvider {
     protected void saveAdditional(@NotNull CompoundTag tag) {
         super.saveAdditional(tag);
         tag.put("Inventory", itemHandler.serializeNBT());
+        tag.putInt("Energy", energyStorage.getEnergyStored());
     }
 
     @Override
     public void load(@NotNull CompoundTag tag) {
         super.load(tag);
         itemHandler.deserializeNBT(tag.getCompound("Inventory"));
+        energyStorage.receiveEnergy(tag.getInt("Energy"), false);
     }
 
 
@@ -80,7 +112,11 @@ public class ResearcherBlockEntity extends BlockEntity implements MenuProvider {
         return new ResearcherMenu(pContainerId, pPlayerInventory, this);
     }
 
-    public ItemStackHandler getContainer() {
+    public ItemStackHandler getItemStackHandler() {
         return itemHandler;
+    }
+
+    public EnergyStorage getEnergyStorage() {
+        return energyStorage;
     }
 }

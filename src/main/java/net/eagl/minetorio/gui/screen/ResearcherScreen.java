@@ -23,6 +23,23 @@ public class ResearcherScreen extends AbstractContainerScreen<ResearcherMenu> {
         pGuiGraphics.setColor(1f, 1f, 1f, 1f);
         pGuiGraphics.blit(GUI_TEXTURE, leftPos, topPos, 0, 0, imageWidth, imageHeight);
 
+        int energy = menu.getData().get(0);
+        int maxEnergy = menu.getData().get(1);
+
+        if (maxEnergy > 0 && energy > 0) {
+            int barHeight = 100;
+            int energyHeight = (int) ((float) energy / maxEnergy * barHeight);
+
+            pGuiGraphics.blit(GUI_TEXTURE,
+                    leftPos + 155,
+                    topPos + 33 + (barHeight - energyHeight),
+                    178,
+                    33 + barHeight - energyHeight,
+                    12,
+                    energyHeight
+            );
+        }
+
     }
 
     @Override
