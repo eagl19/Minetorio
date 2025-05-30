@@ -6,10 +6,7 @@ import net.eagl.minetorio.util.InventorySlotHelper;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ContainerData;
-import net.minecraft.world.inventory.ContainerLevelAccess;
-import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.items.ItemStackHandler;
@@ -41,10 +38,10 @@ public class ResearcherMenu extends AbstractContainerMenu {
             }
             this.addSlot(new SlotItemHandler(container, 9, 80, 37));
 
-            this.data = new SimpleContainerData(2); // [0] — енергія, [1] — макс. енергія
+            this.data = new SimpleContainerData(4); // [0] — енергія, [1] — макс. енергія, [2] - поточне вивчення, [3] - вивчення
 
             addDataSlots(data);
-            updateEnergyValues(researcherEntity);
+            updateDataValues(researcherEntity);
 
         } else {
             throw new IllegalStateException("Invalid block entity for ResearcherMenu");
@@ -57,11 +54,13 @@ public class ResearcherMenu extends AbstractContainerMenu {
         return this.data;
     }
 
-    private void updateEnergyValues(ResearcherBlockEntity blockEntity) {
+    private void updateDataValues(ResearcherBlockEntity blockEntity) {
         //data.set(0, blockEntity.getEnergyStorage().getEnergyStored());
         //data.set(1, blockEntity.getEnergyStorage().getMaxEnergyStored());
         data.set(0, 5000);
         data.set(1, 10000);
+        data.set(2, 5000);
+        data.set(3, 10000);
     }
 
     public ResearcherMenu (int id, Inventory inv, FriendlyByteBuf extraData){
@@ -71,7 +70,45 @@ public class ResearcherMenu extends AbstractContainerMenu {
 
     @Override
     public @NotNull ItemStack quickMoveStack(@NotNull Player pPlayer, int pIndex) {
-        return ItemStack.EMPTY;
+
+        Slot slot = this.slots.get(pIndex);
+        if (!slot.hasItem()) return ItemStack.EMPTY;
+
+        ItemStack originalStack = slot.getItem();
+        ItemStack copy = originalStack.copy();
+
+
+        int playerInventoryStart = 0;
+        int playerInventoryEnd =27;
+        int hotbarEnd = 36;
+        int researcherInventoryEnd = 45;
+
+
+        if (pIndex > researcherInventoryEnd) {
+            return ItemStack.EMPTY;
+        }
+
+        if (pIndex < playerInventoryEnd) {
+            if (!moveItemStackTo(originalStack, playerInventoryEnd, hotbarEnd, false)) {
+                return ItemStack.EMPTY;
+            }
+        }
+        else if (pIndex < hotbarEnd) {
+            if (!moveItemStackTo(originalStack, playerInventoryStart, playerInventoryEnd, false)) {
+                return ItemStack.EMPTY;
+            }
+        }
+        if (slot instanceof PatternSlot) {
+            return ItemStack.EMPTY;
+        }
+
+        if (originalStack.isEmpty()) {
+            slot.set(ItemStack.EMPTY);
+        } else {
+            slot.setChanged();
+        }
+
+        return copy;
     }
 
 
