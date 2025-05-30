@@ -40,6 +40,23 @@ public class ResearcherScreen extends AbstractContainerScreen<ResearcherMenu> {
             );
         }
 
+        int learn = menu.getData().get(2);
+        int maxLearn = menu.getData().get(3);
+
+        if (maxLearn > 0 && learn > 0) {
+            int barHeight = 100;
+            int learnHeight = (int) ((float) learn / maxLearn * barHeight);
+
+            pGuiGraphics.blit(GUI_TEXTURE,
+                    leftPos + 10,
+                    topPos + 33 + (barHeight - learnHeight),
+                    193,
+                    33 + barHeight - learnHeight,
+                    12,
+                    learnHeight
+            );
+        }
+
     }
 
     @Override

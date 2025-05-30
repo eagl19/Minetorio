@@ -2,7 +2,7 @@ package net.eagl.minetorio.gui;
 
 import net.eagl.minetorio.block.MinetorioBlocks;
 import net.eagl.minetorio.block.entity.ResearcherBlockEntity;
-import net.eagl.minetorio.util.InventorySlotHelper;
+import net.eagl.minetorio.util.InventorySlot;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -25,10 +25,7 @@ public class ResearcherMenu extends AbstractContainerMenu {
         super(MinetorioMenus.RESEARCHER_MENU.get(), id);
         this.access = ContainerLevelAccess.create(Objects.requireNonNull(entity.getLevel()), entity.getBlockPos());
 
-        InventorySlotHelper.addPlayerInventorySlots(this::addSlot, playerInventory, 8, 140);
-
-        InventorySlotHelper.addHotbarSlots(this::addSlot, playerInventory, 8, 198);
-
+        InventorySlot.addHotbarAndPlayerInventorySlots(this::addSlot, playerInventory, 0, 8, 140, 3, 9, 18, 18, 58);
 
         if (entity instanceof ResearcherBlockEntity researcherEntity) {
             ItemStackHandler container = Objects.requireNonNull(researcherEntity.getItemStackHandler(), "Researcher container is null");
@@ -69,35 +66,40 @@ public class ResearcherMenu extends AbstractContainerMenu {
 
 
     @Override
-    public @NotNull ItemStack quickMoveStack(@NotNull Player pPlayer, int pIndex) {
-
-        Slot slot = this.slots.get(pIndex);
+    public @NotNull ItemStack quickMoveStack(@NotNull Player player, int index) {
+        Slot slot = this.slots.get(index);
         if (!slot.hasItem()) return ItemStack.EMPTY;
 
         ItemStack originalStack = slot.getItem();
         ItemStack copy = originalStack.copy();
 
+        int hotbarStart = 0;
+        int hotbarEnd = 9;
+        int playerInventoryStart = 9;
+        int playerInventoryEnd = 36;
+        int researcherStart = 36;
+        int researcherEnd = 46;
 
-        int playerInventoryStart = 0;
-        int playerInventoryEnd =27;
-        int hotbarEnd = 36;
-        int researcherInventoryEnd = 45;
-
-
-        if (pIndex > researcherInventoryEnd) {
-            return ItemStack.EMPTY;
-        }
-
-        if (pIndex < playerInventoryEnd) {
-            if (!moveItemStackTo(originalStack, playerInventoryEnd, hotbarEnd, false)) {
+        if (index >= researcherStart && index < researcherEnd) {
+            // From Researcher to Player: try main inventory first, then hotbar
+            if (!moveItemStackTo(originalStack, playerInventoryStart, playerInventoryEnd, false) &&
+                    !moveItemStackTo(originalStack, hotbarStart, hotbarEnd, false)) {
                 return ItemStack.EMPTY;
             }
         }
-        else if (pIndex < hotbarEnd) {
+        else if (index >= playerInventoryStart && index < playerInventoryEnd) {
+            // From Player Inventory to Hotbar
+            if (!moveItemStackTo(originalStack, hotbarStart, hotbarEnd, false)) {
+                return ItemStack.EMPTY;
+            }
+        }
+        else if (index >= hotbarStart && index < hotbarEnd) {
+            // From Hotbar to Player Inventory
             if (!moveItemStackTo(originalStack, playerInventoryStart, playerInventoryEnd, false)) {
                 return ItemStack.EMPTY;
             }
         }
+
         if (slot instanceof PatternSlot) {
             return ItemStack.EMPTY;
         }
@@ -110,6 +112,7 @@ public class ResearcherMenu extends AbstractContainerMenu {
 
         return copy;
     }
+
 
 
 

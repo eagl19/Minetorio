@@ -2,7 +2,7 @@ package net.eagl.minetorio.gui;
 
 import net.eagl.minetorio.block.MinetorioBlocks;
 import net.eagl.minetorio.handler.PatternItemsHandler;
-import net.eagl.minetorio.util.InventorySlotHelper;
+import net.eagl.minetorio.util.InventorySlot;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -24,9 +24,7 @@ public class PatternsCollectorMenu extends AbstractContainerMenu {
         this.access = ContainerLevelAccess.create(Objects.requireNonNull(entity.getLevel()), entity.getBlockPos());
         PatternItemsHandler patternItemsHandler = new PatternItemsHandler();
 
-        InventorySlotHelper.addPlayerInventorySlots(this::addSlot, playerInventory, 8, 140);
-
-        InventorySlotHelper.addHotbarSlots(this::addSlot, playerInventory, 8, 198);
+        InventorySlot.addHotbarAndPlayerInventorySlots(this::addSlot, playerInventory, 0, 8, 140, 3, 9, 18, 18, 48);
 
         int startX = 8;
         int startY = 18;
