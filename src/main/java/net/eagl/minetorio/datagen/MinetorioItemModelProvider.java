@@ -39,6 +39,17 @@ public class MinetorioItemModelProvider extends ItemModelProvider {
         simplePatternItem(MinetorioItems.PATTERN_VOID);
         simplePatternItem(MinetorioItems.PATTERN_WATER);
 
+        simpleFlaskItem(MinetorioItems.FLASK_BLACK);
+        simpleFlaskItem(MinetorioItems.FLASK_GREEN);
+        simpleFlaskItem(MinetorioItems.FLASK_PINK);
+        simpleFlaskItem(MinetorioItems.FLASK_PURPLE);
+        simpleFlaskItem(MinetorioItems.FLASK_RED);
+    }
+
+    private void simpleFlaskItem(RegistryObject<Item> item) {
+        withExistingParent(itemPath(item),
+                ResourceLocation.fromNamespaceAndPath("minecraft", "item/generated")).texture("layer0",
+                ResourceLocation.fromNamespaceAndPath(Minetorio.MOD_ID, "item/flasks/" + itemPath(item).replaceFirst("flask_","")));
     }
 
     private void simplePatternItem(RegistryObject<Item> item) {

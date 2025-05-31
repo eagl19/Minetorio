@@ -21,6 +21,12 @@
   "item.minetorio.pattern_void": "Void",
   "item.minetorio.pattern_water": "Water",
 
+  "item.minetorio.flask_black": "Black flask",
+  "item.minetorio.flask_green": "Green flask",
+  "item.minetorio.flask_pink": "Pink flask",
+  "item.minetorio.flask_purple": "Purple flask",
+  "item.minetorio.flask_red": "Red flask",
+
   "creativetab.minetorio_tab": "Minetorio",
 
   "tooltip.minetorio.learned": "Learned",
