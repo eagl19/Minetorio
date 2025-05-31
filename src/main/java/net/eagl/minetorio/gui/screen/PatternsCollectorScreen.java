@@ -1,6 +1,6 @@
 package net.eagl.minetorio.gui.screen;
 
-import net.eagl.minetorio.gui.PatternSlot;
+import net.eagl.minetorio.gui.slot.PatternSlot;
 import net.eagl.minetorio.gui.PatternsCollectorMenu;
 import net.eagl.minetorio.handler.PatternInfo;
 import net.eagl.minetorio.handler.PatternItemsHandler;

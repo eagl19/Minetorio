@@ -1,6 +1,7 @@
 package net.eagl.minetorio.gui;
 
 import net.eagl.minetorio.block.MinetorioBlocks;
+import net.eagl.minetorio.gui.slot.PatternSlot;
 import net.eagl.minetorio.handler.PatternItemsHandler;
 import net.eagl.minetorio.util.InventorySlot;
 import net.minecraft.network.FriendlyByteBuf;

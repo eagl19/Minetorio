@@ -1,4 +1,4 @@
-package net.eagl.minetorio.gui;
+package net.eagl.minetorio.gui.slot;
 
 import net.eagl.minetorio.client.ClientPatternsData;
 import net.minecraft.resources.ResourceLocation;

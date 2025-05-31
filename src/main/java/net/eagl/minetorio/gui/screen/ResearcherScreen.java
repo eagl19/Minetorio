@@ -1,11 +1,14 @@
 package net.eagl.minetorio.gui.screen;
 
 import net.eagl.minetorio.gui.ResearcherMenu;
+import net.eagl.minetorio.gui.slot.FlaskSlot;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 public class ResearcherScreen extends AbstractContainerScreen<ResearcherMenu> {
@@ -92,8 +95,17 @@ public class ResearcherScreen extends AbstractContainerScreen<ResearcherMenu> {
 
     }
 
+
+
     @Override
     protected void renderLabels(@NotNull GuiGraphics pGuiGraphics, int pMouseX, int pMouseY) {
+
+        for (Slot slot : menu.slots) {
+            if (slot instanceof FlaskSlot flask && !flask.isVisible()) {
+               pGuiGraphics.renderItem(new ItemStack(flask.getFlask()),slot.x, slot.y);
+                pGuiGraphics.fill(slot.x, slot.y, slot.x + 16, slot.y + 16, 0x88000000);
+            }
+        }
 
     }
 

@@ -2,6 +2,9 @@ package net.eagl.minetorio.gui;
 
 import net.eagl.minetorio.block.MinetorioBlocks;
 import net.eagl.minetorio.block.entity.ResearcherBlockEntity;
+import net.eagl.minetorio.gui.slot.FlaskSlot;
+import net.eagl.minetorio.gui.slot.PatternSlot;
+import net.eagl.minetorio.item.MinetorioItems;
 import net.eagl.minetorio.util.InventorySlot;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
@@ -36,10 +39,20 @@ public class ResearcherMenu extends AbstractContainerMenu {
             this.addSlot(new SlotItemHandler(container, 9, 8, 60));
 
 
-            for (int i = 0; i < 6; i++) {
-                this.addSlot(new SlotItemHandler(container, 9+2*i, 8 + i * 18, 98));
-                this.addSlot(new SlotItemHandler(container, 9+2*i+1, 8 + i * 18, 116));
-            }
+            this.addSlot(new FlaskSlot(container, 10, 8, 98, MinetorioItems.FLASK_RED.get()));
+            this.addSlot(new FlaskSlot(container, 11, 26, 98, MinetorioItems.FLASK_GREEN.get()));
+            this.addSlot(new FlaskSlot(container, 12, 44, 98, MinetorioItems.FLASK_BLACK.get()));
+            this.addSlot(new FlaskSlot(container, 13, 62, 98, MinetorioItems.FLASK_PURPLE.get()));
+            this.addSlot(new FlaskSlot(container, 14, 80, 98, MinetorioItems.FLASK_PINK.get()));
+            this.addSlot(new FlaskSlot(container, 15, 98, 98, MinetorioItems.FLASK_RED.get()));
+
+            this.addSlot(new FlaskSlot(container, 16, 8, 116, MinetorioItems.FLASK_RED.get()));
+            this.addSlot(new FlaskSlot(container, 17, 26, 116, MinetorioItems.FLASK_RED.get()));
+            this.addSlot(new FlaskSlot(container, 18, 44, 116, MinetorioItems.FLASK_RED.get()));
+            this.addSlot(new FlaskSlot(container, 19, 62, 116, MinetorioItems.FLASK_RED.get()));
+            this.addSlot(new FlaskSlot(container, 20, 80, 116, MinetorioItems.FLASK_RED.get()));
+            this.addSlot(new FlaskSlot(container, 21, 98, 116, MinetorioItems.FLASK_RED.get()));
+
 
 
             this.data = new SimpleContainerData(8); // [0] — енергія, [1] — макс. енергія, [2] - поточне вивчення, [3] - вивчення
