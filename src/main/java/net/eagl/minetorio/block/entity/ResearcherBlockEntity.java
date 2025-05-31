@@ -26,7 +26,7 @@ public class ResearcherBlockEntity extends BlockEntity implements MenuProvider {
     private final LazyOptional<IItemHandler> optionalHandler = LazyOptional.of(() -> itemHandler);
 
     private ItemStackHandler createItemHandler() {
-        return new ItemStackHandler(10) {
+        return new ItemStackHandler(22) {
             @Override
             protected void onContentsChanged(int slot) {
                 setChanged();

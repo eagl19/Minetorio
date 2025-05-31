@@ -31,11 +31,18 @@ public class ResearcherMenu extends AbstractContainerMenu {
             ItemStackHandler container = Objects.requireNonNull(researcherEntity.getItemStackHandler(), "Researcher container is null");
 
             for (int i = 0; i < 9; i++) {
-                this.addSlot(new SlotItemHandler(container, i, 8 + i * 18, 12));
+                this.addSlot(new SlotItemHandler(container, i, 8 + i * 18, 23));
             }
-            this.addSlot(new SlotItemHandler(container, 9, 80, 37));
+            this.addSlot(new SlotItemHandler(container, 9, 8, 60));
 
-            this.data = new SimpleContainerData(4); // [0] — енергія, [1] — макс. енергія, [2] - поточне вивчення, [3] - вивчення
+
+            for (int i = 0; i < 6; i++) {
+                this.addSlot(new SlotItemHandler(container, 9+2*i, 8 + i * 18, 98));
+                this.addSlot(new SlotItemHandler(container, 9+2*i+1, 8 + i * 18, 116));
+            }
+
+
+            this.data = new SimpleContainerData(8); // [0] — енергія, [1] — макс. енергія, [2] - поточне вивчення, [3] - вивчення
 
             addDataSlots(data);
             updateDataValues(researcherEntity);
@@ -58,6 +65,10 @@ public class ResearcherMenu extends AbstractContainerMenu {
         data.set(1, 10000);
         data.set(2, 5000);
         data.set(3, 10000);
+        data.set(4, 5000);
+        data.set(5, 10000);
+        data.set(6, 7500);
+        data.set(7, 10000);
     }
 
     public ResearcherMenu (int id, Inventory inv, FriendlyByteBuf extraData){

@@ -14,7 +14,7 @@ public class ResearcherScreen extends AbstractContainerScreen<ResearcherMenu> {
 
     public ResearcherScreen(ResearcherMenu pMenu, Inventory pPlayerInventory, Component pTitle) {
         super(pMenu, pPlayerInventory, pTitle);
-        this.imageHeight = 256;
+        this.imageHeight = 222;
         this.imageWidth = 176;
     }
 
@@ -27,33 +27,66 @@ public class ResearcherScreen extends AbstractContainerScreen<ResearcherMenu> {
         int maxEnergy = menu.getData().get(1);
 
         if (maxEnergy > 0 && energy > 0) {
-            int barHeight = 100;
+            int barHeight = 90;
             int energyHeight = (int) ((float) energy / maxEnergy * barHeight);
 
             pGuiGraphics.blit(GUI_TEXTURE,
                     leftPos + 155,
-                    topPos + 33 + (barHeight - energyHeight),
+                    topPos + 43 + (barHeight - energyHeight),
                     178,
-                    33 + barHeight - energyHeight,
+                    43 + barHeight - energyHeight,
                     12,
                     energyHeight
             );
         }
 
-        int learn = menu.getData().get(2);
-        int maxLearn = menu.getData().get(3);
+        int water = menu.getData().get(2);
+        int maxWater = menu.getData().get(3);
 
-        if (maxLearn > 0 && learn > 0) {
-            int barHeight = 100;
-            int learnHeight = (int) ((float) learn / maxLearn * barHeight);
+        if (maxWater > 0 && water > 0) {
+            int barHeight = 90;
+            int learnHeight = (int) ((float) water / maxWater * barHeight);
 
             pGuiGraphics.blit(GUI_TEXTURE,
-                    leftPos + 10,
-                    topPos + 33 + (barHeight - learnHeight),
-                    193,
-                    33 + barHeight - learnHeight,
+                    leftPos + 138,
+                    topPos + 43 + (barHeight - learnHeight),
+                    204,
+                    43 + barHeight - learnHeight,
                     12,
                     learnHeight
+            );
+        }
+        int lava = menu.getData().get(4);
+        int maxLava = menu.getData().get(5);
+
+        if (maxLava > 0 && lava > 0) {
+            int barHeight = 90;
+            int learnHeight = (int) ((float) lava / maxLava * barHeight);
+
+            pGuiGraphics.blit(GUI_TEXTURE,
+                    leftPos + 121,
+                    topPos + 43 + (barHeight - learnHeight),
+                    191,
+                    43 + barHeight - learnHeight,
+                    12,
+                    learnHeight
+            );
+        }
+
+        int learn = menu.getData().get(6);
+        int maxLearn = menu.getData().get(7);
+
+        if (maxLearn > 0 && learn > 0) {
+            int barWidth = 160;
+            int learWidth = (int) ((float) learn / maxLearn * barWidth);
+
+            pGuiGraphics.blit(GUI_TEXTURE,
+                    leftPos + 8,
+                    topPos + 7,
+                    8,
+                    225,
+                    learWidth,
+                    12
             );
         }
 
