@@ -114,5 +114,7 @@ public class ResearcherScreen extends AbstractContainerScreen<ResearcherMenu> {
         renderBackground(pGuiGraphics);
         super.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
         renderTooltip(pGuiGraphics, pMouseX, pMouseY);
+
+
     }
 }

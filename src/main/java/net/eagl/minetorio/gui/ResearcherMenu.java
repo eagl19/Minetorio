@@ -3,13 +3,13 @@ package net.eagl.minetorio.gui;
 import net.eagl.minetorio.block.MinetorioBlocks;
 import net.eagl.minetorio.block.entity.ResearcherBlockEntity;
 import net.eagl.minetorio.gui.slot.FlaskSlot;
-import net.eagl.minetorio.gui.slot.PatternSlot;
 import net.eagl.minetorio.item.MinetorioItems;
 import net.eagl.minetorio.util.InventorySlot;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.items.ItemStackHandler;
@@ -39,20 +39,19 @@ public class ResearcherMenu extends AbstractContainerMenu {
             this.addSlot(new SlotItemHandler(container, 9, 8, 60));
 
 
-            this.addSlot(new FlaskSlot(container, 10, 8, 98, MinetorioItems.FLASK_RED.get()));
+            this.addSlot(new FlaskSlot(container, 10, 8,  98, MinetorioItems.FLASK_RED.get()));
             this.addSlot(new FlaskSlot(container, 11, 26, 98, MinetorioItems.FLASK_GREEN.get()));
             this.addSlot(new FlaskSlot(container, 12, 44, 98, MinetorioItems.FLASK_BLACK.get()));
             this.addSlot(new FlaskSlot(container, 13, 62, 98, MinetorioItems.FLASK_PURPLE.get()));
             this.addSlot(new FlaskSlot(container, 14, 80, 98, MinetorioItems.FLASK_PINK.get()));
             this.addSlot(new FlaskSlot(container, 15, 98, 98, MinetorioItems.FLASK_RED.get()));
 
-            this.addSlot(new FlaskSlot(container, 16, 8, 116, MinetorioItems.FLASK_RED.get()));
+            this.addSlot(new FlaskSlot(container, 16, 8,  116, MinetorioItems.FLASK_RED.get()));
             this.addSlot(new FlaskSlot(container, 17, 26, 116, MinetorioItems.FLASK_RED.get()));
             this.addSlot(new FlaskSlot(container, 18, 44, 116, MinetorioItems.FLASK_RED.get()));
             this.addSlot(new FlaskSlot(container, 19, 62, 116, MinetorioItems.FLASK_RED.get()));
             this.addSlot(new FlaskSlot(container, 20, 80, 116, MinetorioItems.FLASK_RED.get()));
             this.addSlot(new FlaskSlot(container, 21, 98, 116, MinetorioItems.FLASK_RED.get()));
-
 
 
             this.data = new SimpleContainerData(8); // [0] — енергія, [1] — макс. енергія, [2] - поточне вивчення, [3] - вивчення
@@ -97,35 +96,38 @@ public class ResearcherMenu extends AbstractContainerMenu {
         ItemStack originalStack = slot.getItem();
         ItemStack copy = originalStack.copy();
 
-        int hotbarStart = 0;
-        int hotbarEnd = 9;
-        int playerInventoryStart = 9;
-        int playerInventoryEnd = 36;
-        int researcherStart = 36;
-        int researcherEnd = 46;
-
-        if (index >= researcherStart && index < researcherEnd) {
-            // From Researcher to Player: try main inventory first, then hotbar
-            if (!moveItemStackTo(originalStack, playerInventoryStart, playerInventoryEnd, false) &&
-                    !moveItemStackTo(originalStack, hotbarStart, hotbarEnd, false)) {
-                return ItemStack.EMPTY;
-            }
-        }
-        else if (index >= playerInventoryStart && index < playerInventoryEnd) {
-            // From Player Inventory to Hotbar
-            if (!moveItemStackTo(originalStack, hotbarStart, hotbarEnd, false)) {
-                return ItemStack.EMPTY;
-            }
-        }
-        else if (index >= hotbarStart && index < hotbarEnd) {
-            // From Hotbar to Player Inventory
-            if (!moveItemStackTo(originalStack, playerInventoryStart, playerInventoryEnd, false)) {
-                return ItemStack.EMPTY;
-            }
-        }
-
-        if (slot instanceof PatternSlot) {
+        if(slot instanceof FlaskSlot){
             return ItemStack.EMPTY;
+        }
+
+        if (index >= 36 && index < 46) {
+            // From Researcher to Player: try main inventory first, then hotbar
+            if (!moveItemStackTo(originalStack, 9, 36, false) &&
+                    !moveItemStackTo(originalStack, 0, 9, false)) {
+                return ItemStack.EMPTY;
+            }
+        }
+        else if (index >= 9 && index < 36) {
+            if (isFlaskItem(originalStack.getItem())) {
+                if (!moveItemStackTo(originalStack, 46, 58, false) &&
+                        !moveItemStackTo(originalStack, 0, 9, false)) {
+                    return ItemStack.EMPTY;
+                }
+            }
+            else if (!moveItemStackTo(originalStack, 0, 9, false)) {
+                return ItemStack.EMPTY;
+            }
+        }
+        else if (index >= 0 && index < 9) {
+            if (isFlaskItem(originalStack.getItem())) {
+                if (!moveItemStackTo(originalStack, 46, 58, false) &&
+                        !moveItemStackTo(originalStack, 9, 36, false)) {
+                    return ItemStack.EMPTY;
+                }
+            }
+            else if (!moveItemStackTo(originalStack, 9, 36, false)) {
+                return ItemStack.EMPTY;
+            }
         }
 
         if (originalStack.isEmpty()) {
@@ -137,11 +139,15 @@ public class ResearcherMenu extends AbstractContainerMenu {
         return copy;
     }
 
-
+    private boolean isFlaskItem(Item item) {
+        return item.getDescriptionId().contains("flask_");
+    }
 
 
     @Override
     public boolean stillValid(@NotNull Player pPlayer) {
         return stillValid(access, pPlayer, MinetorioBlocks.RESEARCHER.get());
     }
+
+
 }
