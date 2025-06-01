@@ -1,7 +1,6 @@
 package net.eagl.minetorio.util;
 
 import net.eagl.minetorio.item.MinetorioItems;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.*;
