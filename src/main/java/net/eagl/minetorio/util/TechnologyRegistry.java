@@ -22,8 +22,58 @@ public class TechnologyRegistry {
     }
 
     public static void init() {
-        register(new Technology("logistics", Component.literal("Logistics"), List.of(), Collections.singletonList(new ItemStack(MinetorioItems.FLASK_RED.get(),100)), false, 0,0));
-        register(new Technology("automation", Component.literal("Automation"), List.of("logistics"), Collections.singletonList(new ItemStack(MinetorioItems.FLASK_RED.get(),200)), false, 100,100));
+        register(
+                new Technology(
+                        "void",
+                        Component.literal("Void"),
+                        MinetorioItems.PATTERN_VOID.get(),
+                        List.of(),
+                        List.of(
+                                new ItemStack(MinetorioItems.FLASK_RED.get(),1)
+                        ),
+                        1000,
+                        3,
+                        false,
+                        0,
+                        0
+                )
+        );
+        register(
+                new Technology(
+                        "fire",
+                        Component.literal("Fire"),
+                        MinetorioItems.PATTERN_FIRE.get(),
+                        List.of("void"),
+                        List.of(
+                                new ItemStack(MinetorioItems.FLASK_RED.get(), 3),
+                                new ItemStack(MinetorioItems.FLASK_GREEN.get(), 2),
+                                new ItemStack(MinetorioItems.FLASK_BLACK.get(), 1)
+                        ),
+                        1000,
+                        3,
+                        false,
+                        200,
+                        100
+                )
+        );
+        register(
+                new Technology(
+                        "water",
+                        Component.literal("Water"),
+                        MinetorioItems.PATTERN_WATER.get(),
+                        List.of("void"),
+                        List.of(
+                                new ItemStack(MinetorioItems.FLASK_RED.get(), 3),
+                                new ItemStack(MinetorioItems.FLASK_GREEN.get(), 2),
+                                new ItemStack(MinetorioItems.FLASK_BLACK.get(), 1)
+                        ),
+                        1000,
+                        3,
+                        false,
+                        200,
+                        0
+                )
+        );
     }
 }
 
