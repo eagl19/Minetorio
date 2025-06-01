@@ -17,7 +17,12 @@ import java.util.List;
 public class TechnologyTreeScreen extends Screen {
     private static final ResourceLocation NODE_TEXTURE = ResourceLocation.fromNamespaceAndPath("minetorio", "textures/gui/tech.png");
 
+    private float zoom = 1.0f;
+    private float offsetX = 0;
+    private float offsetY = 0;
 
+    private double lastMouseX, lastMouseY;
+    private boolean dragging = false;
 
     public TechnologyTreeScreen() {
         super(Component.literal("Technology Tree"));
@@ -26,6 +31,13 @@ public class TechnologyTreeScreen extends Screen {
     @Override
     public void render(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         this.renderBackground(guiGraphics);
+
+        guiGraphics.pose().pushPose();
+        guiGraphics.pose().translate(offsetX, offsetY, 0);
+        guiGraphics.pose().scale(zoom, zoom, 1f);
+
+        float adjustedMouseX = (mouseX - offsetX) / zoom;
+        float adjustedMouseY = (mouseY - offsetY) / zoom;
 
         for (Technology tech : TechnologyRegistry.getAll()) {
             int x1 = tech.getX();
@@ -42,6 +54,8 @@ public class TechnologyTreeScreen extends Screen {
         }
 
 
+        List<Component> tooltip = null;
+
         for (Technology tech : TechnologyRegistry.getAll()) {
             int x = tech.getX();
             int y = tech.getY();
@@ -55,60 +69,138 @@ public class TechnologyTreeScreen extends Screen {
             guiGraphics.pose().pushPose();
 
             guiGraphics.pose().scale(scale, scale, 1f);
-            guiGraphics.renderItem(new ItemStack(tech.getDisplayIcon()), (int) ((x+1)/scale), (int) ((y+1)/scale));
+            guiGraphics.renderItem(new ItemStack(tech.getDisplayIcon()), Math.round((x + 1) / scale), Math.round((y + 1) / scale));
 
             guiGraphics.pose().popPose();
 
 
-            guiGraphics.drawString(this.font, tech.getDisplayName(), x+28, y+1, 0x000000, false);
+            guiGraphics.drawString(this.font, tech.getDisplayName(), x + 28, y + 1, 0x000000, false);
 
 
-            scale =0.75f;
+            scale = 0.75f;
             guiGraphics.pose().pushPose();
 
             guiGraphics.pose().scale(scale, scale, 1f);
 
-            int costStartX = (int) ((x + 1) / scale);
-            int costY = (int) ((y + 26)/scale);
+            int costStartX = Math.round((x + 1) / scale);
+            int costY = Math.round((y + 24) / scale);
 
             int iconOffsetX = 15;
             int dx;
             int dy;
-            int flaskCount=0;
+            int flaskCount = 0;
             for (ItemStack baseCost : tech.getCost()) {
-                if(flaskCount<6){
+                if (flaskCount < 6) {
                     dx = costStartX + iconOffsetX * flaskCount;
                     dy = costY;
-                }else{
+                } else {
                     dx = costStartX + iconOffsetX * (flaskCount - 6);
                     dy = costY + 16;
                 }
 
-                guiGraphics.renderItem(baseCost,  dx, dy);
+                guiGraphics.renderItem(baseCost, dx, dy);
                 guiGraphics.renderItemDecorations(this.font, baseCost, dx, dy);
 
                 flaskCount++;
             }
-            if(flaskCount>5){
+            if (flaskCount > 5) {
                 dx = costStartX + iconOffsetX * 6;
                 dy = costY + 11;
-            }else{
+            } else {
                 dx = costStartX + iconOffsetX * flaskCount;
                 dy = costY + 3;
             }
-            guiGraphics.drawString(this.font, " x "+timeToString(tech.getTime()) +" x "+ tech.getCount(), dx, dy, 0x000000, false);
+            guiGraphics.drawString(this.font, " x " + timeToString(tech.getTime()) + " x " + tech.getCount(), dx, dy, 0x000000, false);
 
             guiGraphics.pose().popPose();
 
-            if (mouseX >= x && mouseX <= x + 128 && mouseY >= y && mouseY <= y + 64) {
-                guiGraphics.renderComponentTooltip(this.font, List.of(
+
+            if (adjustedMouseX >= x && adjustedMouseX <= x + 123 && adjustedMouseY >= y && adjustedMouseY <= y + 51) {
+
+                tooltip = List.of(
                         tech.getDisplayName(),
                         Component.literal("Cost: " + tech.getFormattedCost().getString())
-                ), mouseX, mouseY);
+                );
+
+            }
+
+        }
+        guiGraphics.pose().popPose();
+
+        if (tooltip != null) {
+            guiGraphics.renderComponentTooltip(this.font, tooltip, mouseX, mouseY);
+        }
+
+
+        super.render(guiGraphics, mouseX, mouseY, partialTick);
+    }
+
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+
+        float adjustedMouseX = (float) ((mouseX - offsetX) / zoom);
+        float adjustedMouseY = (float) ((mouseY - offsetY) / zoom);
+
+        for (Technology tech : TechnologyRegistry.getAll()) {
+            int x = tech.getX();
+            int y = tech.getY();
+            int width = 123;
+            int height = 51;
+
+            if (adjustedMouseX >= x && adjustedMouseX <= x + width && adjustedMouseY >= y && adjustedMouseY <= y + height) {
+                onTechnologyClicked(tech, button);
+                return true;
             }
         }
 
-        super.render(guiGraphics, mouseX, mouseY, partialTick);
+        if (button == 0) { // Ліва кнопка
+            dragging = true;
+            lastMouseX = mouseX;
+            lastMouseY = mouseY;
+            return true;
+        }
+
+        return super.mouseClicked(mouseX, mouseY, button);
+    }
+
+    private void onTechnologyClicked(Technology tech, int button) {
+        // Тут логіка: наприклад, відкрити новий екран, зробити research тощо
+        System.out.println("Clicked on: " + tech.getId() + " with button " + button);
+    }
+
+    @Override
+    public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
+        float oldZoom = zoom;
+        zoom += (float) (delta * 0.1f);
+        zoom = Math.max(0.25f, Math.min(zoom, 3.0f));
+
+        // Корекція позиції після зміни масштабу
+        float zoomRatio = zoom / oldZoom;
+        offsetX = (float) (mouseX + (offsetX - mouseX) * zoomRatio);
+        offsetY = (float) (mouseY + (offsetY - mouseY) * zoomRatio);
+
+        return true;
+    }
+
+    @Override
+    public boolean mouseReleased(double mouseX, double mouseY, int button) {
+        if (button == 0 && dragging) {
+            dragging = false;
+            return true;
+        }
+        return super.mouseReleased(mouseX, mouseY, button);
+    }
+
+    @Override
+    public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
+        if (dragging && button == 0) {
+            offsetX += (float) (mouseX - lastMouseX);
+            offsetY += (float) (mouseY - lastMouseY);
+            lastMouseX = mouseX;
+            lastMouseY = mouseY;
+            return true;
+        }
+        return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
     }
 
     private void drawConnectionLine(GuiGraphics guiGraphics, int x1, int y1, int x2, int y2, int color) {
