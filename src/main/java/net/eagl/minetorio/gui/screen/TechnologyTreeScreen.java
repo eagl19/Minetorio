@@ -36,7 +36,7 @@ public class TechnologyTreeScreen extends Screen {
                 if (parent != null) {
                     int x2 = parent.getX();
                     int y2 = parent.getY();
-                    drawConnectionLine(guiGraphics, x1 + 64, y1 + 32, x2 + 64, y2 + 32, 0xFFFFFFFF);
+                    drawConnectionLine(guiGraphics, x1 + 64, y1 + 16, x2 + 64, y2 + 16, 0xFFFFFFFF);
                 }
             }
         }
@@ -48,38 +48,55 @@ public class TechnologyTreeScreen extends Screen {
 
             RenderSystem.setShader(GameRenderer::getPositionTexShader);
             RenderSystem.setShaderTexture(0, NODE_TEXTURE);
-            guiGraphics.blit(NODE_TEXTURE, x, y, 0, 0, 128, 64, 128, 64);
+            guiGraphics.blit(NODE_TEXTURE, x, y, 0, 0, 128, 80, 128, 80);
 
 
-            guiGraphics.renderItem(new ItemStack(tech.getDisplayIcon()), x +1, y + 1);
-
-
+            float scale = 1.5f;
             guiGraphics.pose().pushPose();
 
-            float scale = 0.75f;  // 75% від початкового розміру
+            guiGraphics.pose().scale(scale, scale, 1f);
+            guiGraphics.renderItem(new ItemStack(tech.getDisplayIcon()), (int) ((x+1)/scale), (int) ((y+1)/scale));
+
+            guiGraphics.pose().popPose();
+
+
+            guiGraphics.drawString(this.font, tech.getDisplayName(), x+28, y+1, 0x000000, false);
+
+
+            scale =0.75f;
+            guiGraphics.pose().pushPose();
+
             guiGraphics.pose().scale(scale, scale, 1f);
 
-
-
             int costStartX = (int) ((x + 1) / scale);
-            int costY = (int) ((y + 16)/scale);
+            int costY = (int) ((y + 26)/scale);
 
-            int time = tech.getTime();
-            int count = tech.getCount();
-
-            int iconOffsetX = 0;
-
+            int iconOffsetX = 15;
+            int dx;
+            int dy;
+            int flaskCount=0;
             for (ItemStack baseCost : tech.getCost()) {
+                if(flaskCount<6){
+                    dx = costStartX + iconOffsetX * flaskCount;
+                    dy = costY;
+                }else{
+                    dx = costStartX + iconOffsetX * (flaskCount - 6);
+                    dy = costY + 16;
+                }
 
-                // Рендер іконки
-                guiGraphics.renderItem(baseCost, costStartX + iconOffsetX, costY);
+                guiGraphics.renderItem(baseCost,  dx, dy);
+                guiGraphics.renderItemDecorations(this.font, baseCost, dx, dy);
 
-                // Рендер кількості поверх іконки
-                guiGraphics.renderItemDecorations(this.font, baseCost, costStartX + iconOffsetX, costY);
-
-                iconOffsetX += 14;
+                flaskCount++;
             }
-            guiGraphics.drawString(this.font, Component.literal(" x "+timeToString(time) +" x "+ count), costStartX + iconOffsetX, costY+3, 0xFFFFFF);
+            if(flaskCount>5){
+                dx = costStartX + iconOffsetX * 6;
+                dy = costY + 11;
+            }else{
+                dx = costStartX + iconOffsetX * flaskCount;
+                dy = costY + 3;
+            }
+            guiGraphics.drawString(this.font, " x "+timeToString(tech.getTime()) +" x "+ tech.getCount(), dx, dy, 0x000000, false);
 
             guiGraphics.pose().popPose();
 
@@ -116,8 +133,8 @@ public class TechnologyTreeScreen extends Screen {
         if (hours > 0) {
             sb.append(String.format("%d:", hours));
         }
-        sb.append(String.format("%d:", minutes));
-        sb.append(String.format("%d", seconds));
+        sb.append(String.format("%02d:", minutes));
+        sb.append(String.format("%02d", seconds));
 
         return sb.toString().trim();
     }

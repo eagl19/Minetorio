@@ -8,7 +8,6 @@ import java.util.List;
 
 public class Technology {
     private final String id;
-    private final Component displayName;
     private final Item displayIcon;
     private final List<String> prerequisites;
     private final List<ItemStack> cost;
@@ -18,9 +17,8 @@ public class Technology {
     private final int x, y, time, count;
 
 
-    public Technology(String id, Component displayName, Item displayIcon, List<String> prerequisites, List<ItemStack> cost, int time, int count, boolean hidden, int x, int y) {
+    public Technology(String id, Item displayIcon, List<String> prerequisites, List<ItemStack> cost, int time, int count, boolean hidden, int x, int y) {
         this.id = id;
-        this.displayName = displayName;
         this.displayIcon = displayIcon;
         this.prerequisites = prerequisites;
         this.cost = cost;
@@ -36,7 +34,7 @@ public class Technology {
     }
 
     public Component getDisplayName() {
-        return displayName;
+        return displayIcon.getDescription();
     }
 
     public List<String> getPrerequisites() {
