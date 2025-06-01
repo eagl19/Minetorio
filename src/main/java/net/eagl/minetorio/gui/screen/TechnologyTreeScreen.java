@@ -25,7 +25,6 @@ public class TechnologyTreeScreen extends Screen {
     public void render(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         this.renderBackground(guiGraphics);
 
-        // Draw connections
         for (Technology tech : TechnologyRegistry.getAll()) {
             int x1 = tech.getX() + treeOffsetX;
             int y1 = tech.getY() + treeOffsetY;
@@ -40,7 +39,7 @@ public class TechnologyTreeScreen extends Screen {
             }
         }
 
-        // Draw nodes
+
         for (Technology tech : TechnologyRegistry.getAll()) {
             int x = tech.getX() + treeOffsetX;
             int y = tech.getY() + treeOffsetY;
@@ -50,7 +49,6 @@ public class TechnologyTreeScreen extends Screen {
             guiGraphics.blit(NODE_TEXTURE, x, y, 0, 0, 32, 16, 32, 16);
             guiGraphics.drawString(this.font, tech.getDisplayName(), x + 36, y + 4, 0xFFFFFF);
 
-            // Tooltip on hover
             if (mouseX >= x && mouseX <= x + 32 && mouseY >= y && mouseY <= y + 16) {
                 guiGraphics.renderComponentTooltip(this.font, List.of(
                         tech.getDisplayName(),
@@ -64,13 +62,10 @@ public class TechnologyTreeScreen extends Screen {
 
     private void drawConnectionLine(GuiGraphics guiGraphics, int x1, int y1, int x2, int y2, int color) {
         if (x1 == x2) {
-            // Вертикальна лінія
             guiGraphics.vLine(x1, Math.min(y1, y2), Math.max(y1, y2), color);
         } else if (y1 == y2) {
-            // Горизонтальна лінія
             guiGraphics.hLine(Math.min(x1, x2), Math.max(x1, x2), y1, color);
         } else {
-            // "Г-подібна" лінія (спершу по горизонталі, потім по вертикалі)
             guiGraphics.hLine(Math.min(x1, x2), Math.max(x1, x2), y1, color);
             guiGraphics.vLine(x2, Math.min(y1, y2), Math.max(y1, y2), color);
         }
