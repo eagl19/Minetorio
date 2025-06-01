@@ -10,6 +10,7 @@ import net.eagl.minetorio.gui.MinetorioMenus;
 import net.eagl.minetorio.item.MinetorioCreativeModTabs;
 import net.eagl.minetorio.item.MinetorioItems;
 import net.eagl.minetorio.network.MinetorioNetwork;
+import net.eagl.minetorio.util.TechnologyRegistry;
 import net.eagl.minetorio.worldgen.biome.MinetorioTerrablender;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
@@ -61,6 +62,7 @@ public class Minetorio
     {
         event.enqueueWork(() -> {
             MinetorioTerrablender.registerBiomes();
+            TechnologyRegistry.init();
             //SurfaceRuleManager.addSurfaceRules(SurfaceRuleManager.RuleCategory.OVERWORLD, MOD_ID, MinetorioSurfaceRules.makeRules());
         });
     }

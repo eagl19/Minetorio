@@ -4,8 +4,11 @@ import net.eagl.minetorio.block.MinetorioBlocks;
 import net.eagl.minetorio.block.entity.ResearcherBlockEntity;
 import net.eagl.minetorio.gui.slot.FlaskSlot;
 import net.eagl.minetorio.item.MinetorioItems;
+import net.eagl.minetorio.network.MinetorioNetwork;
+import net.eagl.minetorio.network.OpenTechnologyTreeScreenPacket;
 import net.eagl.minetorio.util.InventorySlot;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
@@ -14,6 +17,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
+import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -149,5 +153,18 @@ public class ResearcherMenu extends AbstractContainerMenu {
         return stillValid(access, pPlayer, MinetorioBlocks.RESEARCHER.get());
     }
 
+    @Override
+    public void clicked(int slotId, int dragType, @NotNull ClickType clickType, @NotNull Player player) {
+        if (slotId >= 36 && slotId <= 45) {
+            if (!player.level().isClientSide) {
+                MinetorioNetwork.CHANNEL.send(
+                        PacketDistributor.PLAYER.with(() -> (ServerPlayer) player),
+                        new OpenTechnologyTreeScreenPacket()
+                );
+            }
+            return;
+        }
+        super.clicked(slotId, dragType, clickType, player);
+    }
 
 }
