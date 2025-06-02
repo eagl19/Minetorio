@@ -96,6 +96,32 @@ public class TechnologyRegistry {
                         60
                 )
         );
+        register(
+                new Technology(
+                        "snowflake",
+                        MinetorioItems.PATTERN_SNOWFLAKE.get(),
+                        List.of("cloud"),
+                        List.of(
+                                new ItemStack(MinetorioItems.FLASK_RED.get(), 31),
+                                new ItemStack(MinetorioItems.FLASK_GREEN.get(), 21),
+                                new ItemStack(MinetorioItems.FLASK_BLACK.get(), 10),
+                                new ItemStack(MinetorioItems.FLASK_PURPLE.get(), 9),
+                                new ItemStack(MinetorioItems.FLASK_PINK.get(), 8),
+                                new ItemStack(MinetorioItems.FLASK_GREEN.get(), 7),
+                                new ItemStack(MinetorioItems.FLASK_GREEN.get(), 6),
+                                new ItemStack(MinetorioItems.FLASK_GREEN.get(), 5),
+                                new ItemStack(MinetorioItems.FLASK_GREEN.get(), 4),
+                                new ItemStack(MinetorioItems.FLASK_GREEN.get(), 3),
+                                new ItemStack(MinetorioItems.FLASK_GREEN.get(), 2),
+                                new ItemStack(MinetorioItems.FLASK_BLACK.get(), 1)
+                        ),
+                        13000,
+                        5,
+                        false,
+                        310,
+                        150
+                )
+        );
     }
 }
 

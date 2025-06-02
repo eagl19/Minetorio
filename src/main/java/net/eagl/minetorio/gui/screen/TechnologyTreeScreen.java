@@ -88,11 +88,10 @@ public class TechnologyTreeScreen extends Screen {
 
             guiGraphics.pose().popPose();
 
-
             guiGraphics.drawString(
                     this.font,
                     tech.getDisplayName(),
-                    x + 32,
+                    x +  74 -  this.font.width(tech.getDisplayName().getString()) / 2,
                     y + 5,
                     0x000000,
                     false
@@ -107,27 +106,36 @@ public class TechnologyTreeScreen extends Screen {
             int costStartX = Math.round((x + 1) / scale);
             int costY = Math.round((y + 30) / scale);
 
-            int iconOffsetX = 15;
+            float iconOffsetX = 14.75f;
             int dx;
             int dy;
             int flaskCount = 0;
 
-            if(tech.getCost().size()<6){
-                dy = costY + 9;
-            }else{
-                dy = costY;
-            }
 
             for (ItemStack baseCost : tech.getCost()) {
                 if (flaskCount < 6) {
-                    dx = costStartX + iconOffsetX * flaskCount;
+                    dx = Math.round(costStartX + iconOffsetX * flaskCount + 2);
+                    dy = costY + 4;
                 } else {
-                    dx = costStartX + iconOffsetX * (flaskCount - 6);
-                    dy = costY + 16;
+                    dx = Math.round(costStartX + iconOffsetX * (flaskCount - 6) + 2);
+                    dy = costY + 19;
                 }
 
                 guiGraphics.renderItem(baseCost, dx, dy);
-                guiGraphics.renderItemDecorations(this.font, baseCost, dx, dy);
+
+                guiGraphics.pose().pushPose();
+                guiGraphics.pose().translate(0, 0, 300);
+                String text = String.valueOf(baseCost.getCount());
+
+                guiGraphics.drawString(
+                        this.font,
+                        text,
+                        dx + 16 - this.font.width(text),
+                        dy + 9,
+                        0x000000,
+                        false
+                );
+                guiGraphics.pose().popPose();
 
                 flaskCount++;
             }
@@ -135,7 +143,7 @@ public class TechnologyTreeScreen extends Screen {
             guiGraphics.drawString(
                     this.font,
                     " x " + timeToString(tech.getTime()) + " x " + tech.getCount(),
-                    costStartX+ iconOffsetX * 6,
+                    costStartX + iconOffsetX * 6,
                     costY + 14,
                     0x000000,
                     false
