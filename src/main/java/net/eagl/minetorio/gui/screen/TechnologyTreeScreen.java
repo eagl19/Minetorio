@@ -62,19 +62,41 @@ public class TechnologyTreeScreen extends Screen {
 
             RenderSystem.setShader(GameRenderer::getPositionTexShader);
             RenderSystem.setShaderTexture(0, NODE_TEXTURE);
-            guiGraphics.blit(NODE_TEXTURE, x, y, 0, 0, 128, 80, 128, 80);
+
+            guiGraphics.blit(
+                    NODE_TEXTURE,
+                    x,
+                    y,
+                    0,
+                    0,
+                    128,
+                    60,
+                    128,
+                    60
+            );
 
 
             float scale = 1.5f;
             guiGraphics.pose().pushPose();
 
             guiGraphics.pose().scale(scale, scale, 1f);
-            guiGraphics.renderItem(new ItemStack(tech.getDisplayIcon()), Math.round((x + 1) / scale), Math.round((y + 1) / scale));
+            guiGraphics.renderItem(
+                    new ItemStack(tech.getDisplayIcon()),
+                    Math.round((x + 5) / scale),
+                    Math.round((y + 5) / scale)
+            );
 
             guiGraphics.pose().popPose();
 
 
-            guiGraphics.drawString(this.font, tech.getDisplayName(), x + 28, y + 1, 0x000000, false);
+            guiGraphics.drawString(
+                    this.font,
+                    tech.getDisplayName(),
+                    x + 32,
+                    y + 5,
+                    0x000000,
+                    false
+            );
 
 
             scale = 0.75f;
@@ -83,16 +105,22 @@ public class TechnologyTreeScreen extends Screen {
             guiGraphics.pose().scale(scale, scale, 1f);
 
             int costStartX = Math.round((x + 1) / scale);
-            int costY = Math.round((y + 24) / scale);
+            int costY = Math.round((y + 30) / scale);
 
             int iconOffsetX = 15;
             int dx;
             int dy;
             int flaskCount = 0;
+
+            if(tech.getCost().size()<6){
+                dy = costY + 9;
+            }else{
+                dy = costY;
+            }
+
             for (ItemStack baseCost : tech.getCost()) {
                 if (flaskCount < 6) {
                     dx = costStartX + iconOffsetX * flaskCount;
-                    dy = costY;
                 } else {
                     dx = costStartX + iconOffsetX * (flaskCount - 6);
                     dy = costY + 16;
@@ -103,19 +131,20 @@ public class TechnologyTreeScreen extends Screen {
 
                 flaskCount++;
             }
-            if (flaskCount > 5) {
-                dx = costStartX + iconOffsetX * 6;
-                dy = costY + 11;
-            } else {
-                dx = costStartX + iconOffsetX * flaskCount;
-                dy = costY + 3;
-            }
-            guiGraphics.drawString(this.font, " x " + timeToString(tech.getTime()) + " x " + tech.getCount(), dx, dy, 0x000000, false);
+
+            guiGraphics.drawString(
+                    this.font,
+                    " x " + timeToString(tech.getTime()) + " x " + tech.getCount(),
+                    costStartX+ iconOffsetX * 6,
+                    costY + 14,
+                    0x000000,
+                    false
+            );
 
             guiGraphics.pose().popPose();
 
 
-            if (adjustedMouseX >= x && adjustedMouseX <= x + 123 && adjustedMouseY >= y && adjustedMouseY <= y + 51) {
+            if (adjustedMouseX >= x && adjustedMouseX <= x + 128 && adjustedMouseY >= y && adjustedMouseY <= y + 60) {
 
                 tooltip = List.of(
                         tech.getDisplayName(),
@@ -144,8 +173,8 @@ public class TechnologyTreeScreen extends Screen {
         for (Technology tech : TechnologyRegistry.getAll()) {
             int x = tech.getX();
             int y = tech.getY();
-            int width = 123;
-            int height = 51;
+            int width = 128;
+            int height = 60;
 
             if (adjustedMouseX >= x && adjustedMouseX <= x + width && adjustedMouseY >= y && adjustedMouseY <= y + height) {
                 onTechnologyClicked(tech, button);
@@ -153,7 +182,7 @@ public class TechnologyTreeScreen extends Screen {
             }
         }
 
-        if (button == 0) { // Ліва кнопка
+        if (button == 0) {
             dragging = true;
             lastMouseX = mouseX;
             lastMouseY = mouseY;
