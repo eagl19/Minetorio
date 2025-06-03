@@ -16,7 +16,7 @@ import java.util.List;
 
 public class TechnologyTreeScreen extends Screen {
     private static final ResourceLocation NODE_TEXTURE = ResourceLocation.fromNamespaceAndPath("minetorio", "textures/gui/tech.png");
-
+    private static final ResourceLocation FLASK_FIELD = ResourceLocation.fromNamespaceAndPath("minetorio", "textures/gui/tech_flask_field.png");
     private float zoom = 1.0f;
     private float offsetX = 0;
     private float offsetY = 0;
@@ -76,81 +76,18 @@ public class TechnologyTreeScreen extends Screen {
             );
 
 
-            float scale = 1.5f;
-            guiGraphics.pose().pushPose();
+            renderItem(guiGraphics, new ItemStack(tech.getDisplayIcon()), x + 3, y + 3, 1.5f);
 
-            guiGraphics.pose().scale(scale, scale, 1f);
-            guiGraphics.renderItem(
-                    new ItemStack(tech.getDisplayIcon()),
-                    Math.round((x + 5) / scale),
-                    Math.round((y + 5) / scale)
+            drawString(
+                    guiGraphics,
+                    tech.getDisplayName().getString(),
+                    x + 77 - this.font.width(tech.getDisplayName().getString())/2,
+                    y+5,
+                    0,
+                    1
             );
 
-            guiGraphics.pose().popPose();
-
-            guiGraphics.drawString(
-                    this.font,
-                    tech.getDisplayName(),
-                    x +  74 -  this.font.width(tech.getDisplayName().getString()) / 2,
-                    y + 5,
-                    0x000000,
-                    false
-            );
-
-
-            scale = 0.75f;
-            guiGraphics.pose().pushPose();
-
-            guiGraphics.pose().scale(scale, scale, 1f);
-
-            int costStartX = Math.round((x + 1) / scale);
-            int costY = Math.round((y + 30) / scale);
-
-            float iconOffsetX = 14.75f;
-            int dx;
-            int dy;
-            int flaskCount = 0;
-
-
-            for (ItemStack baseCost : tech.getCost()) {
-                if (flaskCount < 6) {
-                    dx = Math.round(costStartX + iconOffsetX * flaskCount + 2);
-                    dy = costY + 4;
-                } else {
-                    dx = Math.round(costStartX + iconOffsetX * (flaskCount - 6) + 2);
-                    dy = costY + 19;
-                }
-
-                guiGraphics.renderItem(baseCost, dx, dy);
-
-                guiGraphics.pose().pushPose();
-                guiGraphics.pose().translate(0, 0, 300);
-                String text = String.valueOf(baseCost.getCount());
-
-                guiGraphics.drawString(
-                        this.font,
-                        text,
-                        dx + 16 - this.font.width(text),
-                        dy + 9,
-                        0x000000,
-                        false
-                );
-                guiGraphics.pose().popPose();
-
-                flaskCount++;
-            }
-
-            guiGraphics.drawString(
-                    this.font,
-                    " x " + timeToString(tech.getTime()) + " x " + tech.getCount(),
-                    costStartX + iconOffsetX * 6,
-                    costY + 14,
-                    0x000000,
-                    false
-            );
-
-            guiGraphics.pose().popPose();
-
+            renderFlaskField(guiGraphics, x, y, tech);
 
             if (adjustedMouseX >= x && adjustedMouseX <= x + 128 && adjustedMouseY >= y && adjustedMouseY <= y + 60) {
 
@@ -170,6 +107,73 @@ public class TechnologyTreeScreen extends Screen {
 
 
         super.render(guiGraphics, mouseX, mouseY, partialTick);
+    }
+
+    private void renderFlaskField(GuiGraphics guiGraphics, int x, int y, Technology tech){
+        guiGraphics.pose().pushPose();
+        guiGraphics.pose().translate(x + 3, y + 30, 0);
+        guiGraphics.pose().scale( 0.7f, 0.7f, 1f);
+        guiGraphics.blit(FLASK_FIELD,0,0,0,0,108,36,108,36);
+
+        int flaskCount = 0;
+
+        for (ItemStack baseCost : tech.getCost()) {
+            String text = String.valueOf(baseCost.getCount());
+            if (flaskCount < 6) {
+                renderItem(guiGraphics, baseCost,1 + flaskCount * 18, 1, 1);
+                drawString(
+                        guiGraphics,
+                        text,
+                        Math.round ((flaskCount + 1) * 18 - this.font.width(text) * 0.75f) - 1,
+                        Math.round(18 - this.font.lineHeight * 0.75f),
+                        300,
+                        0.75f
+                );
+            } else {
+                renderItem(guiGraphics, baseCost, 1 + (flaskCount - 6) * 18, 19, 1);
+                drawString(
+                        guiGraphics,
+                        text,
+                        Math.round ((flaskCount - 5) * 18 - this.font.width(text) * 0.75f) - 1,
+                        Math.round(36 - this.font.lineHeight * 0.75f),
+                        300,
+                        0.75f
+                );
+            }
+            flaskCount++;
+        }
+
+        drawString(
+                guiGraphics,
+                " x " + timeToString(tech.getTime()) + " x " + tech.getCount(),
+                110,
+                18 - this.font.lineHeight/2,
+                0,
+                1
+        );
+
+        guiGraphics.pose().popPose();
+
+    }
+
+    private void renderItem(GuiGraphics guiGraphics, ItemStack itemStack, int dx, int dy, float scale){
+
+        guiGraphics.pose().pushPose();
+        guiGraphics.pose().translate(dx, dy, 0);
+        guiGraphics.pose().scale(scale, scale, 1f);
+        guiGraphics.renderItem(itemStack, 0, 0);
+        guiGraphics.pose().popPose();
+
+    }
+
+    private void drawString(GuiGraphics guiGraphics, String text, int dx, int dy, int dz, float scale){
+
+        guiGraphics.pose().pushPose();
+        guiGraphics.pose().translate(dx, dy, dz);
+        guiGraphics.pose().scale(scale, scale, 1f);
+        guiGraphics.drawString(this.font, text, 0, 0, 0x000000, false);
+        guiGraphics.pose().popPose();
+
     }
 
     @Override
