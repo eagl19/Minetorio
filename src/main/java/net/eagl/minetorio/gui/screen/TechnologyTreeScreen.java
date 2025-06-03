@@ -2,6 +2,7 @@ package net.eagl.minetorio.gui.screen;
 
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.math.Axis;
 import net.eagl.minetorio.util.Technology;
 import net.eagl.minetorio.util.TechnologyRegistry;
 import net.minecraft.client.gui.GuiGraphics;
@@ -17,6 +18,10 @@ import java.util.List;
 public class TechnologyTreeScreen extends Screen {
     private static final ResourceLocation NODE_TEXTURE = ResourceLocation.fromNamespaceAndPath("minetorio", "textures/gui/tech.png");
     private static final ResourceLocation FLASK_FIELD = ResourceLocation.fromNamespaceAndPath("minetorio", "textures/gui/tech_flask_field.png");
+    private static final ResourceLocation CLOCK = ResourceLocation.fromNamespaceAndPath("minetorio", "textures/gui/clock.png");
+    private static final ResourceLocation CLOCK_HOUR = ResourceLocation.fromNamespaceAndPath("minetorio", "textures/gui/clock_hour.png");
+    private static final ResourceLocation CLOCK_MIN = ResourceLocation.fromNamespaceAndPath("minetorio", "textures/gui/clock_min.png");
+
     private float zoom = 1.0f;
     private float offsetX = 0;
     private float offsetY = 0;
@@ -143,17 +148,55 @@ public class TechnologyTreeScreen extends Screen {
             flaskCount++;
         }
 
+        renderClock(guiGraphics, 128, 18, tech.getTime());
+
         drawString(
                 guiGraphics,
-                " x " + timeToString(tech.getTime()) + " x " + tech.getCount(),
-                110,
+                "x " + tech.getCount(),
+                152,
                 18 - this.font.lineHeight/2,
+                0,
+                1
+        );
+
+        drawString(
+                guiGraphics,
+                timeToString(tech.getTime()),
+                110,
+                -this.font.lineHeight-2,
                 0,
                 1
         );
 
         guiGraphics.pose().popPose();
 
+    }
+
+    private void renderClock(GuiGraphics guiGraphics, int centerX, int centerY, int time){
+        guiGraphics.pose().pushPose();
+        guiGraphics.pose().translate(centerX, centerY, 0);
+        guiGraphics.pose().scale(0.015f, 0.015f, 1f);
+        guiGraphics.blit(CLOCK,-1350,-1350,0,0,2700,2700,2700,2700);
+
+        long totalSeconds = time / 20;
+        long seconds = totalSeconds % 60;
+        long minutes = (totalSeconds / 60) % 60;
+        long hours = (totalSeconds / 3600) % 12;
+
+        renderClockItem(guiGraphics, CLOCK_MIN,136,741,-68 ,-452, seconds * 6f + ((time % 20) / 20f) * 6f, 1.5f);
+        renderClockItem(guiGraphics, CLOCK_MIN,136,741,-68 ,-452, minutes * 6f + (seconds / 60f) * 6f, 2.0f);
+        renderClockItem(guiGraphics, CLOCK_HOUR, 176, 505, -109, -382, hours * 30f + (minutes / 60f) * 30f, 2.0f);
+
+        guiGraphics.pose().popPose();
+    }
+
+    private void renderClockItem(GuiGraphics guiGraphics, ResourceLocation texture, int width, int height, int dx, int dy, float degree, float scale){
+        guiGraphics.pose().pushPose();
+        guiGraphics.pose().scale(scale, scale, 1f);
+        guiGraphics.pose().mulPose(Axis.ZP.rotationDegrees(degree));
+        guiGraphics.blit(texture, dx, dy,0,0,width,height,width,height);
+
+        guiGraphics.pose().popPose();
     }
 
     private void renderItem(GuiGraphics guiGraphics, ItemStack itemStack, int dx, int dy, float scale){

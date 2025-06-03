@@ -89,7 +89,7 @@ public class TechnologyRegistry {
                                 new ItemStack(MinetorioItems.FLASK_GREEN.get(), 2),
                                 new ItemStack(MinetorioItems.FLASK_BLACK.get(), 1)
                         ),
-                        100000,
+                        400000,
                         3,
                         false,
                         310,
