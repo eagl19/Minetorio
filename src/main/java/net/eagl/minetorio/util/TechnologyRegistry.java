@@ -86,7 +86,7 @@ public class TechnologyRegistry {
                                 new ItemStack(MinetorioItems.FLASK_YELLOW.get(), 5),
                                 new ItemStack(MinetorioItems.FLASK_BROWN.get(), 4),
                                 new ItemStack(MinetorioItems.FLASK_CYAN.get(), 3),
-                                new ItemStack(MinetorioItems.FLASK_GREEN.get(), 2),
+                                new ItemStack(MinetorioItems.FLASK_ORANGE.get(), 2),
                                 new ItemStack(MinetorioItems.FLASK_BLACK.get(), 1)
                         ),
                         400000,

@@ -125,7 +125,7 @@ public class TechnologyTreeScreen extends Screen {
 
         new Clock(guiGraphics, 128, 18, tech.getTime()).render();
         drawString(guiGraphics, "x " + tech.getCount(), 152, 18 - this.font.lineHeight / 2, 0, 1);
-        drawString(guiGraphics, timeToString(tech.getTime()), 110, -this.font.lineHeight - 2, 0, 1);
+       // drawString(guiGraphics, timeToString(tech.getTime()), 110, -this.font.lineHeight - 2, 0, 1);
         guiGraphics.pose().popPose();
     }
 
