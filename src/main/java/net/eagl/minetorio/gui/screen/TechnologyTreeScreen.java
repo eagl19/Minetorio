@@ -1,8 +1,7 @@
 package net.eagl.minetorio.gui.screen;
 
-
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.math.Axis;
+import net.eagl.minetorio.util.Clock;
 import net.eagl.minetorio.util.Technology;
 import net.eagl.minetorio.util.TechnologyRegistry;
 import net.minecraft.client.gui.GuiGraphics;
@@ -18,14 +17,9 @@ import java.util.List;
 public class TechnologyTreeScreen extends Screen {
     private static final ResourceLocation NODE_TEXTURE = ResourceLocation.fromNamespaceAndPath("minetorio", "textures/gui/tech.png");
     private static final ResourceLocation FLASK_FIELD = ResourceLocation.fromNamespaceAndPath("minetorio", "textures/gui/tech_flask_field.png");
-    private static final ResourceLocation CLOCK = ResourceLocation.fromNamespaceAndPath("minetorio", "textures/gui/clock.png");
-    private static final ResourceLocation CLOCK_HOUR = ResourceLocation.fromNamespaceAndPath("minetorio", "textures/gui/clock_hour.png");
-    private static final ResourceLocation CLOCK_MIN = ResourceLocation.fromNamespaceAndPath("minetorio", "textures/gui/clock_min.png");
 
     private float zoom = 1.0f;
-    private float offsetX = 0;
-    private float offsetY = 0;
-
+    private float offsetX = 0, offsetY = 0;
     private double lastMouseX, lastMouseY;
     private boolean dragging = false;
 
@@ -44,10 +38,27 @@ public class TechnologyTreeScreen extends Screen {
         float adjustedMouseX = (mouseX - offsetX) / zoom;
         float adjustedMouseY = (mouseY - offsetY) / zoom;
 
+        renderConnections(guiGraphics);
+
+        List<Component> tooltip = null;
+        for (Technology tech : TechnologyRegistry.getAll()) {
+            List<Component> result = renderTechnology(guiGraphics, tech, adjustedMouseX, adjustedMouseY);
+            if (result != null) tooltip = result;
+        }
+
+        guiGraphics.pose().popPose();
+
+        if (tooltip != null) {
+            guiGraphics.renderComponentTooltip(this.font, tooltip, mouseX, mouseY);
+        }
+
+        super.render(guiGraphics, mouseX, mouseY, partialTick);
+    }
+
+    private void renderConnections(GuiGraphics guiGraphics) {
         for (Technology tech : TechnologyRegistry.getAll()) {
             int x1 = tech.getX();
             int y1 = tech.getY();
-
             for (String parentId : tech.getPrerequisites()) {
                 Technology parent = TechnologyRegistry.get(parentId);
                 if (parent != null) {
@@ -57,181 +68,112 @@ public class TechnologyTreeScreen extends Screen {
                 }
             }
         }
-
-
-        List<Component> tooltip = null;
-
-        for (Technology tech : TechnologyRegistry.getAll()) {
-            int x = tech.getX();
-            int y = tech.getY();
-
-            RenderSystem.setShader(GameRenderer::getPositionTexShader);
-            RenderSystem.setShaderTexture(0, NODE_TEXTURE);
-
-            guiGraphics.blit(
-                    NODE_TEXTURE,
-                    x,
-                    y,
-                    0,
-                    0,
-                    128,
-                    60,
-                    128,
-                    60
-            );
-
-
-            renderItem(guiGraphics, new ItemStack(tech.getDisplayIcon()), x + 3, y + 3, 1.5f);
-
-            drawString(
-                    guiGraphics,
-                    tech.getDisplayName().getString(),
-                    x + 77 - this.font.width(tech.getDisplayName().getString())/2,
-                    y+5,
-                    0,
-                    1
-            );
-
-            renderFlaskField(guiGraphics, x, y, tech);
-
-            if (adjustedMouseX >= x && adjustedMouseX <= x + 128 && adjustedMouseY >= y && adjustedMouseY <= y + 60) {
-
-                tooltip = List.of(
-                        tech.getDisplayName(),
-                        Component.literal("Cost: " + tech.getFormattedCost().getString())
-                );
-
-            }
-
-        }
-        guiGraphics.pose().popPose();
-
-        if (tooltip != null) {
-            guiGraphics.renderComponentTooltip(this.font, tooltip, mouseX, mouseY);
-        }
-
-
-        super.render(guiGraphics, mouseX, mouseY, partialTick);
     }
 
-    private void renderFlaskField(GuiGraphics guiGraphics, int x, int y, Technology tech){
+    private List<Component> renderTechnology(GuiGraphics guiGraphics, Technology tech, float mouseX, float mouseY) {
+        int x = tech.getX();
+        int y = tech.getY();
+
+        renderTechBackground(guiGraphics, x, y);
+        renderItem(guiGraphics, new ItemStack(tech.getDisplayIcon()), x + 3, y + 3, 1.5f);
+        renderTechName(guiGraphics, tech, x, y);
+        renderFlaskField(guiGraphics, x, y, tech);
+
+        if (isMouseOverNode(mouseX, mouseY, x, y, 128, 60)) {
+            return List.of(
+                    tech.getDisplayName(),
+                    Component.literal("Cost: " + tech.getFormattedCost().getString())
+            );
+        }
+        return null;
+    }
+
+    private boolean isMouseOverNode(float mx, float my, int x, int y, int width, int height) {
+        return mx >= x && mx <= x + width && my >= y && my <= y + height;
+    }
+
+    private void renderTechBackground(GuiGraphics guiGraphics, int x, int y) {
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShaderTexture(0, NODE_TEXTURE);
+        guiGraphics.blit(NODE_TEXTURE, x, y, 0, 0, 128, 60, 128, 60);
+    }
+
+    private void renderTechName(GuiGraphics guiGraphics, Technology tech, int x, int y) {
+        String name = tech.getDisplayName().getString();
+        int nameX = x + 77 - this.font.width(name) / 2;
+        drawString(guiGraphics, name, nameX, y + 5, 0, 1);
+    }
+
+    private void renderFlaskField(GuiGraphics guiGraphics, int x, int y, Technology tech) {
         guiGraphics.pose().pushPose();
         guiGraphics.pose().translate(x + 3, y + 30, 0);
-        guiGraphics.pose().scale( 0.7f, 0.7f, 1f);
-        guiGraphics.blit(FLASK_FIELD,0,0,0,0,108,36,108,36);
+        guiGraphics.pose().scale(0.7f, 0.7f, 1f);
+        guiGraphics.blit(FLASK_FIELD, 0, 0, 0, 0, 108, 36, 108, 36);
 
         int flaskCount = 0;
-
         for (ItemStack baseCost : tech.getCost()) {
             String text = String.valueOf(baseCost.getCount());
-            if (flaskCount < 6) {
-                renderItem(guiGraphics, baseCost,1 + flaskCount * 18, 1, 1);
-                drawString(
-                        guiGraphics,
-                        text,
-                        Math.round ((flaskCount + 1) * 18 - this.font.width(text) * 0.75f) - 1,
-                        Math.round(18 - this.font.lineHeight * 0.75f),
-                        300,
-                        0.75f
-                );
-            } else {
-                renderItem(guiGraphics, baseCost, 1 + (flaskCount - 6) * 18, 19, 1);
-                drawString(
-                        guiGraphics,
-                        text,
-                        Math.round ((flaskCount - 5) * 18 - this.font.width(text) * 0.75f) - 1,
-                        Math.round(36 - this.font.lineHeight * 0.75f),
-                        300,
-                        0.75f
-                );
-            }
+            int renderX = 1 + (flaskCount % 6) * 18;
+            int renderY = flaskCount < 6 ? 1 : 19;
+            renderItem(guiGraphics, baseCost, renderX, renderY, 1);
+            drawString(guiGraphics, text,
+                    Math.round((flaskCount % 6 + 1) * 18 - this.font.width(text) * 0.75f) - 1,
+                    renderY + 17 - Math.round(this.font.lineHeight * 0.75f),
+                    300, 0.75f);
             flaskCount++;
         }
 
-        renderClock(guiGraphics, 128, 18, tech.getTime());
-
-        drawString(
-                guiGraphics,
-                "x " + tech.getCount(),
-                152,
-                18 - this.font.lineHeight/2,
-                0,
-                1
-        );
-
-        drawString(
-                guiGraphics,
-                timeToString(tech.getTime()),
-                110,
-                -this.font.lineHeight-2,
-                0,
-                1
-        );
-
-        guiGraphics.pose().popPose();
-
-    }
-
-    private void renderClock(GuiGraphics guiGraphics, int centerX, int centerY, int time){
-        guiGraphics.pose().pushPose();
-        guiGraphics.pose().translate(centerX, centerY, 0);
-        guiGraphics.pose().scale(0.015f, 0.015f, 1f);
-        guiGraphics.blit(CLOCK,-1350,-1350,0,0,2700,2700,2700,2700);
-
-        long totalSeconds = time / 20;
-        long seconds = totalSeconds % 60;
-        long minutes = (totalSeconds / 60) % 60;
-        long hours = (totalSeconds / 3600) % 12;
-
-        renderClockItem(guiGraphics, CLOCK_MIN,136,741,-68 ,-452, seconds * 6f + ((time % 20) / 20f) * 6f, 1.5f);
-        renderClockItem(guiGraphics, CLOCK_MIN,136,741,-68 ,-452, minutes * 6f + (seconds / 60f) * 6f, 2.0f);
-        renderClockItem(guiGraphics, CLOCK_HOUR, 176, 505, -109, -382, hours * 30f + (minutes / 60f) * 30f, 2.0f);
-
+        new Clock(guiGraphics, 128, 18, tech.getTime()).render();
+        drawString(guiGraphics, "x " + tech.getCount(), 152, 18 - this.font.lineHeight / 2, 0, 1);
+        drawString(guiGraphics, timeToString(tech.getTime()), 110, -this.font.lineHeight - 2, 0, 1);
         guiGraphics.pose().popPose();
     }
 
-    private void renderClockItem(GuiGraphics guiGraphics, ResourceLocation texture, int width, int height, int dx, int dy, float degree, float scale){
-        guiGraphics.pose().pushPose();
-        guiGraphics.pose().scale(scale, scale, 1f);
-        guiGraphics.pose().mulPose(Axis.ZP.rotationDegrees(degree));
-        guiGraphics.blit(texture, dx, dy,0,0,width,height,width,height);
-
-        guiGraphics.pose().popPose();
-    }
-
-    private void renderItem(GuiGraphics guiGraphics, ItemStack itemStack, int dx, int dy, float scale){
-
+    private void renderItem(GuiGraphics guiGraphics, ItemStack itemStack, int dx, int dy, float scale) {
         guiGraphics.pose().pushPose();
         guiGraphics.pose().translate(dx, dy, 0);
         guiGraphics.pose().scale(scale, scale, 1f);
         guiGraphics.renderItem(itemStack, 0, 0);
         guiGraphics.pose().popPose();
-
     }
 
-    private void drawString(GuiGraphics guiGraphics, String text, int dx, int dy, int dz, float scale){
-
+    private void drawString(GuiGraphics guiGraphics, String text, int dx, int dy, int dz, float scale) {
         guiGraphics.pose().pushPose();
         guiGraphics.pose().translate(dx, dy, dz);
         guiGraphics.pose().scale(scale, scale, 1f);
         guiGraphics.drawString(this.font, text, 0, 0, 0x000000, false);
         guiGraphics.pose().popPose();
+    }
 
+    private void drawConnectionLine(GuiGraphics guiGraphics, int x1, int y1, int x2, int y2, int color) {
+        if (x1 == x2) {
+            guiGraphics.vLine(x1, Math.min(y1, y2), Math.max(y1, y2), color);
+        } else if (y1 == y2) {
+            guiGraphics.hLine(Math.min(x1, x2), Math.max(x1, x2), y1, color);
+        } else {
+            guiGraphics.hLine(Math.min(x1, x2), Math.max(x1, x2), y1, color);
+            guiGraphics.vLine(x2, Math.min(y1, y2), Math.max(y1, y2), color);
+        }
+    }
+
+    private String timeToString(int time) {
+        int totalSeconds = time / 20;
+        int hours = totalSeconds / 3600;
+        int minutes = (totalSeconds % 3600) / 60;
+        int seconds = totalSeconds % 60;
+        StringBuilder sb = new StringBuilder();
+        if (hours > 0) sb.append(String.format("%d:", hours));
+        sb.append(String.format("%02d:%02d", minutes, seconds));
+        return sb.toString();
     }
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-
-        float adjustedMouseX = (float) ((mouseX - offsetX) / zoom);
-        float adjustedMouseY = (float) ((mouseY - offsetY) / zoom);
+        float adjustedX = (float) ((mouseX - offsetX) / zoom);
+        float adjustedY = (float) ((mouseY - offsetY) / zoom);
 
         for (Technology tech : TechnologyRegistry.getAll()) {
-            int x = tech.getX();
-            int y = tech.getY();
-            int width = 128;
-            int height = 60;
-
-            if (adjustedMouseX >= x && adjustedMouseX <= x + width && adjustedMouseY >= y && adjustedMouseY <= y + height) {
+            if (isMouseOverNode(adjustedX, adjustedY, tech.getX(), tech.getY(), 128, 60)) {
                 onTechnologyClicked(tech, button);
                 return true;
             }
@@ -248,21 +190,16 @@ public class TechnologyTreeScreen extends Screen {
     }
 
     private void onTechnologyClicked(Technology tech, int button) {
-        // Тут логіка: наприклад, відкрити новий екран, зробити research тощо
         System.out.println("Clicked on: " + tech.getId() + " with button " + button);
     }
 
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
         float oldZoom = zoom;
-        zoom += (float) (delta * 0.1f);
-        zoom = Math.max(0.25f, Math.min(zoom, 3.0f));
-
-        // Корекція позиції після зміни масштабу
-        float zoomRatio = zoom / oldZoom;
-        offsetX = (float) (mouseX + (offsetX - mouseX) * zoomRatio);
-        offsetY = (float) (mouseY + (offsetY - mouseY) * zoomRatio);
-
+        zoom = Math.max(0.25f, Math.min(zoom + (float) delta * 0.1f, 3.0f));
+        float ratio = zoom / oldZoom;
+        offsetX = (float) (mouseX + (offsetX - mouseX) * ratio);
+        offsetY = (float) (mouseY + (offsetY - mouseY) * ratio);
         return true;
     }
 
@@ -285,33 +222,5 @@ public class TechnologyTreeScreen extends Screen {
             return true;
         }
         return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
-    }
-
-    private void drawConnectionLine(GuiGraphics guiGraphics, int x1, int y1, int x2, int y2, int color) {
-        if (x1 == x2) {
-            guiGraphics.vLine(x1, Math.min(y1, y2), Math.max(y1, y2), color);
-        } else if (y1 == y2) {
-            guiGraphics.hLine(Math.min(x1, x2), Math.max(x1, x2), y1, color);
-        } else {
-            guiGraphics.hLine(Math.min(x1, x2), Math.max(x1, x2), y1, color);
-            guiGraphics.vLine(x2, Math.min(y1, y2), Math.max(y1, y2), color);
-        }
-    }
-
-    private String timeToString(int time){
-
-        int totalSeconds = time / 20;
-        int hours = totalSeconds / 3600;
-        int minutes = (totalSeconds % 3600) / 60;
-        int seconds = totalSeconds % 60;
-        StringBuilder sb = new StringBuilder();
-
-        if (hours > 0) {
-            sb.append(String.format("%d:", hours));
-        }
-        sb.append(String.format("%02d:", minutes));
-        sb.append(String.format("%02d", seconds));
-
-        return sb.toString().trim();
     }
 }

@@ -22,10 +22,15 @@
   "item.minetorio.pattern_water": "Water",
 
   "item.minetorio.flask_black": "Black flask",
+  "item.minetorio.flask_blue": "Blue flask",
+  "item.minetorio.flask_brown": "Brown flask",
+  "item.minetorio.flask_cyan": "Cyan flask",
   "item.minetorio.flask_green": "Green flask",
   "item.minetorio.flask_pink": "Pink flask",
   "item.minetorio.flask_purple": "Purple flask",
   "item.minetorio.flask_red": "Red flask",
+  "item.minetorio.flask_white": "White flask",
+  "item.minetorio.flask_yellow": "Yellow flask",
 
   "creativetab.minetorio_tab": "Minetorio",
 

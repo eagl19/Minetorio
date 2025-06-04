@@ -40,10 +40,15 @@ public class MinetorioItemModelProvider extends ItemModelProvider {
         simplePatternItem(MinetorioItems.PATTERN_WATER);
 
         simpleFlaskItem(MinetorioItems.FLASK_BLACK);
+        simpleFlaskItem(MinetorioItems.FLASK_BLUE);
+        simpleFlaskItem(MinetorioItems.FLASK_BROWN);
+        simpleFlaskItem(MinetorioItems.FLASK_CYAN);
         simpleFlaskItem(MinetorioItems.FLASK_GREEN);
         simpleFlaskItem(MinetorioItems.FLASK_PINK);
         simpleFlaskItem(MinetorioItems.FLASK_PURPLE);
         simpleFlaskItem(MinetorioItems.FLASK_RED);
+        simpleFlaskItem(MinetorioItems.FLASK_WHITE);
+        simpleFlaskItem(MinetorioItems.FLASK_YELLOW);
     }
 
     private void simpleFlaskItem(RegistryObject<Item> item) {

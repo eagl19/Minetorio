@@ -39,10 +39,15 @@ public class MinetorioCreativeModTabs {
 
 
                         pOutput.accept(MinetorioItems.FLASK_BLACK.get());
+                        pOutput.accept(MinetorioItems.FLASK_BLUE.get());
+                        pOutput.accept(MinetorioItems.FLASK_BROWN.get());
+                        pOutput.accept(MinetorioItems.FLASK_CYAN.get());
                         pOutput.accept(MinetorioItems.FLASK_GREEN.get());
                         pOutput.accept(MinetorioItems.FLASK_PINK.get());
                         pOutput.accept(MinetorioItems.FLASK_PURPLE.get());
                         pOutput.accept(MinetorioItems.FLASK_RED.get());
+                        pOutput.accept(MinetorioItems.FLASK_WHITE.get());
+                        pOutput.accept(MinetorioItems.FLASK_YELLOW.get());
 
 
                         pOutput.accept(MinetorioBlocks.GLOWING_BEDROCK.get());

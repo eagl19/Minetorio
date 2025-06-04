@@ -48,6 +48,12 @@ public class MinetorioItems {
 
     public static final RegistryObject<Item> FLASK_BLACK = ITEMS.register("flask_black",
             ()-> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> FLASK_BLUE = ITEMS.register("flask_blue",
+            ()-> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> FLASK_BROWN = ITEMS.register("flask_brown",
+            ()-> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> FLASK_CYAN = ITEMS.register("flask_cyan",
+            ()-> new Item(new Item.Properties()));
     public static final RegistryObject<Item> FLASK_GREEN = ITEMS.register("flask_green",
             ()-> new Item(new Item.Properties()));
     public static final RegistryObject<Item> FLASK_PINK = ITEMS.register("flask_pink",
@@ -56,6 +62,11 @@ public class MinetorioItems {
             ()-> new Item(new Item.Properties()));
     public static final RegistryObject<Item> FLASK_RED = ITEMS.register("flask_red",
             ()-> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> FLASK_WHITE = ITEMS.register("flask_white",
+            ()-> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> FLASK_YELLOW = ITEMS.register("flask_yellow",
+            ()-> new Item(new Item.Properties()));
+
 
 
     public static void register(IEventBus eventBus){
