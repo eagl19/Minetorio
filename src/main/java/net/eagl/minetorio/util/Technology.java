@@ -10,30 +10,10 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.List;
 
-public class Technology {
-    private final String id;
-    private final Item displayIcon;
-    private final List<String> prerequisites;
-    private final List<ItemStack> cost;
-    private final boolean hidden;
+public record Technology(String id, Item displayIcon, List<String> prerequisites, List<ItemStack> cost, int time,
+                         int count, boolean hidden, int x, int y) {
 
-
-    private final int x, y, time, count;
-
-
-    public Technology(String id, Item displayIcon, List<String> prerequisites, List<ItemStack> cost, int time, int count, boolean hidden, int x, int y) {
-        this.id = id;
-        this.displayIcon = displayIcon;
-        this.prerequisites = prerequisites;
-        this.cost = cost;
-        this.hidden = hidden;
-        this.x = x;
-        this.y = y;
-        this.time = time;
-        this.count = count;
-    }
-
-    public MutableComponent getBenefit(){
+    public MutableComponent getBenefit() {
         ResourceLocation key = ForgeRegistries.ITEMS.getKey(displayIcon);
         if (key == null) {
             return Component.empty();
@@ -43,7 +23,7 @@ public class Technology {
     }
 
     public MutableComponent getTotalTimeAsString() {
-        int totalSeconds = time * this.getCount()/ 20;
+        int totalSeconds = time * this.count() / 20;
         int hours = totalSeconds / 3600;
         int minutes = (totalSeconds % 3600) / 60;
         int seconds = totalSeconds % 60;
@@ -55,32 +35,8 @@ public class Technology {
                 );
     }
 
-    public String getId() {
-        return id;
-    }
-
     public Component getDisplayName() {
         return displayIcon.getDescription();
-    }
-
-    public List<String> getPrerequisites() {
-        return prerequisites;
-    }
-
-    public Item getDisplayIcon(){
-        return displayIcon;
-    }
-
-    public int getX() { return x; }
-    public int getY() { return y; }
-    public int getCount() { return count; }
-    public int getTime() { return  time; }
-    public List<ItemStack> getCost() {
-        return cost;
-    }
-
-    public boolean isHidden() {
-        return hidden;
     }
 
     public Component getFormattedCost() {

@@ -90,7 +90,7 @@ public class TechnologyTreeScreen extends Screen {
         float adjustedMouseX = (mouseX - x) / scale;
         float adjustedMouseY = (mouseY - y) / scale;
 
-        String tooltip = "";
+        String tooltip;
 
         guiGraphics.pose().translate(x, y,0.0f);
         guiGraphics.pose().scale(scale, scale, 1.0f);
@@ -100,13 +100,13 @@ public class TechnologyTreeScreen extends Screen {
 
         renderTechName(guiGraphics, techDetails, TECH_DETAILS_TEXTURE_WIDTH / 2, 40, 2);
 
-        renderItem(guiGraphics, new ItemStack(techDetails.getDisplayIcon()), 30, 75, 3);
+        renderItem(guiGraphics, new ItemStack(techDetails.displayIcon()), 30, 75, 3);
 
-        renderBenefit(guiGraphics, 83, 75, 0.9f);
+        renderBenefit(guiGraphics);
 
-        drawString(guiGraphics, techDetails.getTotalTimeAsString(),30, 130, 0, 1);
+        drawString(guiGraphics, techDetails.getTotalTimeAsString(),30, 130);
 
-        tooltip = renderCost(guiGraphics, 30, 140, 1, adjustedMouseX, adjustedMouseY);
+        tooltip = renderCost(guiGraphics, adjustedMouseX, adjustedMouseY);
 
         guiGraphics.pose().popPose();
         guiGraphics.pose().popPose();
@@ -114,7 +114,10 @@ public class TechnologyTreeScreen extends Screen {
         return tooltip;
     }
 
-    private String renderCost(GuiGraphics guiGraphics, int x, int y, float scale, float mouseX, float mouseY) {
+    private String renderCost(GuiGraphics guiGraphics, float mouseX, float mouseY) {
+        int x = 30;
+        int y = 140;
+        float scale = 1.0f;
         guiGraphics.pose().pushPose();
         guiGraphics.pose().translate(x, y,0);
         guiGraphics.pose().scale(scale,scale,0);
@@ -128,9 +131,9 @@ public class TechnologyTreeScreen extends Screen {
         drawString(guiGraphics,
                 Component.translatable("tooltip.minetorio.cost").append(" : ")
                         .withStyle(ChatFormatting.DARK_RED),
-                0, 0, 0, 1);
+                0, 0);
 
-        List<ItemStack> cost = techDetails.getCost();
+        List<ItemStack> cost = techDetails.cost();
         if (cost != null && !cost.isEmpty()) {
             int pairCount = (cost.size() + 1) / 2;
             for (int row = 0; row < pairCount; row++) {
@@ -139,7 +142,7 @@ public class TechnologyTreeScreen extends Screen {
                 int maxWidth = TECH_DETAILS_TEXTURE_WIDTH - 80;
                 int yPos = 12 * row + 12;
 
-                String tip="";
+                String tip;
                 if (rightIndex < cost.size()) {
                     maxWidth = TECH_DETAILS_TEXTURE_WIDTH / 2 - 40;
                     tip = renderCostItem(guiGraphics, cost.get(rightIndex), TECH_DETAILS_TEXTURE_WIDTH / 2 - 25, yPos, maxWidth, adjustedMouseX, adjustedMouseY);
@@ -161,7 +164,7 @@ public class TechnologyTreeScreen extends Screen {
 
     private String renderCostItem(GuiGraphics guiGraphics, ItemStack stack, int x, int y, int maxWidth, float mouseX, float mouseY) {
         String tooltip = "";
-        String baseText = "x" + stack.getCount() * techDetails.getCount() + "            " +
+        String baseText = "x" + stack.getCount() * techDetails.count() + " " +
                 stack.getDisplayName().getString().replace("[", "").replace("]", "");
         String trimmedText = trimmedText(baseText, maxWidth);
         if (!trimmedText.equals(baseText)) {
@@ -183,7 +186,11 @@ public class TechnologyTreeScreen extends Screen {
         return trimmedText;
     }
 
-    private void renderBenefit(GuiGraphics guiGraphics, int x, int y, float scale){
+    private void renderBenefit(GuiGraphics guiGraphics){
+        int x = 83;
+        int y = 75;
+        float scale = 0.9f;
+
         guiGraphics.pose().pushPose();
         guiGraphics.pose().translate(x,y,0);
         guiGraphics.pose().scale(scale,scale,0);
@@ -191,27 +198,26 @@ public class TechnologyTreeScreen extends Screen {
         List<FormattedCharSequence> lines = this.font.split(techDetails.getBenefit(), (int) ((TECH_DETAILS_TEXTURE_WIDTH - x - 35) / scale));
         for (int i = 0; i < lines.size(); i++) {
             height = Math.round(i * (font.lineHeight * scale + 3));
-            drawString(guiGraphics, lines.get(i), 0, height, 0, 1);
+            drawString(guiGraphics, lines.get(i), height);
         }
         guiGraphics.pose().popPose();
     }
 
     private void renderConnections(GuiGraphics guiGraphics) {
         for (Technology tech : TechnologyRegistry.getAll()) {
-            int x1 = tech.getX();
-            int y1 = tech.getY();
-            for (String parentId : tech.getPrerequisites()) {
+            int x1 = tech.x();
+            int y1 = tech.y();
+            for (String parentId : tech.prerequisites()) {
                 Technology parent = TechnologyRegistry.get(parentId);
                 if (parent != null) {
-                    int x2 = parent.getX();
-                    int y2 = parent.getY();
+                    int x2 = parent.x();
+                    int y2 = parent.y();
                     drawConnectionLine(
                             guiGraphics,
                             x1 + NODE_TEXTURE_WIDTH / 2,
                             y1 + NODE_TEXTURE_HEIGHT / 2,
                             x2 + NODE_TEXTURE_WIDTH / 2,
-                            y2 + NODE_TEXTURE_HEIGHT / 2,
-                            0xFFFFFFFF
+                            y2 + NODE_TEXTURE_HEIGHT / 2
                     );
                 }
             }
@@ -219,11 +225,11 @@ public class TechnologyTreeScreen extends Screen {
     }
 
     private List<Component> renderTechnology(GuiGraphics guiGraphics, Technology tech, float mouseX, float mouseY) {
-        int x = tech.getX();
-        int y = tech.getY();
+        int x = tech.x();
+        int y = tech.y();
 
         renderTechBackground(guiGraphics, NODE_TEXTURE, NODE_TEXTURE_WIDTH, NODE_TEXTURE_HEIGHT, x, y);
-        renderItem(guiGraphics, new ItemStack(tech.getDisplayIcon()), x + 3, y + 3, 1.5f);
+        renderItem(guiGraphics, new ItemStack(tech.displayIcon()), x + 3, y + 3, 1.5f);
         renderTechName(guiGraphics, tech, x + 77, y + 1, 1);
         renderFlaskField(guiGraphics, x, y, tech);
 
@@ -260,7 +266,7 @@ public class TechnologyTreeScreen extends Screen {
         guiGraphics.blit(FLASK_FIELD, 0, 0, 0, 0, 108, 36, 108, 36);
 
         int flaskCount = 0;
-        for (ItemStack baseCost : tech.getCost()) {
+        for (ItemStack baseCost : tech.cost()) {
             String text = String.valueOf(baseCost.getCount());
             int renderX = 1 + (flaskCount % 6) * 18;
             int renderY = flaskCount < 6 ? 1 : 19;
@@ -272,8 +278,8 @@ public class TechnologyTreeScreen extends Screen {
             flaskCount++;
         }
 
-        new Clock(guiGraphics, 128, 18, tech.getTime()).render();
-        drawString(guiGraphics, "x " + tech.getCount(), 152, 18 - this.font.lineHeight / 2, 0, 1);
+        new Clock(guiGraphics, 128, 18, tech.time()).render();
+        drawString(guiGraphics, "x " + tech.count(), 152, 18 - this.font.lineHeight / 2, 0, 1);
         guiGraphics.pose().popPose();
     }
 
@@ -293,7 +299,10 @@ public class TechnologyTreeScreen extends Screen {
         guiGraphics.pose().popPose();
     }
 
-    private void drawString(GuiGraphics guiGraphics, MutableComponent text, int dx, int dy, int dz, float scale) {
+    private void drawString(GuiGraphics guiGraphics, MutableComponent text, int dx, int dy) {
+
+        int dz = 0;
+        float scale = 1;
         guiGraphics.pose().pushPose();
         guiGraphics.pose().translate(dx, dy, dz);
         guiGraphics.pose().scale(scale, scale, 1f);
@@ -301,7 +310,11 @@ public class TechnologyTreeScreen extends Screen {
         guiGraphics.pose().popPose();
     }
 
-    private void drawString(GuiGraphics guiGraphics, FormattedCharSequence text, int dx, int dy, int dz, float scale) {
+    private void drawString(GuiGraphics guiGraphics, FormattedCharSequence text, int dy) {
+        int dx = 0;
+        int dz = 0;
+        float scale = 1;
+
         guiGraphics.pose().pushPose();
         guiGraphics.pose().translate(dx, dy, dz);
         guiGraphics.pose().scale(scale, scale, 1f);
@@ -309,7 +322,8 @@ public class TechnologyTreeScreen extends Screen {
         guiGraphics.pose().popPose();
     }
 
-    private void drawConnectionLine(GuiGraphics guiGraphics, int x1, int y1, int x2, int y2, int color) {
+    private void drawConnectionLine(GuiGraphics guiGraphics, int x1, int y1, int x2, int y2) {
+        int color = 0xFFFFFFFF;
         if (x1 == x2) {
             guiGraphics.vLine(x1, Math.min(y1, y2), Math.max(y1, y2), color);
         } else if (y1 == y2) {
@@ -326,7 +340,7 @@ public class TechnologyTreeScreen extends Screen {
         float adjustedY = (float) ((mouseY - offsetY) / zoom);
 
         for (Technology tech : TechnologyRegistry.getAll()) {
-            if (isMouseOver(adjustedX, adjustedY, tech.getX(), tech.getY(), 128, 60)) {
+            if (isMouseOver(adjustedX, adjustedY, tech.x(), tech.y(), 128, 60)) {
                 onTechnologyClicked(tech, button);
                 return true;
             }
