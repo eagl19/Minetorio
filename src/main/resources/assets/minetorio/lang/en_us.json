@@ -39,6 +39,8 @@
   "tooltip.minetorio.unlearned":"Unlearned",
   "tooltip.minetorio.learn_status":"Learn Status",
   "tooltip.minetorio.benefit": "Benefit",
+  "tooltip.minetorio.learn_time": "Time to learn",
+  "tooltip.minetorio.cost": "Cost",
   "tooltip.minetorio.how_to_learn": "How To Learn",
 
   "pattern.minetorio.pattern_air.benefit": "Air Benefit",
@@ -54,7 +56,7 @@
   "pattern.minetorio.pattern_snow.benefit": "Snow Benefit",
   "pattern.minetorio.pattern_snowflake.benefit": "Snowflake Benefit",
   "pattern.minetorio.pattern_sun.benefit": "Sun Benefit",
-  "pattern.minetorio.pattern_void.benefit": "Void Benefit",
+  "pattern.minetorio.pattern_void.benefit": "Unlock teleportation to other rooms in this dimension",
   "pattern.minetorio.pattern_water.benefit": "Water Benefit",
 
   "pattern.minetorio.pattern_air.how_to_learn": "Air How To Learn",
