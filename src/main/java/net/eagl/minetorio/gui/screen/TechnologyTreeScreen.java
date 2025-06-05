@@ -24,7 +24,7 @@ public class TechnologyTreeScreen extends Screen {
 
     private static final ResourceLocation FLASK_FIELD = ResourceLocation.fromNamespaceAndPath("minetorio", "textures/gui/tech_flask_field.png");
     private static final ResourceLocation TECH_DETAILS_TEXTURE = ResourceLocation.fromNamespaceAndPath("minetorio", "textures/gui/tech_details.png");
-    private  static final int TECH_DETAILS_TEXTURE_WIDTH = 219;
+    private  static final int TECH_DETAILS_TEXTURE_WIDTH = 289;
     private  static final int TECH_DETAILS_TEXTURE_HEIGHT = 326;
 
 
@@ -102,12 +102,23 @@ public class TechnologyTreeScreen extends Screen {
                 Component.translatable("tooltip.minetorio.cost").append(" : ")
                         .withStyle(ChatFormatting.DARK_RED),
                 0, 0, 0, 1);
-        int i = 0;
-        for (ItemStack stack : techDetails.getCost()) {
-            i++;
-            System.out.println(stack);
-            renderCostItem(guiGraphics, stack, 2, 12 * i);
+
+        List<ItemStack> cost = techDetails.getCost();
+        if (cost != null && !cost.isEmpty()) {
+            int pairCount = (cost.size() + 1) / 2;
+            for (int row = 0; row < pairCount; row++) {
+                int leftIndex = row * 2;
+                int rightIndex = leftIndex + 1;
+                int yPos = 12 * row + 12;
+
+                renderCostItem(guiGraphics, cost.get(leftIndex), 2, yPos);
+
+                if (rightIndex < cost.size()) {
+                    renderCostItem(guiGraphics, cost.get(rightIndex), TECH_DETAILS_TEXTURE_WIDTH / 2 - 35, yPos);
+                }
+            }
         }
+
         guiGraphics.pose().popPose();
     }
 
@@ -132,7 +143,7 @@ public class TechnologyTreeScreen extends Screen {
         guiGraphics.pose().translate(x,y,0);
         guiGraphics.pose().scale(scale,scale,0);
         int height;
-        List<FormattedCharSequence> lines = this.font.split(techDetails.getBenefit(), (int) ((TECH_DETAILS_TEXTURE_WIDTH - x -5) / scale));
+        List<FormattedCharSequence> lines = this.font.split(techDetails.getBenefit(), (int) ((TECH_DETAILS_TEXTURE_WIDTH - x - 35) / scale));
         for (int i = 0; i < lines.size(); i++) {
             height = Math.round(i * (font.lineHeight * scale + 3));
             drawString(guiGraphics, lines.get(i), 0, height, 0, 1);
