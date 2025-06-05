@@ -41,9 +41,13 @@ public class TechnologyTreeScreen extends Screen {
     @Override
     public void render(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         this.renderBackground(guiGraphics);
+        List<Component> tooltip = null;
         if (techDetails != null) {
 
-            renderTechnologyDetails(guiGraphics);
+            String tip = renderTechnologyDetails(guiGraphics, mouseX, mouseY);
+            if (!tip.isEmpty()) {
+                tooltip = List.of(Component.literal(tip));
+            }
 
         } else {
             guiGraphics.pose().pushPose();
@@ -55,7 +59,7 @@ public class TechnologyTreeScreen extends Screen {
 
             renderConnections(guiGraphics);
 
-            List<Component> tooltip = null;
+
             for (Technology tech : TechnologyRegistry.getAll()) {
                 List<Component> result = renderTechnology(guiGraphics, tech, adjustedMouseX, adjustedMouseY);
                 if (result != null) tooltip = result;
@@ -63,21 +67,35 @@ public class TechnologyTreeScreen extends Screen {
 
             guiGraphics.pose().popPose();
 
-            if (tooltip != null) {
-                guiGraphics.renderComponentTooltip(this.font, tooltip, mouseX, mouseY);
-            }
+
+        }
+
+        if (tooltip != null) {
+            guiGraphics.renderComponentTooltip(this.font, tooltip, mouseX, mouseY);
         }
 
         super.render(guiGraphics, mouseX, mouseY, partialTick);
     }
 
-    private void renderTechnologyDetails(@NotNull GuiGraphics guiGraphics) {
-        int x =  (this.width - TECH_DETAILS_TEXTURE_WIDTH) / 2;
-        int y = (this.height - TECH_DETAILS_TEXTURE_HEIGHT) / 2;
+    private String renderTechnologyDetails(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY) {
+
+
+        float scale = (float) this.height / TECH_DETAILS_TEXTURE_HEIGHT;
+
+        float x = (this.width - TECH_DETAILS_TEXTURE_WIDTH * scale) / 2;
+        float y = (this.height - TECH_DETAILS_TEXTURE_HEIGHT * scale) / 2;
 
         guiGraphics.pose().pushPose();
 
+        float adjustedMouseX = (mouseX - x) / scale;
+        float adjustedMouseY = (mouseY - y) / scale;
+
+        String tooltip = "";
+
         guiGraphics.pose().translate(x, y,0.0f);
+        guiGraphics.pose().scale(scale, scale, 1.0f);
+
+        guiGraphics.pose().pushPose();
         renderTechBackground(guiGraphics, TECH_DETAILS_TEXTURE, TECH_DETAILS_TEXTURE_WIDTH, TECH_DETAILS_TEXTURE_HEIGHT,0,0);
 
         renderTechName(guiGraphics, techDetails, TECH_DETAILS_TEXTURE_WIDTH / 2, 40, 2);
@@ -88,15 +106,24 @@ public class TechnologyTreeScreen extends Screen {
 
         drawString(guiGraphics, techDetails.getTotalTimeAsString(),30, 130, 0, 1);
 
-        renderCost(guiGraphics, 30, 140, 1);
+        tooltip = renderCost(guiGraphics, 30, 140, 1, adjustedMouseX, adjustedMouseY);
 
         guiGraphics.pose().popPose();
+        guiGraphics.pose().popPose();
+
+        return tooltip;
     }
 
-    private void renderCost(GuiGraphics guiGraphics, int x, int y, float scale) {
+    private String renderCost(GuiGraphics guiGraphics, int x, int y, float scale, float mouseX, float mouseY) {
         guiGraphics.pose().pushPose();
         guiGraphics.pose().translate(x, y,0);
         guiGraphics.pose().scale(scale,scale,0);
+
+
+        String tooltip = "";
+        float adjustedMouseX = (mouseX - x) / scale;
+        float adjustedMouseY = (mouseY - y) / scale;
+
 
         drawString(guiGraphics,
                 Component.translatable("tooltip.minetorio.cost").append(" : ")
@@ -109,34 +136,52 @@ public class TechnologyTreeScreen extends Screen {
             for (int row = 0; row < pairCount; row++) {
                 int leftIndex = row * 2;
                 int rightIndex = leftIndex + 1;
+                int maxWidth = TECH_DETAILS_TEXTURE_WIDTH - 80;
                 int yPos = 12 * row + 12;
 
-                renderCostItem(guiGraphics, cost.get(leftIndex), 2, yPos);
-
+                String tip="";
                 if (rightIndex < cost.size()) {
-                    renderCostItem(guiGraphics, cost.get(rightIndex), TECH_DETAILS_TEXTURE_WIDTH / 2 - 35, yPos);
+                    maxWidth = TECH_DETAILS_TEXTURE_WIDTH / 2 - 40;
+                    tip = renderCostItem(guiGraphics, cost.get(rightIndex), TECH_DETAILS_TEXTURE_WIDTH / 2 - 25, yPos, maxWidth, adjustedMouseX, adjustedMouseY);
+                    if (!tip.isEmpty()){
+                        tooltip = tip;
+                    }
+                }
+                tip = renderCostItem(guiGraphics, cost.get(leftIndex), 2, yPos, maxWidth, adjustedMouseX, adjustedMouseY);
+                if (!tip.isEmpty()){
+                    tooltip = tip;
                 }
             }
         }
 
         guiGraphics.pose().popPose();
+
+        return tooltip;
     }
 
-    private void renderCostItem(GuiGraphics guiGraphics, ItemStack stack, int x, int y) {
+    private String renderCostItem(GuiGraphics guiGraphics, ItemStack stack, int x, int y, int maxWidth, float mouseX, float mouseY) {
+        String tooltip = "";
+        String baseText = "x" + stack.getCount() * techDetails.getCount() + "            " +
+                stack.getDisplayName().getString().replace("[", "").replace("]", "");
+        String trimmedText = trimmedText(baseText, maxWidth);
+        if (!trimmedText.equals(baseText)) {
+            if (isMouseOver(mouseX, mouseY, x + 4, y - 4, maxWidth, 10)) {
+                tooltip = baseText;
+            }
+        }
         renderItem(guiGraphics, stack, x, y - 4, 1);
-        drawString(
-                guiGraphics,
-                " x " + stack.getCount() * techDetails.getCount() + " " +
-                        stack.getDisplayName().getString()
-                                .replace("[","")
-                                .replace("]",""),
-                x + 16,
-                y,
-                0,
-                1
-        );
+        drawString(guiGraphics, trimmedText ,x + 14, y,0,1);
+        return tooltip;
     }
 
+    private  String trimmedText(String text, int maxWidth){
+
+        String trimmedText = font.plainSubstrByWidth(text, maxWidth);
+        if (!trimmedText.equals(text)) {
+            trimmedText = font.plainSubstrByWidth(text, maxWidth - font.width("...")) + "...";
+        }
+        return trimmedText;
+    }
 
     private void renderBenefit(GuiGraphics guiGraphics, int x, int y, float scale){
         guiGraphics.pose().pushPose();
@@ -182,7 +227,7 @@ public class TechnologyTreeScreen extends Screen {
         renderTechName(guiGraphics, tech, x + 77, y + 1, 1);
         renderFlaskField(guiGraphics, x, y, tech);
 
-        if (isMouseOverNode(mouseX, mouseY, x, y, NODE_TEXTURE_WIDTH, NODE_TEXTURE_HEIGHT)) {
+        if (isMouseOver(mouseX, mouseY, x, y, NODE_TEXTURE_WIDTH, NODE_TEXTURE_HEIGHT)) {
             return List.of(
                     tech.getDisplayName(),
                     Component.literal("Cost: " + tech.getFormattedCost().getString())
@@ -191,7 +236,7 @@ public class TechnologyTreeScreen extends Screen {
         return null;
     }
 
-    private boolean isMouseOverNode(float mx, float my, int x, int y, int width, int height) {
+    private boolean isMouseOver(float mx, float my, int x, int y, int width, int height) {
         return mx >= x && mx <= x + width && my >= y && my <= y + height;
     }
 
@@ -281,7 +326,7 @@ public class TechnologyTreeScreen extends Screen {
         float adjustedY = (float) ((mouseY - offsetY) / zoom);
 
         for (Technology tech : TechnologyRegistry.getAll()) {
-            if (isMouseOverNode(adjustedX, adjustedY, tech.getX(), tech.getY(), 128, 60)) {
+            if (isMouseOver(adjustedX, adjustedY, tech.getX(), tech.getY(), 128, 60)) {
                 onTechnologyClicked(tech, button);
                 return true;
             }
