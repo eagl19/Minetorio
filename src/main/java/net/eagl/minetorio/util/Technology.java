@@ -42,8 +42,8 @@ public class Technology {
 
     }
 
-    public MutableComponent getTimeAsString() {
-        int totalSeconds = time / 20;
+    public MutableComponent getTotalTimeAsString() {
+        int totalSeconds = time * this.getCount()/ 20;
         int hours = totalSeconds / 3600;
         int minutes = (totalSeconds % 3600) / 60;
         int seconds = totalSeconds % 60;

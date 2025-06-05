@@ -86,7 +86,7 @@ public class TechnologyTreeScreen extends Screen {
 
         renderBenefit(guiGraphics, 83, 75, 0.9f);
 
-        drawString(guiGraphics, techDetails.getTimeAsString(),30, 130, 0, 1);
+        drawString(guiGraphics, techDetails.getTotalTimeAsString(),30, 130, 0, 1);
 
         renderCost(guiGraphics, 30, 140, 1);
 
@@ -126,7 +126,7 @@ public class TechnologyTreeScreen extends Screen {
         renderItem(guiGraphics, stack, x, y - 4, 1);
         drawString(
                 guiGraphics,
-                " x " + stack.getCount() + " " +
+                " x " + stack.getCount() * techDetails.getCount() + " " +
                         stack.getDisplayName().getString()
                                 .replace("[","")
                                 .replace("]",""),
