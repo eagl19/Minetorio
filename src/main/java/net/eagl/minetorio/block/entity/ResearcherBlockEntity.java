@@ -1,6 +1,7 @@
 package net.eagl.minetorio.block.entity;
 
 import net.eagl.minetorio.gui.ResearcherMenu;
+import net.eagl.minetorio.util.Technology;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -21,9 +22,14 @@ import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class ResearcherBlockEntity extends BlockEntity implements MenuProvider {
 
 
+    private final List<Technology> techList = new ArrayList<>(Collections.nCopies(9, Technology.EMPTY));
     private final ItemStackHandler itemHandler = createItemHandler();
     private final LazyOptional<IItemHandler> optionalHandler = LazyOptional.of(() -> itemHandler);
 
@@ -120,5 +126,9 @@ public class ResearcherBlockEntity extends BlockEntity implements MenuProvider {
 
     public EnergyStorage getEnergyStorage() {
         return energyStorage;
+    }
+
+    public List<Technology> getTechList() {
+        return techList;
     }
 }

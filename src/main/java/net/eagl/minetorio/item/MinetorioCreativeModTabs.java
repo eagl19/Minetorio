@@ -25,6 +25,7 @@ public class MinetorioCreativeModTabs {
                         pOutput.accept(MinetorioItems.PATTERN_BATTERY.get());
                         pOutput.accept(MinetorioItems.PATTERN_CLOUD.get());
                         pOutput.accept(MinetorioItems.PATTERN_EARTH.get());
+                        pOutput.accept(MinetorioItems.PATTERN_EMPTY.get());
                         pOutput.accept(MinetorioItems.PATTERN_FIRE.get());
                         pOutput.accept(MinetorioItems.PATTERN_INFINITY.get());
                         pOutput.accept(MinetorioItems.PATTERN_LIGHTNING.get());

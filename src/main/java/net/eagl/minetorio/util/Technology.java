@@ -1,5 +1,6 @@
 package net.eagl.minetorio.util;
 
+import net.eagl.minetorio.item.MinetorioItems;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -8,10 +9,23 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import java.util.Collections;
 import java.util.List;
 
 public record Technology(String id, Item displayIcon, List<String> prerequisites, List<ItemStack> cost, int time,
                          int count, boolean hidden, int x, int y) {
+
+    public static final Technology EMPTY = new Technology(
+            "empty",
+            MinetorioItems.PATTERN_EMPTY.get(),
+            Collections.emptyList(),
+            Collections.emptyList(),
+            0,
+            0,
+            true,
+            0,
+            0
+    );
 
     public MutableComponent getBenefit() {
         ResourceLocation key = ForgeRegistries.ITEMS.getKey(displayIcon);

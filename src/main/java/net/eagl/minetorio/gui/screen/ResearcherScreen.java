@@ -28,19 +28,22 @@ public class ResearcherScreen extends AbstractContainerScreen<ResearcherMenu> {
     @Override
     protected void init() {
         super.init();
-        this.addRenderableWidget(new RemovableItemIcon(
-                leftPos + 20, topPos + 40,
-                new ItemStack(MinetorioItems.PATTERN_VOID.get()),
-                () -> openFlaskAction(),
-                () -> removeFlaskAction()
-        ));
+        for (int i = 0; i < 9; i++) {
+            int finalI = i;
+            this.addRenderableWidget(new RemovableItemIcon(
+                    leftPos + 8 + i * 18, topPos + 22,
+                    new ItemStack(MinetorioItems.PATTERN_EMPTY.get()),
+                    () -> openFlaskAction(finalI),
+                    () -> removeFlaskAction(finalI)
+            ));
+        }
     }
 
-    private void removeFlaskAction() {
+    private void removeFlaskAction(int number) {
 
     }
 
-    private void openFlaskAction() {
+    private void openFlaskAction(int number) {
         Minecraft.getInstance().setScreen(new TechnologyTreeScreen());
     }
 

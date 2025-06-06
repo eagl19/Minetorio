@@ -27,6 +27,7 @@ public class MinetorioItemModelProvider extends ItemModelProvider {
         simplePatternItem(MinetorioItems.PATTERN_BATTERY);
         simplePatternItem(MinetorioItems.PATTERN_CLOUD);
         simplePatternItem(MinetorioItems.PATTERN_EARTH);
+        simplePatternItem(MinetorioItems.PATTERN_EMPTY);
         simplePatternItem(MinetorioItems.PATTERN_FIRE);
         simplePatternItem(MinetorioItems.PATTERN_INFINITY);
         simplePatternItem(MinetorioItems.PATTERN_LIGHTNING);

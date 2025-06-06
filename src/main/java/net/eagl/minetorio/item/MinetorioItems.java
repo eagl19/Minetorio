@@ -45,6 +45,8 @@ public class MinetorioItems {
             ()-> new Item(new Item.Properties()));
     public static final RegistryObject<Item> PATTERN_MINETORIO = ITEMS.register("pattern_minetorio",
             ()-> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> PATTERN_EMPTY = ITEMS.register("pattern_empty",
+            ()-> new Item(new Item.Properties()));
 
     public static final RegistryObject<Item> FLASK_BLACK = ITEMS.register("flask_black",
             ()-> new Item(new Item.Properties()));
