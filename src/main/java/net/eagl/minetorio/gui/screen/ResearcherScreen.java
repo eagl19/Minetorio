@@ -1,7 +1,11 @@
 package net.eagl.minetorio.gui.screen;
 
+import net.eagl.minetorio.gui.RemovableItemIcon;
 import net.eagl.minetorio.gui.ResearcherMenu;
 import net.eagl.minetorio.gui.slot.FlaskSlot;
+import net.eagl.minetorio.item.MinetorioItems;
+import net.eagl.minetorio.network.MinetorioNetwork;
+import net.eagl.minetorio.network.OpenTechnologyTreeScreenPacket;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
@@ -20,6 +24,27 @@ public class ResearcherScreen extends AbstractContainerScreen<ResearcherMenu> {
         this.imageHeight = 222;
         this.imageWidth = 176;
     }
+
+
+    @Override
+    protected void init() {
+        super.init();
+        this.addRenderableWidget(new RemovableItemIcon(
+                leftPos + 20, topPos + 40,
+                new ItemStack(MinetorioItems.FLASK_RED.get()),
+                () -> openFlaskAction(),
+                () -> removeFlaskAction()
+        ));
+    }
+
+    private void removeFlaskAction() {
+
+    }
+
+    private void openFlaskAction() {
+
+    }
+
 
     @Override
     protected void renderBg(@NotNull GuiGraphics pGuiGraphics, float pPartialTick, int pMouseX, int pMouseY) {

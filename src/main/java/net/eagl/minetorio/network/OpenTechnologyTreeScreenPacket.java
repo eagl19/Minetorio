@@ -24,7 +24,6 @@ public class OpenTechnologyTreeScreenPacket {
 
     public static void handle(OpenTechnologyTreeScreenPacket msg, Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
-            // Відкриваємо екран на клієнті
             Minecraft.getInstance().setScreen(new TechnologyTreeScreen());
         });
         ctx.get().setPacketHandled(true);

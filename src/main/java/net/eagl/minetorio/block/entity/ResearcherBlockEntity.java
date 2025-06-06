@@ -15,6 +15,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.EnergyStorage;
+import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
@@ -22,11 +23,12 @@ import org.jetbrains.annotations.Nullable;
 
 public class ResearcherBlockEntity extends BlockEntity implements MenuProvider {
 
+
     private final ItemStackHandler itemHandler = createItemHandler();
     private final LazyOptional<IItemHandler> optionalHandler = LazyOptional.of(() -> itemHandler);
 
     private ItemStackHandler createItemHandler() {
-        return new ItemStackHandler(22) {
+        return new ItemStackHandler(12) {
             @Override
             protected void onContentsChanged(int slot) {
                 setChanged();
@@ -35,7 +37,7 @@ public class ResearcherBlockEntity extends BlockEntity implements MenuProvider {
     }
 
     private final EnergyStorage energyStorage = createEnergyStorage();
-    private final LazyOptional<EnergyStorage> optionalEnergy = LazyOptional.of(() -> energyStorage);
+    private final LazyOptional<IEnergyStorage> optionalEnergy = LazyOptional.of(() -> energyStorage);
 
     private EnergyStorage createEnergyStorage() {
         return new EnergyStorage(10000, 10000, 100) {
@@ -91,14 +93,14 @@ public class ResearcherBlockEntity extends BlockEntity implements MenuProvider {
     protected void saveAdditional(@NotNull CompoundTag tag) {
         super.saveAdditional(tag);
         tag.put("Inventory", itemHandler.serializeNBT());
-        tag.putInt("Energy", energyStorage.getEnergyStored());
+        tag.put("Energy", energyStorage.serializeNBT());
     }
 
     @Override
     public void load(@NotNull CompoundTag tag) {
         super.load(tag);
         itemHandler.deserializeNBT(tag.getCompound("Inventory"));
-        energyStorage.receiveEnergy(tag.getInt("Energy"), false);
+        energyStorage.deserializeNBT(tag.getCompound("Energy"));
     }
 
 

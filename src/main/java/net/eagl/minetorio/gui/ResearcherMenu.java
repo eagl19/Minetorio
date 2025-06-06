@@ -37,25 +37,20 @@ public class ResearcherMenu extends AbstractContainerMenu {
         if (entity instanceof ResearcherBlockEntity researcherEntity) {
             ItemStackHandler container = Objects.requireNonNull(researcherEntity.getItemStackHandler(), "Researcher container is null");
 
-            for (int i = 0; i < 9; i++) {
-                this.addSlot(new SlotItemHandler(container, i, 8 + i * 18, 23));
-            }
-            this.addSlot(new SlotItemHandler(container, 9, 8, 60));
 
+            this.addSlot(new FlaskSlot(container, 0,  8,  98, MinetorioItems.FLASK_RED.get()));
+            this.addSlot(new FlaskSlot(container, 1,  26, 98, MinetorioItems.FLASK_GREEN.get()));
+            this.addSlot(new FlaskSlot(container, 2,  44, 98, MinetorioItems.FLASK_BLACK.get()));
+            this.addSlot(new FlaskSlot(container, 3,  62, 98, MinetorioItems.FLASK_PURPLE.get()));
+            this.addSlot(new FlaskSlot(container, 4,  80, 98, MinetorioItems.FLASK_PINK.get()));
+            this.addSlot(new FlaskSlot(container, 5,  98, 98, MinetorioItems.FLASK_WHITE.get()));
 
-            this.addSlot(new FlaskSlot(container, 10, 8,  98, MinetorioItems.FLASK_RED.get()));
-            this.addSlot(new FlaskSlot(container, 11, 26, 98, MinetorioItems.FLASK_GREEN.get()));
-            this.addSlot(new FlaskSlot(container, 12, 44, 98, MinetorioItems.FLASK_BLACK.get()));
-            this.addSlot(new FlaskSlot(container, 13, 62, 98, MinetorioItems.FLASK_PURPLE.get()));
-            this.addSlot(new FlaskSlot(container, 14, 80, 98, MinetorioItems.FLASK_PINK.get()));
-            this.addSlot(new FlaskSlot(container, 15, 98, 98, MinetorioItems.FLASK_WHITE.get()));
-
-            this.addSlot(new FlaskSlot(container, 16, 8,  116, MinetorioItems.FLASK_BLUE.get()));
-            this.addSlot(new FlaskSlot(container, 17, 26, 116, MinetorioItems.FLASK_YELLOW.get()));
-            this.addSlot(new FlaskSlot(container, 18, 44, 116, MinetorioItems.FLASK_BROWN.get()));
-            this.addSlot(new FlaskSlot(container, 19, 62, 116, MinetorioItems.FLASK_CYAN.get()));
-            this.addSlot(new FlaskSlot(container, 20, 80, 116, MinetorioItems.FLASK_ORANGE.get()));
-            this.addSlot(new FlaskSlot(container, 21, 98, 116, MinetorioItems.FLASK_GRAY.get()));
+            this.addSlot(new FlaskSlot(container, 6,  8,  116, MinetorioItems.FLASK_BLUE.get()));
+            this.addSlot(new FlaskSlot(container, 7,  26, 116, MinetorioItems.FLASK_YELLOW.get()));
+            this.addSlot(new FlaskSlot(container, 8,  44, 116, MinetorioItems.FLASK_BROWN.get()));
+            this.addSlot(new FlaskSlot(container, 9,  62, 116, MinetorioItems.FLASK_CYAN.get()));
+            this.addSlot(new FlaskSlot(container, 10, 80, 116, MinetorioItems.FLASK_ORANGE.get()));
+            this.addSlot(new FlaskSlot(container, 11, 98, 116, MinetorioItems.FLASK_GRAY.get()));
 
 
             this.data = new SimpleContainerData(8); // [0] — енергія, [1] — макс. енергія, [2] - поточне вивчення, [3] - вивчення
@@ -104,16 +99,9 @@ public class ResearcherMenu extends AbstractContainerMenu {
             return ItemStack.EMPTY;
         }
 
-        if (index >= 36 && index < 46) {
-            // From Researcher to Player: try main inventory first, then hotbar
-            if (!moveItemStackTo(originalStack, 9, 36, false) &&
-                    !moveItemStackTo(originalStack, 0, 9, false)) {
-                return ItemStack.EMPTY;
-            }
-        }
-        else if (index >= 9 && index < 36) {
+         if (index >= 9 && index < 36) {
             if (isFlaskItem(originalStack.getItem())) {
-                if (!moveItemStackTo(originalStack, 46, 58, false) &&
+                if (!moveItemStackTo(originalStack, 36, 48, false) &&
                         !moveItemStackTo(originalStack, 0, 9, false)) {
                     return ItemStack.EMPTY;
                 }
@@ -124,7 +112,7 @@ public class ResearcherMenu extends AbstractContainerMenu {
         }
         else if (index >= 0 && index < 9) {
             if (isFlaskItem(originalStack.getItem())) {
-                if (!moveItemStackTo(originalStack, 46, 58, false) &&
+                if (!moveItemStackTo(originalStack, 36, 48, false) &&
                         !moveItemStackTo(originalStack, 9, 36, false)) {
                     return ItemStack.EMPTY;
                 }
