@@ -1,9 +1,11 @@
 package net.eagl.minetorio.gui.screen;
 
-import net.eagl.minetorio.gui.RemovableItemIcon;
+import net.eagl.minetorio.gui.widget.ItemIconWidget;
+import net.eagl.minetorio.gui.widget.RemovableItemIcon;
 import net.eagl.minetorio.gui.ResearcherMenu;
 import net.eagl.minetorio.gui.slot.FlaskSlot;
 import net.eagl.minetorio.item.MinetorioItems;
+import net.eagl.minetorio.util.Technology;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -14,25 +16,37 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ResearcherScreen extends AbstractContainerScreen<ResearcherMenu> {
 
     private static final ResourceLocation GUI_TEXTURE = ResourceLocation.fromNamespaceAndPath("minetorio", "textures/gui/researcher.png");
+    private final List<Technology> techList;
 
     public ResearcherScreen(ResearcherMenu pMenu, Inventory pPlayerInventory, Component pTitle) {
         super(pMenu, pPlayerInventory, pTitle);
         this.imageHeight = 222;
         this.imageWidth = 176;
+        this.techList = new ArrayList<>(menu.getTechList());
     }
 
 
     @Override
     protected void init() {
         super.init();
-        for (int i = 0; i < 9; i++) {
+
+        this.addRenderableWidget(new ItemIconWidget(
+                leftPos + 8,
+                topPos + 60,
+                new ItemStack(techList.get(0).displayIcon())
+        ));
+
+        for (int i = 1; i < 10; i++) {
             int finalI = i;
             this.addRenderableWidget(new RemovableItemIcon(
-                    leftPos + 8 + i * 18, topPos + 22,
-                    new ItemStack(MinetorioItems.PATTERN_EMPTY.get()),
+                    leftPos - 10 + i * 18, topPos + 22,
+                    new ItemStack(techList.get(i).displayIcon()),
                     () -> openFlaskAction(finalI),
                     () -> removeFlaskAction(finalI)
             ));

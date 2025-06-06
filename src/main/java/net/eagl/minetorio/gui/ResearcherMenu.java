@@ -7,6 +7,7 @@ import net.eagl.minetorio.item.MinetorioItems;
 import net.eagl.minetorio.network.MinetorioNetwork;
 import net.eagl.minetorio.network.OpenTechnologyTreeScreenPacket;
 import net.eagl.minetorio.util.InventorySlot;
+import net.eagl.minetorio.util.Technology;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
@@ -20,13 +21,15 @@ import net.minecraftforge.items.SlotItemHandler;
 import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class ResearcherMenu extends AbstractContainerMenu {
 
     private final ContainerLevelAccess access;
     private final SimpleContainerData data;
-
+    private final List<Technology> techList;
 
     public ResearcherMenu(int id, Inventory playerInventory, BlockEntity entity) {
         super(MinetorioMenus.RESEARCHER_MENU.get(), id);
@@ -35,6 +38,9 @@ public class ResearcherMenu extends AbstractContainerMenu {
         InventorySlot.addHotbarAndPlayerInventorySlots(this::addSlot, playerInventory, 0, 8, 140, 3, 9, 18, 18, 58);
 
         if (entity instanceof ResearcherBlockEntity researcherEntity) {
+
+            this.techList = new ArrayList<>(researcherEntity.getTechList());
+
             ItemStackHandler container = Objects.requireNonNull(researcherEntity.getItemStackHandler(), "Researcher container is null");
 
 
@@ -63,6 +69,10 @@ public class ResearcherMenu extends AbstractContainerMenu {
         }
 
 
+    }
+
+    public List<Technology> getTechList() {
+        return techList;
     }
 
     public ContainerData getData() {

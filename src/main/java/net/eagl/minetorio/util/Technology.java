@@ -1,7 +1,11 @@
 package net.eagl.minetorio.util;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.eagl.minetorio.item.MinetorioItems;
 import net.minecraft.ChatFormatting;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -26,6 +30,30 @@ public record Technology(String id, Item displayIcon, List<String> prerequisites
             0,
             0
     );
+
+    public static final Codec<Technology> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+            Codec.STRING.fieldOf("id").forGetter(Technology::id),
+            ForgeRegistries.ITEMS.getCodec().fieldOf("icon").forGetter(Technology::displayIcon),
+            Codec.STRING.listOf().fieldOf("prerequisites").forGetter(Technology::prerequisites),
+            ItemStack.CODEC.listOf().fieldOf("cost").forGetter(Technology::cost),
+            Codec.INT.fieldOf("time").forGetter(Technology::time),
+            Codec.INT.fieldOf("count").forGetter(Technology::count),
+            Codec.BOOL.fieldOf("hidden").forGetter(Technology::hidden),
+            Codec.INT.fieldOf("x").forGetter(Technology::x),
+            Codec.INT.fieldOf("y").forGetter(Technology::y)
+    ).apply(instance, Technology::new));
+
+    public static Technology fromNBT(CompoundTag tag) {
+        return CODEC.parse(NbtOps.INSTANCE, tag)
+                .resultOrPartial(System.err::println)
+                .orElse(Technology.EMPTY);
+    }
+
+    public CompoundTag serializeNBT() {
+        return (CompoundTag) CODEC.encodeStart(NbtOps.INSTANCE, this)
+                .resultOrPartial(System.err::println)
+                .orElse(new CompoundTag());
+    }
 
     public MutableComponent getBenefit() {
         ResourceLocation key = ForgeRegistries.ITEMS.getKey(displayIcon);

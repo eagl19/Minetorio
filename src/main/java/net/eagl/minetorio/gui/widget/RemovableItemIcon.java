@@ -1,4 +1,4 @@
-package net.eagl.minetorio.gui;
+package net.eagl.minetorio.gui.widget;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -27,7 +27,7 @@ public class RemovableItemIcon extends AbstractWidget {
         double relX = mouseX - getX();
         double relY = mouseY - getY();
 
-        if (relX >= 12 && relY <= 6) {
+        if (relX >= 11 && relY <= 6) {
             onClickRemove.run();
         } else {
             onClickIcon.run();
@@ -43,12 +43,15 @@ public class RemovableItemIcon extends AbstractWidget {
     public void renderWidget(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         graphics.renderItem(itemStack, getX(), getY());
 
-        // Малюємо "X" в куті (або маленьку іконку)
+        graphics.pose().pushPose();
+        graphics.pose().translate(0,0, 300);
+
         graphics.drawString(
                 Minecraft.getInstance().font, "X",
-                getX() + 13, getY() + 1,
+                getX() + 12, getY() + 1,
                 0xFF0000, true
         );
+        graphics.pose().popPose();
     }
 }
 

@@ -29,7 +29,7 @@ import java.util.List;
 public class ResearcherBlockEntity extends BlockEntity implements MenuProvider {
 
 
-    private final List<Technology> techList = new ArrayList<>(Collections.nCopies(9, Technology.EMPTY));
+    private final List<Technology> techList = new ArrayList<>(Collections.nCopies(10, Technology.EMPTY));
     private final ItemStackHandler itemHandler = createItemHandler();
     private final LazyOptional<IItemHandler> optionalHandler = LazyOptional.of(() -> itemHandler);
 

@@ -36,6 +36,12 @@ public class MinetorioNetwork {
                 OpenTechnologyTreeScreenPacket::handle,
                 Optional.of(NetworkDirection.PLAY_TO_CLIENT)
         );
+        CHANNEL.registerMessage(
+                packetId++, TwoWayTechnologyPacket.class,
+                TwoWayTechnologyPacket::toBytes,
+                TwoWayTechnologyPacket::new,
+                TwoWayTechnologyPacket::handle
+        );
     }
 
 
