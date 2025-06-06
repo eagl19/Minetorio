@@ -43,6 +43,7 @@ public class MinetorioItemModelProvider extends ItemModelProvider {
         simpleFlaskItem(MinetorioItems.FLASK_BLUE);
         simpleFlaskItem(MinetorioItems.FLASK_BROWN);
         simpleFlaskItem(MinetorioItems.FLASK_CYAN);
+        simpleFlaskItem(MinetorioItems.FLASK_GRAY);
         simpleFlaskItem(MinetorioItems.FLASK_GREEN);
         simpleFlaskItem(MinetorioItems.FLASK_ORANGE);
         simpleFlaskItem(MinetorioItems.FLASK_PINK);

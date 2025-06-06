@@ -55,7 +55,7 @@ public class ResearcherMenu extends AbstractContainerMenu {
             this.addSlot(new FlaskSlot(container, 18, 44, 116, MinetorioItems.FLASK_BROWN.get()));
             this.addSlot(new FlaskSlot(container, 19, 62, 116, MinetorioItems.FLASK_CYAN.get()));
             this.addSlot(new FlaskSlot(container, 20, 80, 116, MinetorioItems.FLASK_ORANGE.get()));
-            this.addSlot(new FlaskSlot(container, 21, 98, 116, MinetorioItems.FLASK_RED.get()));
+            this.addSlot(new FlaskSlot(container, 21, 98, 116, MinetorioItems.FLASK_GRAY.get()));
 
 
             this.data = new SimpleContainerData(8); // [0] — енергія, [1] — макс. енергія, [2] - поточне вивчення, [3] - вивчення

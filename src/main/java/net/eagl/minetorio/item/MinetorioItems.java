@@ -54,6 +54,8 @@ public class MinetorioItems {
             ()-> new Item(new Item.Properties()));
     public static final RegistryObject<Item> FLASK_CYAN = ITEMS.register("flask_cyan",
             ()-> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> FLASK_GRAY = ITEMS.register("flask_gray",
+            ()-> new Item(new Item.Properties()));
     public static final RegistryObject<Item> FLASK_GREEN = ITEMS.register("flask_green",
             ()-> new Item(new Item.Properties()));
     public static final RegistryObject<Item> FLASK_ORANGE = ITEMS.register("flask_orange",
