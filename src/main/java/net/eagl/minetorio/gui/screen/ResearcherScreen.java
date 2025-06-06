@@ -4,8 +4,7 @@ import net.eagl.minetorio.gui.RemovableItemIcon;
 import net.eagl.minetorio.gui.ResearcherMenu;
 import net.eagl.minetorio.gui.slot.FlaskSlot;
 import net.eagl.minetorio.item.MinetorioItems;
-import net.eagl.minetorio.network.MinetorioNetwork;
-import net.eagl.minetorio.network.OpenTechnologyTreeScreenPacket;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
@@ -31,7 +30,7 @@ public class ResearcherScreen extends AbstractContainerScreen<ResearcherMenu> {
         super.init();
         this.addRenderableWidget(new RemovableItemIcon(
                 leftPos + 20, topPos + 40,
-                new ItemStack(MinetorioItems.FLASK_RED.get()),
+                new ItemStack(MinetorioItems.PATTERN_VOID.get()),
                 () -> openFlaskAction(),
                 () -> removeFlaskAction()
         ));
@@ -42,7 +41,7 @@ public class ResearcherScreen extends AbstractContainerScreen<ResearcherMenu> {
     }
 
     private void openFlaskAction() {
-
+        Minecraft.getInstance().setScreen(new TechnologyTreeScreen());
     }
 
 
