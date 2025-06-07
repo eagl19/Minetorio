@@ -49,7 +49,7 @@ public class ResearcherScreen extends AbstractContainerScreen<ResearcherMenu> {
             Technology currentTech = getTechList().get(i);
             int currentI = i;
             this.addRenderableWidget(new RemovableItemIcon(
-                    leftPos - 10 + i * 18, topPos + 22,
+                    leftPos - 10 + i * 18, topPos + 23,
                     new ItemStack(currentTech.getDisplayIcon()),
                     () -> openFlaskAction(currentI, currentTech),
                     () -> removeFlaskAction(currentI)
