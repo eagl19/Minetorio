@@ -13,6 +13,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -109,7 +110,15 @@ public class Technology {
         return learn;
     }
 
-    public boolean hasLearn(List<Technology> techList) {
+    public boolean canLearnWithout(int techIndex, List<Technology> techList){
+        List<Technology> list = new ArrayList<>(techList);
+        for (int i = techIndex; i < list.size(); i++) {
+            list.set(i, Technology.EMPTY);
+        }
+        return canLearn(list);
+    }
+
+    public boolean canLearn(List<Technology> techList) {
         if (prerequisites.isEmpty()) {
             return true;
         }

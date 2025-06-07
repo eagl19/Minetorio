@@ -135,6 +135,7 @@ public class ResearcherBlockEntity extends BlockEntity implements MenuProvider {
 
     public List<Technology> getTechList() {
        if(!isSorted) {
+
            techList.sort((a, b) -> {
                if (a == Technology.EMPTY && b != Technology.EMPTY) return 1;
                if (a != Technology.EMPTY && b == Technology.EMPTY) return -1;
