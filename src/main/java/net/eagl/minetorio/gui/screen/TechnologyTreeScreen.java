@@ -1,10 +1,12 @@
 package net.eagl.minetorio.gui.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.eagl.minetorio.gui.ResearcherMenu;
 import net.eagl.minetorio.util.Clock;
 import net.eagl.minetorio.util.Technology;
 import net.eagl.minetorio.util.TechnologyRegistry;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
@@ -12,6 +14,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -19,30 +22,58 @@ import java.util.List;
 
 public class TechnologyTreeScreen extends Screen {
     private static final ResourceLocation NODE_TEXTURE = ResourceLocation.fromNamespaceAndPath("minetorio", "textures/gui/tech.png");
-    private  static final int NODE_TEXTURE_WIDTH = 128;
-    private  static final int NODE_TEXTURE_HEIGHT = 60;
+    private static final int NODE_TEXTURE_WIDTH = 128;
+    private static final int NODE_TEXTURE_HEIGHT = 60;
 
     private static final ResourceLocation FLASK_FIELD = ResourceLocation.fromNamespaceAndPath("minetorio", "textures/gui/tech_flask_field.png");
     private static final ResourceLocation TECH_DETAILS_TEXTURE = ResourceLocation.fromNamespaceAndPath("minetorio", "textures/gui/tech_details.png");
-    private  static final int TECH_DETAILS_TEXTURE_WIDTH = 289;
-    private  static final int TECH_DETAILS_TEXTURE_HEIGHT = 326;
+    private static final int TECH_DETAILS_TEXTURE_WIDTH = 289;
+    private static final int TECH_DETAILS_TEXTURE_HEIGHT = 326;
 
+    private static final ResourceLocation BUTTON_OK_TEXTURE = ResourceLocation.fromNamespaceAndPath("minetorio", "textures/gui/button_ok.png");
+    private static final ResourceLocation BUTTON_CANCEL_TEXTURE = ResourceLocation.fromNamespaceAndPath("minetorio", "textures/gui/button_cancel.png");
+    private static final int BUTTON_TEXTURE_WIDTH = 358;
+    private static final int BUTTON_TEXTURE_HEIGHT = 219;
+    float okX;
+    float okY;
+    float cancelX;
+    float cancelY;
 
-    private float zoom = 1.0f;
-    private float offsetX = 0, offsetY = 0;
+    float btnWidth;
+    float btnHeight;
+
+    private float zoom;
+    private float offsetX, offsetY;
     private double lastMouseX, lastMouseY;
     private boolean dragging = false;
 
-    private Technology techDetails = null;
-    public TechnologyTreeScreen() {
+    private final int currentTech;
+
+    private Technology techDetails = Technology.EMPTY;
+
+    private final ResearcherMenu menu;
+    private final Inventory playerInventory;
+    private final Component researcherTitle;
+
+    public TechnologyTreeScreen(ResearcherMenu pMenu, Inventory pPlayerInventory, Component pTitle,Technology tech, int pCurrentTech) {
         super(Component.literal("Technology Tree"));
+        this.zoom = 1.0f;
+        this.offsetX = - tech.x();
+        this.offsetY = - tech.y();
+
+        this.currentTech = pCurrentTech;
+        this.menu = pMenu;
+        this.playerInventory = pPlayerInventory;
+        this.researcherTitle = pTitle;
+
     }
+
 
     @Override
     public void render(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         this.renderBackground(guiGraphics);
         List<Component> tooltip = null;
-        if (techDetails != null) {
+        if (!techDetails.equals(Technology.EMPTY)) {
 
             String tip = renderTechnologyDetails(guiGraphics, mouseX, mouseY);
             if (!tip.isEmpty()) {
@@ -50,6 +81,7 @@ public class TechnologyTreeScreen extends Screen {
             }
 
         } else {
+
             guiGraphics.pose().pushPose();
             guiGraphics.pose().translate(offsetX, offsetY, 0);
             guiGraphics.pose().scale(zoom, zoom, 1f);
@@ -108,10 +140,48 @@ public class TechnologyTreeScreen extends Screen {
 
         tooltip = renderCost(guiGraphics, adjustedMouseX, adjustedMouseY);
 
+
+
+        float scale_button = (float) 15 / BUTTON_TEXTURE_HEIGHT;
+
+        okX = TECH_DETAILS_TEXTURE_WIDTH - 50 - BUTTON_TEXTURE_WIDTH * scale_button * 2;
+        okY = TECH_DETAILS_TEXTURE_HEIGHT - 70;
+        cancelX = TECH_DETAILS_TEXTURE_WIDTH - 40 - BUTTON_TEXTURE_WIDTH * scale_button;
+        cancelY = TECH_DETAILS_TEXTURE_HEIGHT - 70;
+
+        renderButton(guiGraphics, BUTTON_OK_TEXTURE, okX, okY, scale_button);
+        renderButton(guiGraphics, BUTTON_CANCEL_TEXTURE, cancelX, cancelY, scale_button);
+
+        okX = x + (TECH_DETAILS_TEXTURE_WIDTH - 50 - BUTTON_TEXTURE_WIDTH * scale_button * 2) * scale;
+        okY = y + (TECH_DETAILS_TEXTURE_HEIGHT - 70) * scale;
+        cancelX = x + (TECH_DETAILS_TEXTURE_WIDTH - 40 - BUTTON_TEXTURE_WIDTH * scale_button) * scale;
+        cancelY = y + (TECH_DETAILS_TEXTURE_HEIGHT - 70) * scale;
+
+        btnWidth = BUTTON_TEXTURE_WIDTH * scale_button * scale;
+        btnHeight = BUTTON_TEXTURE_HEIGHT * scale_button * scale;
+
         guiGraphics.pose().popPose();
         guiGraphics.pose().popPose();
 
         return tooltip;
+    }
+
+    private void renderButton(@NotNull GuiGraphics guiGraphics, ResourceLocation texture, float dx, float dy, float scaleButton) {
+        guiGraphics.pose().pushPose();
+        guiGraphics.pose().translate(dx, dy, 0 );
+
+        guiGraphics.pose().scale(scaleButton, scaleButton, 1);
+        guiGraphics.blit(texture,
+                0,
+                0,
+                0,
+                0,
+                BUTTON_TEXTURE_WIDTH,
+                BUTTON_TEXTURE_HEIGHT,
+                BUTTON_TEXTURE_WIDTH,
+                BUTTON_TEXTURE_HEIGHT
+        );
+        guiGraphics.pose().popPose();
     }
 
     private String renderCost(GuiGraphics guiGraphics, float mouseX, float mouseY) {
@@ -336,31 +406,54 @@ public class TechnologyTreeScreen extends Screen {
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        float adjustedX = (float) ((mouseX - offsetX) / zoom);
-        float adjustedY = (float) ((mouseY - offsetY) / zoom);
+        if(techDetails.equals(Technology.EMPTY)) {
+            float adjustedX = (float) ((mouseX - offsetX) / zoom);
+            float adjustedY = (float) ((mouseY - offsetY) / zoom);
 
-        for (Technology tech : TechnologyRegistry.getAll()) {
-            if (isMouseOver(adjustedX, adjustedY, tech.x(), tech.y(), 128, 60)) {
-                onTechnologyClicked(tech, button);
+            for (Technology tech : TechnologyRegistry.getAll()) {
+                if (isMouseOver(adjustedX, adjustedY, tech.x(), tech.y(), 128, 60)) {
+                    onTechnologyClicked(tech, button);
+                    return true;
+                }
+            }
+
+            if (button == 0) {
+                dragging = true;
+                lastMouseX = mouseX;
+                lastMouseY = mouseY;
                 return true;
             }
-        }
+        }else{
+            if (isMouseOver((float) mouseX, (float) mouseY, (int) okX, (int) okY, (int) btnWidth, (int) btnHeight)) {
+                onOkButtonClicked();
+                return true;
+            }
 
-        if (button == 0) {
-            dragging = true;
-            lastMouseX = mouseX;
-            lastMouseY = mouseY;
-            return true;
+            if (isMouseOver((float) mouseX, (float) mouseY, (int) cancelX, (int) cancelY, (int) btnWidth, (int) btnHeight)) {
+                onCancelButtonClicked();
+                return true;
+            }
         }
 
         return super.mouseClicked(mouseX, mouseY, button);
     }
 
+    private void onCancelButtonClicked() {
+        techDetails = Technology.EMPTY;
+    }
+
+    private void onOkButtonClicked() {
+        menu.getBlockEntity().getTechList().set(currentTech, techDetails);
+        menu.getBlockEntity().setIsSorted(false);
+        menu.getBlockEntity().setChanged();
+        Minecraft.getInstance().setScreen(new ResearcherScreen(menu, playerInventory, researcherTitle));
+    }
+
     private void onTechnologyClicked(Technology tech, int button) {
+
         if (button == 0) {
             this.techDetails = tech;
         }
-        //System.out.println("Clicked on: " + tech.getId() + " with button " + button);
     }
 
     @Override

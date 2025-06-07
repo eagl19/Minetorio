@@ -4,12 +4,9 @@ import net.eagl.minetorio.block.MinetorioBlocks;
 import net.eagl.minetorio.block.entity.ResearcherBlockEntity;
 import net.eagl.minetorio.gui.slot.FlaskSlot;
 import net.eagl.minetorio.item.MinetorioItems;
-import net.eagl.minetorio.network.MinetorioNetwork;
-import net.eagl.minetorio.network.OpenTechnologyTreeScreenPacket;
 import net.eagl.minetorio.util.InventorySlot;
 import net.eagl.minetorio.util.Technology;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
@@ -17,8 +14,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.items.ItemStackHandler;
-import net.minecraftforge.items.SlotItemHandler;
-import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -29,7 +24,7 @@ public class ResearcherMenu extends AbstractContainerMenu {
 
     private final ContainerLevelAccess access;
     private final SimpleContainerData data;
-    private final List<Technology> techList;
+    private final ResearcherBlockEntity be;
 
     public ResearcherMenu(int id, Inventory playerInventory, BlockEntity entity) {
         super(MinetorioMenus.RESEARCHER_MENU.get(), id);
@@ -39,8 +34,7 @@ public class ResearcherMenu extends AbstractContainerMenu {
 
         if (entity instanceof ResearcherBlockEntity researcherEntity) {
 
-            this.techList = new ArrayList<>(researcherEntity.getTechList());
-
+            be = researcherEntity;
             ItemStackHandler container = Objects.requireNonNull(researcherEntity.getItemStackHandler(), "Researcher container is null");
 
 
@@ -71,9 +65,6 @@ public class ResearcherMenu extends AbstractContainerMenu {
 
     }
 
-    public List<Technology> getTechList() {
-        return techList;
-    }
 
     public ContainerData getData() {
         return this.data;
@@ -151,18 +142,10 @@ public class ResearcherMenu extends AbstractContainerMenu {
         return stillValid(access, pPlayer, MinetorioBlocks.RESEARCHER.get());
     }
 
-    @Override
-    public void clicked(int slotId, int dragType, @NotNull ClickType clickType, @NotNull Player player) {
-        if (slotId >= 36 && slotId <= 45) {
-            if (!player.level().isClientSide) {
-                MinetorioNetwork.CHANNEL.send(
-                        PacketDistributor.PLAYER.with(() -> (ServerPlayer) player),
-                        new OpenTechnologyTreeScreenPacket()
-                );
-            }
-            return;
-        }
-        super.clicked(slotId, dragType, clickType, player);
+    public ResearcherBlockEntity getBlockEntity() {
+        return be;
     }
-
+    public  List<Technology> getTechList(){
+        return be.getTechList();
+    }
 }

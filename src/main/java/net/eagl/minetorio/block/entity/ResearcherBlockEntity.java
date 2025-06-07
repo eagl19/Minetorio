@@ -1,11 +1,15 @@
 package net.eagl.minetorio.block.entity;
 
 import net.eagl.minetorio.gui.ResearcherMenu;
+import net.eagl.minetorio.network.MinetorioNetwork;
+import net.eagl.minetorio.network.TwoWayTechnologyPacket;
 import net.eagl.minetorio.util.Technology;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -19,6 +23,7 @@ import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -33,6 +38,7 @@ public class ResearcherBlockEntity extends BlockEntity implements MenuProvider {
     private final ItemStackHandler itemHandler = createItemHandler();
     private final LazyOptional<IItemHandler> optionalHandler = LazyOptional.of(() -> itemHandler);
 
+    private boolean isSorted = true;
     private ItemStackHandler createItemHandler() {
         return new ItemStackHandler(12) {
             @Override
@@ -128,7 +134,18 @@ public class ResearcherBlockEntity extends BlockEntity implements MenuProvider {
         return energyStorage;
     }
 
+    public void setIsSorted(boolean pIsSorted){
+        this.isSorted = pIsSorted;
+    }
+
     public List<Technology> getTechList() {
+       if(!isSorted) {
+           techList.sort((a, b) -> {
+               if (a == Technology.EMPTY && b != Technology.EMPTY) return 1;
+               if (a != Technology.EMPTY && b == Technology.EMPTY) return -1;
+               return 0;
+           });
+       }
         return techList;
     }
 }

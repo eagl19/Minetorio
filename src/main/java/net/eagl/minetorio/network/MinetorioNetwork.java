@@ -29,14 +29,6 @@ public class MinetorioNetwork {
                 Optional.of(NetworkDirection.PLAY_TO_CLIENT)
         );
         CHANNEL.registerMessage(
-                packetId++,
-                OpenTechnologyTreeScreenPacket.class,
-                OpenTechnologyTreeScreenPacket::encode,
-                OpenTechnologyTreeScreenPacket::new,
-                OpenTechnologyTreeScreenPacket::handle,
-                Optional.of(NetworkDirection.PLAY_TO_CLIENT)
-        );
-        CHANNEL.registerMessage(
                 packetId++, TwoWayTechnologyPacket.class,
                 TwoWayTechnologyPacket::toBytes,
                 TwoWayTechnologyPacket::new,
@@ -49,9 +41,6 @@ public class MinetorioNetwork {
         CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), packet);
     }
 
-    public static void sendToClient(ServerPlayer player, OpenTechnologyTreeScreenPacket packet) {
-        CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), packet);
-    }
 }
 
 
