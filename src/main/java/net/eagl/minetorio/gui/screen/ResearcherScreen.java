@@ -42,7 +42,7 @@ public class ResearcherScreen extends AbstractContainerScreen<ResearcherMenu> {
         this.addRenderableWidget(new ItemIconWidget(
                 leftPos + 8,
                 topPos + 60,
-                new ItemStack(getTechList().get(0).displayIcon())
+                new ItemStack(getTechList().get(0).getDisplayIcon())
         ));
 
         for (int i = 1; i < 10; i++) {
@@ -50,7 +50,7 @@ public class ResearcherScreen extends AbstractContainerScreen<ResearcherMenu> {
             int currentI = i;
             this.addRenderableWidget(new RemovableItemIcon(
                     leftPos - 10 + i * 18, topPos + 22,
-                    new ItemStack(currentTech.displayIcon()),
+                    new ItemStack(currentTech.getDisplayIcon()),
                     () -> openFlaskAction(currentI, currentTech),
                     () -> removeFlaskAction(currentI)
             ));

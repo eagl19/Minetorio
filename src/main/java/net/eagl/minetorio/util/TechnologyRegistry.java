@@ -9,7 +9,7 @@ public class TechnologyRegistry {
     private static final Map<String, Technology> TECHNOLOGIES = new HashMap<>();
 
     public static void register(Technology tech) {
-        TECHNOLOGIES.put(tech.id(), tech);
+        TECHNOLOGIES.put(tech.getId(), tech);
     }
 
     public static Technology get(String id) {

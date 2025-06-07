@@ -55,16 +55,20 @@ public class TechnologyTreeScreen extends Screen {
     private final Inventory playerInventory;
     private final Component researcherTitle;
 
+    private  boolean hasLearn;
+
     public TechnologyTreeScreen(ResearcherMenu pMenu, Inventory pPlayerInventory, Component pTitle,Technology tech, int pCurrentTech) {
         super(Component.literal("Technology Tree"));
         this.zoom = 1.0f;
-        this.offsetX = - tech.x();
-        this.offsetY = - tech.y();
+        this.offsetX = - tech.getX();
+        this.offsetY = - tech.getY();
 
         this.currentTech = pCurrentTech;
         this.menu = pMenu;
         this.playerInventory = pPlayerInventory;
         this.researcherTitle = pTitle;
+
+        hasLearn = false;
 
     }
 
@@ -132,7 +136,7 @@ public class TechnologyTreeScreen extends Screen {
 
         renderTechName(guiGraphics, techDetails, TECH_DETAILS_TEXTURE_WIDTH / 2, 40, 2);
 
-        renderItem(guiGraphics, new ItemStack(techDetails.displayIcon()), 30, 75, 3);
+        renderItem(guiGraphics, new ItemStack(techDetails.getDisplayIcon()), 30, 75, 3);
 
         renderBenefit(guiGraphics);
 
@@ -149,7 +153,9 @@ public class TechnologyTreeScreen extends Screen {
         cancelX = TECH_DETAILS_TEXTURE_WIDTH - 40 - BUTTON_TEXTURE_WIDTH * scale_button;
         cancelY = TECH_DETAILS_TEXTURE_HEIGHT - 70;
 
-        renderButton(guiGraphics, BUTTON_OK_TEXTURE, okX, okY, scale_button);
+        if(hasLearn) {
+            renderButton(guiGraphics, BUTTON_OK_TEXTURE, okX, okY, scale_button);
+        }
         renderButton(guiGraphics, BUTTON_CANCEL_TEXTURE, cancelX, cancelY, scale_button);
 
         okX = x + (TECH_DETAILS_TEXTURE_WIDTH - 50 - BUTTON_TEXTURE_WIDTH * scale_button * 2) * scale;
@@ -203,7 +209,7 @@ public class TechnologyTreeScreen extends Screen {
                         .withStyle(ChatFormatting.DARK_RED),
                 0, 0);
 
-        List<ItemStack> cost = techDetails.cost();
+        List<ItemStack> cost = techDetails.getCost();
         if (cost != null && !cost.isEmpty()) {
             int pairCount = (cost.size() + 1) / 2;
             for (int row = 0; row < pairCount; row++) {
@@ -234,7 +240,7 @@ public class TechnologyTreeScreen extends Screen {
 
     private String renderCostItem(GuiGraphics guiGraphics, ItemStack stack, int x, int y, int maxWidth, float mouseX, float mouseY) {
         String tooltip = "";
-        String baseText = "x" + stack.getCount() * techDetails.count() + " " +
+        String baseText = "x" + stack.getCount() * techDetails.getCount() + " " +
                 stack.getDisplayName().getString().replace("[", "").replace("]", "");
         String trimmedText = trimmedText(baseText, maxWidth);
         if (!trimmedText.equals(baseText)) {
@@ -275,13 +281,13 @@ public class TechnologyTreeScreen extends Screen {
 
     private void renderConnections(GuiGraphics guiGraphics) {
         for (Technology tech : TechnologyRegistry.getAll()) {
-            int x1 = tech.x();
-            int y1 = tech.y();
-            for (String parentId : tech.prerequisites()) {
+            int x1 = tech.getX();
+            int y1 = tech.getY();
+            for (String parentId : tech.getPrerequisites()) {
                 Technology parent = TechnologyRegistry.get(parentId);
                 if (parent != null) {
-                    int x2 = parent.x();
-                    int y2 = parent.y();
+                    int x2 = parent.getX();
+                    int y2 = parent.getY();
                     drawConnectionLine(
                             guiGraphics,
                             x1 + NODE_TEXTURE_WIDTH / 2,
@@ -295,11 +301,11 @@ public class TechnologyTreeScreen extends Screen {
     }
 
     private List<Component> renderTechnology(GuiGraphics guiGraphics, Technology tech, float mouseX, float mouseY) {
-        int x = tech.x();
-        int y = tech.y();
+        int x = tech.getX();
+        int y = tech.getY();
 
         renderTechBackground(guiGraphics, NODE_TEXTURE, NODE_TEXTURE_WIDTH, NODE_TEXTURE_HEIGHT, x, y);
-        renderItem(guiGraphics, new ItemStack(tech.displayIcon()), x + 3, y + 3, 1.5f);
+        renderItem(guiGraphics, new ItemStack(tech.getDisplayIcon()), x + 3, y + 3, 1.5f);
         renderTechName(guiGraphics, tech, x + 77, y + 1, 1);
         renderFlaskField(guiGraphics, x, y, tech);
 
@@ -336,7 +342,7 @@ public class TechnologyTreeScreen extends Screen {
         guiGraphics.blit(FLASK_FIELD, 0, 0, 0, 0, 108, 36, 108, 36);
 
         int flaskCount = 0;
-        for (ItemStack baseCost : tech.cost()) {
+        for (ItemStack baseCost : tech.getCost()) {
             String text = String.valueOf(baseCost.getCount());
             int renderX = 1 + (flaskCount % 6) * 18;
             int renderY = flaskCount < 6 ? 1 : 19;
@@ -348,8 +354,8 @@ public class TechnologyTreeScreen extends Screen {
             flaskCount++;
         }
 
-        new Clock(guiGraphics, 128, 18, tech.time()).render();
-        drawString(guiGraphics, "x " + tech.count(), 152, 18 - this.font.lineHeight / 2, 0, 1);
+        new Clock(guiGraphics, 128, 18, tech.getTime()).render();
+        drawString(guiGraphics, "x " + tech.getCount(), 152, 18 - this.font.lineHeight / 2, 0, 1);
         guiGraphics.pose().popPose();
     }
 
@@ -411,7 +417,7 @@ public class TechnologyTreeScreen extends Screen {
             float adjustedY = (float) ((mouseY - offsetY) / zoom);
 
             for (Technology tech : TechnologyRegistry.getAll()) {
-                if (isMouseOver(adjustedX, adjustedY, tech.x(), tech.y(), 128, 60)) {
+                if (isMouseOver(adjustedX, adjustedY, tech.getX(), tech.getY(), 128, 60)) {
                     onTechnologyClicked(tech, button);
                     return true;
                 }
@@ -424,9 +430,11 @@ public class TechnologyTreeScreen extends Screen {
                 return true;
             }
         }else{
-            if (isMouseOver((float) mouseX, (float) mouseY, (int) okX, (int) okY, (int) btnWidth, (int) btnHeight)) {
-                onOkButtonClicked();
-                return true;
+            if(hasLearn) {
+                if (isMouseOver((float) mouseX, (float) mouseY, (int) okX, (int) okY, (int) btnWidth, (int) btnHeight)) {
+                    onOkButtonClicked();
+                    return true;
+                }
             }
 
             if (isMouseOver((float) mouseX, (float) mouseY, (int) cancelX, (int) cancelY, (int) btnWidth, (int) btnHeight)) {
@@ -453,6 +461,7 @@ public class TechnologyTreeScreen extends Screen {
 
         if (button == 0) {
             this.techDetails = tech;
+            hasLearn = techDetails.hasLearn(menu.getTechList());
         }
     }
 

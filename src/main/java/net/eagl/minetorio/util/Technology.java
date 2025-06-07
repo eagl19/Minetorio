@@ -15,9 +15,21 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
-public record Technology(String id, Item displayIcon, List<String> prerequisites, List<ItemStack> cost, int time,
-                         int count, boolean hidden, int x, int y) {
+public class Technology {
+
+    private final String id;
+    private final Item displayIcon;
+    private final List<String> prerequisites;
+    private final List<ItemStack> cost;
+    private final int time;
+    private final int count;
+    private final boolean hidden;
+    private final int x;
+    private final int y;
+    private  boolean learn;
 
     public static final Technology EMPTY = new Technology(
             "empty",
@@ -32,16 +44,29 @@ public record Technology(String id, Item displayIcon, List<String> prerequisites
     );
 
     public static final Codec<Technology> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            Codec.STRING.fieldOf("id").forGetter(Technology::id),
-            ForgeRegistries.ITEMS.getCodec().fieldOf("icon").forGetter(Technology::displayIcon),
-            Codec.STRING.listOf().fieldOf("prerequisites").forGetter(Technology::prerequisites),
-            ItemStack.CODEC.listOf().fieldOf("cost").forGetter(Technology::cost),
-            Codec.INT.fieldOf("time").forGetter(Technology::time),
-            Codec.INT.fieldOf("count").forGetter(Technology::count),
-            Codec.BOOL.fieldOf("hidden").forGetter(Technology::hidden),
-            Codec.INT.fieldOf("x").forGetter(Technology::x),
-            Codec.INT.fieldOf("y").forGetter(Technology::y)
+            Codec.STRING.fieldOf("id").forGetter(Technology::getId),
+            ForgeRegistries.ITEMS.getCodec().fieldOf("icon").forGetter(Technology::getDisplayIcon),
+            Codec.STRING.listOf().fieldOf("prerequisites").forGetter(Technology::getPrerequisites),
+            ItemStack.CODEC.listOf().fieldOf("cost").forGetter(Technology::getCost),
+            Codec.INT.fieldOf("time").forGetter(Technology::getTime),
+            Codec.INT.fieldOf("count").forGetter(Technology::getCount),
+            Codec.BOOL.fieldOf("hidden").forGetter(Technology::isHidden),
+            Codec.INT.fieldOf("x").forGetter(Technology::getX),
+            Codec.INT.fieldOf("y").forGetter(Technology::getY)
     ).apply(instance, Technology::new));
+
+    public Technology(String id, Item displayIcon, List<String> prerequisites, List<ItemStack> cost, int time, int count, boolean hidden, int x, int y) {
+        this.id = id;
+        this.displayIcon = displayIcon;
+        this.prerequisites = prerequisites;
+        this.cost = cost;
+        this.time = time;
+        this.count = count;
+        this.hidden = hidden;
+        this.x = x;
+        this.y = y;
+        this.learn = false;
+    }
 
     public static Technology fromNBT(CompoundTag tag) {
         return CODEC.parse(NbtOps.INSTANCE, tag)
@@ -61,11 +86,10 @@ public record Technology(String id, Item displayIcon, List<String> prerequisites
             return Component.empty();
         }
         return Component.translatable("pattern.minetorio." + key.getPath() + ".benefit").withStyle(ChatFormatting.BLUE);
-
     }
 
     public MutableComponent getTotalTimeAsString() {
-        int totalSeconds = time * this.count() / 20;
+        int totalSeconds = time * count / 20;
         int hours = totalSeconds / 3600;
         int minutes = (totalSeconds % 3600) / 60;
         int seconds = totalSeconds % 60;
@@ -75,6 +99,33 @@ public record Technology(String id, Item displayIcon, List<String> prerequisites
                 .append(Component.translatable(String.format("%d:%02d:%02d", hours, minutes, seconds))
                         .withStyle(ChatFormatting.BLUE)
                 );
+    }
+
+    public void learn(boolean pLearn){
+        this.learn = pLearn;
+    }
+
+    public boolean isLearn() {
+        return learn;
+    }
+
+    public boolean hasLearn(List<Technology> techList) {
+        if (prerequisites.isEmpty()) {
+            return true;
+        }
+
+        Set<String> learnedIds = techList.stream()
+                .map(Technology::getId)
+                .collect(Collectors.toSet());
+
+        for (String parentId : prerequisites) {
+            Technology parent = TechnologyRegistry.get(parentId);
+            if (parent == null || (!parent.isLearn() && !learnedIds.contains(parentId))) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public Component getDisplayName() {
@@ -89,5 +140,41 @@ public record Technology(String id, Item displayIcon, List<String> prerequisites
                         .orElse("Free")
         );
     }
-}
 
+
+    public String getId() {
+        return id;
+    }
+
+    public Item getDisplayIcon() {
+        return displayIcon;
+    }
+
+    public List<String> getPrerequisites() {
+        return prerequisites;
+    }
+
+    public List<ItemStack> getCost() {
+        return cost;
+    }
+
+    public int getTime() {
+        return time;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public boolean isHidden() {
+        return hidden;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+}
