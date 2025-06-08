@@ -19,6 +19,7 @@ import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.glfw.GLFW;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TechnologyTreeScreen extends Screen {
@@ -48,32 +49,27 @@ public class TechnologyTreeScreen extends Screen {
     private double lastMouseX, lastMouseY;
     private boolean dragging = false;
 
-    private final int oldTechIndex;
+    private final int techIndex;
 
-    private Technology techDetails = Technology.EMPTY;
+    private Technology techDetails;
 
-    private  Technology oldTech = Technology.EMPTY;
-
+    private final boolean isSee;
     private final ResearcherMenu menu;
     private final Inventory playerInventory;
     private final Component researcherTitle;
 
     private  boolean canLearn;
 
-    public TechnologyTreeScreen(ResearcherMenu pMenu, Inventory pPlayerInventory, Component pTitle,Technology tech, int pCurrentTech) {
+    public TechnologyTreeScreen(ResearcherMenu pMenu, Inventory pPlayerInventory, Component pTitle, Technology tech, int pCurrentTech) {
         super(Component.literal("Technology Tree"));
         this.zoom = 1.0f;
-        this.offsetX = - tech.getX();
-        this.offsetY = - tech.getY();
-
-        this.oldTech = tech;
-
-        this.oldTechIndex = pCurrentTech;
+        this.techDetails = tech;
+        this.techIndex = pCurrentTech;
         this.menu = pMenu;
         this.playerInventory = pPlayerInventory;
         this.researcherTitle = pTitle;
-
         canLearn = false;
+        isSee = !tech.equals(Technology.EMPTY);
 
     }
 
@@ -158,10 +154,13 @@ public class TechnologyTreeScreen extends Screen {
         cancelX = TECH_DETAILS_TEXTURE_WIDTH - 40 - BUTTON_TEXTURE_WIDTH * scale_button;
         cancelY = TECH_DETAILS_TEXTURE_HEIGHT - 70;
 
-        if(canLearn) {
+        if(canLearn || isSee) {
             renderButton(guiGraphics, BUTTON_OK_TEXTURE, okX, okY, scale_button);
         }
-        renderButton(guiGraphics, BUTTON_CANCEL_TEXTURE, cancelX, cancelY, scale_button);
+        if(!isSee) {
+            renderButton(guiGraphics, BUTTON_CANCEL_TEXTURE, cancelX, cancelY, scale_button);
+        }
+
 
         okX = x + (TECH_DETAILS_TEXTURE_WIDTH - 50 - BUTTON_TEXTURE_WIDTH * scale_button * 2) * scale;
         okY = y + (TECH_DETAILS_TEXTURE_HEIGHT - 70) * scale;
@@ -314,7 +313,7 @@ public class TechnologyTreeScreen extends Screen {
         if(tech.isLearn()) {
             RenderSystem.setShaderColor(0.5f, 1.0f, 0.5f, 1.0f);
         }
-        else if(tech.canLearnWithout(oldTechIndex, menu.getTechList())){
+        else if(tech.canLearn(menu.getTechList())){
             RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
         }
         else{
@@ -448,16 +447,18 @@ public class TechnologyTreeScreen extends Screen {
                 return true;
             }
         }else{
-            if(canLearn) {
+            if(canLearn || isSee) {
                 if (isMouseOver((float) mouseX, (float) mouseY, (int) okX, (int) okY, (int) btnWidth, (int) btnHeight)) {
                     onOkButtonClicked();
                     return true;
                 }
             }
 
-            if (isMouseOver((float) mouseX, (float) mouseY, (int) cancelX, (int) cancelY, (int) btnWidth, (int) btnHeight)) {
-                onCancelButtonClicked();
-                return true;
+            if(!isSee) {
+                if (isMouseOver((float) mouseX, (float) mouseY, (int) cancelX, (int) cancelY, (int) btnWidth, (int) btnHeight)) {
+                    onCancelButtonClicked();
+                    return true;
+                }
             }
         }
 
@@ -465,13 +466,21 @@ public class TechnologyTreeScreen extends Screen {
     }
 
     private void onCancelButtonClicked() {
+
         techDetails = Technology.EMPTY;
     }
 
     private void onOkButtonClicked() {
-        menu.getBlockEntity().getTechList().set(oldTechIndex, techDetails);
-        menu.getBlockEntity().setIsSorted(false);
-        menu.getBlockEntity().setChanged();
+        if(!isSee) {
+            List<Technology> list = new ArrayList<>(menu.getTechList());
+            list.set(techIndex,techDetails);
+            list.sort((a, b) -> {
+                if (a == Technology.EMPTY && b != Technology.EMPTY) return 1;
+                if (a != Technology.EMPTY && b == Technology.EMPTY) return -1;
+                return 0;
+            });
+            menu.setTechList(list);
+        }
         Minecraft.getInstance().setScreen(new ResearcherScreen(menu, playerInventory, researcherTitle));
     }
 
@@ -480,7 +489,7 @@ public class TechnologyTreeScreen extends Screen {
         if (button == 0) {
             this.techDetails = tech;
 
-            canLearn = (techDetails.canLearnWithout(oldTechIndex, menu.getTechList()) && !menu.getTechList().contains(techDetails))|| menu.getTechList().get(oldTechIndex).equals(techDetails);
+            canLearn = !menu.getTechList().contains(techDetails) && techDetails.canLearn(menu.getTechList());
         }
     }
 
@@ -517,13 +526,12 @@ public class TechnologyTreeScreen extends Screen {
 
     @Override
     public boolean keyPressed(int pKeyCode, int pScanCode, int pModifiers) {
-        if(!this.techDetails.equals(Technology.EMPTY)) {
+        if(!isSee && !this.techDetails.equals(Technology.EMPTY)) {
             if (pKeyCode == GLFW.GLFW_KEY_ESCAPE) {
                 this.techDetails = Technology.EMPTY;
                 return true;
             }
         }else{
-            //menu.getBlockEntity().getTechList().set(oldTechIndex, oldTech);
             Minecraft.getInstance().setScreen(new ResearcherScreen(menu, playerInventory, researcherTitle));
             return true;
         }

@@ -5,6 +5,7 @@ import net.eagl.minetorio.gui.widget.RemovableItemIcon;
 import net.eagl.minetorio.gui.ResearcherMenu;
 import net.eagl.minetorio.gui.slot.FlaskSlot;
 import net.eagl.minetorio.util.Technology;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -15,6 +16,7 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ResearcherScreen extends AbstractContainerScreen<ResearcherMenu> {
@@ -59,9 +61,26 @@ public class ResearcherScreen extends AbstractContainerScreen<ResearcherMenu> {
 
     private void removeFlaskAction(int currentTech) {
         if(!getTechList().get(currentTech).equals(Technology.EMPTY)){
-            menu.getTechList().set(currentTech,Technology.EMPTY);
-            menu.getBlockEntity().setChanged();
-            menu.getBlockEntity().setIsSorted(false);
+
+            List<Technology> list = new ArrayList<>(menu.getTechList());
+
+            list.set(currentTech,Technology.EMPTY);
+
+            int size=list.size();
+            if(currentTech + 1 < list.size()) {
+                for (int i = currentTech +1; i < size; i++){
+                    if(!list.get(i).equals(Technology.EMPTY) && !list.get(i).canLearn(list)){
+                        list.set(i,Technology.EMPTY);
+                    }
+                }
+            }
+            list.sort((a, b) -> {
+                if (a == Technology.EMPTY && b != Technology.EMPTY) return 1;
+                if (a != Technology.EMPTY && b == Technology.EMPTY) return -1;
+                return 0;
+            });
+
+            menu.setTechList(list);
             updateTechnologies();
         }
     }
@@ -81,9 +100,9 @@ public class ResearcherScreen extends AbstractContainerScreen<ResearcherMenu> {
         pGuiGraphics.setColor(1f, 1f, 1f, 1f);
         pGuiGraphics.blit(GUI_TEXTURE, leftPos, topPos, 0, 0, imageWidth, imageHeight);
 
-        int energy = menu.getData().get(0);
-        int maxEnergy = menu.getData().get(1);
 
+        int energy = menu.getEnergy();
+        int maxEnergy = menu.getMaxEnergyStorage();
         if (maxEnergy > 0 && energy > 0) {
             int barHeight = 90;
             int energyHeight = (int) ((float) energy / maxEnergy * barHeight);
@@ -97,9 +116,11 @@ public class ResearcherScreen extends AbstractContainerScreen<ResearcherMenu> {
                     energyHeight
             );
         }
-
-        int water = menu.getData().get(2);
-        int maxWater = menu.getData().get(3);
+        if(pMouseX > leftPos + 155 && pMouseX < leftPos + 167 && pMouseY > topPos + 44 && pMouseY < topPos + 134) {
+            pGuiGraphics.renderTooltip(this.font, Component.literal(String.valueOf(energy)).withStyle(ChatFormatting.GOLD), pMouseX, pMouseY);
+        }
+        int water = menu.getWater();
+        int maxWater = menu.getMaxWaterStorage();
 
         if (maxWater > 0 && water > 0) {
             int barHeight = 90;
@@ -114,8 +135,13 @@ public class ResearcherScreen extends AbstractContainerScreen<ResearcherMenu> {
                     learnHeight
             );
         }
-        int lava = menu.getData().get(4);
-        int maxLava = menu.getData().get(5);
+
+        if(pMouseX > leftPos + 138 && pMouseX < leftPos + 150 && pMouseY > topPos + 44 && pMouseY < topPos + 134) {
+            pGuiGraphics.renderTooltip(this.font, Component.literal(String.valueOf(water)).withStyle(ChatFormatting.AQUA), pMouseX, pMouseY);
+        }
+
+        int lava = menu.getLava();
+        int maxLava = menu.getMaxLavaStorage();
 
         if (maxLava > 0 && lava > 0) {
             int barHeight = 90;
@@ -130,6 +156,10 @@ public class ResearcherScreen extends AbstractContainerScreen<ResearcherMenu> {
                     learnHeight
             );
         }
+        if(pMouseX > leftPos + 121 && pMouseX < leftPos + 133 && pMouseY > topPos + 44 && pMouseY < topPos + 134) {
+            pGuiGraphics.renderTooltip(this.font, Component.literal(String.valueOf(lava)).withStyle(ChatFormatting.RED), pMouseX, pMouseY);
+        }
+
 
         int learn = menu.getData().get(6);
         int maxLearn = menu.getData().get(7);

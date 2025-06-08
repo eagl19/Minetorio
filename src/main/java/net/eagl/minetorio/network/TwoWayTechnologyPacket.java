@@ -3,6 +3,7 @@ package net.eagl.minetorio.network;
 import net.eagl.minetorio.network.client.ClientTechnologyData;
 import net.eagl.minetorio.network.server.ServerTechnologyHandler;
 import net.eagl.minetorio.util.Technology;
+import net.eagl.minetorio.util.TechnologyRegistry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
@@ -23,15 +24,24 @@ public class TwoWayTechnologyPacket {
         this.techList = new ArrayList<>(size);
         for (int i = 0; i < size; i++) {
             CompoundTag tag = buf.readNbt();
-            Technology tech = Technology.fromNBT(tag);
-            this.techList.add(tech != null ? tech : Technology.EMPTY);
+            String id = tag.getString("id");
+            Technology base = TechnologyRegistry.get(id);
+            if (base != null) {
+                base.learn(tag.getBoolean("learn"));
+                this.techList.add(base);
+            } else {
+                this.techList.add(Technology.EMPTY);
+            }
         }
     }
 
     public void toBytes(FriendlyByteBuf buf) {
         buf.writeInt(techList.size());
         for (Technology tech : techList) {
-            buf.writeNbt(tech.serializeNBT());
+            CompoundTag tag = new CompoundTag();
+            tag.putString("id", tech.getId());
+            tag.putBoolean("learn", tech.isLearn());
+            buf.writeNbt(tag);
         }
     }
 

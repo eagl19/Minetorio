@@ -1,11 +1,8 @@
 package net.eagl.minetorio.util;
 
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.eagl.minetorio.item.MinetorioItems;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -13,7 +10,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -27,7 +23,6 @@ public class Technology {
     private final List<ItemStack> cost;
     private final int time;
     private final int count;
-    private final boolean hidden;
     private final int x;
     private final int y;
     private  boolean learn;
@@ -39,46 +34,33 @@ public class Technology {
             Collections.emptyList(),
             0,
             0,
-            true,
             0,
             0
     );
 
-    public static final Codec<Technology> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            Codec.STRING.fieldOf("id").forGetter(Technology::getId),
-            ForgeRegistries.ITEMS.getCodec().fieldOf("icon").forGetter(Technology::getDisplayIcon),
-            Codec.STRING.listOf().fieldOf("prerequisites").forGetter(Technology::getPrerequisites),
-            ItemStack.CODEC.listOf().fieldOf("cost").forGetter(Technology::getCost),
-            Codec.INT.fieldOf("time").forGetter(Technology::getTime),
-            Codec.INT.fieldOf("count").forGetter(Technology::getCount),
-            Codec.BOOL.fieldOf("hidden").forGetter(Technology::isHidden),
-            Codec.INT.fieldOf("x").forGetter(Technology::getX),
-            Codec.INT.fieldOf("y").forGetter(Technology::getY)
-    ).apply(instance, Technology::new));
 
-    public Technology(String id, Item displayIcon, List<String> prerequisites, List<ItemStack> cost, int time, int count, boolean hidden, int x, int y) {
+
+    public void saveToNBT(CompoundTag tag) {
+        tag.putString("Id", this.id);
+    }
+
+    public static Technology fromNBT(CompoundTag tag) {
+        String id = tag.getString("Id");
+        System.out.println(id);
+        return TechnologyRegistry.get(id) != null ? TechnologyRegistry.get(id) : Technology.EMPTY;
+    }
+
+
+    public Technology(String id, Item displayIcon, List<String> prerequisites, List<ItemStack> cost, int time, int count, int x, int y) {
         this.id = id;
         this.displayIcon = displayIcon;
         this.prerequisites = prerequisites;
         this.cost = cost;
         this.time = time;
         this.count = count;
-        this.hidden = hidden;
         this.x = x;
         this.y = y;
         this.learn = false;
-    }
-
-    public static Technology fromNBT(CompoundTag tag) {
-        return CODEC.parse(NbtOps.INSTANCE, tag)
-                .resultOrPartial(System.err::println)
-                .orElse(Technology.EMPTY);
-    }
-
-    public CompoundTag serializeNBT() {
-        return (CompoundTag) CODEC.encodeStart(NbtOps.INSTANCE, this)
-                .resultOrPartial(System.err::println)
-                .orElse(new CompoundTag());
     }
 
     public MutableComponent getBenefit() {
@@ -108,14 +90,6 @@ public class Technology {
 
     public boolean isLearn() {
         return learn;
-    }
-
-    public boolean canLearnWithout(int techIndex, List<Technology> techList){
-        List<Technology> list = new ArrayList<>(techList);
-        for (int i = techIndex; i < list.size(); i++) {
-            list.set(i, Technology.EMPTY);
-        }
-        return canLearn(list);
     }
 
     public boolean canLearn(List<Technology> techList) {
@@ -175,9 +149,6 @@ public class Technology {
         return count;
     }
 
-    public boolean isHidden() {
-        return hidden;
-    }
 
     public int getX() {
         return x;

@@ -31,7 +31,6 @@ public class TechnologyRegistry {
                         ),
                         1000,
                         3,
-                        false,
                         10,
                         10
                 )
@@ -48,9 +47,8 @@ public class TechnologyRegistry {
                         ),
                         10000,
                         3,
-                        false,
                         160,
-                        100
+                        10
                 )
         );
         register(
@@ -65,9 +63,40 @@ public class TechnologyRegistry {
                         ),
                         15000,
                         3,
-                        false,
                         160,
-                        10
+                        100
+                )
+        );
+        register(
+                new Technology(
+                        "air",
+                        MinetorioItems.PATTERN_AIR.get(),
+                        List.of("void"),
+                        List.of(
+                                new ItemStack(MinetorioItems.FLASK_RED.get(), 3),
+                                new ItemStack(MinetorioItems.FLASK_GREEN.get(), 2),
+                                new ItemStack(MinetorioItems.FLASK_BLACK.get(), 1)
+                        ),
+                        15000,
+                        3,
+                        160,
+                        190
+                )
+        );
+        register(
+                new Technology(
+                        "earth",
+                        MinetorioItems.PATTERN_EARTH.get(),
+                        List.of("void"),
+                        List.of(
+                                new ItemStack(MinetorioItems.FLASK_RED.get(), 3),
+                                new ItemStack(MinetorioItems.FLASK_GREEN.get(), 2),
+                                new ItemStack(MinetorioItems.FLASK_BLACK.get(), 1)
+                        ),
+                        15000,
+                        3,
+                        160,
+                        280
                 )
         );
         register(
@@ -91,7 +120,6 @@ public class TechnologyRegistry {
                         ),
                         400000,
                         3,
-                        false,
                         310,
                         60
                 )
@@ -117,9 +145,49 @@ public class TechnologyRegistry {
                         ),
                         13000,
                         5,
-                        false,
+                        450,
+                        60
+                )
+        );
+        register(
+                new Technology(
+                        "snow",
+                        MinetorioItems.PATTERN_SNOW.get(),
+                        List.of("snowflake"),
+                        List.of(
+                                new ItemStack(MinetorioItems.FLASK_RED.get(), 31),
+                                new ItemStack(MinetorioItems.FLASK_GREEN.get(), 21),
+                                new ItemStack(MinetorioItems.FLASK_BLACK.get(), 10),
+                                new ItemStack(MinetorioItems.FLASK_PURPLE.get(), 9),
+                                new ItemStack(MinetorioItems.FLASK_PINK.get(), 8),
+                                new ItemStack(MinetorioItems.FLASK_GREEN.get(), 7),
+                                new ItemStack(MinetorioItems.FLASK_GREEN.get(), 6),
+                                new ItemStack(MinetorioItems.FLASK_GREEN.get(), 5),
+                                new ItemStack(MinetorioItems.FLASK_GREEN.get(), 4),
+                                new ItemStack(MinetorioItems.FLASK_GREEN.get(), 3),
+                                new ItemStack(MinetorioItems.FLASK_GREEN.get(), 2),
+                                new ItemStack(MinetorioItems.FLASK_BLACK.get(), 1)
+                        ),
+                        13000,
+                        5,
+                        610,
+                        60
+                )
+        );
+        register(
+                new Technology(
+                        "sun",
+                        MinetorioItems.PATTERN_SUN.get(),
+                        List.of("fire"),
+                        List.of(
+                                new ItemStack(MinetorioItems.FLASK_RED.get(), 3),
+                                new ItemStack(MinetorioItems.FLASK_GREEN.get(), 2),
+                                new ItemStack(MinetorioItems.FLASK_BLACK.get(), 1)
+                        ),
+                        10000,
+                        3,
                         310,
-                        150
+                        -30
                 )
         );
     }

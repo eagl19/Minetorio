@@ -22,8 +22,9 @@ import java.util.Objects;
 public class ResearcherMenu extends AbstractContainerMenu {
 
     private final ContainerLevelAccess access;
-    private final SimpleContainerData data;
     private final ResearcherBlockEntity be;
+
+    private final ContainerData data;
 
     public ResearcherMenu(int id, Inventory playerInventory, BlockEntity entity) {
         super(MinetorioMenus.RESEARCHER_MENU.get(), id);
@@ -52,10 +53,10 @@ public class ResearcherMenu extends AbstractContainerMenu {
             this.addSlot(new FlaskSlot(container, 11, 98, 116, MinetorioItems.FLASK_GRAY.get()));
 
 
-            this.data = new SimpleContainerData(8); // [0] — енергія, [1] — макс. енергія, [2] - поточне вивчення, [3] - вивчення
-
-            addDataSlots(data);
-            updateDataValues(researcherEntity);
+            this.data = researcherEntity.getContainerData();
+            addDataSlots(this.data);
+            data.set(6, 7500);
+            data.set(7, 10000);
 
         } else {
             throw new IllegalStateException("Invalid block entity for ResearcherMenu");
@@ -67,19 +68,6 @@ public class ResearcherMenu extends AbstractContainerMenu {
 
     public ContainerData getData() {
         return this.data;
-    }
-
-    private void updateDataValues(ResearcherBlockEntity blockEntity) {
-        //data.set(0, blockEntity.getEnergyStorage().getEnergyStored());
-        //data.set(1, blockEntity.getEnergyStorage().getMaxEnergyStored());
-        data.set(0, 5000);
-        data.set(1, 10000);
-        data.set(2, 5000);
-        data.set(3, 10000);
-        data.set(4, 5000);
-        data.set(5, 10000);
-        data.set(6, 7500);
-        data.set(7, 10000);
     }
 
     public ResearcherMenu (int id, Inventory inv, FriendlyByteBuf extraData){
@@ -141,10 +129,31 @@ public class ResearcherMenu extends AbstractContainerMenu {
         return stillValid(access, pPlayer, MinetorioBlocks.RESEARCHER.get());
     }
 
-    public ResearcherBlockEntity getBlockEntity() {
-        return be;
+    public  int getMaxEnergyStorage(){
+        return data.get(1);
+    }
+
+    public int getEnergy(){
+        return data.get(0);
+    }
+
+    public int getWater() {
+        return data.get(2);
+    }
+    public int getMaxWaterStorage(){
+        return data.get(3);
+    }
+    public int getLava(){
+        return  data.get(4);
+    }
+    public int getMaxLavaStorage(){
+        return  data.get(5);
     }
     public  List<Technology> getTechList(){
         return be.getTechList();
     }
+    public void setTechList(List<Technology> pList){
+        be.setTechList(pList);
+    }
+
 }
