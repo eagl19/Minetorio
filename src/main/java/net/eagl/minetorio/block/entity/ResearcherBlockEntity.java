@@ -213,11 +213,11 @@ public class ResearcherBlockEntity extends BlockEntity implements MenuProvider {
 
     public void tickServer() {
         energyStorage.receiveEnergy(1,false);
-        if(waterStorage++ < maxWaterStorage){
+        if(waterStorage < maxWaterStorage){
             waterStorage++;
             setChanged();
         }
-        if (lavaStorage++ < maxLavaStorage) {
+        if (lavaStorage < maxLavaStorage) {
             lavaStorage++;
             setChanged();
         }
