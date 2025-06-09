@@ -29,10 +29,18 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ResearcherBlockEntity extends BlockEntity implements MenuProvider {
 
+
+    public static final int ENERGY = 0;
+    public static final int MAX_ENERGY = 1;
+    public static final int WATER = 2;
+    public static final int MAX_WATER = 3;
+    public static final int LAVA = 4;
+    public static final int MAX_LAVA = 5;
+    public static final int LEARN = 6;
+    public static final int MAX_LEARN = 7;
 
     private final List<Technology> techList = new ArrayList<>(Collections.nCopies(10, Technology.EMPTY));
     private final ItemStackHandler itemHandler = createItemHandler();
@@ -56,6 +64,8 @@ public class ResearcherBlockEntity extends BlockEntity implements MenuProvider {
     private int lavaStorage;
     private final int maxLavaStorage = 100000;
 
+    private  int learn;
+    private int maxLearn;
     private final LazyOptional<IEnergyStorage> optionalEnergy = LazyOptional.of(() -> energyStorage);
 
     private EnergyStorage createEnergyStorage() {
@@ -87,6 +97,7 @@ public class ResearcherBlockEntity extends BlockEntity implements MenuProvider {
         this.waterStorage = 5000;
         this.lavaStorage = 5000;
 
+        this.learn = 0;
         updateContainerData();
     }
 
@@ -95,13 +106,14 @@ public class ResearcherBlockEntity extends BlockEntity implements MenuProvider {
     }
 
     public void updateContainerData() {
-        containerData.set(0, energyStorage.getEnergyStored());
-        containerData.set(1, energyStorage.getMaxEnergyStored());
-        containerData.set(2, waterStorage);
-        containerData.set(3, maxWaterStorage);
-        containerData.set(4, lavaStorage);
-        containerData.set(5, maxLavaStorage);
-
+        containerData.set(ENERGY, energyStorage.getEnergyStored());
+        containerData.set(MAX_ENERGY, energyStorage.getMaxEnergyStored());
+        containerData.set(WATER, waterStorage);
+        containerData.set(MAX_WATER, maxWaterStorage);
+        containerData.set(LAVA, lavaStorage);
+        containerData.set(MAX_LAVA, maxLavaStorage);
+        containerData.set(LEARN, learn);
+        containerData.set(MAX_LEARN, maxLearn);
     }
 
     @NotNull
@@ -135,12 +147,8 @@ public class ResearcherBlockEntity extends BlockEntity implements MenuProvider {
 
         tag.putInt("Water", waterStorage);
         tag.putInt("Lava", lavaStorage);
+        tag.putInt("Learn", learn);
 
-        System.out.println("saveAdditional____________________________________");
-        System.out.println(techList.stream()
-                .map(Technology::getId)
-                .collect(Collectors.toList()));
-        System.out.println("___________________________________________");
         var idList = new ListTag();
         for (Technology tech : techList) {
             CompoundTag techTag = new CompoundTag();
@@ -170,6 +178,9 @@ public class ResearcherBlockEntity extends BlockEntity implements MenuProvider {
         if (tag.contains("Lava", CompoundTag.TAG_INT)) {
             lavaStorage = tag.getInt("Lava");
         }
+        if (tag.contains("Learn", CompoundTag.TAG_INT)) {
+            learn = tag.getInt("Learn");
+        }
 
         if (tag.contains("TechListIds")) {
             techList.clear();
@@ -178,14 +189,11 @@ public class ResearcherBlockEntity extends BlockEntity implements MenuProvider {
                 CompoundTag techTag = idList.getCompound(i);
                 String id = techTag.getString("Id");
                 Technology tech = TechnologyRegistry.get(id);
-                System.out.println(id);
                 techList.add(tech != null ? tech : Technology.EMPTY);
             }
-            System.out.println("load____________________________________");
-            System.out.println(techList.stream()
-                    .map(Technology::getId)
-                    .collect(Collectors.toList()));
-            System.out.println("___________________________________________");
+        }
+        if(!techList.get(0).equals(Technology.EMPTY)) {
+            maxLearn = techList.get(0).getTime();
         }
     }
 
@@ -207,6 +215,7 @@ public class ResearcherBlockEntity extends BlockEntity implements MenuProvider {
         this.techList.clear();
         this.techList.addAll(pList);
         setChanged();
+        maxLearn = techList.get(0).getTime();
     }
 
     @Override
@@ -224,15 +233,22 @@ public class ResearcherBlockEntity extends BlockEntity implements MenuProvider {
 
     public void tickServer() {
         energyStorage.receiveEnergy(1,false);
+        boolean change = false;
         if(waterStorage < maxWaterStorage){
             waterStorage++;
-            setChanged();
+            change = true;
         }
         if (lavaStorage < maxLavaStorage) {
             lavaStorage++;
-            setChanged();
+            change = true;
         }
-        updateContainerData();
+        if(learn<maxLearn){
+            learn++;
+            change = true;
+        }
+        if (change) {
+            setChanged();
+            updateContainerData();
+        }
     }
-
 }

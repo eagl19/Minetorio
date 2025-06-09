@@ -161,8 +161,8 @@ public class ResearcherScreen extends AbstractContainerScreen<ResearcherMenu> {
         }
 
 
-        int learn = menu.getData().get(6);
-        int maxLearn = menu.getData().get(7);
+        int learn = menu.getLearn();
+        int maxLearn = menu.getMaxLearn();
 
         if (maxLearn > 0 && learn > 0) {
             int barWidth = 160;
@@ -176,6 +176,9 @@ public class ResearcherScreen extends AbstractContainerScreen<ResearcherMenu> {
                     learWidth,
                     12
             );
+        }
+        if(pMouseX > leftPos + 8 && pMouseX < leftPos + 168 && pMouseY > topPos + 7 && pMouseY < topPos + 19) {
+            pGuiGraphics.renderTooltip(this.font, Component.literal(String.valueOf(learn)).withStyle(ChatFormatting.GREEN), pMouseX, pMouseY);
         }
 
     }

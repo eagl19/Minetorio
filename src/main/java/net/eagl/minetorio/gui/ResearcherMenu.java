@@ -61,8 +61,6 @@ public class ResearcherMenu extends AbstractContainerMenu {
 
             this.data = researcherEntity.getContainerData();
             addDataSlots(this.data);
-            data.set(6, 7500);
-            data.set(7, 10000);
 
         } else {
             throw new IllegalStateException("Invalid block entity for ResearcherMenu");
@@ -142,25 +140,32 @@ public class ResearcherMenu extends AbstractContainerMenu {
     }
 
     public  int getMaxEnergyStorage(){
-        return data.get(1);
+        return data.get(ResearcherBlockEntity.MAX_ENERGY);
     }
 
     public int getEnergy(){
-        return data.get(0);
+        return data.get(ResearcherBlockEntity.ENERGY);
     }
 
     public int getWater() {
-        return data.get(2);
+        return data.get(ResearcherBlockEntity.WATER);
     }
     public int getMaxWaterStorage(){
-        return data.get(3);
+        return data.get(ResearcherBlockEntity.MAX_WATER);
     }
     public int getLava(){
-        return  data.get(4);
+        return  data.get(ResearcherBlockEntity.LAVA);
     }
     public int getMaxLavaStorage(){
-        return  data.get(5);
+        return  data.get(ResearcherBlockEntity.MAX_LAVA);
     }
+    public int getLearn(){
+        return  data.get(ResearcherBlockEntity.LEARN);
+    }
+    public int getMaxLearn(){
+        return data.get(ResearcherBlockEntity.MAX_LEARN);
+    }
+
     public  List<Technology> getTechList(){
         return be.getTechList();
     }
