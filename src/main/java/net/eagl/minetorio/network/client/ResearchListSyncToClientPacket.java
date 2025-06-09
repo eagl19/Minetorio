@@ -1,4 +1,4 @@
-package net.eagl.minetorio.network;
+package net.eagl.minetorio.network.client;
 
 import net.eagl.minetorio.block.entity.ResearcherBlockEntity;
 import net.eagl.minetorio.util.Technology;
@@ -13,16 +13,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
-public class ResearcherSyncToClientPacket {
+public class ResearchListSyncToClientPacket {
     private final BlockPos pos;
     private final List<Technology> techList;
 
-    public ResearcherSyncToClientPacket(BlockPos pos, List<Technology> techList) {
+    public ResearchListSyncToClientPacket(BlockPos pos, List<Technology> techList) {
         this.pos = pos;
         this.techList = techList;
     }
 
-    public static void encode(ResearcherSyncToClientPacket msg, FriendlyByteBuf buf) {
+    public static void encode(ResearchListSyncToClientPacket msg, FriendlyByteBuf buf) {
         buf.writeBlockPos(msg.pos);
         buf.writeInt(msg.techList.size());
         for (Technology tech : msg.techList) {
@@ -30,7 +30,7 @@ public class ResearcherSyncToClientPacket {
         }
     }
 
-    public static ResearcherSyncToClientPacket decode(FriendlyByteBuf buf) {
+    public static ResearchListSyncToClientPacket decode(FriendlyByteBuf buf) {
         BlockPos pos = buf.readBlockPos();
         int size = buf.readInt();
         List<Technology> techList = new ArrayList<>();
@@ -38,10 +38,10 @@ public class ResearcherSyncToClientPacket {
             Technology tech = TechnologyRegistry.get(buf.readUtf());
             techList.add(tech != null ? tech : Technology.EMPTY);
         }
-        return new ResearcherSyncToClientPacket(pos, techList);
+        return new ResearchListSyncToClientPacket(pos, techList);
     }
 
-    public static void handle(ResearcherSyncToClientPacket msg, Supplier<NetworkEvent.Context> ctx) {
+    public static void handle(ResearchListSyncToClientPacket msg, Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
             Level level = Minecraft.getInstance().level;
             if (level != null && level.getBlockEntity(msg.pos) instanceof ResearcherBlockEntity be) {

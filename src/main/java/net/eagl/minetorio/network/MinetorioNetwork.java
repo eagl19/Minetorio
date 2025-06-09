@@ -1,5 +1,7 @@
 package net.eagl.minetorio.network;
 
+import net.eagl.minetorio.network.client.ResearchListSyncToClientPacket;
+import net.eagl.minetorio.network.server.ResearchListSyncToServerPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkRegistry;
@@ -28,17 +30,17 @@ public class MinetorioNetwork {
                 PatternLearnSyncPacket::handle,
                 Optional.of(NetworkDirection.PLAY_TO_CLIENT)
         );
-        CHANNEL.registerMessage(packetId++, ResearchListSyncServerPacket.class,
-                ResearchListSyncServerPacket::encode,
-                ResearchListSyncServerPacket::decode,
-                ResearchListSyncServerPacket::handle,
+        CHANNEL.registerMessage(packetId++, ResearchListSyncToServerPacket.class,
+                ResearchListSyncToServerPacket::encode,
+                ResearchListSyncToServerPacket::decode,
+                ResearchListSyncToServerPacket::handle,
                 Optional.of(NetworkDirection.PLAY_TO_SERVER));
         CHANNEL.registerMessage(
                 packetId++,
-                ResearcherSyncToClientPacket.class,
-                ResearcherSyncToClientPacket::encode,
-                ResearcherSyncToClientPacket::decode,
-                ResearcherSyncToClientPacket::handle,
+                ResearchListSyncToClientPacket.class,
+                ResearchListSyncToClientPacket::encode,
+                ResearchListSyncToClientPacket::decode,
+                ResearchListSyncToClientPacket::handle,
                 Optional.of(NetworkDirection.PLAY_TO_CLIENT)
         );
     }

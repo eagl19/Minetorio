@@ -5,10 +5,12 @@ import net.eagl.minetorio.block.entity.ResearcherBlockEntity;
 import net.eagl.minetorio.gui.slot.FlaskSlot;
 import net.eagl.minetorio.item.MinetorioItems;
 import net.eagl.minetorio.network.MinetorioNetwork;
-import net.eagl.minetorio.network.ResearchListSyncServerPacket;
+import net.eagl.minetorio.network.server.ResearchListSyncToServerPacket;
+import net.eagl.minetorio.network.client.ResearchListSyncToClientPacket;
 import net.eagl.minetorio.util.InventorySlot;
 import net.eagl.minetorio.util.Technology;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
@@ -16,6 +18,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -65,6 +68,12 @@ public class ResearcherMenu extends AbstractContainerMenu {
             throw new IllegalStateException("Invalid block entity for ResearcherMenu");
         }
 
+        if (playerInventory.player instanceof ServerPlayer serverPlayer) {
+            MinetorioNetwork.CHANNEL.send(
+                    PacketDistributor.PLAYER.with(() -> serverPlayer),
+                    new ResearchListSyncToClientPacket(be.getBlockPos(), be.getTechList())
+            );
+        }
 
     }
 
@@ -163,7 +172,7 @@ public class ResearcherMenu extends AbstractContainerMenu {
     public void removed(@NotNull Player pPlayer) {
         super.removed(pPlayer);
         if (pPlayer.level().isClientSide) {
-            MinetorioNetwork.CHANNEL.sendToServer(new ResearchListSyncServerPacket(be.getBlockPos(), be.getTechList()));
+            MinetorioNetwork.CHANNEL.sendToServer(new ResearchListSyncToServerPacket(be.getBlockPos(), be.getTechList()));
         }
     }
 }

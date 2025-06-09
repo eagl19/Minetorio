@@ -1,4 +1,4 @@
-package net.eagl.minetorio.network;
+package net.eagl.minetorio.network.server;
 
 import net.eagl.minetorio.block.entity.ResearcherBlockEntity;
 import net.eagl.minetorio.util.Technology;
@@ -13,16 +13,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
-public class ResearchListSyncServerPacket {
+public class ResearchListSyncToServerPacket {
     private final BlockPos pos;
     private final List<Technology> techList;
 
-    public ResearchListSyncServerPacket(BlockPos pos, List<Technology> techList) {
+    public ResearchListSyncToServerPacket(BlockPos pos, List<Technology> techList) {
         this.pos = pos;
         this.techList = techList;
     }
 
-    public static void encode(ResearchListSyncServerPacket msg, FriendlyByteBuf buf) {
+    public static void encode(ResearchListSyncToServerPacket msg, FriendlyByteBuf buf) {
         buf.writeBlockPos(msg.pos);
         buf.writeInt(msg.techList.size());
         for (Technology tech : msg.techList) {
@@ -30,7 +30,7 @@ public class ResearchListSyncServerPacket {
         }
     }
 
-    public static ResearchListSyncServerPacket decode(FriendlyByteBuf buf) {
+    public static ResearchListSyncToServerPacket decode(FriendlyByteBuf buf) {
         BlockPos pos = buf.readBlockPos();
         int size = buf.readInt();
         List<Technology> techList = new ArrayList<>();
@@ -38,10 +38,10 @@ public class ResearchListSyncServerPacket {
             Technology tech = TechnologyRegistry.get(buf.readUtf());
             techList.add(tech != null ? tech : Technology.EMPTY);
         }
-        return new ResearchListSyncServerPacket(pos, techList);
+        return new ResearchListSyncToServerPacket(pos, techList);
     }
 
-    public static void handle(ResearchListSyncServerPacket msg, Supplier<NetworkEvent.Context> ctx) {
+    public static void handle(ResearchListSyncToServerPacket msg, Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
             ServerPlayer player = ctx.get().getSender();
             if (player == null) return;
