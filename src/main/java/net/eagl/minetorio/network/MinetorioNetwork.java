@@ -28,11 +28,18 @@ public class MinetorioNetwork {
                 PatternLearnSyncPacket::handle,
                 Optional.of(NetworkDirection.PLAY_TO_CLIENT)
         );
+        CHANNEL.registerMessage(packetId++, ResearchListSyncServerPacket.class,
+                ResearchListSyncServerPacket::encode,
+                ResearchListSyncServerPacket::decode,
+                ResearchListSyncServerPacket::handle,
+                Optional.of(NetworkDirection.PLAY_TO_SERVER));
         CHANNEL.registerMessage(
-                packetId++, TwoWayTechnologyPacket.class,
-                TwoWayTechnologyPacket::toBytes,
-                TwoWayTechnologyPacket::new,
-                TwoWayTechnologyPacket::handle
+                packetId++,
+                ResearcherSyncToClientPacket.class,
+                ResearcherSyncToClientPacket::encode,
+                ResearcherSyncToClientPacket::decode,
+                ResearcherSyncToClientPacket::handle,
+                Optional.of(NetworkDirection.PLAY_TO_CLIENT)
         );
     }
 

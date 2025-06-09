@@ -4,9 +4,13 @@ import net.eagl.minetorio.block.MinetorioBlocks;
 import net.eagl.minetorio.block.entity.ResearcherBlockEntity;
 import net.eagl.minetorio.gui.slot.FlaskSlot;
 import net.eagl.minetorio.item.MinetorioItems;
+import net.eagl.minetorio.network.MinetorioNetwork;
+import net.eagl.minetorio.network.ResearchListSyncServerPacket;
+import net.eagl.minetorio.network.ResearcherSyncToClientPacket;
 import net.eagl.minetorio.util.InventorySlot;
 import net.eagl.minetorio.util.Technology;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
@@ -14,6 +18,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -28,6 +33,7 @@ public class ResearcherMenu extends AbstractContainerMenu {
 
     public ResearcherMenu(int id, Inventory playerInventory, BlockEntity entity) {
         super(MinetorioMenus.RESEARCHER_MENU.get(), id);
+
         this.access = ContainerLevelAccess.create(Objects.requireNonNull(entity.getLevel()), entity.getBlockPos());
 
         InventorySlot.addHotbarAndPlayerInventorySlots(this::addSlot, playerInventory, 0, 8, 140, 3, 9, 18, 18, 58);
@@ -35,8 +41,8 @@ public class ResearcherMenu extends AbstractContainerMenu {
         if (entity instanceof ResearcherBlockEntity researcherEntity) {
 
             be = researcherEntity;
-            ItemStackHandler container = Objects.requireNonNull(researcherEntity.getItemStackHandler(), "Researcher container is null");
 
+            ItemStackHandler container = Objects.requireNonNull(researcherEntity.getItemStackHandler(), "Researcher container is null");
 
             this.addSlot(new FlaskSlot(container, 0,  8,  98, MinetorioItems.FLASK_RED.get()));
             this.addSlot(new FlaskSlot(container, 1,  26, 98, MinetorioItems.FLASK_GREEN.get()));
@@ -156,4 +162,11 @@ public class ResearcherMenu extends AbstractContainerMenu {
         be.setTechList(pList);
     }
 
+    @Override
+    public void removed(@NotNull Player pPlayer) {
+        super.removed(pPlayer);
+        if (pPlayer.level().isClientSide) {
+            MinetorioNetwork.CHANNEL.sendToServer(new ResearchListSyncServerPacket(be.getBlockPos(), be.getTechList()));
+        }
+    }
 }

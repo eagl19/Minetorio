@@ -6,6 +6,7 @@ import net.eagl.minetorio.util.TechnologyRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
@@ -28,6 +29,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ResearcherBlockEntity extends BlockEntity implements MenuProvider {
 
@@ -134,7 +136,12 @@ public class ResearcherBlockEntity extends BlockEntity implements MenuProvider {
         tag.putInt("Water", waterStorage);
         tag.putInt("Lava", lavaStorage);
 
-        var idList = new net.minecraft.nbt.ListTag();
+        System.out.println("saveAdditional____________________________________");
+        System.out.println(techList.stream()
+                .map(Technology::getId)
+                .collect(Collectors.toList()));
+        System.out.println("___________________________________________");
+        var idList = new ListTag();
         for (Technology tech : techList) {
             CompoundTag techTag = new CompoundTag();
             techTag.putString("Id", tech.getId());
@@ -163,7 +170,6 @@ public class ResearcherBlockEntity extends BlockEntity implements MenuProvider {
         if (tag.contains("Lava", CompoundTag.TAG_INT)) {
             lavaStorage = tag.getInt("Lava");
         }
-        System.out.println("energy="+energy+",water="+waterStorage+", lava="+lavaStorage);
 
         if (tag.contains("TechListIds")) {
             techList.clear();
@@ -175,6 +181,11 @@ public class ResearcherBlockEntity extends BlockEntity implements MenuProvider {
                 System.out.println(id);
                 techList.add(tech != null ? tech : Technology.EMPTY);
             }
+            System.out.println("load____________________________________");
+            System.out.println(techList.stream()
+                    .map(Technology::getId)
+                    .collect(Collectors.toList()));
+            System.out.println("___________________________________________");
         }
     }
 
