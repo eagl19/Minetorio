@@ -16,6 +16,7 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -178,7 +179,13 @@ public class ResearcherScreen extends AbstractContainerScreen<ResearcherMenu> {
             );
         }
         if(pMouseX > leftPos + 8 && pMouseX < leftPos + 168 && pMouseY > topPos + 7 && pMouseY < topPos + 19) {
-            pGuiGraphics.renderTooltip(this.font, Component.literal(String.valueOf(learn)).withStyle(ChatFormatting.GREEN), pMouseX, pMouseY);
+            double progress = 0;
+            if (maxLearn > 0) {
+                progress = (double) learn / maxLearn * 100;
+            }
+            DecimalFormat df = new DecimalFormat("0.00");
+            String percentage = df.format(progress) + "%";
+            pGuiGraphics.renderTooltip(this.font, Component.literal(percentage).withStyle(ChatFormatting.GREEN), pMouseX, pMouseY);
         }
 
     }
