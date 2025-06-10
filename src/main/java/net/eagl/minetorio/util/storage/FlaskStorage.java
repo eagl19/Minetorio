@@ -1,10 +1,8 @@
 package net.eagl.minetorio.util.storage;
 
-import net.eagl.minetorio.item.MinetorioItems;
 import net.eagl.minetorio.util.FlasksField;
 import net.eagl.minetorio.util.enums.FlaskColor;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.ItemStackHandler;
 
