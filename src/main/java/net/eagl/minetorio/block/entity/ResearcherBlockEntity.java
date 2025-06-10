@@ -3,6 +3,7 @@ package net.eagl.minetorio.block.entity;
 import net.eagl.minetorio.gui.ResearcherMenu;
 import net.eagl.minetorio.util.Technology;
 import net.eagl.minetorio.util.TechnologyRegistry;
+import net.eagl.minetorio.util.enums.FluidType;
 import net.eagl.minetorio.util.storage.FlaskStorage;
 import net.eagl.minetorio.util.storage.MinetorioFluidStorage;
 import net.eagl.minetorio.util.storage.MinetorioEnergyStorage;
@@ -19,12 +20,10 @@ import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.IEnergyStorage;
-import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
@@ -69,17 +68,16 @@ public class ResearcherBlockEntity extends BlockEntity implements MenuProvider {
     private final MinetorioEnergyStorage energyStorage = new MinetorioEnergyStorage(MAX_ENERGY_STORAGE, MAX_RECEIVE_ENERGY, MAX_EXTRACT_ENERGY, START_ENERGY_STORAGE, this::setChanged);
     private final LazyOptional<IEnergyStorage> optionalEnergy = LazyOptional.of(() -> energyStorage);
 
-    private final MinetorioFluidStorage waterStorage = new MinetorioFluidStorage(MAX_WATER_STORAGE, this::setChanged);
-    private final LazyOptional<IFluidHandler> optionalWater = LazyOptional.of(() -> waterStorage);
+    private final MinetorioFluidStorage fluidStorage = new MinetorioFluidStorage(2,
+            new int[]{MAX_WATER_STORAGE, MAX_LAVA_STORAGE},
+            new FluidType[]{FluidType.WATER, FluidType.LAVA},
+            new int[]{START_WATER_STORAGE, START_LAVA_STORAGE},
+            this::setChanged);
+    private final LazyOptional<IFluidHandler> optionalFluid = LazyOptional.of(() -> fluidStorage);
 
-    private final MinetorioFluidStorage lavaStorage = new MinetorioFluidStorage(MAX_LAVA_STORAGE, this::setChanged);
-    private final LazyOptional<IFluidHandler> optionalLava = LazyOptional.of(() -> lavaStorage);
 
     public ResearcherBlockEntity(BlockPos pPos, BlockState pBlockState) {
         super(MinetorioBlockEntities.RESEARCHER_BLOCK_ENTITY.get(), pPos, pBlockState);
-
-        waterStorage.fill(new FluidStack(Fluids.WATER, START_WATER_STORAGE), IFluidHandler.FluidAction.EXECUTE);
-        lavaStorage.fill(new FluidStack(Fluids.LAVA, START_LAVA_STORAGE), IFluidHandler.FluidAction.EXECUTE);
         this.learn = 0;
         updateContainerData();
     }
@@ -91,10 +89,10 @@ public class ResearcherBlockEntity extends BlockEntity implements MenuProvider {
     public void updateContainerData() {
         containerData.set(ENERGY, energyStorage.getEnergyStored());
         containerData.set(MAX_ENERGY, energyStorage.getMaxEnergyStored());
-        containerData.set(WATER, waterStorage.getFluidInTank(0).getAmount());
-        containerData.set(MAX_WATER, waterStorage.getTankCapacity(0));
-        containerData.set(LAVA, lavaStorage.getFluidInTank(0).getAmount());
-        containerData.set(MAX_LAVA, lavaStorage.getTankCapacity(0));
+        containerData.set(WATER, fluidStorage.getFluidInTank(FluidType.WATER).getAmount());
+        containerData.set(MAX_WATER, fluidStorage.getTankCapacity(FluidType.WATER));
+        containerData.set(LAVA, fluidStorage.getFluidInTank(FluidType.LAVA).getAmount());
+        containerData.set(MAX_LAVA, fluidStorage.getTankCapacity(FluidType.LAVA));
         containerData.set(LEARN, learn);
         containerData.set(MAX_LEARN, maxLearn);
     }
@@ -109,7 +107,7 @@ public class ResearcherBlockEntity extends BlockEntity implements MenuProvider {
             return optionalEnergy.cast();
         }
         if (cap == ForgeCapabilities.FLUID_HANDLER) {
-            return optionalWater.cast();
+            return optionalFluid.cast();
         }
         return super.getCapability(cap, side);
     }
@@ -119,8 +117,7 @@ public class ResearcherBlockEntity extends BlockEntity implements MenuProvider {
         super.invalidateCaps();
         optionalHandler.invalidate();
         optionalEnergy.invalidate();
-        optionalWater.invalidate();
-        optionalLava.invalidate();
+        optionalFluid.invalidate();
     }
 
 
@@ -133,8 +130,8 @@ public class ResearcherBlockEntity extends BlockEntity implements MenuProvider {
 
         tag.put("Energy", energyStorage.serializeNBT());
 
-        tag.put("Water", waterStorage.serializeNBT());
-        tag.put("Lava", lavaStorage.serializeNBT());
+        tag.put("Fluid", fluidStorage.serializeNBT());
+
         tag.putInt("Learn", learn);
 
         var idList = new ListTag();
@@ -157,11 +154,8 @@ public class ResearcherBlockEntity extends BlockEntity implements MenuProvider {
             energyStorage.deserializeNBT(tag.get("Energy"));
         }
 
-        if (tag.contains("Water")) {
-            waterStorage.deserializeNBT(tag.getCompound("Water"));
-        }
-        if (tag.contains("Lava")) {
-            lavaStorage.deserializeNBT(tag.getCompound("Lava"));
+        if (tag.contains("Fluid")) {
+            fluidStorage.deserializeNBT(tag.getCompound("Fluid"));
         }
         if (tag.contains("Learn", CompoundTag.TAG_INT)) {
             learn = tag.getInt("Learn");
@@ -219,8 +213,8 @@ public class ResearcherBlockEntity extends BlockEntity implements MenuProvider {
     public void tickServer() {
         boolean change = false;
         int energy = energyStorage.receiveEnergy(1,false);
-        int water = waterStorage.fill(new FluidStack(Fluids.WATER, 1), IFluidHandler.FluidAction.EXECUTE);
-        int lava = lavaStorage.fill(new FluidStack(Fluids.LAVA,1), IFluidHandler.FluidAction.EXECUTE);
+        int water = fluidStorage.fill(FluidType.WATER, 1, IFluidHandler.FluidAction.EXECUTE);
+        int lava = fluidStorage.fill(FluidType.LAVA ,1, IFluidHandler.FluidAction.EXECUTE);
         if(learn<maxLearn){
             learn++;
             change = true;
