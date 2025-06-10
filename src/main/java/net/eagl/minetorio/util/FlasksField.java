@@ -44,7 +44,7 @@ public class FlasksField {
     }
 
     public static ItemStack getFlask(FlaskColor color){
-        return new ItemStack(getFlaskItemByColor(color));
+        return new ItemStack(getFlaskItemByColor(color),0);
     }
 
     public static Item getFlaskItemByColor(FlaskColor color) {

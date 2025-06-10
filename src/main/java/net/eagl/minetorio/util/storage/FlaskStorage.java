@@ -39,29 +39,9 @@ public class FlaskStorage extends ItemStackHandler {
 
     public void setFlaskAmount(FlaskColor color, int amount) {
         int slot = color.ordinal();
-        ItemStack flaskStack = getFlaskStack(color);
+        ItemStack flaskStack = FlasksField.getFlask(color);
         flaskStack.setCount(amount);
         setStackInSlot(slot, flaskStack);
-    }
-
-    private ItemStack getFlaskStack(FlaskColor color) {
-        Item item;
-        switch (color) {
-            case RED -> item = MinetorioItems.FLASK_RED.get();
-            case GREEN -> item = MinetorioItems.FLASK_GREEN.get();
-            case BLACK -> item = MinetorioItems.FLASK_BLACK.get();
-            case PURPLE -> item = MinetorioItems.FLASK_PURPLE.get();
-            case PINK -> item = MinetorioItems.FLASK_PINK.get();
-            case WHITE -> item = MinetorioItems.FLASK_WHITE.get();
-            case BLUE -> item = MinetorioItems.FLASK_BLUE.get();
-            case YELLOW -> item = MinetorioItems.FLASK_YELLOW.get();
-            case BROWN -> item = MinetorioItems.FLASK_BROWN.get();
-            case CYAN -> item = MinetorioItems.FLASK_CYAN.get();
-            case ORANGE -> item = MinetorioItems.FLASK_ORANGE.get();
-            case GRAY -> item = MinetorioItems.FLASK_GRAY.get();
-            default -> throw new IllegalArgumentException("Unknown flask color: " + color);
-        }
-        return new ItemStack(item, 0);
     }
 
     public void loadFromFlasksField(FlasksField flasksField) {
