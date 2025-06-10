@@ -65,14 +65,13 @@ public class ResearcherBlockEntity extends BlockEntity implements MenuProvider {
     private int learn;
     private int maxLearn;
 
-    private final MinetorioEnergyStorage energyStorage = new MinetorioEnergyStorage(MAX_ENERGY_STORAGE, MAX_RECEIVE_ENERGY, MAX_EXTRACT_ENERGY, START_ENERGY_STORAGE, this::setChanged);
+    private final MinetorioEnergyStorage energyStorage = new MinetorioEnergyStorage(MAX_ENERGY_STORAGE,
+            MAX_RECEIVE_ENERGY, MAX_EXTRACT_ENERGY, START_ENERGY_STORAGE, this::setChanged);
     private final LazyOptional<IEnergyStorage> optionalEnergy = LazyOptional.of(() -> energyStorage);
 
     private final MinetorioFluidStorage fluidStorage = new MinetorioFluidStorage(2,
-            new int[]{MAX_WATER_STORAGE, MAX_LAVA_STORAGE},
-            new FluidType[]{FluidType.WATER, FluidType.LAVA},
-            new int[]{START_WATER_STORAGE, START_LAVA_STORAGE},
-            this::setChanged);
+            new int[]{MAX_WATER_STORAGE, MAX_LAVA_STORAGE}, new FluidType[]{FluidType.WATER, FluidType.LAVA},
+            new int[]{START_WATER_STORAGE, START_LAVA_STORAGE}, this::setChanged);
     private final LazyOptional<IFluidHandler> optionalFluid = LazyOptional.of(() -> fluidStorage);
 
 
