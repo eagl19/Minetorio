@@ -1,7 +1,6 @@
 package net.eagl.minetorio.util;
 
 import net.eagl.minetorio.item.MinetorioItems;
-import net.minecraft.world.item.ItemStack;
 
 import java.util.*;
 
@@ -26,9 +25,7 @@ public class TechnologyRegistry {
                         "void",
                         MinetorioItems.PATTERN_VOID.get(),
                         List.of(),
-                        List.of(
-                                new ItemStack(MinetorioItems.FLASK_RED.get(),1)
-                        ),
+                        new FlasksField(1,0,0,0,0,0,0,0,0,0,0,0),
                         1000,
                         3,
                         10,
@@ -40,11 +37,7 @@ public class TechnologyRegistry {
                         "fire",
                         MinetorioItems.PATTERN_FIRE.get(),
                         List.of("void"),
-                        List.of(
-                                new ItemStack(MinetorioItems.FLASK_RED.get(), 3),
-                                new ItemStack(MinetorioItems.FLASK_GREEN.get(), 2),
-                                new ItemStack(MinetorioItems.FLASK_BLACK.get(), 1)
-                        ),
+                        new FlasksField(3,2,1,0,0,0,0,0,0,0,0,0),
                         10000,
                         3,
                         160,
@@ -56,11 +49,7 @@ public class TechnologyRegistry {
                         "water",
                         MinetorioItems.PATTERN_WATER.get(),
                         List.of("void"),
-                        List.of(
-                                new ItemStack(MinetorioItems.FLASK_RED.get(), 3),
-                                new ItemStack(MinetorioItems.FLASK_GREEN.get(), 2),
-                                new ItemStack(MinetorioItems.FLASK_BLACK.get(), 1)
-                        ),
+                        new FlasksField(3,2,1,0,0,0,0,0,0,0,0,0),
                         15000,
                         3,
                         160,
@@ -72,11 +61,7 @@ public class TechnologyRegistry {
                         "air",
                         MinetorioItems.PATTERN_AIR.get(),
                         List.of("void"),
-                        List.of(
-                                new ItemStack(MinetorioItems.FLASK_RED.get(), 3),
-                                new ItemStack(MinetorioItems.FLASK_GREEN.get(), 2),
-                                new ItemStack(MinetorioItems.FLASK_BLACK.get(), 1)
-                        ),
+                        new FlasksField(3,2,1,0,0,0,0,0,0,0,0,0),
                         15000,
                         3,
                         160,
@@ -88,11 +73,7 @@ public class TechnologyRegistry {
                         "earth",
                         MinetorioItems.PATTERN_EARTH.get(),
                         List.of("void"),
-                        List.of(
-                                new ItemStack(MinetorioItems.FLASK_RED.get(), 3),
-                                new ItemStack(MinetorioItems.FLASK_GREEN.get(), 2),
-                                new ItemStack(MinetorioItems.FLASK_BLACK.get(), 1)
-                        ),
+                        new FlasksField(3,2,1,0,0,0,0,0,0,0,0,0),
                         15000,
                         3,
                         160,
@@ -104,20 +85,7 @@ public class TechnologyRegistry {
                         "cloud",
                         MinetorioItems.PATTERN_CLOUD.get(),
                         List.of("fire","water"),
-                        List.of(
-                                new ItemStack(MinetorioItems.FLASK_RED.get(), 12),
-                                new ItemStack(MinetorioItems.FLASK_GREEN.get(), 11),
-                                new ItemStack(MinetorioItems.FLASK_BLACK.get(), 10),
-                                new ItemStack(MinetorioItems.FLASK_PURPLE.get(), 9),
-                                new ItemStack(MinetorioItems.FLASK_PINK.get(), 8),
-                                new ItemStack(MinetorioItems.FLASK_WHITE.get(), 7),
-                                new ItemStack(MinetorioItems.FLASK_BLUE.get(), 6),
-                                new ItemStack(MinetorioItems.FLASK_YELLOW.get(), 5),
-                                new ItemStack(MinetorioItems.FLASK_BROWN.get(), 4),
-                                new ItemStack(MinetorioItems.FLASK_CYAN.get(), 3),
-                                new ItemStack(MinetorioItems.FLASK_ORANGE.get(), 2),
-                                new ItemStack(MinetorioItems.FLASK_GRAY.get(), 1)
-                        ),
+                        new FlasksField(12,11,10,9,8,7,6,5,4,3,2,1),
                         400000,
                         3,
                         310,
@@ -129,20 +97,7 @@ public class TechnologyRegistry {
                         "snowflake",
                         MinetorioItems.PATTERN_SNOWFLAKE.get(),
                         List.of("cloud"),
-                        List.of(
-                                new ItemStack(MinetorioItems.FLASK_RED.get(), 31),
-                                new ItemStack(MinetorioItems.FLASK_GREEN.get(), 21),
-                                new ItemStack(MinetorioItems.FLASK_BLACK.get(), 10),
-                                new ItemStack(MinetorioItems.FLASK_PURPLE.get(), 9),
-                                new ItemStack(MinetorioItems.FLASK_PINK.get(), 8),
-                                new ItemStack(MinetorioItems.FLASK_GREEN.get(), 7),
-                                new ItemStack(MinetorioItems.FLASK_GREEN.get(), 6),
-                                new ItemStack(MinetorioItems.FLASK_GREEN.get(), 5),
-                                new ItemStack(MinetorioItems.FLASK_GREEN.get(), 4),
-                                new ItemStack(MinetorioItems.FLASK_GREEN.get(), 3),
-                                new ItemStack(MinetorioItems.FLASK_GREEN.get(), 2),
-                                new ItemStack(MinetorioItems.FLASK_BLACK.get(), 1)
-                        ),
+                        new FlasksField(31,21,10,9,8,7,6,5,4,3,2,1),
                         13000,
                         5,
                         450,
@@ -154,20 +109,7 @@ public class TechnologyRegistry {
                         "snow",
                         MinetorioItems.PATTERN_SNOW.get(),
                         List.of("snowflake"),
-                        List.of(
-                                new ItemStack(MinetorioItems.FLASK_RED.get(), 31),
-                                new ItemStack(MinetorioItems.FLASK_GREEN.get(), 21),
-                                new ItemStack(MinetorioItems.FLASK_BLACK.get(), 10),
-                                new ItemStack(MinetorioItems.FLASK_PURPLE.get(), 9),
-                                new ItemStack(MinetorioItems.FLASK_PINK.get(), 8),
-                                new ItemStack(MinetorioItems.FLASK_GREEN.get(), 7),
-                                new ItemStack(MinetorioItems.FLASK_GREEN.get(), 6),
-                                new ItemStack(MinetorioItems.FLASK_GREEN.get(), 5),
-                                new ItemStack(MinetorioItems.FLASK_GREEN.get(), 4),
-                                new ItemStack(MinetorioItems.FLASK_GREEN.get(), 3),
-                                new ItemStack(MinetorioItems.FLASK_GREEN.get(), 2),
-                                new ItemStack(MinetorioItems.FLASK_BLACK.get(), 1)
-                        ),
+                        new FlasksField(31,21,10,9,8,7,6,5,4,3,2,1),
                         13000,
                         5,
                         610,
@@ -179,11 +121,7 @@ public class TechnologyRegistry {
                         "sun",
                         MinetorioItems.PATTERN_SUN.get(),
                         List.of("fire"),
-                        List.of(
-                                new ItemStack(MinetorioItems.FLASK_RED.get(), 3),
-                                new ItemStack(MinetorioItems.FLASK_GREEN.get(), 2),
-                                new ItemStack(MinetorioItems.FLASK_BLACK.get(), 1)
-                        ),
+                        new FlasksField(3,2,1,0,0,0,0,0,0,0,0,0),
                         10000,
                         3,
                         310,

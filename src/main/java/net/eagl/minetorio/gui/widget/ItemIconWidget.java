@@ -10,10 +10,17 @@ import org.jetbrains.annotations.NotNull;
 
 public class ItemIconWidget extends AbstractWidget {
     private final ItemStack stack;
+    private final Runnable onClickIcon;
 
-    public ItemIconWidget(int x, int y, ItemStack stack) {
+    public ItemIconWidget(int x, int y, ItemStack stack, Runnable iconAction) {
         super(x, y, 16, 16, Component.empty());
         this.stack = stack;
+        this.onClickIcon = iconAction;
+    }
+
+    @Override
+    public void onClick(double pMouseX, double pMouseY) {
+        onClickIcon.run();
     }
 
     @Override

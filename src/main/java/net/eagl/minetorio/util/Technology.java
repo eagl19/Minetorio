@@ -7,7 +7,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Collections;
@@ -20,7 +19,7 @@ public class Technology {
     private final String id;
     private final Item displayIcon;
     private final List<String> prerequisites;
-    private final List<ItemStack> cost;
+    private final FlasksField cost;
     private final int time;
     private final int count;
     private final int x;
@@ -31,7 +30,7 @@ public class Technology {
             "empty",
             MinetorioItems.PATTERN_EMPTY.get(),
             Collections.emptyList(),
-            Collections.emptyList(),
+            FlasksField.EMPTY,
             0,
             0,
             0,
@@ -51,7 +50,7 @@ public class Technology {
     }
 
 
-    public Technology(String id, Item displayIcon, List<String> prerequisites, List<ItemStack> cost, int time, int count, int x, int y) {
+    public Technology(String id, Item displayIcon, List<String> prerequisites, FlasksField cost, int time, int count, int x, int y) {
         this.id = id;
         this.displayIcon = displayIcon;
         this.prerequisites = prerequisites;
@@ -117,8 +116,13 @@ public class Technology {
 
     public Component getFormattedCost() {
         return Component.literal(
-                cost.stream()
-                        .map(s -> s.getCount() + "x " + s.getDisplayName().getString())
+                cost.getAll().entrySet().stream()
+                        .filter(entry -> entry.getValue() > 0)
+                        .map(entry -> {
+                            int count = entry.getValue();
+                            String name = cost.getFlask(entry.getKey()).getHoverName().getString();
+                            return count + "x " + name;
+                        })
                         .reduce((a, b) -> a + ", " + b)
                         .orElse("Free")
         );
@@ -137,7 +141,7 @@ public class Technology {
         return prerequisites;
     }
 
-    public List<ItemStack> getCost() {
+    public FlasksField getCost() {
         return cost;
     }
 

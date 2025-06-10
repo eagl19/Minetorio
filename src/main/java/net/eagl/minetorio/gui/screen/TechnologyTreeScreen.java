@@ -3,8 +3,10 @@ package net.eagl.minetorio.gui.screen;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.eagl.minetorio.gui.ResearcherMenu;
 import net.eagl.minetorio.util.Clock;
+import net.eagl.minetorio.util.FlasksField;
 import net.eagl.minetorio.util.Technology;
 import net.eagl.minetorio.util.TechnologyRegistry;
+import net.eagl.minetorio.util.enums.FlaskColor;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -21,6 +23,7 @@ import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class TechnologyTreeScreen extends Screen {
     private static final ResourceLocation NODE_TEXTURE = ResourceLocation.fromNamespaceAndPath("minetorio", "textures/gui/tech.png");
@@ -213,27 +216,31 @@ public class TechnologyTreeScreen extends Screen {
                         .withStyle(ChatFormatting.DARK_RED),
                 0, 0);
 
-        List<ItemStack> cost = techDetails.getCost();
-        if (cost != null && !cost.isEmpty()) {
-            int pairCount = (cost.size() + 1) / 2;
-            for (int row = 0; row < pairCount; row++) {
-                int leftIndex = row * 2;
-                int rightIndex = leftIndex + 1;
-                int maxWidth = TECH_DETAILS_TEXTURE_WIDTH - 80;
-                int yPos = 12 * row + 12;
+        FlasksField cost = techDetails.getCost();
+        if (cost != null && !cost.equals(FlasksField.EMPTY)) {
+            int rendered = 0;
+            String tip;
 
-                String tip;
-                if (rightIndex < cost.size()) {
-                    maxWidth = TECH_DETAILS_TEXTURE_WIDTH / 2 - 40;
-                    tip = renderCostItem(guiGraphics, cost.get(rightIndex), TECH_DETAILS_TEXTURE_WIDTH / 2 - 25, yPos, maxWidth, adjustedMouseX, adjustedMouseY);
-                    if (!tip.isEmpty()){
-                        tooltip = tip;
-                    }
-                }
-                tip = renderCostItem(guiGraphics, cost.get(leftIndex), 2, yPos, maxWidth, adjustedMouseX, adjustedMouseY);
-                if (!tip.isEmpty()){
+            for (Map.Entry<FlaskColor, Integer> entry : cost.getAll().entrySet()) {
+                int amount = entry.getValue();
+                if (amount <= 0) continue;
+
+                int row = rendered / 2;
+                int dx = (rendered % 2 == 0) ? 2 : TECH_DETAILS_TEXTURE_WIDTH / 2 - 25;
+                int dy = row * 12 + 12;
+                int maxWidth = (rendered % 2 == 0)
+                        ? TECH_DETAILS_TEXTURE_WIDTH - 80
+                        : TECH_DETAILS_TEXTURE_WIDTH / 2 - 40;
+
+                ItemStack stack = cost.getFlask(entry.getKey());
+                stack.setCount(amount);
+
+                tip = renderCostItem(guiGraphics, stack, dx, dy, maxWidth, adjustedMouseX, adjustedMouseY);
+                if (!tip.isEmpty()) {
                     tooltip = tip;
                 }
+
+                rendered++;
             }
         }
 
@@ -359,17 +366,30 @@ public class TechnologyTreeScreen extends Screen {
         guiGraphics.blit(FLASK_FIELD, 0, 0, 0, 0, 108, 36, 108, 36);
 
         int flaskCount = 0;
-        for (ItemStack baseCost : tech.getCost()) {
-            String text = String.valueOf(baseCost.getCount());
+        FlasksField flasksField = tech.getCost();
+        for (Map.Entry<FlaskColor, Integer> entry : flasksField.getAll().entrySet()) {
+            int amount = entry.getValue();
+            if (amount <= 0) continue;
+
+            FlaskColor color = entry.getKey();
+            ItemStack flaskStack = flasksField.getFlask(color);
+            flaskStack.setCount(amount);
+
             int renderX = 1 + (flaskCount % 6) * 18;
             int renderY = flaskCount < 6 ? 1 : 19;
-            renderItem(guiGraphics, baseCost, renderX, renderY, 1);
+
+            renderItem(guiGraphics, flaskStack, renderX, renderY, 1);
+
+            String text = String.valueOf(amount);
             drawString(guiGraphics, text,
                     Math.round((flaskCount % 6 + 1) * 18 - this.font.width(text) * 0.75f) - 1,
                     renderY + 17 - Math.round(this.font.lineHeight * 0.75f),
-                    300, 0.75f);
+                    300, 0.75f
+            );
+
             flaskCount++;
         }
+
 
         new Clock(guiGraphics, 128, 18, tech.getTime()).render();
         drawString(guiGraphics, "x " + tech.getCount(), 152, 18 - this.font.lineHeight / 2, 0, 1);

@@ -41,22 +41,30 @@ public class ResearcherScreen extends AbstractContainerScreen<ResearcherMenu> {
     @Override
     protected void init() {
         super.init();
-
+        List<Technology> techList = new ArrayList<>(getTechList());
         this.addRenderableWidget(new ItemIconWidget(
                 leftPos + 8,
                 topPos + 60,
-                new ItemStack(getTechList().get(0).getDisplayIcon())
+                new ItemStack(techList.get(0).getDisplayIcon()),
+                () -> openFlaskAction(0, techList.get(0))
         ));
-
         for (int i = 1; i < 10; i++) {
-            Technology currentTech = getTechList().get(i);
+            Technology currentTech = techList.get(i);
             int currentI = i;
-            this.addRenderableWidget(new RemovableItemIcon(
-                    leftPos - 10 + i * 18, topPos + 23,
-                    new ItemStack(currentTech.getDisplayIcon()),
-                    () -> openFlaskAction(currentI, currentTech),
-                    () -> removeFlaskAction(currentI)
-            ));
+            if(currentTech.equals(Technology.EMPTY)){
+                this.addRenderableWidget(new ItemIconWidget(
+                        leftPos - 10 + i * 18, topPos + 23,
+                        new ItemStack(currentTech.getDisplayIcon()),
+                        () -> openFlaskAction(currentI, currentTech)
+                ));
+            }else {
+                this.addRenderableWidget(new RemovableItemIcon(
+                        leftPos - 10 + i * 18, topPos + 23,
+                        new ItemStack(currentTech.getDisplayIcon()),
+                        () -> openFlaskAction(currentI, currentTech),
+                        () -> removeFlaskAction(currentI)
+                ));
+            }
         }
     }
 
@@ -86,9 +94,9 @@ public class ResearcherScreen extends AbstractContainerScreen<ResearcherMenu> {
         }
     }
 
-    private void openFlaskAction(int tech, Technology currentTech) {
+    private void openFlaskAction(int techIndex, Technology currentTech) {
 
-        Minecraft.getInstance().setScreen(new TechnologyTreeScreen(menu, this.playerInventory, this.title, currentTech, tech));
+        Minecraft.getInstance().setScreen(new TechnologyTreeScreen(menu, this.playerInventory, this.title, currentTech, techIndex));
 
     }
 
