@@ -43,24 +43,25 @@ public class FlasksField {
         return flasks.getOrDefault(color, 0);
     }
 
-    public ItemStack getFlask(FlaskColor color){
-        Item item;
-        switch (color) {
-            case RED -> item = MinetorioItems.FLASK_RED.get();
-            case GREEN -> item = MinetorioItems.FLASK_GREEN.get();
-            case BLACK -> item = MinetorioItems.FLASK_BLACK.get();
-            case PURPLE -> item = MinetorioItems.FLASK_PURPLE.get();
-            case PINK -> item = MinetorioItems.FLASK_PINK.get();
-            case WHITE -> item = MinetorioItems.FLASK_WHITE.get();
-            case BLUE -> item = MinetorioItems.FLASK_BLUE.get();
-            case YELLOW -> item = MinetorioItems.FLASK_YELLOW.get();
-            case BROWN -> item = MinetorioItems.FLASK_BROWN.get();
-            case CYAN -> item = MinetorioItems.FLASK_CYAN.get();
-            case ORANGE -> item = MinetorioItems.FLASK_ORANGE.get();
-            case GRAY -> item = MinetorioItems.FLASK_GRAY.get();
-            default -> throw new IllegalArgumentException("Unknown flask color: " + color);
-        }
-        return new ItemStack(item);
+    public static ItemStack getFlask(FlaskColor color){
+        return new ItemStack(getFlaskItemByColor(color));
+    }
+
+    public static Item getFlaskItemByColor(FlaskColor color) {
+        return switch (color) {
+            case RED -> MinetorioItems.FLASK_RED.get();
+            case GREEN -> MinetorioItems.FLASK_GREEN.get();
+            case BLACK -> MinetorioItems.FLASK_BLACK.get();
+            case PURPLE -> MinetorioItems.FLASK_PURPLE.get();
+            case PINK -> MinetorioItems.FLASK_PINK.get();
+            case WHITE -> MinetorioItems.FLASK_WHITE.get();
+            case BLUE -> MinetorioItems.FLASK_BLUE.get();
+            case YELLOW -> MinetorioItems.FLASK_YELLOW.get();
+            case BROWN -> MinetorioItems.FLASK_BROWN.get();
+            case CYAN -> MinetorioItems.FLASK_CYAN.get();
+            case ORANGE -> MinetorioItems.FLASK_ORANGE.get();
+            case GRAY -> MinetorioItems.FLASK_GRAY.get();
+        };
     }
 
     public EnumMap<FlaskColor, Integer> getAll() {

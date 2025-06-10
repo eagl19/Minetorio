@@ -3,12 +3,13 @@ package net.eagl.minetorio.gui;
 import net.eagl.minetorio.block.MinetorioBlocks;
 import net.eagl.minetorio.block.entity.ResearcherBlockEntity;
 import net.eagl.minetorio.gui.slot.FlaskSlot;
-import net.eagl.minetorio.item.MinetorioItems;
 import net.eagl.minetorio.network.MinetorioNetwork;
 import net.eagl.minetorio.network.server.ResearchListSyncToServerPacket;
 import net.eagl.minetorio.network.client.ResearchListSyncToClientPacket;
 import net.eagl.minetorio.util.InventorySlot;
 import net.eagl.minetorio.util.Technology;
+import net.eagl.minetorio.util.enums.FlaskColor;
+import net.eagl.minetorio.util.storage.FlaskStorage;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
@@ -17,12 +18,13 @@ import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Objects;
+
+import static net.eagl.minetorio.util.FlasksField.getFlaskItemByColor;
 
 public class ResearcherMenu extends AbstractContainerMenu {
 
@@ -42,22 +44,21 @@ public class ResearcherMenu extends AbstractContainerMenu {
 
             be = researcherEntity;
 
-            ItemStackHandler container = Objects.requireNonNull(researcherEntity.getItemStackHandler(), "Researcher container is null");
+            FlaskStorage container = researcherEntity.getItemStackHandler();
 
-            this.addSlot(new FlaskSlot(container, 0,  8,  98, MinetorioItems.FLASK_RED.get()));
-            this.addSlot(new FlaskSlot(container, 1,  26, 98, MinetorioItems.FLASK_GREEN.get()));
-            this.addSlot(new FlaskSlot(container, 2,  44, 98, MinetorioItems.FLASK_BLACK.get()));
-            this.addSlot(new FlaskSlot(container, 3,  62, 98, MinetorioItems.FLASK_PURPLE.get()));
-            this.addSlot(new FlaskSlot(container, 4,  80, 98, MinetorioItems.FLASK_PINK.get()));
-            this.addSlot(new FlaskSlot(container, 5,  98, 98, MinetorioItems.FLASK_WHITE.get()));
+            int startX = 8;
+            int startY = 98;
+            int slotSpacingX = 18;
+            int slotsPerRow = 6;
 
-            this.addSlot(new FlaskSlot(container, 6,  8,  116, MinetorioItems.FLASK_BLUE.get()));
-            this.addSlot(new FlaskSlot(container, 7,  26, 116, MinetorioItems.FLASK_YELLOW.get()));
-            this.addSlot(new FlaskSlot(container, 8,  44, 116, MinetorioItems.FLASK_BROWN.get()));
-            this.addSlot(new FlaskSlot(container, 9,  62, 116, MinetorioItems.FLASK_CYAN.get()));
-            this.addSlot(new FlaskSlot(container, 10, 80, 116, MinetorioItems.FLASK_ORANGE.get()));
-            this.addSlot(new FlaskSlot(container, 11, 98, 116, MinetorioItems.FLASK_GRAY.get()));
+            FlaskColor[] colors = FlaskColor.values();
 
+            for (int i = 0; i < colors.length; i++) {
+                int x = startX + (i % slotsPerRow) * slotSpacingX;
+                int y = startY + (i / slotsPerRow) * 18;
+                Item flaskItem = getFlaskItemByColor(colors[i]);
+                this.addSlot(new FlaskSlot(container, i, x, y, flaskItem));
+            }
 
             this.data = researcherEntity.getContainerData();
             addDataSlots(this.data);

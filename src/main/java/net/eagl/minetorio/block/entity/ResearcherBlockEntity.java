@@ -3,6 +3,7 @@ package net.eagl.minetorio.block.entity;
 import net.eagl.minetorio.gui.ResearcherMenu;
 import net.eagl.minetorio.util.Technology;
 import net.eagl.minetorio.util.TechnologyRegistry;
+import net.eagl.minetorio.util.storage.FlaskStorage;
 import net.eagl.minetorio.util.storage.MinetorioFluidStorage;
 import net.eagl.minetorio.util.storage.MinetorioEnergyStorage;
 import net.minecraft.core.BlockPos;
@@ -58,19 +59,10 @@ public class ResearcherBlockEntity extends BlockEntity implements MenuProvider {
     public static final int START_LAVA_STORAGE = 5000;
 
     private final List<Technology> techList = new ArrayList<>(Collections.nCopies(10, Technology.EMPTY));
-    private final ItemStackHandler itemHandler = createItemHandler();
+    private final FlaskStorage itemHandler = new FlaskStorage(this::setChanged);
     private final LazyOptional<IItemHandler> optionalHandler = LazyOptional.of(() -> itemHandler);
 
     private final ContainerData containerData = new SimpleContainerData(8);
-
-    private ItemStackHandler createItemHandler() {
-        return new ItemStackHandler(12) {
-            @Override
-            protected void onContentsChanged(int slot) {
-                setChanged();
-            }
-        };
-    }
 
     private int learn;
     private int maxLearn;
@@ -201,7 +193,7 @@ public class ResearcherBlockEntity extends BlockEntity implements MenuProvider {
         return new ResearcherMenu(pContainerId, pPlayerInventory, this);
     }
 
-    public ItemStackHandler getItemStackHandler() {
+    public FlaskStorage getItemStackHandler() {
         return itemHandler;
     }
 
