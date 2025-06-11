@@ -174,6 +174,10 @@ public class ResearcherMenu extends AbstractContainerMenu {
         be.getResearchPlan().setPlan(pList);
     }
 
+    public ResearcherBlockEntity getBlockEntity(){
+        return be;
+    }
+
     @Override
     public void removed(@NotNull Player pPlayer) {
         super.removed(pPlayer);

@@ -70,8 +70,12 @@ public class Technology {
         return Component.translatable("pattern.minetorio." + key.getPath() + ".benefit").withStyle(ChatFormatting.BLUE);
     }
 
+    public int getTotalTime(){
+        return time * count;
+    }
+
     public MutableComponent getTotalTimeAsString() {
-        int totalSeconds = time * count / 20;
+        int totalSeconds = getTotalTime() / 20;
         int hours = totalSeconds / 3600;
         int minutes = (totalSeconds % 3600) / 60;
         int seconds = totalSeconds % 60;

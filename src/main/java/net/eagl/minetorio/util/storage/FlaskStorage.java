@@ -65,5 +65,11 @@ public class FlaskStorage extends ItemStackHandler {
                 .build();
     }
 
+    public boolean consumeFlasks(FlaskColor color, int amount) {
+        int current = getFlaskAmount(color);
+        if (current <= amount) return false;
+        setFlaskAmount(color, current - amount);
+        return true;
+    }
 }
 

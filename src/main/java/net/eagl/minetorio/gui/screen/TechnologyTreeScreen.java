@@ -2,6 +2,8 @@ package net.eagl.minetorio.gui.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.eagl.minetorio.gui.ResearcherMenu;
+import net.eagl.minetorio.network.MinetorioNetwork;
+import net.eagl.minetorio.network.server.ResearchListSyncToServerPacket;
 import net.eagl.minetorio.util.Clock;
 import net.eagl.minetorio.util.FlasksField;
 import net.eagl.minetorio.util.Technology;
@@ -499,6 +501,7 @@ public class TechnologyTreeScreen extends Screen {
                 return 0;
             });
             menu.setTechList(list);
+            MinetorioNetwork.CHANNEL.sendToServer(new ResearchListSyncToServerPacket(menu.getBlockEntity().getBlockPos(), menu.getBlockEntity().getResearchPlan().getPlan()));
         }
         Minecraft.getInstance().setScreen(new ResearcherScreen(menu, playerInventory, researcherTitle));
     }

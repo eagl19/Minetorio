@@ -1,7 +1,9 @@
 package net.eagl.minetorio.block.entity;
 
 import net.eagl.minetorio.gui.ResearcherMenu;
+import net.eagl.minetorio.util.Leaner;
 import net.eagl.minetorio.util.ResearchPlan;
+import net.eagl.minetorio.util.Technology;
 import net.eagl.minetorio.util.enums.FluidType;
 import net.eagl.minetorio.util.storage.FlaskStorage;
 import net.eagl.minetorio.util.storage.MinetorioFluidStorage;
@@ -50,14 +52,13 @@ public class ResearcherBlockEntity extends BlockEntity implements MenuProvider {
     public static final int START_WATER_STORAGE = 5000;
     public static final int START_LAVA_STORAGE = 5000;
 
-    private final ResearchPlan researchPlan = new ResearchPlan(this::setChanged);
+    private final ResearchPlan researchPlan = new ResearchPlan(this::setChanged, this::onChange);
     private final FlaskStorage itemHandler = new FlaskStorage(this::setChanged);
     private final LazyOptional<IItemHandler> optionalHandler = LazyOptional.of(() -> itemHandler);
 
     private final ContainerData containerData = new SimpleContainerData(8);
 
-    private int learn;
-    private int maxLearn;
+   private Leaner learnTechnology = new Leaner(Technology.EMPTY, this::setChanged);
 
     private final MinetorioEnergyStorage energyStorage = new MinetorioEnergyStorage(MAX_ENERGY_STORAGE,
             MAX_RECEIVE_ENERGY, MAX_EXTRACT_ENERGY, START_ENERGY_STORAGE, this::setChanged);
@@ -71,7 +72,6 @@ public class ResearcherBlockEntity extends BlockEntity implements MenuProvider {
 
     public ResearcherBlockEntity(BlockPos pPos, BlockState pBlockState) {
         super(MinetorioBlockEntities.RESEARCHER_BLOCK_ENTITY.get(), pPos, pBlockState);
-        this.learn = 0;
         updateContainerData();
     }
 
@@ -86,8 +86,8 @@ public class ResearcherBlockEntity extends BlockEntity implements MenuProvider {
         containerData.set(MAX_WATER, fluidStorage.getTankCapacity(FluidType.WATER));
         containerData.set(LAVA, fluidStorage.getFluidInTank(FluidType.LAVA).getAmount());
         containerData.set(MAX_LAVA, fluidStorage.getTankCapacity(FluidType.LAVA));
-        containerData.set(LEARN, learn);
-        containerData.set(MAX_LEARN, maxLearn);
+        containerData.set(LEARN, learnTechnology.getCurrentTime());
+        containerData.set(MAX_LEARN, learnTechnology.getTotalTime());
     }
 
     @NotNull
@@ -122,7 +122,7 @@ public class ResearcherBlockEntity extends BlockEntity implements MenuProvider {
 
         tag.put("Fluid", fluidStorage.serializeNBT());
 
-        tag.putInt("Learn", learn);
+        tag.put("Learn", learnTechnology.serializeNBT());
 
         tag.put("TechList", researchPlan.serializeNBT());
     }
@@ -141,8 +141,9 @@ public class ResearcherBlockEntity extends BlockEntity implements MenuProvider {
         if (tag.contains("Fluid")) {
             fluidStorage.deserializeNBT(tag.getCompound("Fluid"));
         }
-        if (tag.contains("Learn", CompoundTag.TAG_INT)) {
-            learn = tag.getInt("Learn");
+        if (tag.contains("Learn")) {
+            CompoundTag learnTag = tag.getCompound("Learn");
+            learnTechnology = Leaner.fromNBT(learnTag, this::setChanged);
         }
 
         if (tag.contains("TechList")) {
@@ -158,6 +159,10 @@ public class ResearcherBlockEntity extends BlockEntity implements MenuProvider {
     @Override
     public @Nullable AbstractContainerMenu createMenu(int pContainerId, @NotNull Inventory pPlayerInventory, @NotNull Player pPlayer) {
         return new ResearcherMenu(pContainerId, pPlayerInventory, this);
+    }
+
+    private void onChange(){
+        learnTechnology.setTech(researchPlan.getPlan().get(0));
     }
 
     public FlaskStorage getItemStackHandler() {
@@ -182,10 +187,11 @@ public class ResearcherBlockEntity extends BlockEntity implements MenuProvider {
         int energy = energyStorage.receiveEnergy(1,false);
         int water = fluidStorage.fill(FluidType.WATER, 1, IFluidHandler.FluidAction.EXECUTE);
         int lava = fluidStorage.fill(FluidType.LAVA ,1, IFluidHandler.FluidAction.EXECUTE);
-        if(learn<maxLearn){
-            learn++;
-            change = true;
+        if(learnTechnology.canLearn(itemHandler)){
+            change = learnTechnology.consumeFlasks(itemHandler);
+
         }
+
         if (water > 0 || energy > 0 || lava > 0 || change) {
             setChanged();
             updateContainerData();

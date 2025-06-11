@@ -13,14 +13,17 @@ public class ResearchPlan implements INBTSerializable<CompoundTag> {
 
     private final List<Technology> techList = new ArrayList<>(Collections.nCopies(10, Technology.EMPTY));
     private final Runnable onChange;
-    public ResearchPlan(Runnable onChange){
+    private final Runnable learnerChange;
+    public ResearchPlan(Runnable onChange, Runnable learnerChange){
         this.onChange = onChange;
+        this.learnerChange = learnerChange;
     }
 
     public void setPlan(List<Technology> pList){
         this.techList.clear();
         this.techList.addAll(pList);
         this.onChange.run();
+        this.learnerChange.run();
     }
 
     public List<Technology> getPlan() {

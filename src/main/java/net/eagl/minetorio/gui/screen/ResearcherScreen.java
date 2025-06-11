@@ -4,6 +4,8 @@ import net.eagl.minetorio.gui.widget.ItemIconWidget;
 import net.eagl.minetorio.gui.widget.RemovableItemIcon;
 import net.eagl.minetorio.gui.ResearcherMenu;
 import net.eagl.minetorio.gui.slot.FlaskSlot;
+import net.eagl.minetorio.network.MinetorioNetwork;
+import net.eagl.minetorio.network.server.ResearchListSyncToServerPacket;
 import net.eagl.minetorio.util.Technology;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -90,6 +92,7 @@ public class ResearcherScreen extends AbstractContainerScreen<ResearcherMenu> {
             });
 
             menu.setTechList(list);
+            MinetorioNetwork.CHANNEL.sendToServer(new ResearchListSyncToServerPacket(menu.getBlockEntity().getBlockPos(), menu.getBlockEntity().getResearchPlan().getPlan()));
             updateTechnologies();
         }
     }
