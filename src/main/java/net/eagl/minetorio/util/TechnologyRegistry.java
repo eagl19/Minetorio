@@ -1,6 +1,7 @@
 package net.eagl.minetorio.util;
 
 import net.eagl.minetorio.item.MinetorioItems;
+import net.eagl.minetorio.util.enums.FlaskColor;
 
 import java.util.*;
 
@@ -8,6 +9,9 @@ public class TechnologyRegistry {
     private static final Map<String, Technology> TECHNOLOGIES = new HashMap<>();
 
     public static void register(Technology tech) {
+        if (TECHNOLOGIES.containsKey(tech.getId())) {
+            throw new IllegalArgumentException("Technology ID already registered: " + tech.getId());
+        }
         TECHNOLOGIES.put(tech.getId(), tech);
     }
 
@@ -21,112 +25,154 @@ public class TechnologyRegistry {
 
     public static void init() {
         register(
-                new Technology(
-                        "void",
-                        MinetorioItems.PATTERN_VOID.get(),
-                        List.of(),
-                        new FlasksField(1,0,0,0,0,0,0,0,0,0,0,0),
-                        1000,
-                        3,
-                        10,
-                        10
-                )
+                TechnologyBuilder.create("void")
+                        .pattern(MinetorioItems.PATTERN_VOID.get())
+                        .flasks(new FlasksField.Builder()
+                                .set(FlaskColor.RED,1)
+                                .build())
+                        .duration(1000)
+                        .tier(3)
+                        .pos(10, 10)
+                        .build()
         );
         register(
-                new Technology(
-                        "fire",
-                        MinetorioItems.PATTERN_FIRE.get(),
-                        List.of("void"),
-                        new FlasksField(3,2,1,0,0,0,0,0,0,0,0,0),
-                        10000,
-                        3,
-                        160,
-                        10
-                )
+                TechnologyBuilder.create("fire")
+                        .pattern(MinetorioItems.PATTERN_FIRE.get())
+                        .requires("void")
+                        .flasks(new FlasksField.Builder()
+                                .set(FlaskColor.RED, 3)
+                                .set(FlaskColor.GREEN, 2)
+                                .set(FlaskColor.BLACK, 1)
+                                .build())
+                        .duration(10000)
+                        .tier(3)
+                        .pos(160, 10)
+                        .build()
         );
         register(
-                new Technology(
-                        "water",
-                        MinetorioItems.PATTERN_WATER.get(),
-                        List.of("void"),
-                        new FlasksField(3,2,1,0,0,0,0,0,0,0,0,0),
-                        15000,
-                        3,
-                        160,
-                        100
-                )
+                TechnologyBuilder.create("water")
+                        .pattern(MinetorioItems.PATTERN_WATER.get())
+                        .requires("void")
+                        .flasks(new FlasksField.Builder()
+                                .set(FlaskColor.RED, 3)
+                                .set(FlaskColor.GREEN, 2)
+                                .set(FlaskColor.BLACK, 1)
+                                .build())
+                        .duration(15000)
+                        .tier(3)
+                        .pos(160, 100)
+                        .build()
         );
         register(
-                new Technology(
-                        "air",
-                        MinetorioItems.PATTERN_AIR.get(),
-                        List.of("void"),
-                        new FlasksField(3,2,1,0,0,0,0,0,0,0,0,0),
-                        15000,
-                        3,
-                        160,
-                        190
-                )
+                TechnologyBuilder.create("air")
+                        .pattern(MinetorioItems.PATTERN_AIR.get())
+                        .requires("void")
+                        .flasks(new FlasksField.Builder()
+                                .set(FlaskColor.RED, 3)
+                                .set(FlaskColor.GREEN, 2)
+                                .set(FlaskColor.BLACK, 1)
+                                .build())
+                        .duration(15000)
+                        .tier(3)
+                        .pos(160, 190)
+                        .build()
         );
         register(
-                new Technology(
-                        "earth",
-                        MinetorioItems.PATTERN_EARTH.get(),
-                        List.of("void"),
-                        new FlasksField(3,2,1,0,0,0,0,0,0,0,0,0),
-                        15000,
-                        3,
-                        160,
-                        280
-                )
+                TechnologyBuilder.create("earth")
+                        .pattern(MinetorioItems.PATTERN_EARTH.get())
+                        .requires("void")
+                        .flasks(new FlasksField.Builder()
+                                .set(FlaskColor.RED, 3)
+                                .set(FlaskColor.GREEN, 2)
+                                .set(FlaskColor.BLACK, 1)
+                                .build())
+                        .duration(15000)
+                        .tier(3)
+                        .pos(160, 280)
+                        .build()
         );
         register(
-                new Technology(
-                        "cloud",
-                        MinetorioItems.PATTERN_CLOUD.get(),
-                        List.of("fire","water"),
-                        new FlasksField(12,11,10,9,8,7,6,5,4,3,2,1),
-                        400000,
-                        3,
-                        310,
-                        60
-                )
+                TechnologyBuilder.create("cloud")
+                        .pattern(MinetorioItems.PATTERN_CLOUD.get())
+                        .requires("fire","water")
+                        .flasks(new FlasksField.Builder()
+                                .set(FlaskColor.RED, 12)
+                                .set(FlaskColor.GREEN, 11)
+                                .set(FlaskColor.BLACK, 10)
+                                .set(FlaskColor.PURPLE, 9)
+                                .set(FlaskColor.PINK, 8)
+                                .set(FlaskColor.WHITE, 7)
+                                .set(FlaskColor.BLUE, 6)
+                                .set(FlaskColor.YELLOW, 5)
+                                .set(FlaskColor.BROWN, 4)
+                                .set(FlaskColor.CYAN, 3)
+                                .set(FlaskColor.ORANGE, 2)
+                                .set(FlaskColor.GRAY, 1)
+                                .build())
+                        .duration(400000)
+                        .tier(3)
+                        .pos(310, 60)
+                        .build()
         );
         register(
-                new Technology(
-                        "snowflake",
-                        MinetorioItems.PATTERN_SNOWFLAKE.get(),
-                        List.of("cloud"),
-                        new FlasksField(31,21,10,9,8,7,6,5,4,3,2,1),
-                        13000,
-                        5,
-                        450,
-                        60
-                )
+                TechnologyBuilder.create("snowflake")
+                        .pattern(MinetorioItems.PATTERN_SNOWFLAKE.get())
+                        .requires("cloud")
+                        .flasks(new FlasksField.Builder()
+                                .set(FlaskColor.RED, 31)
+                                .set(FlaskColor.GREEN, 21)
+                                .set(FlaskColor.BLACK, 10)
+                                .set(FlaskColor.PURPLE, 9)
+                                .set(FlaskColor.PINK, 8)
+                                .set(FlaskColor.WHITE, 7)
+                                .set(FlaskColor.BLUE, 6)
+                                .set(FlaskColor.YELLOW, 5)
+                                .set(FlaskColor.BROWN, 4)
+                                .set(FlaskColor.CYAN, 3)
+                                .set(FlaskColor.ORANGE, 2)
+                                .set(FlaskColor.GRAY, 1)
+                                .build())
+                        .duration(13000)
+                        .tier(5)
+                        .pos(450, 60)
+                        .build()
         );
         register(
-                new Technology(
-                        "snow",
-                        MinetorioItems.PATTERN_SNOW.get(),
-                        List.of("snowflake"),
-                        new FlasksField(31,21,10,9,8,7,6,5,4,3,2,1),
-                        13000,
-                        5,
-                        610,
-                        60
-                )
+                TechnologyBuilder.create("snow")
+                        .pattern(MinetorioItems.PATTERN_SNOW.get())
+                        .requires("snowflake")
+                        .flasks(new FlasksField.Builder()
+                                .set(FlaskColor.RED, 31)
+                                .set(FlaskColor.GREEN, 21)
+                                .set(FlaskColor.BLACK, 10)
+                                .set(FlaskColor.PURPLE, 9)
+                                .set(FlaskColor.PINK, 8)
+                                .set(FlaskColor.WHITE, 7)
+                                .set(FlaskColor.BLUE, 6)
+                                .set(FlaskColor.YELLOW, 5)
+                                .set(FlaskColor.BROWN, 4)
+                                .set(FlaskColor.CYAN, 3)
+                                .set(FlaskColor.ORANGE, 2)
+                                .set(FlaskColor.GRAY, 1)
+                                .build())
+                        .duration(13000)
+                        .tier(5)
+                        .pos(610, 60)
+                        .build()
         );
         register(
-                new Technology(
-                        "sun",
-                        MinetorioItems.PATTERN_SUN.get(),
-                        List.of("fire"),
-                        new FlasksField(3,2,1,0,0,0,0,0,0,0,0,0),
-                        10000,
-                        3,
-                        310,
-                        -30
-                )
+                TechnologyBuilder.create("sun")
+                        .pattern(MinetorioItems.PATTERN_SUN.get())
+                        .requires("fire")
+                        .flasks(new FlasksField.Builder()
+                                .set(FlaskColor.RED, 3)
+                                .set(FlaskColor.GREEN, 2)
+                                .set(FlaskColor.BLACK, 1)
+                                .build())
+                        .duration(10000)
+                        .tier(3)
+                        .pos(310, -30)
+                        .build()
         );
     }
 }

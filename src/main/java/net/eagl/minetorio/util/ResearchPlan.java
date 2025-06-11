@@ -9,21 +9,21 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class TechList implements INBTSerializable<CompoundTag> {
+public class ResearchPlan implements INBTSerializable<CompoundTag> {
 
     private final List<Technology> techList = new ArrayList<>(Collections.nCopies(10, Technology.EMPTY));
     private final Runnable onChange;
-    public TechList(Runnable onChange){
+    public ResearchPlan(Runnable onChange){
         this.onChange = onChange;
     }
 
-    public void setTechList(List<Technology> pList){
+    public void setPlan(List<Technology> pList){
         this.techList.clear();
         this.techList.addAll(pList);
         this.onChange.run();
     }
 
-    public List<Technology> getTechList() {
+    public List<Technology> getPlan() {
         return techList;
     }
 

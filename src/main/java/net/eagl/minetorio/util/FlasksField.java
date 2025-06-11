@@ -7,32 +7,13 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.EnumMap;
 
-
 public class FlasksField {
     private final EnumMap<FlaskColor, Integer> flasks;
-    public static final FlasksField EMPTY = new FlasksField(
-            0, 0, 0,
-            0, 0, 0,
-            0, 0, 0,
-            0, 0, 0
-    );
-    public FlasksField(int red, int green, int black,
-                       int purple, int pink, int white,
-                       int blue, int yellow, int brown,
-                       int cyan, int orange, int gray) {
-        this.flasks = new EnumMap<>(FlaskColor.class);
-        flasks.put(FlaskColor.RED, red);
-        flasks.put(FlaskColor.GREEN, green);
-        flasks.put(FlaskColor.BLACK, black);
-        flasks.put(FlaskColor.PURPLE, purple);
-        flasks.put(FlaskColor.PINK, pink);
-        flasks.put(FlaskColor.WHITE, white);
-        flasks.put(FlaskColor.BLUE, blue);
-        flasks.put(FlaskColor.YELLOW, yellow);
-        flasks.put(FlaskColor.BROWN, brown);
-        flasks.put(FlaskColor.CYAN, cyan);
-        flasks.put(FlaskColor.ORANGE, orange);
-        flasks.put(FlaskColor.GRAY, gray);
+
+    public static final FlasksField EMPTY = new Builder().build();
+
+    public FlasksField(EnumMap<FlaskColor, Integer> flasks) {
+        this.flasks = new EnumMap<>(flasks);
     }
 
     public void setFlask(FlaskColor color, int amount) {
@@ -43,8 +24,8 @@ public class FlasksField {
         return flasks.getOrDefault(color, 0);
     }
 
-    public static ItemStack getFlask(FlaskColor color){
-        return new ItemStack(getFlaskItemByColor(color),0);
+    public static ItemStack getFlask(FlaskColor color) {
+        return new ItemStack(getFlaskItemByColor(color), 0);
     }
 
     public static Item getFlaskItemByColor(FlaskColor color) {
@@ -69,7 +50,45 @@ public class FlasksField {
     }
 
     public int size() {
-        return 12;
+        return FlaskColor.values().length;
+    }
+
+    public boolean isEmpty() {
+        return flasks.values().stream().allMatch(v -> v == 0);
+    }
+
+    public FlasksField add(FlasksField other) {
+        Builder builder = new Builder();
+        for (FlaskColor color : FlaskColor.values()) {
+            int sum = this.getFlaskAmount(color) + other.getFlaskAmount(color);
+            builder.set(color, sum);
+        }
+        return builder.build();
+    }
+
+    public static class Builder {
+        private final EnumMap<FlaskColor, Integer> flasks = new EnumMap<>(FlaskColor.class);
+
+        public Builder() {
+            for (FlaskColor color : FlaskColor.values()) {
+                flasks.put(color, 0);
+            }
+        }
+
+        public Builder set(FlaskColor color, int amount) {
+            flasks.put(color, amount);
+            return this;
+        }
+
+        public Builder setAll(int amount) {
+            for (FlaskColor color : FlaskColor.values()) {
+                flasks.put(color, amount);
+            }
+            return this;
+        }
+
+        public FlasksField build() {
+            return new FlasksField(flasks);
+        }
     }
 }
-

@@ -1,7 +1,7 @@
 package net.eagl.minetorio.block.entity;
 
 import net.eagl.minetorio.gui.ResearcherMenu;
-import net.eagl.minetorio.util.TechList;
+import net.eagl.minetorio.util.ResearchPlan;
 import net.eagl.minetorio.util.enums.FluidType;
 import net.eagl.minetorio.util.storage.FlaskStorage;
 import net.eagl.minetorio.util.storage.MinetorioFluidStorage;
@@ -50,7 +50,7 @@ public class ResearcherBlockEntity extends BlockEntity implements MenuProvider {
     public static final int START_WATER_STORAGE = 5000;
     public static final int START_LAVA_STORAGE = 5000;
 
-    private final TechList techList = new TechList(this::setChanged);
+    private final ResearchPlan researchPlan = new ResearchPlan(this::setChanged);
     private final FlaskStorage itemHandler = new FlaskStorage(this::setChanged);
     private final LazyOptional<IItemHandler> optionalHandler = LazyOptional.of(() -> itemHandler);
 
@@ -124,7 +124,7 @@ public class ResearcherBlockEntity extends BlockEntity implements MenuProvider {
 
         tag.putInt("Learn", learn);
 
-        tag.put("TechList", techList.serializeNBT());
+        tag.put("TechList", researchPlan.serializeNBT());
     }
 
     @Override
@@ -146,7 +146,7 @@ public class ResearcherBlockEntity extends BlockEntity implements MenuProvider {
         }
 
         if (tag.contains("TechList")) {
-            techList.deserializeNBT(tag.getCompound("TechList"));
+            researchPlan.deserializeNBT(tag.getCompound("TechList"));
         }
     }
 
@@ -169,8 +169,8 @@ public class ResearcherBlockEntity extends BlockEntity implements MenuProvider {
         super.setChanged();
     }
 
-    public TechList getTechnologyList() {
-        return this.techList;
+    public ResearchPlan getResearchPlan() {
+        return this.researchPlan;
     }
 
     public void tickClient() {

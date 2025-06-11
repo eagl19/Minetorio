@@ -49,20 +49,20 @@ public class FlaskStorage extends ItemStackHandler {
     }
 
     public FlasksField toFlasksField() {
-        return new FlasksField(
-                getFlaskAmount(FlaskColor.RED),
-                getFlaskAmount(FlaskColor.GREEN),
-                getFlaskAmount(FlaskColor.BLACK),
-                getFlaskAmount(FlaskColor.PURPLE),
-                getFlaskAmount(FlaskColor.PINK),
-                getFlaskAmount(FlaskColor.WHITE),
-                getFlaskAmount(FlaskColor.BLUE),
-                getFlaskAmount(FlaskColor.YELLOW),
-                getFlaskAmount(FlaskColor.BROWN),
-                getFlaskAmount(FlaskColor.CYAN),
-                getFlaskAmount(FlaskColor.ORANGE),
-                getFlaskAmount(FlaskColor.GRAY)
-        );
+        return new FlasksField.Builder()
+                .set(FlaskColor.RED, getFlaskAmount(FlaskColor.RED))
+                .set(FlaskColor.GREEN, getFlaskAmount(FlaskColor.GREEN))
+                .set(FlaskColor.BLACK, getFlaskAmount(FlaskColor.BLACK))
+                .set(FlaskColor.PURPLE, getFlaskAmount(FlaskColor.PURPLE))
+                .set(FlaskColor.PINK, getFlaskAmount(FlaskColor.PINK))
+                .set(FlaskColor.WHITE, getFlaskAmount(FlaskColor.WHITE))
+                .set(FlaskColor.BLUE, getFlaskAmount(FlaskColor.BLUE))
+                .set(FlaskColor.YELLOW, getFlaskAmount(FlaskColor.YELLOW))
+                .set(FlaskColor.BROWN, getFlaskAmount(FlaskColor.BROWN))
+                .set(FlaskColor.CYAN, getFlaskAmount(FlaskColor.CYAN))
+                .set(FlaskColor.ORANGE, getFlaskAmount(FlaskColor.ORANGE))
+                .set(FlaskColor.GRAY, getFlaskAmount(FlaskColor.GRAY))
+                .build();
     }
 
 }
