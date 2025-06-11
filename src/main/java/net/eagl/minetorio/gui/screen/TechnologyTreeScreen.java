@@ -232,7 +232,7 @@ public class TechnologyTreeScreen extends Screen {
                         ? TECH_DETAILS_TEXTURE_WIDTH - 80
                         : TECH_DETAILS_TEXTURE_WIDTH / 2 - 40;
 
-                ItemStack stack = cost.getFlask(entry.getKey());
+                ItemStack stack = FlasksField.getFlask(entry.getKey());
                 stack.setCount(amount);
 
                 tip = renderCostItem(guiGraphics, stack, dx, dy, maxWidth, adjustedMouseX, adjustedMouseY);
@@ -371,8 +371,7 @@ public class TechnologyTreeScreen extends Screen {
             int amount = entry.getValue();
             if (amount <= 0) continue;
 
-            FlaskColor color = entry.getKey();
-            ItemStack flaskStack = flasksField.getFlask(color);
+            ItemStack flaskStack = FlasksField.getFlask(entry.getKey());
             flaskStack.setCount(amount);
 
             int renderX = 1 + (flaskCount % 6) * 18;

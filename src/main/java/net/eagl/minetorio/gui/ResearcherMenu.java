@@ -70,7 +70,7 @@ public class ResearcherMenu extends AbstractContainerMenu {
         if (playerInventory.player instanceof ServerPlayer serverPlayer) {
             MinetorioNetwork.CHANNEL.send(
                     PacketDistributor.PLAYER.with(() -> serverPlayer),
-                    new ResearchListSyncToClientPacket(be.getBlockPos(), be.getTechList())
+                    new ResearchListSyncToClientPacket(be.getBlockPos(), be.getTechnologyList().getTechList())
             );
         }
 
@@ -168,17 +168,17 @@ public class ResearcherMenu extends AbstractContainerMenu {
     }
 
     public  List<Technology> getTechList(){
-        return be.getTechList();
+        return be.getTechnologyList().getTechList();
     }
     public void setTechList(List<Technology> pList){
-        be.setTechList(pList);
+        be.getTechnologyList().setTechList(pList);
     }
 
     @Override
     public void removed(@NotNull Player pPlayer) {
         super.removed(pPlayer);
         if (pPlayer.level().isClientSide) {
-            MinetorioNetwork.CHANNEL.sendToServer(new ResearchListSyncToServerPacket(be.getBlockPos(), be.getTechList()));
+            MinetorioNetwork.CHANNEL.sendToServer(new ResearchListSyncToServerPacket(be.getBlockPos(), be.getTechnologyList().getTechList()));
         }
     }
 }

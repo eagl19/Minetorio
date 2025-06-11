@@ -45,7 +45,7 @@ public class ResearchListSyncToClientPacket {
         ctx.get().enqueueWork(() -> {
             Level level = Minecraft.getInstance().level;
             if (level != null && level.getBlockEntity(msg.pos) instanceof ResearcherBlockEntity be) {
-                be.setTechList(msg.techList);
+                be.getTechnologyList().setTechList(msg.techList);
             }
         });
         ctx.get().setPacketHandled(true);

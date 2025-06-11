@@ -1,8 +1,7 @@
 package net.eagl.minetorio.block.entity;
 
 import net.eagl.minetorio.gui.ResearcherMenu;
-import net.eagl.minetorio.util.Technology;
-import net.eagl.minetorio.util.TechnologyRegistry;
+import net.eagl.minetorio.util.TechList;
 import net.eagl.minetorio.util.enums.FluidType;
 import net.eagl.minetorio.util.storage.FlaskStorage;
 import net.eagl.minetorio.util.storage.MinetorioFluidStorage;
@@ -10,7 +9,6 @@ import net.eagl.minetorio.util.storage.MinetorioEnergyStorage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
@@ -28,10 +26,6 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 public class ResearcherBlockEntity extends BlockEntity implements MenuProvider {
 
@@ -56,7 +50,7 @@ public class ResearcherBlockEntity extends BlockEntity implements MenuProvider {
     public static final int START_WATER_STORAGE = 5000;
     public static final int START_LAVA_STORAGE = 5000;
 
-    private final List<Technology> techList = new ArrayList<>(Collections.nCopies(10, Technology.EMPTY));
+    private final TechList techList = new TechList(this::setChanged);
     private final FlaskStorage itemHandler = new FlaskStorage(this::setChanged);
     private final LazyOptional<IItemHandler> optionalHandler = LazyOptional.of(() -> itemHandler);
 
@@ -119,9 +113,6 @@ public class ResearcherBlockEntity extends BlockEntity implements MenuProvider {
         optionalFluid.invalidate();
     }
 
-
-
-
     @Override
     protected void saveAdditional(@NotNull CompoundTag tag) {
         super.saveAdditional(tag);
@@ -133,13 +124,7 @@ public class ResearcherBlockEntity extends BlockEntity implements MenuProvider {
 
         tag.putInt("Learn", learn);
 
-        var idList = new ListTag();
-        for (Technology tech : techList) {
-            CompoundTag techTag = new CompoundTag();
-            techTag.putString("Id", tech.getId());
-            idList.add(techTag);
-        }
-        tag.put("TechListIds", idList);
+        tag.put("TechList", techList.serializeNBT());
     }
 
     @Override
@@ -160,18 +145,8 @@ public class ResearcherBlockEntity extends BlockEntity implements MenuProvider {
             learn = tag.getInt("Learn");
         }
 
-        if (tag.contains("TechListIds")) {
-            techList.clear();
-            var idList = tag.getList("TechListIds", CompoundTag.TAG_COMPOUND);
-            for (int i = 0; i < idList.size(); i++) {
-                CompoundTag techTag = idList.getCompound(i);
-                String id = techTag.getString("Id");
-                Technology tech = TechnologyRegistry.get(id);
-                techList.add(tech != null ? tech : Technology.EMPTY);
-            }
-        }
-        if(!techList.get(0).equals(Technology.EMPTY)) {
-            maxLearn = techList.get(0).getTime();
+        if (tag.contains("TechList")) {
+            techList.deserializeNBT(tag.getCompound("TechList"));
         }
     }
 
@@ -189,20 +164,13 @@ public class ResearcherBlockEntity extends BlockEntity implements MenuProvider {
         return itemHandler;
     }
 
-    public void setTechList(List<Technology> pList){
-        this.techList.clear();
-        this.techList.addAll(pList);
-        setChanged();
-        maxLearn = techList.get(0).getTime();
-    }
-
     @Override
     public void setChanged() {
         super.setChanged();
     }
 
-    public List<Technology> getTechList() {
-        return techList;
+    public TechList getTechnologyList() {
+        return this.techList;
     }
 
     public void tickClient() {

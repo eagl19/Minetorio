@@ -48,7 +48,7 @@ public class ResearchListSyncToServerPacket {
 
             Level level = player.level();
             if (level.getBlockEntity(msg.pos) instanceof ResearcherBlockEntity be) {
-                be.setTechList(msg.techList);
+                be.getTechnologyList().setTechList(msg.techList);
             }
         });
         ctx.get().setPacketHandled(true);

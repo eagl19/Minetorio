@@ -12,7 +12,7 @@ public class TechnologyRegistry {
     }
 
     public static Technology get(String id) {
-        return TECHNOLOGIES.get(id);
+        return TECHNOLOGIES.getOrDefault(id, Technology.EMPTY);
     }
 
     public static Collection<Technology> getAll() {
