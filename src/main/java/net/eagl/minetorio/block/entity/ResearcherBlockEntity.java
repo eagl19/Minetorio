@@ -178,9 +178,8 @@ public class ResearcherBlockEntity extends BlockEntity implements MenuProvider {
         if(learnTechnology.isDone()) {
             Technology learnedTechnology = researchPlan.nextTechnology();
             if (learnedTechnology != Technology.EMPTY) {
-                player.getCapability(MinetorioCapabilities.TECHNOLOGY_PROGRESS).ifPresent(progress -> {
-                    progress.learnTechnology(learnedTechnology.getId());
-                });
+                player.getCapability(MinetorioCapabilities.TECHNOLOGY_PROGRESS).ifPresent(progress ->
+                        progress.learnTechnology(learnedTechnology.getId()));
             }
             if (player instanceof ServerPlayer serverPlayer) {
                 MinetorioNetwork.CHANNEL.send(

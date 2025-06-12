@@ -3,21 +3,14 @@ package net.eagl.minetorio.event;
 import net.eagl.minetorio.Minetorio;
 import net.eagl.minetorio.capability.MinetorioCapabilities;
 import net.eagl.minetorio.capability.PatternLearnProvider;
-import net.eagl.minetorio.capability.Technology.ITechnologyProgress;
-import net.eagl.minetorio.capability.Technology.TechnologyProgress;
 import net.eagl.minetorio.capability.Technology.TechnologyProgressProvider;
-import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import org.jetbrains.annotations.NotNull;
 
 @Mod.EventBusSubscriber(modid = Minetorio.MOD_ID)
 public class CapabilityAttachHandler {
