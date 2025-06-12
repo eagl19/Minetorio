@@ -6,6 +6,7 @@ import net.eagl.minetorio.gui.ResearcherMenu;
 import net.eagl.minetorio.gui.slot.FlaskSlot;
 import net.eagl.minetorio.network.MinetorioNetwork;
 import net.eagl.minetorio.network.server.ResearchListSyncToServerPacket;
+import net.eagl.minetorio.network.server.ResearcherButtonPacket;
 import net.eagl.minetorio.util.Technology;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -17,6 +18,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import net.minecraft.client.gui.components.Button;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -68,6 +70,15 @@ public class ResearcherScreen extends AbstractContainerScreen<ResearcherMenu> {
                 ));
             }
         }
+        this.addRenderableWidget(
+                Button.builder(Component.literal("Learn"), btn -> buttonClick())
+                        .bounds(leftPos + 8, topPos + 80, 50, 20)
+                        .build()
+        );
+    }
+
+    private void buttonClick(){
+        MinetorioNetwork.CHANNEL.sendToServer(new ResearcherButtonPacket(0));
     }
 
     private void removeFlaskAction(int currentTech) {

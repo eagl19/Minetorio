@@ -13,17 +13,15 @@ public class ResearchPlan implements INBTSerializable<CompoundTag> {
 
     private final List<Technology> techList = new ArrayList<>(Collections.nCopies(10, Technology.EMPTY));
     private final Runnable onChange;
-    private final Runnable learnerChange;
-    public ResearchPlan(Runnable onChange, Runnable learnerChange){
+
+    public ResearchPlan(Runnable onChange){
         this.onChange = onChange;
-        this.learnerChange = learnerChange;
     }
 
     public void setPlan(List<Technology> pList){
         this.techList.clear();
         this.techList.addAll(pList);
         this.onChange.run();
-        this.learnerChange.run();
     }
 
     public List<Technology> getPlan() {
@@ -57,5 +55,15 @@ public class ResearchPlan implements INBTSerializable<CompoundTag> {
             techList.add(tech);
         }
         onChange.run();
+    }
+
+    public Technology nextTechnology() {
+        Technology removed = techList.get(0);
+        for (int i = 0; i < techList.size() - 1; i++) {
+            techList.set(i, techList.get(i + 1));
+        }
+        techList.set(techList.size() - 1, Technology.EMPTY);
+        onChange.run();
+        return removed;
     }
 }

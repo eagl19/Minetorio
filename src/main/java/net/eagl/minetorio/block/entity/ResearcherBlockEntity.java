@@ -1,9 +1,12 @@
 package net.eagl.minetorio.block.entity;
 
 import net.eagl.minetorio.gui.ResearcherMenu;
-import net.eagl.minetorio.util.Leaner;
+import net.eagl.minetorio.network.MinetorioNetwork;
+import net.eagl.minetorio.network.client.ResearchListSyncToClientPacket;
+import net.eagl.minetorio.util.Learner;
 import net.eagl.minetorio.util.ResearchPlan;
 import net.eagl.minetorio.util.Technology;
+import net.eagl.minetorio.util.TechnologyProgress;
 import net.eagl.minetorio.util.enums.FluidType;
 import net.eagl.minetorio.util.storage.FlaskStorage;
 import net.eagl.minetorio.util.storage.MinetorioFluidStorage;
@@ -11,7 +14,9 @@ import net.eagl.minetorio.util.storage.MinetorioEnergyStorage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -26,11 +31,11 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class ResearcherBlockEntity extends BlockEntity implements MenuProvider {
-
 
     public static final int ENERGY = 0;
     public static final int MAX_ENERGY = 1;
@@ -52,13 +57,13 @@ public class ResearcherBlockEntity extends BlockEntity implements MenuProvider {
     public static final int START_WATER_STORAGE = 5000;
     public static final int START_LAVA_STORAGE = 5000;
 
-    private final ResearchPlan researchPlan = new ResearchPlan(this::setChanged, this::onChange);
-    private final FlaskStorage itemHandler = new FlaskStorage(this::setChanged);
+    private final ResearchPlan researchPlan = new ResearchPlan(this::onResearcherPlanChange);
+    private final FlaskStorage itemHandler = new FlaskStorage(this::onFlaskFieldChange);
     private final LazyOptional<IItemHandler> optionalHandler = LazyOptional.of(() -> itemHandler);
 
     private final ContainerData containerData = new SimpleContainerData(8);
 
-   private Leaner learnTechnology = new Leaner(Technology.EMPTY, this::setChanged);
+   private final Learner learnTechnology = new Learner(Technology.EMPTY, itemHandler, this::setChanged);
 
     private final MinetorioEnergyStorage energyStorage = new MinetorioEnergyStorage(MAX_ENERGY_STORAGE,
             MAX_RECEIVE_ENERGY, MAX_EXTRACT_ENERGY, START_ENERGY_STORAGE, this::setChanged);
@@ -68,7 +73,6 @@ public class ResearcherBlockEntity extends BlockEntity implements MenuProvider {
             new int[]{MAX_WATER_STORAGE, MAX_LAVA_STORAGE}, new FluidType[]{FluidType.WATER, FluidType.LAVA},
             new int[]{START_WATER_STORAGE, START_LAVA_STORAGE}, this::setChanged);
     private final LazyOptional<IFluidHandler> optionalFluid = LazyOptional.of(() -> fluidStorage);
-
 
     public ResearcherBlockEntity(BlockPos pPos, BlockState pBlockState) {
         super(MinetorioBlockEntities.RESEARCHER_BLOCK_ENTITY.get(), pPos, pBlockState);
@@ -116,6 +120,7 @@ public class ResearcherBlockEntity extends BlockEntity implements MenuProvider {
     @Override
     protected void saveAdditional(@NotNull CompoundTag tag) {
         super.saveAdditional(tag);
+
         tag.put("Items", itemHandler.serializeNBT());
 
         tag.put("Energy", energyStorage.serializeNBT());
@@ -125,12 +130,14 @@ public class ResearcherBlockEntity extends BlockEntity implements MenuProvider {
         tag.put("Learn", learnTechnology.serializeNBT());
 
         tag.put("TechList", researchPlan.serializeNBT());
+
     }
 
     @Override
     public void load(@NotNull CompoundTag tag) {
         super.load(tag);
-        if (tag.contains("Items")) {
+
+        if (tag.contains("Items", Tag.TAG_COMPOUND)) {
             itemHandler.deserializeNBT(tag.getCompound("Items"));
         }
 
@@ -138,22 +145,22 @@ public class ResearcherBlockEntity extends BlockEntity implements MenuProvider {
             energyStorage.deserializeNBT(tag.get("Energy"));
         }
 
-        if (tag.contains("Fluid")) {
+        if (tag.contains("Fluid", Tag.TAG_COMPOUND)) {
             fluidStorage.deserializeNBT(tag.getCompound("Fluid"));
         }
-        if (tag.contains("Learn")) {
-            CompoundTag learnTag = tag.getCompound("Learn");
-            learnTechnology = Leaner.fromNBT(learnTag, this::setChanged);
+        if (tag.contains("Learn", Tag.TAG_COMPOUND)) {
+            learnTechnology.deserializeNBT(tag.getCompound("Learn"));
         }
 
-        if (tag.contains("TechList")) {
+        if (tag.contains("TechList", Tag.TAG_COMPOUND)) {
             researchPlan.deserializeNBT(tag.getCompound("TechList"));
         }
+        updateContainerData();
     }
 
     @Override
     public @NotNull Component getDisplayName() {
-        return Component.literal("Researcher");
+        return Component.translatable("block.minetorio.researcher");
     }
 
     @Override
@@ -161,8 +168,32 @@ public class ResearcherBlockEntity extends BlockEntity implements MenuProvider {
         return new ResearcherMenu(pContainerId, pPlayerInventory, this);
     }
 
-    private void onChange(){
-        learnTechnology.setTech(researchPlan.getPlan().get(0));
+    private void onResearcherPlanChange(){
+        var plan = researchPlan.getPlan();
+        System.out.println(plan.get(0).getId());
+        learnTechnology.setTech(plan.isEmpty() ? Technology.EMPTY : plan.get(0));
+        setChanged();
+    }
+    public void researchTechnologyDone(Player player) {
+        if(learnTechnology.isDone()) {
+            Technology learnedTechnology = researchPlan.nextTechnology();
+            if (learnedTechnology != Technology.EMPTY) {
+                TechnologyProgress.learnTechnology(player, learnedTechnology.getId());
+            }
+            if (player instanceof ServerPlayer serverPlayer) {
+                MinetorioNetwork.CHANNEL.send(
+                        PacketDistributor.PLAYER.with(() -> serverPlayer),
+                        new ResearchListSyncToClientPacket(this.getBlockPos(), this.getResearchPlan().getPlan())
+                );
+            }
+            learnTechnology.clear();
+            setChanged();
+        }
+    }
+
+    public  void  onFlaskFieldChange(){
+        learnTechnology.setDirty(true);
+        setChanged();
     }
 
     public FlaskStorage getItemStackHandler() {
@@ -183,16 +214,12 @@ public class ResearcherBlockEntity extends BlockEntity implements MenuProvider {
     }
 
     public void tickServer() {
-        boolean change = false;
         int energy = energyStorage.receiveEnergy(1,false);
         int water = fluidStorage.fill(FluidType.WATER, 1, IFluidHandler.FluidAction.EXECUTE);
         int lava = fluidStorage.fill(FluidType.LAVA ,1, IFluidHandler.FluidAction.EXECUTE);
-        if(learnTechnology.canLearn(itemHandler)){
-            change = learnTechnology.consumeFlasks(itemHandler);
+        boolean learn = learnTechnology.learn();
 
-        }
-
-        if (water > 0 || energy > 0 || lava > 0 || change) {
+        if (water > 0 || energy > 0 || lava > 0 || learn) {
             setChanged();
             updateContainerData();
         }

@@ -24,7 +24,7 @@ public class Technology {
     private final int count;
     private final int x;
     private final int y;
-    private  boolean learn;
+    private boolean learn;
 
     public static final Technology EMPTY = new Technology(
             "empty",
@@ -156,7 +156,6 @@ public class Technology {
     public int getCount() {
         return count;
     }
-
 
     public int getX() {
         return x;

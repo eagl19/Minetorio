@@ -178,6 +178,13 @@ public class ResearcherMenu extends AbstractContainerMenu {
         return be;
     }
 
+    public void handleButtonPress(int id, Player player) {
+
+        if (id == 0) {
+            be.researchTechnologyDone(player);
+        }
+    }
+
     @Override
     public void removed(@NotNull Player pPlayer) {
         super.removed(pPlayer);
