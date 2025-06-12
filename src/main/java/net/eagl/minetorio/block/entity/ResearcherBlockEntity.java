@@ -1,12 +1,12 @@
 package net.eagl.minetorio.block.entity;
 
+import net.eagl.minetorio.capability.MinetorioCapabilities;
 import net.eagl.minetorio.gui.ResearcherMenu;
 import net.eagl.minetorio.network.MinetorioNetwork;
 import net.eagl.minetorio.network.client.ResearchListSyncToClientPacket;
 import net.eagl.minetorio.util.Learner;
 import net.eagl.minetorio.util.ResearchPlan;
 import net.eagl.minetorio.util.Technology;
-import net.eagl.minetorio.util.TechnologyProgress;
 import net.eagl.minetorio.util.enums.FluidType;
 import net.eagl.minetorio.util.storage.FlaskStorage;
 import net.eagl.minetorio.util.storage.MinetorioFluidStorage;
@@ -178,7 +178,9 @@ public class ResearcherBlockEntity extends BlockEntity implements MenuProvider {
         if(learnTechnology.isDone()) {
             Technology learnedTechnology = researchPlan.nextTechnology();
             if (learnedTechnology != Technology.EMPTY) {
-                TechnologyProgress.learnTechnology(player, learnedTechnology.getId());
+                player.getCapability(MinetorioCapabilities.TECHNOLOGY_PROGRESS).ifPresent(progress -> {
+                    progress.learnTechnology(learnedTechnology.getId());
+                });
             }
             if (player instanceof ServerPlayer serverPlayer) {
                 MinetorioNetwork.CHANNEL.send(

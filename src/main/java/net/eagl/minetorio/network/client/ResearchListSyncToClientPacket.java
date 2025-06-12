@@ -1,6 +1,7 @@
 package net.eagl.minetorio.network.client;
 
 import net.eagl.minetorio.block.entity.ResearcherBlockEntity;
+import net.eagl.minetorio.gui.screen.ResearcherScreen;
 import net.eagl.minetorio.util.Technology;
 import net.eagl.minetorio.util.TechnologyRegistry;
 import net.minecraft.client.Minecraft;
@@ -46,6 +47,12 @@ public class ResearchListSyncToClientPacket {
             Level level = Minecraft.getInstance().level;
             if (level != null && level.getBlockEntity(msg.pos) instanceof ResearcherBlockEntity be) {
                 be.getResearchPlan().setPlan(msg.techList);
+
+                Minecraft.getInstance().execute(() -> {
+                    if (Minecraft.getInstance().screen instanceof ResearcherScreen screen) {
+                        screen.updateTechnologies();
+                    }
+                });
             }
         });
         ctx.get().setPacketHandled(true);
