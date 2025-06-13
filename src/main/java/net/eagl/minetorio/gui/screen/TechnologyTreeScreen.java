@@ -493,14 +493,7 @@ public class TechnologyTreeScreen extends Screen {
 
     private void onOkButtonClicked() {
         if(!isSee) {
-            List<Technology> list = new ArrayList<>(menu.getTechList());
-            list.set(techIndex,techDetails);
-            list.sort((a, b) -> {
-                if (a == Technology.EMPTY && b != Technology.EMPTY) return 1;
-                if (a != Technology.EMPTY && b == Technology.EMPTY) return -1;
-                return 0;
-            });
-            menu.setTechList(list);
+            menu.getBlockEntity().getResearchPlan().setPlan(techDetails, techIndex);
             MinetorioNetwork.CHANNEL.sendToServer(new ResearchListSyncToServerPacket(menu.getBlockEntity().getBlockPos(), menu.getBlockEntity().getResearchPlan().getPlan()));
         }
         Minecraft.getInstance().setScreen(new ResearcherScreen(menu, playerInventory, researcherTitle));

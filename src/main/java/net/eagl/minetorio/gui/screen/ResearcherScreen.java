@@ -82,30 +82,11 @@ public class ResearcherScreen extends AbstractContainerScreen<ResearcherMenu> {
     }
 
     private void removeFlaskAction(int currentTech) {
-        if(!getTechList().get(currentTech).equals(Technology.EMPTY)){
+       if(menu.getBlockEntity().getResearchPlan().remove(currentTech)) {
+           MinetorioNetwork.CHANNEL.sendToServer(new ResearchListSyncToServerPacket(menu.getBlockEntity().getBlockPos(), menu.getBlockEntity().getResearchPlan().getPlan()));
+           updateTechnologies();
+       }
 
-            List<Technology> list = new ArrayList<>(menu.getTechList());
-
-            list.set(currentTech,Technology.EMPTY);
-
-            int size=list.size();
-            if(currentTech + 1 < list.size()) {
-                for (int i = currentTech +1; i < size; i++){
-                    if(!list.get(i).equals(Technology.EMPTY) && !list.get(i).canLearn(list)){
-                        list.set(i,Technology.EMPTY);
-                    }
-                }
-            }
-            list.sort((a, b) -> {
-                if (a == Technology.EMPTY && b != Technology.EMPTY) return 1;
-                if (a != Technology.EMPTY && b == Technology.EMPTY) return -1;
-                return 0;
-            });
-
-            menu.setTechList(list);
-            MinetorioNetwork.CHANNEL.sendToServer(new ResearchListSyncToServerPacket(menu.getBlockEntity().getBlockPos(), menu.getBlockEntity().getResearchPlan().getPlan()));
-            updateTechnologies();
-        }
     }
 
     private void openFlaskAction(int techIndex, Technology currentTech) {

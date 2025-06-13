@@ -24,6 +24,12 @@ public class ResearchPlan implements INBTSerializable<CompoundTag> {
         this.onChange.run();
     }
 
+    public void setPlan(Technology tech, int index){
+        this.techList.set(index, tech);
+        sortEmpty();
+        this.onChange.run();
+    }
+
     public List<Technology> getPlan() {
         return techList;
     }
@@ -65,5 +71,30 @@ public class ResearchPlan implements INBTSerializable<CompoundTag> {
         techList.set(techList.size() - 1, Technology.EMPTY);
         onChange.run();
         return removed;
+    }
+
+    public boolean remove(int index) {
+        if (!techList.get(index).equals(Technology.EMPTY)) {
+            techList.set(index, Technology.EMPTY);
+            for (int i = index + 1; i < techList.size(); i++) {
+                Technology tech = techList.get(i);
+                if (!tech.equals(Technology.EMPTY) && !tech.canLearn(techList)) {
+                    techList.set(i, Technology.EMPTY);
+                }
+            }
+
+            sortEmpty();
+            onChange.run();
+            return true;
+        }
+        return false;
+    }
+
+    public void sortEmpty(){
+        techList.sort((a, b) -> {
+            if (a == Technology.EMPTY && b != Technology.EMPTY) return 1;
+            if (a != Technology.EMPTY && b == Technology.EMPTY) return -1;
+            return 0;
+        });
     }
 }
