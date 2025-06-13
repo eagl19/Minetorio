@@ -38,7 +38,7 @@ public class Learner implements INBTSerializable<CompoundTag> {
             this.tech = tech;
             this.time = 0;
             this.totalTime = tech.getTotalTime();
-            this.canUpdateLearner = true;
+            updateCaches();
         }
     }
 
@@ -49,18 +49,17 @@ public class Learner implements INBTSerializable<CompoundTag> {
 
         if (tech == null || tech.equals(Technology.EMPTY)) return;
 
-        int time = tech.getTime();
+        int timeTech = tech.getTime();
         for (FlaskColor color : FlaskColor.values()) {
             int count = tech.getCost().getFlaskAmount(color);
             if (count > 0) {
                 cachedFlaskCounts.put(color, count);
-                cachedFlaskTimes.put(color, time / count);
+                cachedFlaskTimes.put(color, timeTech / count);
             }
         }
 
         recheckIsLearnable();
 
-        canUpdateLearner = false;
     }
 
     public void setDirty(boolean dirty) {

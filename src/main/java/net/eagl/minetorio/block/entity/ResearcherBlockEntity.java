@@ -169,13 +169,12 @@ public class ResearcherBlockEntity extends BlockEntity implements MenuProvider {
     }
 
     private void onResearcherPlanChange(){
-        var plan = researchPlan.getPlan();
-        System.out.println(plan.get(0).getId());
-        learnTechnology.setTech(plan.isEmpty() ? Technology.EMPTY : plan.get(0));
+        learnTechnology.setTech(researchPlan.getFirst());
         setChanged();
     }
     public void researchTechnologyDone(Player player) {
         if(learnTechnology.isDone()) {
+            learnTechnology.clear();
             Technology learnedTechnology = researchPlan.nextTechnology();
             if (learnedTechnology != Technology.EMPTY) {
                 player.getCapability(MinetorioCapabilities.TECHNOLOGY_PROGRESS).ifPresent(progress ->
@@ -187,8 +186,6 @@ public class ResearcherBlockEntity extends BlockEntity implements MenuProvider {
                         new ResearchListSyncToClientPacket(this.getBlockPos(), this.getResearchPlan().getPlan())
                 );
             }
-            learnTechnology.clear();
-            setChanged();
         }
     }
 

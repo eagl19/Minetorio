@@ -38,6 +38,12 @@ public class ResearchPlan implements INBTSerializable<CompoundTag> {
         return techList;
     }
 
+    public Technology getFirst(){
+         Technology tech = techList.get(0);
+         if(tech == null) return  Technology.EMPTY;
+         return  tech;
+    }
+
     @Override
     public CompoundTag serializeNBT() {
         CompoundTag tag = new CompoundTag();
