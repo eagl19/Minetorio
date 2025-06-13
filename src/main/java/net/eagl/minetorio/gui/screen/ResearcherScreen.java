@@ -14,6 +14,8 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
@@ -27,6 +29,11 @@ import java.util.List;
 public class ResearcherScreen extends AbstractContainerScreen<ResearcherMenu> {
 
     private static final ResourceLocation GUI_TEXTURE = ResourceLocation.fromNamespaceAndPath("minetorio", "textures/gui/researcher.png");
+
+    private List<FormattedCharSequence> lines;
+    private int scrollOffset = 0;
+    private final int maxVisibleLines = 6;
+    private final int lineHeight = 10;
 
     private final Inventory playerInventory;
 
@@ -44,11 +51,10 @@ public class ResearcherScreen extends AbstractContainerScreen<ResearcherMenu> {
 
     @Override
     protected void init() {
-        super.init();
         List<Technology> techList = new ArrayList<>(getTechList());
         this.addRenderableWidget(new ItemIconWidget(
-                leftPos + 8,
-                topPos + 60,
+                leftPos + 26,
+                topPos + 44,
                 new ItemStack(techList.get(0).getDisplayIcon()),
                 () -> openFlaskAction(0, techList.get(0))
         ));
@@ -72,9 +78,15 @@ public class ResearcherScreen extends AbstractContainerScreen<ResearcherMenu> {
         }
         this.addRenderableWidget(
                 Button.builder(Component.literal("Learn"), btn -> buttonClick())
-                        .bounds(leftPos + 8, topPos + 80, 50, 20)
+                        .bounds(leftPos + 8, topPos + 69, 52, 20)
                         .build()
         );
+        if(!menu.getBlockEntity().getResearchPlan().getFirst().equals(Technology.EMPTY)) {
+            lines = font.split(menu.getBlockEntity().getResearchPlan().getFirst().getBenefit(),100);
+        }else{
+            lines = List.of();
+        }
+        super.init();
     }
 
     private void buttonClick(){
@@ -96,11 +108,40 @@ public class ResearcherScreen extends AbstractContainerScreen<ResearcherMenu> {
         return menu.getTechList();
     }
 
+    private void drawScrollbar(GuiGraphics guiGraphics, int totalLines, int offset) {
+        int x = 104;
+        int y = 0;
+        int maxScroll = Math.max(0, totalLines - maxVisibleLines);
+        int scrollAreaHeight = maxVisibleLines * lineHeight;
+        int barHeight = Math.max(10, scrollAreaHeight * maxVisibleLines / totalLines);
+        int barY = y + (scrollAreaHeight - barHeight) * offset / Math.max(1, maxScroll);
+
+        guiGraphics.fill(x, y, x + 4, y + scrollAreaHeight, 0xFFAAAAAA);
+        guiGraphics.fill(x, barY, x + 4, barY + barHeight, 0xFF555555);
+    }
+
     @Override
     protected void renderBg(@NotNull GuiGraphics pGuiGraphics, float pPartialTick, int pMouseX, int pMouseY) {
         pGuiGraphics.setColor(1f, 1f, 1f, 1f);
         pGuiGraphics.blit(GUI_TEXTURE, leftPos, topPos, 0, 0, imageWidth, imageHeight);
 
+        pGuiGraphics.pose().pushPose();
+
+        int startX = leftPos + 65;
+        int startY = topPos + 44;
+        pGuiGraphics.pose().translate(startX, startY, 0);
+        pGuiGraphics.pose().scale(0.5f, 0.5f, 1.0f);
+        for (int i = 0; i < maxVisibleLines; i++) {
+            int lineIndex = scrollOffset + i;
+            if (lineIndex >= lines.size()) break;
+            pGuiGraphics.drawString(font, lines.get(lineIndex), 0,  i * lineHeight, 0x000000, false);
+        }
+
+        if(lines.size() > maxVisibleLines) {
+            drawScrollbar(pGuiGraphics, lines.size(), scrollOffset);
+        }
+
+        pGuiGraphics.pose().popPose();
 
         int energy = menu.getEnergy();
         int maxEnergy = menu.getMaxEnergyStorage();
@@ -211,5 +252,11 @@ public class ResearcherScreen extends AbstractContainerScreen<ResearcherMenu> {
         renderTooltip(pGuiGraphics, pMouseX, pMouseY);
 
 
+    }
+    @Override
+    public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
+        int maxScroll = Math.max(0, lines.size() - maxVisibleLines);
+        scrollOffset = Mth.clamp(scrollOffset - (int) delta, 0, maxScroll);
+        return true;
     }
 }
