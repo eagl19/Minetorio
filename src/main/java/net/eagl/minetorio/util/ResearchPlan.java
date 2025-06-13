@@ -24,10 +24,14 @@ public class ResearchPlan implements INBTSerializable<CompoundTag> {
         this.onChange.run();
     }
 
-    public void setPlan(Technology tech, int index){
-        this.techList.set(index, tech);
-        sortEmpty();
-        this.onChange.run();
+    public boolean setPlan(Technology tech, int index){
+        if (index >= 0 && index < techList.size()) {
+            this.techList.set(index, tech);
+            sortEmpty();
+            this.onChange.run();
+            return true;
+        }
+        return false;
     }
 
     public List<Technology> getPlan() {

@@ -5,7 +5,7 @@ import net.eagl.minetorio.gui.widget.RemovableItemIcon;
 import net.eagl.minetorio.gui.ResearcherMenu;
 import net.eagl.minetorio.gui.slot.FlaskSlot;
 import net.eagl.minetorio.network.MinetorioNetwork;
-import net.eagl.minetorio.network.server.ResearchListSyncToServerPacket;
+import net.eagl.minetorio.network.server.RemoveResearcherPlanPacket;
 import net.eagl.minetorio.network.server.ResearcherButtonPacket;
 import net.eagl.minetorio.util.Technology;
 import net.minecraft.ChatFormatting;
@@ -82,11 +82,8 @@ public class ResearcherScreen extends AbstractContainerScreen<ResearcherMenu> {
     }
 
     private void removeFlaskAction(int currentTech) {
-       if(menu.getBlockEntity().getResearchPlan().remove(currentTech)) {
-           MinetorioNetwork.CHANNEL.sendToServer(new ResearchListSyncToServerPacket(menu.getBlockEntity().getBlockPos(), menu.getBlockEntity().getResearchPlan().getPlan()));
-           updateTechnologies();
-       }
-
+        MinetorioNetwork.CHANNEL.sendToServer(new RemoveResearcherPlanPacket(
+                menu.getBlockEntity().getBlockPos(), currentTech));
     }
 
     private void openFlaskAction(int techIndex, Technology currentTech) {

@@ -1,7 +1,8 @@
 package net.eagl.minetorio.network;
 
 import net.eagl.minetorio.network.client.ResearchListSyncToClientPacket;
-import net.eagl.minetorio.network.server.ResearchListSyncToServerPacket;
+import net.eagl.minetorio.network.server.AddResearcherPlanPacket;
+import net.eagl.minetorio.network.server.RemoveResearcherPlanPacket;
 import net.eagl.minetorio.network.server.ResearcherButtonPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.network.NetworkDirection;
@@ -31,11 +32,6 @@ public class MinetorioNetwork {
                 PatternLearnSyncPacket::handle,
                 Optional.of(NetworkDirection.PLAY_TO_CLIENT)
         );
-        CHANNEL.registerMessage(packetId++, ResearchListSyncToServerPacket.class,
-                ResearchListSyncToServerPacket::encode,
-                ResearchListSyncToServerPacket::decode,
-                ResearchListSyncToServerPacket::handle,
-                Optional.of(NetworkDirection.PLAY_TO_SERVER));
         CHANNEL.registerMessage(
                 packetId++,
                 ResearchListSyncToClientPacket.class,
@@ -44,12 +40,28 @@ public class MinetorioNetwork {
                 ResearchListSyncToClientPacket::handle,
                 Optional.of(NetworkDirection.PLAY_TO_CLIENT)
         );
-            CHANNEL.registerMessage(packetId++, ResearcherButtonPacket.class,
+            CHANNEL.registerMessage(packetId++,
+                    ResearcherButtonPacket.class,
                     ResearcherButtonPacket::encode,
                     ResearcherButtonPacket::decode,
                     ResearcherButtonPacket::handle,
                     Optional.of(NetworkDirection.PLAY_TO_SERVER)
             );
+        CHANNEL.registerMessage(packetId++,
+                RemoveResearcherPlanPacket.class,
+                RemoveResearcherPlanPacket::toBytes,
+                RemoveResearcherPlanPacket::new,
+                RemoveResearcherPlanPacket::handle,
+                Optional.of(NetworkDirection.PLAY_TO_SERVER)
+        );
+        CHANNEL.registerMessage(packetId++,
+                AddResearcherPlanPacket.class,
+                AddResearcherPlanPacket::encode,
+                AddResearcherPlanPacket::new,
+                AddResearcherPlanPacket::handle,
+                Optional.of(NetworkDirection.PLAY_TO_SERVER)
+        );
+
     }
 
 

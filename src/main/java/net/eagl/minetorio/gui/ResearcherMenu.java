@@ -4,7 +4,6 @@ import net.eagl.minetorio.block.MinetorioBlocks;
 import net.eagl.minetorio.block.entity.ResearcherBlockEntity;
 import net.eagl.minetorio.gui.slot.FlaskSlot;
 import net.eagl.minetorio.network.MinetorioNetwork;
-import net.eagl.minetorio.network.server.ResearchListSyncToServerPacket;
 import net.eagl.minetorio.network.client.ResearchListSyncToClientPacket;
 import net.eagl.minetorio.util.InventorySlot;
 import net.eagl.minetorio.util.Technology;
@@ -170,9 +169,6 @@ public class ResearcherMenu extends AbstractContainerMenu {
     public  List<Technology> getTechList(){
         return be.getResearchPlan().getPlan();
     }
-    public void setTechList(List<Technology> pList){
-        be.getResearchPlan().setPlan(pList);
-    }
 
     public ResearcherBlockEntity getBlockEntity(){
         return be;
@@ -182,14 +178,6 @@ public class ResearcherMenu extends AbstractContainerMenu {
 
         if (id == 0) {
             be.researchTechnologyDone(player);
-        }
-    }
-
-    @Override
-    public void removed(@NotNull Player pPlayer) {
-        super.removed(pPlayer);
-        if (pPlayer.level().isClientSide) {
-            MinetorioNetwork.CHANNEL.sendToServer(new ResearchListSyncToServerPacket(be.getBlockPos(), be.getResearchPlan().getPlan()));
         }
     }
 }
