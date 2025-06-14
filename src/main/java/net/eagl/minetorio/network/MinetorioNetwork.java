@@ -1,6 +1,7 @@
 package net.eagl.minetorio.network;
 
 import net.eagl.minetorio.network.client.ResearchListSyncToClientPacket;
+import net.eagl.minetorio.network.client.SyncTechnologyProgressPacket;
 import net.eagl.minetorio.network.server.AddResearcherPlanPacket;
 import net.eagl.minetorio.network.server.RemoveResearcherPlanPacket;
 import net.eagl.minetorio.network.server.ResearcherButtonPacket;
@@ -61,6 +62,11 @@ public class MinetorioNetwork {
                 AddResearcherPlanPacket::handle,
                 Optional.of(NetworkDirection.PLAY_TO_SERVER)
         );
+        CHANNEL.registerMessage(packetId++,
+                SyncTechnologyProgressPacket.class,
+                SyncTechnologyProgressPacket::encode,
+                SyncTechnologyProgressPacket::decode,
+                SyncTechnologyProgressPacket::handle);
 
     }
 

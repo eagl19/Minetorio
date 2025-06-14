@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.eagl.minetorio.block.entity.ResearcherBlockEntity;
+import net.eagl.minetorio.util.ClockRendererWorld;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -35,24 +36,25 @@ public class ResearcherBlockRenderer implements BlockEntityRenderer<ResearcherBl
         poseStack.mulPose(camera.rotation());
         poseStack.mulPose(Axis.XN.rotationDegrees(90));
 
-        float size = 0.5f;
-        ResourceLocation texture = ResourceLocation.fromNamespaceAndPath("minetorio", "textures/gui/clock.png");
-        RenderType renderType = RenderType.text(texture);
-        VertexConsumer consumer = buffer.getBuffer(renderType);
-        Matrix4f matrix = poseStack.last().pose();
-
-        consumer.vertex(matrix, -size, 0, -size).color(255, 255, 255, 255)
-                .uv(0, 1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight)
-                .normal(poseStack.last().normal(), 0, 0, -1).endVertex();
-        consumer.vertex(matrix, -size, 0, size).color(255, 255, 255, 255)
-                .uv(0, 0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight)
-                .normal(poseStack.last().normal(), 0, 0, -1).endVertex();
-        consumer.vertex(matrix, size, 0, size).color(255, 255, 255, 255)
-                .uv(1, 0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight)
-                .normal(poseStack.last().normal(), 0, 0, -1).endVertex();
-        consumer.vertex(matrix, size, 0, -size).color(255, 255, 255, 255)
-                .uv(1, 1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight)
-                .normal(poseStack.last().normal(), 0, 0, -1).endVertex();
+        ClockRendererWorld.render(poseStack, buffer, packedLight, pBlockEntity.getLearnTime());
+//        float size = 0.5f;
+//        ResourceLocation texture = ResourceLocation.fromNamespaceAndPath("minetorio", "textures/gui/clock.png");
+//        RenderType renderType = RenderType.text(texture);
+//        VertexConsumer consumer = buffer.getBuffer(renderType);
+//        Matrix4f matrix = poseStack.last().pose();
+//
+//        consumer.vertex(matrix, -size, 0, -size).color(255, 255, 255, 255)
+//                .uv(0, 1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight)
+//                .normal(poseStack.last().normal(), 0, 0, -1).endVertex();
+//        consumer.vertex(matrix, -size, 0, size).color(255, 255, 255, 255)
+//                .uv(0, 0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight)
+//                .normal(poseStack.last().normal(), 0, 0, -1).endVertex();
+//        consumer.vertex(matrix, size, 0, size).color(255, 255, 255, 255)
+//                .uv(1, 0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight)
+//                .normal(poseStack.last().normal(), 0, 0, -1).endVertex();
+//        consumer.vertex(matrix, size, 0, -size).color(255, 255, 255, 255)
+//                .uv(1, 1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLight)
+//                .normal(poseStack.last().normal(), 0, 0, -1).endVertex();
 
         poseStack.popPose();
     }

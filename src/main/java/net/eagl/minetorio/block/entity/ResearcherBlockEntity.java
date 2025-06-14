@@ -4,6 +4,7 @@ import net.eagl.minetorio.capability.MinetorioCapabilities;
 import net.eagl.minetorio.gui.ResearcherMenu;
 import net.eagl.minetorio.network.MinetorioNetwork;
 import net.eagl.minetorio.network.client.ResearchListSyncToClientPacket;
+import net.eagl.minetorio.network.client.SyncTechnologyProgressPacket;
 import net.eagl.minetorio.util.Learner;
 import net.eagl.minetorio.util.ResearchPlan;
 import net.eagl.minetorio.util.Technology;
@@ -53,9 +54,9 @@ public class ResearcherBlockEntity extends BlockEntity implements MenuProvider {
     public static final int MAX_RECEIVE_ENERGY = 100;
     public static final int MAX_EXTRACT_ENERGY = 100;
 
-    public static final int START_ENERGY_STORAGE = 5000;
-    public static final int START_WATER_STORAGE = 5000;
-    public static final int START_LAVA_STORAGE = 5000;
+    public static final int START_ENERGY_STORAGE = 250000;
+    public static final int START_WATER_STORAGE = 250000;
+    public static final int START_LAVA_STORAGE = 250000;
 
     private final ResearchPlan researchPlan = new ResearchPlan(this::onResearcherPlanChange);
     private final FlaskStorage itemHandler = new FlaskStorage(this::onFlaskFieldChange);
@@ -83,6 +84,9 @@ public class ResearcherBlockEntity extends BlockEntity implements MenuProvider {
         return containerData;
     }
 
+    public int getLearnTime(){
+        return learnTechnology.getCurrentTime();
+    }
     public void updateContainerData() {
         containerData.set(ENERGY, energyStorage.getEnergyStored());
         containerData.set(MAX_ENERGY, energyStorage.getMaxEnergyStored());
@@ -177,8 +181,16 @@ public class ResearcherBlockEntity extends BlockEntity implements MenuProvider {
             learnTechnology.clear();
             Technology learnedTechnology = researchPlan.nextTechnology();
             if (learnedTechnology != Technology.EMPTY) {
-                player.getCapability(MinetorioCapabilities.TECHNOLOGY_PROGRESS).ifPresent(progress ->
-                        progress.learnTechnology(learnedTechnology.getId()));
+                player.getCapability(MinetorioCapabilities.TECHNOLOGY_PROGRESS).ifPresent(progress -> {
+                    progress.learnTechnology(learnedTechnology.getId());
+
+                    if (player instanceof ServerPlayer serverPlayer) {
+                        MinetorioNetwork.CHANNEL.send(
+                                PacketDistributor.PLAYER.with(() -> serverPlayer),
+                                new SyncTechnologyProgressPacket(progress.serializeNBT())
+                        );
+                    }
+                });
             }
             if (player instanceof ServerPlayer serverPlayer) {
                 MinetorioNetwork.CHANNEL.send(

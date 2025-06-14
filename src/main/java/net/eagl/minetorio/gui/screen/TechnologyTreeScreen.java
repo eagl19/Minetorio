@@ -1,6 +1,7 @@
 package net.eagl.minetorio.gui.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.eagl.minetorio.capability.MinetorioCapabilities;
 import net.eagl.minetorio.gui.ResearcherMenu;
 import net.eagl.minetorio.network.MinetorioNetwork;
 import net.eagl.minetorio.network.server.AddResearcherPlanPacket;
@@ -25,6 +26,7 @@ import org.lwjgl.glfw.GLFW;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class TechnologyTreeScreen extends Screen {
     private static final ResourceLocation NODE_TEXTURE = ResourceLocation.fromNamespaceAndPath("minetorio", "textures/gui/tech.png");
@@ -62,6 +64,8 @@ public class TechnologyTreeScreen extends Screen {
     private final Inventory playerInventory;
     private final Component researcherTitle;
 
+    private Set<String> technologyProgress;
+
     private  boolean canLearn;
 
     public TechnologyTreeScreen(ResearcherMenu pMenu, Inventory pPlayerInventory, Component pTitle, Technology tech, int pCurrentTech) {
@@ -77,6 +81,20 @@ public class TechnologyTreeScreen extends Screen {
 
     }
 
+    @Override
+    protected void init() {
+        super.init();
+        updateTechnologyProgress();
+    }
+
+    public void updateTechnologyProgress() {
+
+        Minecraft mc = Minecraft.getInstance();
+        if(mc.player != null) {
+            mc.player.getCapability(MinetorioCapabilities.TECHNOLOGY_PROGRESS).ifPresent(progress ->
+                    this.technologyProgress = progress.getLearnedTechnologies());
+        }
+    }
 
     @Override
     public void render(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
@@ -318,10 +336,10 @@ public class TechnologyTreeScreen extends Screen {
 
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderTexture(0, NODE_TEXTURE);
-        if(tech.isLearn()) {
+        if(technologyProgress.contains(tech.getId())) {
             RenderSystem.setShaderColor(0.5f, 1.0f, 0.5f, 1.0f);
         }
-        else if(tech.canLearn(menu.getTechList())){
+        else if(tech.canLearn(menu.getTechList(), technologyProgress)){
             RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
         }
         else{
@@ -503,7 +521,7 @@ public class TechnologyTreeScreen extends Screen {
         if (button == 0) {
             this.techDetails = tech;
 
-            canLearn = !menu.getTechList().contains(techDetails) && techDetails.canLearn(menu.getTechList());
+            canLearn = !technologyProgress.contains(techDetails.getId())&& !menu.getTechList().contains(techDetails) && techDetails.canLearn(menu.getTechList(), technologyProgress);
         }
     }
 

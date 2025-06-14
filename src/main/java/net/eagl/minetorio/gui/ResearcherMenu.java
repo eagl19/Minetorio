@@ -2,9 +2,11 @@ package net.eagl.minetorio.gui;
 
 import net.eagl.minetorio.block.MinetorioBlocks;
 import net.eagl.minetorio.block.entity.ResearcherBlockEntity;
+import net.eagl.minetorio.capability.MinetorioCapabilities;
 import net.eagl.minetorio.gui.slot.FlaskSlot;
 import net.eagl.minetorio.network.MinetorioNetwork;
 import net.eagl.minetorio.network.client.ResearchListSyncToClientPacket;
+import net.eagl.minetorio.network.client.SyncTechnologyProgressPacket;
 import net.eagl.minetorio.util.InventorySlot;
 import net.eagl.minetorio.util.Technology;
 import net.eagl.minetorio.util.enums.FlaskColor;
@@ -34,6 +36,8 @@ public class ResearcherMenu extends AbstractContainerMenu {
 
     public ResearcherMenu(int id, Inventory playerInventory, BlockEntity entity) {
         super(MinetorioMenus.RESEARCHER_MENU.get(), id);
+
+
 
         this.access = ContainerLevelAccess.create(Objects.requireNonNull(entity.getLevel()), entity.getBlockPos());
 
@@ -71,6 +75,13 @@ public class ResearcherMenu extends AbstractContainerMenu {
                     PacketDistributor.PLAYER.with(() -> serverPlayer),
                     new ResearchListSyncToClientPacket(be.getBlockPos(), be.getResearchPlan().getPlan())
             );
+
+            serverPlayer.getCapability(MinetorioCapabilities.TECHNOLOGY_PROGRESS).ifPresent(progress -> {
+                MinetorioNetwork.CHANNEL.send(
+                        PacketDistributor.PLAYER.with(() -> serverPlayer),
+                        new SyncTechnologyProgressPacket(progress.serializeNBT())
+                );
+            });
         }
 
     }

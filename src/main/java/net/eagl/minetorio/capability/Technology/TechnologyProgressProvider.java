@@ -1,7 +1,7 @@
 package net.eagl.minetorio.capability.Technology;
 
 import net.minecraft.core.Direction;
-import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
@@ -12,7 +12,7 @@ import net.minecraftforge.common.util.LazyOptional;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class TechnologyProgressProvider implements ICapabilityProvider, INBTSerializable<ListTag> {
+public class TechnologyProgressProvider implements ICapabilityProvider, INBTSerializable<CompoundTag> {
 
     public static final Capability<ITechnologyProgress> CAPABILITY =
             CapabilityManager.get(new CapabilityToken<>(){});
@@ -31,12 +31,12 @@ public class TechnologyProgressProvider implements ICapabilityProvider, INBTSeri
     }
 
     @Override
-    public ListTag serializeNBT() {
+    public CompoundTag serializeNBT() {
         return backend.serializeNBT();
     }
 
     @Override
-    public void deserializeNBT(ListTag nbt) {
+    public void deserializeNBT(CompoundTag nbt) {
         backend.deserializeNBT(nbt);
     }
 }

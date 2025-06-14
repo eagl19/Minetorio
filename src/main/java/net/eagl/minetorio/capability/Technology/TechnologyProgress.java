@@ -1,5 +1,6 @@
 package net.eagl.minetorio.capability.Technology;
 
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
@@ -8,7 +9,7 @@ import net.minecraftforge.common.util.INBTSerializable;
 import java.util.HashSet;
 import java.util.Set;
 
-public class TechnologyProgress implements ITechnologyProgress, INBTSerializable<ListTag> {
+public class TechnologyProgress implements ITechnologyProgress, INBTSerializable<CompoundTag> {
     private final Set<String> learned = new HashSet<>();
 
     @Override
@@ -33,19 +34,24 @@ public class TechnologyProgress implements ITechnologyProgress, INBTSerializable
     }
 
     @Override
-    public ListTag serializeNBT() {
-        ListTag tag = new ListTag();
+    public CompoundTag serializeNBT() {
+        CompoundTag tag = new CompoundTag();
+        ListTag list = new ListTag();
         for (String id : learned) {
-            tag.add(StringTag.valueOf(id));
+            list.add(StringTag.valueOf(id));
         }
+        tag.put("Learned", list);
         return tag;
     }
 
     @Override
-    public void deserializeNBT(ListTag nbt) {
+    public void deserializeNBT(CompoundTag nbt) {
         learned.clear();
-        for (Tag tag : nbt) {
-            learned.add(tag.getAsString());
+        if (nbt.contains("Learned", Tag.TAG_LIST)) {
+            ListTag list = nbt.getList("Learned", Tag.TAG_STRING);
+            for (Tag tag : list) {
+                learned.add(tag.getAsString());
+            }
         }
     }
 }

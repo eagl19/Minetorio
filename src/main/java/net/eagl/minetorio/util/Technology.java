@@ -24,7 +24,6 @@ public class Technology {
     private final int count;
     private final int x;
     private final int y;
-    private boolean learn;
 
     public static final Technology EMPTY = new Technology(
             "empty",
@@ -59,7 +58,6 @@ public class Technology {
         this.count = count;
         this.x = x;
         this.y = y;
-        this.learn = false;
     }
 
     public MutableComponent getBenefit() {
@@ -87,26 +85,22 @@ public class Technology {
                 );
     }
 
-    public void learn(boolean pLearn){
-        this.learn = pLearn;
+    public boolean canLearn(List<Technology> tecList){
+        return canLearn(tecList, Set.of());
     }
 
-    public boolean isLearn() {
-        return learn;
-    }
-
-    public boolean canLearn(List<Technology> techList) {
+    public boolean canLearn(List<Technology> techList, Set<String> learned) {
         if (prerequisites.isEmpty()) {
             return true;
         }
 
-        Set<String> learnedIds = techList.stream()
+        Set<String> researchedIds = techList.stream()
                 .map(Technology::getId)
                 .collect(Collectors.toSet());
 
         for (String parentId : prerequisites) {
             Technology parent = TechnologyRegistry.get(parentId);
-            if (parent == null || (!parent.isLearn() && !learnedIds.contains(parentId))) {
+            if (parent == null || (!learned.contains(parentId) && !researchedIds.contains(parentId))) {
                 return false;
             }
         }
@@ -124,7 +118,7 @@ public class Technology {
                         .filter(entry -> entry.getValue() > 0)
                         .map(entry -> {
                             int count = entry.getValue();
-                            String name = cost.getFlask(entry.getKey()).getHoverName().getString();
+                            String name = FlasksField.getFlask(entry.getKey()).getHoverName().getString();
                             return count + "x " + name;
                         })
                         .reduce((a, b) -> a + ", " + b)
