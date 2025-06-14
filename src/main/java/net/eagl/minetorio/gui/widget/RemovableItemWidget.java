@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 
-public class RemovableItemIcon extends AbstractWidget {
+public class RemovableItemWidget extends AbstractWidget {
     private final ItemStack itemStack;
     private final Runnable onClickIcon;
     private final Runnable onClickRemove;
@@ -22,7 +22,7 @@ public class RemovableItemIcon extends AbstractWidget {
     private static float dy;
     private static float scaleButton;
 
-    public RemovableItemIcon(int x, int y, ItemStack stack, Runnable iconAction, Runnable removeAction) {
+    public RemovableItemWidget(int x, int y, ItemStack stack, Runnable iconAction, Runnable removeAction) {
         super(x, y, 16, 16, Component.empty());
         this.itemStack = stack;
         this.onClickIcon = iconAction;

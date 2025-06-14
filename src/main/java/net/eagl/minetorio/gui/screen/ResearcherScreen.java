@@ -1,7 +1,9 @@
 package net.eagl.minetorio.gui.screen;
 
+import com.mojang.blaze3d.systems.RenderSystem;
+import net.eagl.minetorio.gui.widget.ButtonWidget;
 import net.eagl.minetorio.gui.widget.ItemIconWidget;
-import net.eagl.minetorio.gui.widget.RemovableItemIcon;
+import net.eagl.minetorio.gui.widget.RemovableItemWidget;
 import net.eagl.minetorio.gui.ResearcherMenu;
 import net.eagl.minetorio.gui.slot.FlaskSlot;
 import net.eagl.minetorio.network.MinetorioNetwork;
@@ -20,7 +22,6 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
-import net.minecraft.client.gui.components.Button;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -29,6 +30,7 @@ import java.util.List;
 public class ResearcherScreen extends AbstractContainerScreen<ResearcherMenu> {
 
     private static final ResourceLocation GUI_TEXTURE = ResourceLocation.fromNamespaceAndPath("minetorio", "textures/gui/researcher.png");
+    private static final ResourceLocation RESEARCH_TEXTURE = ResourceLocation.fromNamespaceAndPath("minetorio", "textures/gui/button_learn.png");
 
     private List<FormattedCharSequence> lines;
     private int scrollOffset = 0;
@@ -51,6 +53,7 @@ public class ResearcherScreen extends AbstractContainerScreen<ResearcherMenu> {
 
     @Override
     protected void init() {
+        super.init();
         List<Technology> techList = new ArrayList<>(getTechList());
         this.addRenderableWidget(new ItemIconWidget(
                 leftPos + 26,
@@ -68,7 +71,7 @@ public class ResearcherScreen extends AbstractContainerScreen<ResearcherMenu> {
                         () -> openFlaskAction(currentI, currentTech)
                 ));
             }else {
-                this.addRenderableWidget(new RemovableItemIcon(
+                this.addRenderableWidget(new RemovableItemWidget(
                         leftPos - 10 + i * 18, topPos + 23,
                         new ItemStack(currentTech.getDisplayIcon()),
                         () -> openFlaskAction(currentI, currentTech),
@@ -76,21 +79,24 @@ public class ResearcherScreen extends AbstractContainerScreen<ResearcherMenu> {
                 ));
             }
         }
-        this.addRenderableWidget(
-                Button.builder(Component.literal("Learn"), btn -> buttonClick())
-                        .bounds(leftPos + 8, topPos + 69, 52, 20)
-                        .build()
+        this.addRenderableWidget( new ButtonWidget(
+                leftPos + 8, topPos + 69, 59, 19,
+                RESEARCH_TEXTURE,
+                Component.translatable("tooltip.minetorio.researcher_gui.button_learn").withStyle(ChatFormatting.GREEN),
+                this::buttonClick)
         );
         if(!menu.getBlockEntity().getResearchPlan().getFirst().equals(Technology.EMPTY)) {
-            lines = font.split(menu.getBlockEntity().getResearchPlan().getFirst().getBenefit(),100);
+            lines = font.split(menu.getBlockEntity().getResearchPlan().getFirst().getBenefit(),90);
         }else{
             lines = List.of();
         }
-        super.init();
+
     }
 
     private void buttonClick(){
-        MinetorioNetwork.CHANNEL.sendToServer(new ResearcherButtonPacket(0));
+        if(menu.getLearn() == menu.getMaxLearn()) {
+            MinetorioNetwork.CHANNEL.sendToServer(new ResearcherButtonPacket(0));
+        }
     }
 
     private void removeFlaskAction(int currentTech) {
@@ -127,10 +133,11 @@ public class ResearcherScreen extends AbstractContainerScreen<ResearcherMenu> {
 
         pGuiGraphics.pose().pushPose();
 
-        int startX = leftPos + 65;
+        int startX = leftPos + 70;
         int startY = topPos + 44;
         pGuiGraphics.pose().translate(startX, startY, 0);
         pGuiGraphics.pose().scale(0.5f, 0.5f, 1.0f);
+        RenderSystem.setShaderColor(0.6f, 0.6f, 0.6f, 1.0f);
         for (int i = 0; i < maxVisibleLines; i++) {
             int lineIndex = scrollOffset + i;
             if (lineIndex >= lines.size()) break;
@@ -140,7 +147,7 @@ public class ResearcherScreen extends AbstractContainerScreen<ResearcherMenu> {
         if(lines.size() > maxVisibleLines) {
             drawScrollbar(pGuiGraphics, lines.size(), scrollOffset);
         }
-
+        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
         pGuiGraphics.pose().popPose();
 
         int energy = menu.getEnergy();
