@@ -338,6 +338,8 @@ public class TechnologyTreeScreen extends Screen {
         RenderSystem.setShaderTexture(0, NODE_TEXTURE);
         if(technologyProgress.contains(tech.getId())) {
             RenderSystem.setShaderColor(0.5f, 1.0f, 0.5f, 1.0f);
+        } else if(menu.getTechList().contains(tech)){
+            RenderSystem.setShaderColor(0.5f, 0.5f, 0.5f, 1.0f);
         }
         else if(tech.canLearn(menu.getTechList(), technologyProgress)){
             RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
