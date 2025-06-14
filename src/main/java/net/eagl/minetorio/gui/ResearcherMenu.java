@@ -76,12 +76,11 @@ public class ResearcherMenu extends AbstractContainerMenu {
                     new ResearchListSyncToClientPacket(be.getBlockPos(), be.getResearchPlan().getPlan())
             );
 
-            serverPlayer.getCapability(MinetorioCapabilities.TECHNOLOGY_PROGRESS).ifPresent(progress -> {
-                MinetorioNetwork.CHANNEL.send(
-                        PacketDistributor.PLAYER.with(() -> serverPlayer),
-                        new SyncTechnologyProgressPacket(progress.serializeNBT())
-                );
-            });
+            serverPlayer.getCapability(MinetorioCapabilities.TECHNOLOGY_PROGRESS).ifPresent(progress ->
+                    MinetorioNetwork.CHANNEL.send(
+                            PacketDistributor.PLAYER.with(() -> serverPlayer),
+                            new SyncTechnologyProgressPacket(progress.serializeNBT())
+            ));
         }
 
     }
