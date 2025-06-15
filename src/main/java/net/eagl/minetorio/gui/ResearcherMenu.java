@@ -3,6 +3,7 @@ package net.eagl.minetorio.gui;
 import net.eagl.minetorio.block.MinetorioBlocks;
 import net.eagl.minetorio.block.entity.ResearcherBlockEntity;
 import net.eagl.minetorio.capability.MinetorioCapabilities;
+import net.eagl.minetorio.datagen.MinetorioItemTagGenerator;
 import net.eagl.minetorio.gui.slot.FlaskSlot;
 import net.eagl.minetorio.network.MinetorioNetwork;
 import net.eagl.minetorio.network.client.ResearchListSyncToClientPacket;
@@ -108,7 +109,7 @@ public class ResearcherMenu extends AbstractContainerMenu {
         }
 
          if (index >= 9 && index < 36) {
-            if (isFlaskItem(originalStack.getItem())) {
+            if (isFlaskItem(originalStack)) {
                 if (!moveItemStackTo(originalStack, 36, 48, false) &&
                         !moveItemStackTo(originalStack, 0, 9, false)) {
                     return ItemStack.EMPTY;
@@ -119,7 +120,7 @@ public class ResearcherMenu extends AbstractContainerMenu {
             }
         }
         else if (index >= 0 && index < 9) {
-            if (isFlaskItem(originalStack.getItem())) {
+            if (isFlaskItem(originalStack)) {
                 if (!moveItemStackTo(originalStack, 36, 48, false) &&
                         !moveItemStackTo(originalStack, 9, 36, false)) {
                     return ItemStack.EMPTY;
@@ -139,8 +140,8 @@ public class ResearcherMenu extends AbstractContainerMenu {
         return copy;
     }
 
-    private boolean isFlaskItem(Item item) {
-        return item.getDescriptionId().contains("flask_");
+    private boolean isFlaskItem(ItemStack stack) {
+        return stack.is(MinetorioItemTagGenerator.FLASKS);
     }
 
 
