@@ -190,4 +190,19 @@ public class ResearcherMenu extends AbstractContainerMenu {
             be.researchTechnologyDone(player);
         }
     }
+
+    @Override
+    public void clicked(int pSlotId, int pButton, @NotNull ClickType pClickType, @NotNull Player pPlayer) {
+        if (pSlotId >= 0 && pSlotId < slots.size()) {
+            Slot slot = getSlot(pSlotId);
+
+            if (slot instanceof FlaskSlot) {
+                if ((pClickType == ClickType.PICKUP || pClickType == ClickType.QUICK_MOVE) && getCarried().isEmpty()) {
+                    return;
+                }
+            }
+        }
+
+        super.clicked(pSlotId, pButton, pClickType, pPlayer);
+    }
 }

@@ -18,12 +18,14 @@ public class FlaskSlot extends SlotItemHandler {
 
     @Override
     public boolean mayPlace(@NotNull ItemStack stack) {
-        return stack.getItem() == flask;
+        if (stack.getItem() != flask) return false;
+        ItemStack current = getItem();
+        return current.isEmpty() || ItemStack.isSameItemSameTags(current, stack);
     }
 
     @Override
     public boolean mayPickup(Player playerIn) {
-        return false;
+        return true;
     }
 
     public boolean isVisible() {
