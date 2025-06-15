@@ -2,7 +2,6 @@ package net.eagl.minetorio.util;
 
 import net.eagl.minetorio.item.MinetorioItems;
 import net.minecraft.ChatFormatting;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -35,19 +34,6 @@ public class Technology {
             0,
             0
     );
-
-
-
-    public void saveToNBT(CompoundTag tag) {
-        tag.putString("Id", this.id);
-    }
-
-    public static Technology fromNBT(CompoundTag tag) {
-        String id = tag.getString("Id");
-        System.out.println(id);
-        return TechnologyRegistry.get(id) != null ? TechnologyRegistry.get(id) : Technology.EMPTY;
-    }
-
 
     public Technology(String id, Item displayIcon, List<String> prerequisites, FlasksField cost, int time, int count, int x, int y) {
         this.id = id;
@@ -111,21 +97,6 @@ public class Technology {
     public Component getDisplayName() {
         return displayIcon.getDescription();
     }
-
-    public Component getFormattedCost() {
-        return Component.literal(
-                cost.getAll().entrySet().stream()
-                        .filter(entry -> entry.getValue() > 0)
-                        .map(entry -> {
-                            int count = entry.getValue();
-                            String name = FlasksField.getFlask(entry.getKey()).getHoverName().getString();
-                            return count + "x " + name;
-                        })
-                        .reduce((a, b) -> a + ", " + b)
-                        .orElse("Free")
-        );
-    }
-
 
     public String getId() {
         return id;

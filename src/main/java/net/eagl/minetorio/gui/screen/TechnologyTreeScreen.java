@@ -356,10 +356,7 @@ public class TechnologyTreeScreen extends Screen {
         renderFlaskField(guiGraphics, x, y, tech);
 
         if (isMouseOver(mouseX, mouseY, x, y, NODE_TEXTURE_WIDTH, NODE_TEXTURE_HEIGHT)) {
-            return List.of(
-                    tech.getDisplayName(),
-                    Component.literal("Cost: " + tech.getFormattedCost().getString())
-            );
+            return List.of(tech.getDisplayName(), tech.getBenefit());
         }
         return null;
     }
