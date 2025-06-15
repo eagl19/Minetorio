@@ -3,6 +3,7 @@ package net.eagl.minetorio.datagen;
 import net.eagl.minetorio.Minetorio;
 import net.eagl.minetorio.block.MinetorioBlocks;
 import net.eagl.minetorio.block.custom.GlowingBedrockBlock;
+import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
@@ -42,8 +43,33 @@ public class MinetorioBlockStateProvider extends BlockStateProvider {
                 "item/patterns/battery",
                 "item/patterns/lightning");
 
+        fluidBlock(MinetorioBlocks.STATIC_WATER_BLOCK.get(), "water_still");
+        fluidBlock(MinetorioBlocks.STATIC_LAVA_BLOCK.get(), "lava_still");
 
         blockWithItem(MinetorioBlocks.PORTAL);
+    }
+
+    private void fluidBlock(Block block, String textureName){
+
+        String name = blockName(block);
+
+        models().withExistingParent(name, mcLoc("block/block"))
+                .texture("texture", modLoc("block/"+ textureName))
+                .element()
+                .from(0, 0, 0)
+                .to(16, 16, 16)
+                .face(Direction.DOWN).texture("#texture").cullface(Direction.DOWN).end()
+                .face(Direction.UP).texture("#texture").cullface(Direction.UP).end()
+                .face(Direction.NORTH).texture("#texture").cullface(Direction.NORTH).end()
+                .face(Direction.SOUTH).texture("#texture").cullface(Direction.SOUTH).end()
+                .face(Direction.WEST).texture("#texture").cullface(Direction.WEST).end()
+                .face(Direction.EAST).texture("#texture").cullface(Direction.EAST).end()
+                .end();
+
+        simpleBlock(block, models().getExistingFile(modLoc("block/" + name)));
+
+        itemModels().getBuilder(name)
+                .parent(models().getExistingFile(modLoc("block/" + name)));
     }
 
     private void blockWithCustomSides(Block block, String pDown,String pUp,String pNorth,String pSouth,String pWest,String pEst) {
