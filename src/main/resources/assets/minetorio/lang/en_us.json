@@ -2,6 +2,8 @@
   "block.minetorio.glowing_bedrock": "Minetorio Bedrock",
   "block.minetorio.patterns_collector": "Patterns Collector",
   "block.minetorio.researcher": "Researcher",
+  "block.minetorio.water_generator": "Water Generator",
+  "block.minetorio.lava_generator": "Lava Generator",
 
   "item.minetorio.sapphire": "Sapphire",
 
@@ -45,11 +47,11 @@
   "tooltip.minetorio.cost": "Cost",
   "tooltip.minetorio.how_to_learn": "How To Learn",
 
-  "pattern.minetorio.pattern_air.benefit": "Air Benefit",
+  "pattern.minetorio.pattern_air.benefit": "Stabilizes the Energy Generator",
   "pattern.minetorio.pattern_battery.benefit": "Battery Benefit",
   "pattern.minetorio.pattern_cloud.benefit": "Cloud Benefit",
   "pattern.minetorio.pattern_earth.benefit": "Earth Benefit",
-  "pattern.minetorio.pattern_fire.benefit": "Fire Benefit",
+  "pattern.minetorio.pattern_fire.benefit": "Stabilizes the Lava Generator",
   "pattern.minetorio.pattern_infinity.benefit": "Infinity Benefit",
   "pattern.minetorio.pattern_lightning.benefit": "Lightning Benefit",
   "pattern.minetorio.pattern_minetorio.benefit": "Minetorio Benefit",
@@ -58,8 +60,8 @@
   "pattern.minetorio.pattern_snow.benefit": "Snow Benefit",
   "pattern.minetorio.pattern_snowflake.benefit": "Snowflake Benefit",
   "pattern.minetorio.pattern_sun.benefit": "Sun Benefit",
-  "pattern.minetorio.pattern_void.benefit": "Unlock teleportation to other rooms in this dimension",
-  "pattern.minetorio.pattern_water.benefit": "Water Benefit",
+  "pattern.minetorio.pattern_void.benefit": "Unlock other rooms in this dimension",
+  "pattern.minetorio.pattern_water.benefit": "Stabilizes the Water Generator",
 
   "pattern.minetorio.pattern_air.how_to_learn": "Air How To Learn",
   "pattern.minetorio.pattern_battery.how_to_learn": "Battery How To Learn",

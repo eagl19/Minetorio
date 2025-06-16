@@ -6,7 +6,6 @@ import net.eagl.minetorio.item.MinetorioItems;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.*;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -30,17 +29,11 @@ public class MinetorioBlocks {
     public static final RegistryObject<Block> RESEARCHER = registerBlock("researcher",
             ResearchBlock::new);
 
-    public static final RegistryObject<Block> STATIC_WATER_BLOCK = BLOCKS.register("static_water_block",
-            () -> new StaticFluidBlock(BlockBehaviour.Properties.copy(Blocks.WATER)
-                    .noCollission()
-                    .strength(100.0F)
-                    .noLootTable()));
+    public static final RegistryObject<Block> WATER_GENERATOR = BLOCKS.register("water_generator",
+            WaterGenerator::new);
 
-    public static final RegistryObject<Block> STATIC_LAVA_BLOCK = BLOCKS.register("static_lava_block",
-            () -> new StaticFluidBlock(BlockBehaviour.Properties.copy(Blocks.LAVA)
-                    .noCollission()
-                    .strength(100.0F)
-                    .noLootTable()));
+    public static final RegistryObject<Block> LAVA_GENERATOR = BLOCKS.register("lava_generator",
+            LavaGenerator::new);
 
 
     private static <T extends Block> RegistryObject<T> registerBlock(String name, Supplier<T> block){

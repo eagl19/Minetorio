@@ -28,6 +28,17 @@ public class MinetorioBlockEntities {
             BLOCK_ENTITIES.register("researcher", () ->
                     BlockEntityType.Builder.of(ResearcherBlockEntity::new, MinetorioBlocks.RESEARCHER.get()).build(null));
 
+    @SuppressWarnings("DataFlowIssue")
+    public static final RegistryObject<BlockEntityType<WaterGeneratorBlockEntity>> WATER_GENERATOR_ENTITY =
+            BLOCK_ENTITIES.register("water_generator", () ->
+                    BlockEntityType.Builder.of(WaterGeneratorBlockEntity::new, MinetorioBlocks.WATER_GENERATOR.get()).build(null));
+
+    @SuppressWarnings("DataFlowIssue")
+    public static final RegistryObject<BlockEntityType<LavaGenetatorBlockEntity>> LAVA_GENERATOR_ENTITY =
+            BLOCK_ENTITIES.register("lava_generator", () ->
+                    BlockEntityType.Builder.of(LavaGenetatorBlockEntity::new, MinetorioBlocks.LAVA_GENERATOR.get()).build(null));
+
+
     public static void register(IEventBus eventBus) {
         BLOCK_ENTITIES.register(eventBus);
     }

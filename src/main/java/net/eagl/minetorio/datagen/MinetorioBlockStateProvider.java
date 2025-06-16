@@ -43,8 +43,8 @@ public class MinetorioBlockStateProvider extends BlockStateProvider {
                 "item/patterns/battery",
                 "item/patterns/lightning");
 
-        fluidBlock(MinetorioBlocks.STATIC_WATER_BLOCK.get(), "water_still");
-        fluidBlock(MinetorioBlocks.STATIC_LAVA_BLOCK.get(), "lava_still");
+        fluidBlock(MinetorioBlocks.WATER_GENERATOR.get(), "water_still");
+        fluidBlock(MinetorioBlocks.LAVA_GENERATOR.get(), "lava_still");
 
         blockWithItem(MinetorioBlocks.PORTAL);
     }
