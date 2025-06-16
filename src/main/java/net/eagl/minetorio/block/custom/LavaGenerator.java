@@ -2,7 +2,6 @@ package net.eagl.minetorio.block.custom;
 
 import net.eagl.minetorio.block.entity.LavaGenetatorBlockEntity;
 import net.eagl.minetorio.block.entity.MinetorioBlockEntities;
-import net.eagl.minetorio.block.entity.ResearcherBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
