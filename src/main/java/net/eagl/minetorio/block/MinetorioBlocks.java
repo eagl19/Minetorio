@@ -29,10 +29,10 @@ public class MinetorioBlocks {
     public static final RegistryObject<Block> RESEARCHER = registerBlock("researcher",
             ResearchBlock::new);
 
-    public static final RegistryObject<Block> WATER_GENERATOR = BLOCKS.register("water_generator",
+    public static final RegistryObject<Block> WATER_GENERATOR = registerBlock("water_generator",
             WaterGenerator::new);
 
-    public static final RegistryObject<Block> LAVA_GENERATOR = BLOCKS.register("lava_generator",
+    public static final RegistryObject<Block> LAVA_GENERATOR = registerBlock("lava_generator",
             LavaGenerator::new);
 
 

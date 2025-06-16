@@ -3,12 +3,15 @@ package net.eagl.minetorio.datagen;
 import net.eagl.minetorio.Minetorio;
 import net.eagl.minetorio.block.MinetorioBlocks;
 import net.eagl.minetorio.block.custom.GlowingBedrockBlock;
+import net.eagl.minetorio.block.custom.LavaGenerator;
+import net.eagl.minetorio.block.custom.WaterGenerator;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
+import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -43,34 +46,12 @@ public class MinetorioBlockStateProvider extends BlockStateProvider {
                 "item/patterns/battery",
                 "item/patterns/lightning");
 
-        fluidBlock(MinetorioBlocks.WATER_GENERATOR.get(), "water_still");
-        fluidBlock(MinetorioBlocks.LAVA_GENERATOR.get(), "lava_still");
+        blockWithStatesAndItem(MinetorioBlocks.WATER_GENERATOR.get(), WaterGenerator.STATE);
+        blockWithStatesAndItem(MinetorioBlocks.LAVA_GENERATOR.get(), LavaGenerator.STATE);
 
         blockWithItem(MinetorioBlocks.PORTAL);
     }
 
-    private void fluidBlock(Block block, String textureName){
-
-        String name = blockName(block);
-
-        models().withExistingParent(name, mcLoc("block/block"))
-                .texture("texture", modLoc("block/"+ textureName))
-                .element()
-                .from(0, 0, 0)
-                .to(16, 16, 16)
-                .face(Direction.DOWN).texture("#texture").cullface(Direction.DOWN).end()
-                .face(Direction.UP).texture("#texture").cullface(Direction.UP).end()
-                .face(Direction.NORTH).texture("#texture").cullface(Direction.NORTH).end()
-                .face(Direction.SOUTH).texture("#texture").cullface(Direction.SOUTH).end()
-                .face(Direction.WEST).texture("#texture").cullface(Direction.WEST).end()
-                .face(Direction.EAST).texture("#texture").cullface(Direction.EAST).end()
-                .end();
-
-        simpleBlock(block, models().getExistingFile(modLoc("block/" + name)));
-
-        itemModels().getBuilder(name)
-                .parent(models().getExistingFile(modLoc("block/" + name)));
-    }
 
     private void blockWithCustomSides(Block block, String pDown,String pUp,String pNorth,String pSouth,String pWest,String pEst) {
         String name = blockName(block);
@@ -88,17 +69,38 @@ public class MinetorioBlockStateProvider extends BlockStateProvider {
                 .parent(models().getExistingFile(modLoc("block/" + name)));
     }
 
-    private void blockWithStatesAndItem(Block pBlock, EnumProperty<?> pValue) {
-        getVariantBuilder(pBlock).forAllStates(state -> {
-            String blockState = state.getValue(pValue).getSerializedName();
-            String name = blockName(pBlock) + "_" + blockState;
+    private void blockWithStatesAndItem(Block block, EnumProperty<?> property) {
+        getVariantBuilder(block).forAllStates(state -> {
+            String variant = state.getValue(property).getSerializedName();
+            String name = blockName(block) + "_" + variant;
+
+            ModelFile modelFile;
+            if (variant.equals("stabilized")) {
+                modelFile = models()
+                        .withExistingParent(name, mcLoc("block/block"))
+                        .texture("texture", modLoc("block/" + name))
+                        .element()
+                        .from(0, 0, 0)
+                        .to(16, 16, 16)
+                        .face(Direction.DOWN).texture("#texture").cullface(Direction.DOWN).end()
+                        .face(Direction.UP).texture("#texture").cullface(Direction.UP).end()
+                        .face(Direction.NORTH).texture("#texture").cullface(Direction.NORTH).end()
+                        .face(Direction.SOUTH).texture("#texture").cullface(Direction.SOUTH).end()
+                        .face(Direction.WEST).texture("#texture").cullface(Direction.WEST).end()
+                        .face(Direction.EAST).texture("#texture").cullface(Direction.EAST).end()
+                        .end();
+            } else {
+                modelFile = models().cubeAll(name, modLoc("block/" + name));
+            }
 
             return ConfiguredModel.builder()
-                    .modelFile(models().cubeAll(name, modLoc("block/" + name)))
+                    .modelFile(modelFile)
                     .build();
         });
-        itemModels().getBuilder(blockName(pBlock))
-                .parent(models().getExistingFile(modLoc("block/" + blockName(pBlock) + "_bedrock")));
+
+        String defaultState = block.defaultBlockState().getValue(property).getSerializedName();
+        itemModels().getBuilder(blockName(block))
+                .parent(models().getExistingFile(modLoc("block/" + blockName(block) + "_" + defaultState)));
     }
 
     private String blockName(Block block) {
@@ -113,6 +115,5 @@ public class MinetorioBlockStateProvider extends BlockStateProvider {
     private void blockWithItem(RegistryObject<Block> blockRegistryObject) {
         simpleBlockWithItem(blockRegistryObject.get(), cubeAll(blockRegistryObject.get()));
     }
-
 }
 

@@ -58,6 +58,9 @@ public class MinetorioCreativeModTabs {
                         pOutput.accept(MinetorioBlocks.PORTAL.get());
                         pOutput.accept(MinetorioBlocks.RESEARCHER.get());
 
+                        pOutput.accept(MinetorioBlocks.LAVA_GENERATOR.get());
+                        pOutput.accept(MinetorioBlocks.WATER_GENERATOR.get());
+
 
                     })
                     .build());

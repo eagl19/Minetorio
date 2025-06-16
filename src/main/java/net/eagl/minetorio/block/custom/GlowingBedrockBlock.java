@@ -20,6 +20,7 @@ public class GlowingBedrockBlock extends Block {
                 .lightLevel(state -> 15)
                 .noOcclusion()
         );
+        this.registerDefaultState(this.stateDefinition.any().setValue(STATE, GlowingBedrockBlockState.BEDROCK));
     }
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {

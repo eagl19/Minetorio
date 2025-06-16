@@ -11,15 +11,22 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class WaterGenerator extends Block implements EntityBlock {
+
+    public static final EnumProperty<GeneratorState> STATE = EnumProperty.create("state", GeneratorState.class);
+
+
     public WaterGenerator() {
         super(Properties.copy(Blocks.WATER)
                 .noCollission()
                 .strength(100.0F)
                 .noLootTable());
+        this.registerDefaultState(this.stateDefinition.any().setValue(STATE, GeneratorState.UNSTABLE));
     }
 
     @Override
@@ -39,5 +46,10 @@ public class WaterGenerator extends Block implements EntityBlock {
                     : (lvl, pos, blockState, be) -> ((WaterGeneratorBlockEntity) be).tickServer();
         }
         return null;
+    }
+
+    @Override
+    protected void createBlockStateDefinition(StateDefinition.@NotNull Builder<Block, BlockState> pBuilder) {
+        pBuilder.add(STATE);
     }
 }

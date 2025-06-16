@@ -11,15 +11,21 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class LavaGenerator extends Block implements EntityBlock {
+
+    public static final EnumProperty<GeneratorState> STATE = EnumProperty.create("state", GeneratorState.class);
+
     public LavaGenerator() {
         super(Properties.copy(Blocks.LAVA)
                 .noCollission()
                 .strength(100.0F)
                 .noLootTable());
+        this.registerDefaultState(this.stateDefinition.any().setValue(STATE, GeneratorState.UNSTABLE));
     }
 
     @Override
@@ -38,5 +44,10 @@ public class LavaGenerator extends Block implements EntityBlock {
                     : (lvl, pos, blockState, be) -> ((LavaGenetatorBlockEntity) be).tickServer();
         }
         return null;
+    }
+
+    @Override
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder) {
+        pBuilder.add(STATE);
     }
 }
