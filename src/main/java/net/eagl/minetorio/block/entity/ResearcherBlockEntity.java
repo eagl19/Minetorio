@@ -68,12 +68,12 @@ public class ResearcherBlockEntity extends BlockEntity implements MenuProvider {
    private final Learner learnTechnology = new Learner(Technologies.EMPTY, itemHandler, this::setChanged);
 
     private final MinetorioEnergyStorage energyStorage = new MinetorioEnergyStorage(MAX_ENERGY_STORAGE,
-            MAX_RECEIVE_ENERGY, MAX_EXTRACT_ENERGY, START_ENERGY_STORAGE, this::setChanged);
+            MAX_RECEIVE_ENERGY, MAX_EXTRACT_ENERGY, START_ENERGY_STORAGE, this::onContainerDataChange);
     private final LazyOptional<IEnergyStorage> optionalEnergy = LazyOptional.of(() -> energyStorage);
 
     private final MinetorioFluidStorage fluidStorage = new MinetorioFluidStorage(2,
             new int[]{MAX_WATER_STORAGE, MAX_LAVA_STORAGE}, new FluidType[]{FluidType.WATER, FluidType.LAVA},
-            new int[]{START_WATER_STORAGE, START_LAVA_STORAGE}, this::setChanged);
+            new int[]{START_WATER_STORAGE, START_LAVA_STORAGE}, this::onContainerDataChange);
     private final LazyOptional<IFluidHandler> optionalFluid = LazyOptional.of(() -> fluidStorage);
 
     public ResearcherBlockEntity(BlockPos pPos, BlockState pBlockState) {
@@ -202,8 +202,13 @@ public class ResearcherBlockEntity extends BlockEntity implements MenuProvider {
         }
     }
 
-    public  void  onFlaskFieldChange(){
+    public void onFlaskFieldChange(){
         learnTechnology.setDirty(true);
+        setChanged();
+    }
+
+    public void onContainerDataChange(){
+        updateContainerData();
         setChanged();
     }
 
@@ -225,15 +230,21 @@ public class ResearcherBlockEntity extends BlockEntity implements MenuProvider {
     }
 
     public void tickServer() {
-        int energy = energyStorage.receiveEnergy(1,false);
-        int water = fluidStorage.fill(FluidType.WATER, 1, IFluidHandler.FluidAction.EXECUTE);
-        int lava = fluidStorage.fill(FluidType.LAVA ,1, IFluidHandler.FluidAction.EXECUTE);
-        boolean learn = learnTechnology.learn();
 
-        if (water > 0 || energy > 0 || lava > 0 || learn) {
+        boolean canWater = fluidStorage.drain(FluidType.WATER, 1, IFluidHandler.FluidAction.SIMULATE).getAmount() >= 1;
+        boolean canLava = fluidStorage.drain(FluidType.LAVA, 1, IFluidHandler.FluidAction.SIMULATE).getAmount() >= 1;
+        boolean canEnergy = energyStorage.extractEnergy(1, true) >= 1;
+        boolean canLearn = learnTechnology.canLearn();
+
+        if (canLearn && canWater && canLava && canEnergy){
+
+            learnTechnology.learn();
+            energyStorage.extractEnergy(1,false);
+            fluidStorage.drain(FluidType.WATER, 1, IFluidHandler.FluidAction.EXECUTE).getAmount();
+            fluidStorage.drain(FluidType.LAVA ,1, IFluidHandler.FluidAction.EXECUTE).getAmount();
+
             setChanged();
             updateContainerData();
         }
-
     }
 }

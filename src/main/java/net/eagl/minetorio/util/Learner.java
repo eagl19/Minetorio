@@ -66,12 +66,15 @@ public class Learner implements INBTSerializable<CompoundTag> {
         this.canUpdateLearner = dirty;
     }
 
-    public boolean learn() {
+    public boolean canLearn(){
         if(isDone) return false;
         if (canUpdateLearner) {
             updateCaches();
         }
-        if (!isLearn) return false;
+        return isLearn;
+    }
+
+    public void learn() {
         time++;
         consumeFlasks();
 
@@ -79,7 +82,6 @@ public class Learner implements INBTSerializable<CompoundTag> {
             isDone = true;
             time = totalTime;
         }
-        return true;
     }
 
     private void recheckIsLearnable() {
