@@ -5,10 +5,7 @@ import net.eagl.minetorio.capability.MinetorioCapabilities;
 import net.eagl.minetorio.gui.ResearcherMenu;
 import net.eagl.minetorio.network.MinetorioNetwork;
 import net.eagl.minetorio.network.server.AddResearcherPlanPacket;
-import net.eagl.minetorio.util.Clock;
-import net.eagl.minetorio.util.FlasksField;
-import net.eagl.minetorio.util.Technology;
-import net.eagl.minetorio.util.TechnologyRegistry;
+import net.eagl.minetorio.util.*;
 import net.eagl.minetorio.util.enums.FlaskColor;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -77,7 +74,7 @@ public class TechnologyTreeScreen extends Screen {
         this.playerInventory = pPlayerInventory;
         this.researcherTitle = pTitle;
         canLearn = false;
-        isSee = !tech.equals(Technology.EMPTY);
+        isSee = !tech.equals(Technologies.EMPTY);
 
     }
 
@@ -100,7 +97,7 @@ public class TechnologyTreeScreen extends Screen {
     public void render(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         this.renderBackground(guiGraphics);
         List<Component> tooltip = null;
-        if (!techDetails.equals(Technology.EMPTY)) {
+        if (!techDetails.equals(Technologies.EMPTY)) {
 
             String tip = renderTechnologyDetails(guiGraphics, mouseX, mouseY);
             if (!tip.isEmpty()) {
@@ -466,7 +463,7 @@ public class TechnologyTreeScreen extends Screen {
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if(techDetails.equals(Technology.EMPTY)) {
+        if(techDetails.equals(Technologies.EMPTY)) {
             float adjustedX = (float) ((mouseX - offsetX) / zoom);
             float adjustedY = (float) ((mouseY - offsetY) / zoom);
 
@@ -504,7 +501,7 @@ public class TechnologyTreeScreen extends Screen {
 
     private void onCancelButtonClicked() {
 
-        techDetails = Technology.EMPTY;
+        techDetails = Technologies.EMPTY;
     }
 
     private void onOkButtonClicked() {
@@ -557,9 +554,9 @@ public class TechnologyTreeScreen extends Screen {
 
     @Override
     public boolean keyPressed(int pKeyCode, int pScanCode, int pModifiers) {
-        if(!isSee && !this.techDetails.equals(Technology.EMPTY)) {
+        if(!isSee && !this.techDetails.equals(Technologies.EMPTY)) {
             if (pKeyCode == GLFW.GLFW_KEY_ESCAPE) {
-                this.techDetails = Technology.EMPTY;
+                this.techDetails = Technologies.EMPTY;
                 return true;
             }
         }else{

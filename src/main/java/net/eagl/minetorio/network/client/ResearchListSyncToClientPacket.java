@@ -2,6 +2,7 @@ package net.eagl.minetorio.network.client;
 
 import net.eagl.minetorio.block.entity.ResearcherBlockEntity;
 import net.eagl.minetorio.gui.screen.ResearcherScreen;
+import net.eagl.minetorio.util.Technologies;
 import net.eagl.minetorio.util.Technology;
 import net.eagl.minetorio.util.TechnologyRegistry;
 import net.minecraft.client.Minecraft;
@@ -37,7 +38,7 @@ public class ResearchListSyncToClientPacket {
         List<Technology> techList = new ArrayList<>();
         for (int i = 0; i < size; i++) {
             Technology tech = TechnologyRegistry.get(buf.readUtf());
-            techList.add(tech != null ? tech : Technology.EMPTY);
+            techList.add(tech != null ? tech : Technologies.EMPTY);
         }
         return new ResearchListSyncToClientPacket(pos, techList);
     }

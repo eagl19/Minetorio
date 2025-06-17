@@ -1,6 +1,5 @@
 package net.eagl.minetorio.util;
 
-import net.eagl.minetorio.item.MinetorioItems;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -8,7 +7,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -23,17 +21,6 @@ public class Technology {
     private final int count;
     private final int x;
     private final int y;
-
-    public static final Technology EMPTY = new Technology(
-            "empty",
-            MinetorioItems.PATTERN_EMPTY.get(),
-            Collections.emptyList(),
-            FlasksField.EMPTY,
-            0,
-            0,
-            0,
-            0
-    );
 
     public Technology(String id, Item displayIcon, List<String> prerequisites, FlasksField cost, int time, int count, int x, int y) {
         this.id = id;

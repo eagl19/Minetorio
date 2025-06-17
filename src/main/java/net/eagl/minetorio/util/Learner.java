@@ -24,7 +24,7 @@ public class Learner implements INBTSerializable<CompoundTag> {
 
 
     public Learner(Technology tech, FlaskStorage itemHandler, Runnable onChange){
-        this.tech = Objects.requireNonNullElse(tech, Technology.EMPTY);
+        this.tech = Objects.requireNonNullElse(tech, Technologies.EMPTY);
         this.time = 0;
         this.onChange = onChange;
         this.totalTime = tech.getTotalTime();
@@ -33,8 +33,8 @@ public class Learner implements INBTSerializable<CompoundTag> {
     }
 
     public void setTech(Technology tech){
-        if (tech == null) tech = Technology.EMPTY;
-        if(!this.tech.equals(tech) && !tech.equals(Technology.EMPTY)) {
+        if (tech == null) tech = Technologies.EMPTY;
+        if(!this.tech.equals(tech) && !tech.equals(Technologies.EMPTY)) {
             this.tech = tech;
             this.time = 0;
             this.totalTime = tech.getTotalTime();
@@ -47,7 +47,7 @@ public class Learner implements INBTSerializable<CompoundTag> {
         cachedFlaskTimes.clear();
         isLearn = false;
 
-        if (tech == null || tech.equals(Technology.EMPTY)) return;
+        if (tech == null || tech.equals(Technologies.EMPTY)) return;
 
         int timeTech = tech.getTime();
         for (FlaskColor color : FlaskColor.values()) {
@@ -88,7 +88,7 @@ public class Learner implements INBTSerializable<CompoundTag> {
     }
 
     public void clear(){
-        tech = Technology.EMPTY;
+        tech = Technologies.EMPTY;
         canUpdateLearner = true;
         isLearn = false;
         time = 0;

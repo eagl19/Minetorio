@@ -16,7 +16,7 @@ public class TechnologyRegistry {
     }
 
     public static Technology get(String id) {
-        return TECHNOLOGIES.getOrDefault(id, Technology.EMPTY);
+        return TECHNOLOGIES.getOrDefault(id, Technologies.EMPTY);
     }
 
     public static Collection<Technology> getAll() {
@@ -58,7 +58,7 @@ public class TechnologyRegistry {
                                 .set(FlaskColor.GREEN, 2)
                                 .set(FlaskColor.BLACK, 1)
                                 .build())
-                        .duration(15000)
+                        .duration(500)
                         .tier(3)
                         .pos(160, 100)
                         .build()
@@ -174,6 +174,7 @@ public class TechnologyRegistry {
                         .pos(310, -30)
                         .build()
         );
+        Technologies.init();
     }
 }
 

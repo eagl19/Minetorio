@@ -2,13 +2,14 @@ package net.eagl.minetorio.event;
 
 import net.eagl.minetorio.Minetorio;
 import net.eagl.minetorio.block.MinetorioBlocks;
-import net.eagl.minetorio.block.custom.GlowingBedrockBlock;
-import net.eagl.minetorio.block.custom.GlowingBedrockBlockState;
-import net.eagl.minetorio.block.custom.PatternsCollectorBlock;
-import net.eagl.minetorio.block.custom.ResearchBlock;
+import net.eagl.minetorio.block.custom.*;
+import net.eagl.minetorio.block.entity.LavaGenetatorBlockEntity;
 import net.eagl.minetorio.block.entity.PatternsCollectorBlockEntity;
 import net.eagl.minetorio.block.entity.ResearcherBlockEntity;
+import net.eagl.minetorio.block.entity.WaterGeneratorBlockEntity;
+import net.eagl.minetorio.capability.MinetorioCapabilities;
 import net.eagl.minetorio.item.MinetorioItems;
+import net.eagl.minetorio.util.Technologies;
 import net.eagl.minetorio.worldgen.dimension.MinetorioDimensions;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -66,6 +67,38 @@ public class PlayerClickEvents {
                         event.setCancellationResult(InteractionResult.SUCCESS);
                         event.setCanceled(true);
                         return;
+                }
+            }
+            //Water Generator
+            if(state.is(MinetorioBlocks.WATER_GENERATOR.get())){
+                if(state.getValue(WaterGenerator.STATE) == GeneratorState.UNSTABLE){
+
+                    level.setBlockAndUpdate(pos, state.setValue(WaterGenerator.STATE, GeneratorState.STABILIZED));
+
+                    if (level.getBlockEntity(pos) instanceof WaterGeneratorBlockEntity be) {
+                        serverPlayer.getCapability(MinetorioCapabilities.TECHNOLOGY_PROGRESS).ifPresent(techCap -> {
+                            if (techCap.hasLearned(Technologies.WATER.getId())) {
+                                be.setPermanentlyStabilized(true);
+                            }
+                        });
+                    }
+                }
+            }
+
+            //Lava Generator
+            if(state.is(MinetorioBlocks.LAVA_GENERATOR.get())){
+                if(state.getValue(LavaGenerator.STATE) == GeneratorState.UNSTABLE){
+
+                    level.setBlockAndUpdate(pos, state.setValue(LavaGenerator.STATE, GeneratorState.STABILIZED));
+
+                    if (level.getBlockEntity(pos) instanceof LavaGenetatorBlockEntity be) {
+                        serverPlayer.getCapability(MinetorioCapabilities.TECHNOLOGY_PROGRESS).ifPresent(techCap -> {
+                            if (techCap.hasLearned(Technologies.FIRE.getId())) {
+                                be.setPermanentlyStabilized(true);
+                            }
+                        });
+                    }
+
                 }
             }
 

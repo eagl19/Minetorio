@@ -11,7 +11,7 @@ import java.util.List;
 
 public class ResearchPlan implements INBTSerializable<CompoundTag> {
 
-    private final List<Technology> techList = new ArrayList<>(Collections.nCopies(10, Technology.EMPTY));
+    private final List<Technology> techList = new ArrayList<>(Collections.nCopies(10, Technologies.EMPTY));
     private final Runnable onChange;
 
     public ResearchPlan(Runnable onChange){
@@ -40,7 +40,7 @@ public class ResearchPlan implements INBTSerializable<CompoundTag> {
 
     public Technology getFirst(){
          Technology tech = techList.get(0);
-         if(tech == null) return  Technology.EMPTY;
+         if(tech == null) return  Technologies.EMPTY;
          return  tech;
     }
 
@@ -78,18 +78,18 @@ public class ResearchPlan implements INBTSerializable<CompoundTag> {
         for (int i = 0; i < techList.size() - 1; i++) {
             techList.set(i, techList.get(i + 1));
         }
-        techList.set(techList.size() - 1, Technology.EMPTY);
+        techList.set(techList.size() - 1, Technologies.EMPTY);
         onChange.run();
         return removed;
     }
 
     public boolean remove(int index) {
-        if (!techList.get(index).equals(Technology.EMPTY)) {
-            techList.set(index, Technology.EMPTY);
+        if (!techList.get(index).equals(Technologies.EMPTY)) {
+            techList.set(index, Technologies.EMPTY);
             for (int i = index + 1; i < techList.size(); i++) {
                 Technology tech = techList.get(i);
-                if (!tech.equals(Technology.EMPTY) && !tech.canLearn(techList)) {
-                    techList.set(i, Technology.EMPTY);
+                if (!tech.equals(Technologies.EMPTY) && !tech.canLearn(techList)) {
+                    techList.set(i, Technologies.EMPTY);
                 }
             }
 
@@ -102,8 +102,8 @@ public class ResearchPlan implements INBTSerializable<CompoundTag> {
 
     public void sortEmpty(){
         techList.sort((a, b) -> {
-            if (a == Technology.EMPTY && b != Technology.EMPTY) return 1;
-            if (a != Technology.EMPTY && b == Technology.EMPTY) return -1;
+            if (a == Technologies.EMPTY && b != Technologies.EMPTY) return 1;
+            if (a != Technologies.EMPTY && b == Technologies.EMPTY) return -1;
             return 0;
         });
     }

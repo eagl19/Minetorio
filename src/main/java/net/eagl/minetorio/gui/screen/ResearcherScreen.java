@@ -9,6 +9,7 @@ import net.eagl.minetorio.gui.slot.FlaskSlot;
 import net.eagl.minetorio.network.MinetorioNetwork;
 import net.eagl.minetorio.network.server.RemoveResearcherPlanPacket;
 import net.eagl.minetorio.network.server.ResearcherButtonPacket;
+import net.eagl.minetorio.util.Technologies;
 import net.eagl.minetorio.util.Technology;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -64,7 +65,7 @@ public class ResearcherScreen extends AbstractContainerScreen<ResearcherMenu> {
         for (int i = 1; i < 10; i++) {
             Technology currentTech = techList.get(i);
             int currentI = i;
-            if(currentTech.equals(Technology.EMPTY)){
+            if(currentTech.equals(Technologies.EMPTY)){
                 this.addRenderableWidget(new ItemIconWidget(
                         leftPos - 10 + i * 18, topPos + 23,
                         new ItemStack(currentTech.getDisplayIcon()),
@@ -85,7 +86,7 @@ public class ResearcherScreen extends AbstractContainerScreen<ResearcherMenu> {
                 Component.translatable("tooltip.minetorio.researcher_gui.button_learn").withStyle(ChatFormatting.GREEN),
                 this::buttonClick)
         );
-        if(!menu.getBlockEntity().getResearchPlan().getFirst().equals(Technology.EMPTY)) {
+        if(!menu.getBlockEntity().getResearchPlan().getFirst().equals(Technologies.EMPTY)) {
             lines = font.split(menu.getBlockEntity().getResearchPlan().getFirst().getBenefit(),90);
         }else{
             lines = List.of();

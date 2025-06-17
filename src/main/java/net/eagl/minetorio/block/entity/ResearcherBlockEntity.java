@@ -7,6 +7,7 @@ import net.eagl.minetorio.network.client.ResearchListSyncToClientPacket;
 import net.eagl.minetorio.network.client.SyncTechnologyProgressPacket;
 import net.eagl.minetorio.util.Learner;
 import net.eagl.minetorio.util.ResearchPlan;
+import net.eagl.minetorio.util.Technologies;
 import net.eagl.minetorio.util.Technology;
 import net.eagl.minetorio.util.enums.FluidType;
 import net.eagl.minetorio.util.storage.FlaskStorage;
@@ -64,7 +65,7 @@ public class ResearcherBlockEntity extends BlockEntity implements MenuProvider {
 
     private final ContainerData containerData = new SimpleContainerData(8);
 
-   private final Learner learnTechnology = new Learner(Technology.EMPTY, itemHandler, this::setChanged);
+   private final Learner learnTechnology = new Learner(Technologies.EMPTY, itemHandler, this::setChanged);
 
     private final MinetorioEnergyStorage energyStorage = new MinetorioEnergyStorage(MAX_ENERGY_STORAGE,
             MAX_RECEIVE_ENERGY, MAX_EXTRACT_ENERGY, START_ENERGY_STORAGE, this::setChanged);
@@ -180,7 +181,7 @@ public class ResearcherBlockEntity extends BlockEntity implements MenuProvider {
         if(learnTechnology.isDone()) {
             learnTechnology.clear();
             Technology learnedTechnology = researchPlan.nextTechnology();
-            if (learnedTechnology != Technology.EMPTY) {
+            if (learnedTechnology != Technologies.EMPTY) {
                 player.getCapability(MinetorioCapabilities.TECHNOLOGY_PROGRESS).ifPresent(progress -> {
                     progress.learnTechnology(learnedTechnology.getId());
 
