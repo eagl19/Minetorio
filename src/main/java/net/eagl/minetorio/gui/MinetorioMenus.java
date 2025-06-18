@@ -22,6 +22,10 @@ public class MinetorioMenus {
             MENUS.register("researcher_menu",
                     () -> IForgeMenuType.create(ResearcherMenu::new));
 
+    public static final RegistryObject<MenuType<WaterGeneratorMenu>> WATER_GENERATOR_MENU =
+            MENUS.register("water_generator_menu",
+                    () -> IForgeMenuType.create(WaterGeneratorMenu::new));
+
     public static void register(IEventBus eventBus) {
         MENUS.register(eventBus);
     }

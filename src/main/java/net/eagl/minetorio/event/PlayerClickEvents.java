@@ -70,17 +70,22 @@ public class PlayerClickEvents {
                 }
             }
             //Water Generator
-            if(state.is(MinetorioBlocks.WATER_GENERATOR.get())){
-                if(state.getValue(WaterGenerator.STATE) == GeneratorState.UNSTABLE){
-
-                    level.setBlockAndUpdate(pos, state.setValue(WaterGenerator.STATE, GeneratorState.STABILIZED));
-
-                    if (level.getBlockEntity(pos) instanceof WaterGeneratorBlockEntity be) {
+            if (state.is(MinetorioBlocks.WATER_GENERATOR.get())) {
+                if (level.getBlockEntity(pos) instanceof WaterGeneratorBlockEntity waterGenerator) {
+                    if (state.getValue(WaterGenerator.STATE) == GeneratorState.UNSTABLE) {
+                        level.setBlockAndUpdate(pos, state.setValue(WaterGenerator.STATE, GeneratorState.STABILIZED));
                         serverPlayer.getCapability(MinetorioCapabilities.TECHNOLOGY_PROGRESS).ifPresent(techCap -> {
                             if (techCap.hasLearned(Technologies.WATER.getId())) {
-                                be.setPermanentlyStabilized(true);
+                                waterGenerator.setPermanentlyStabilized(true);
                             }
                         });
+                    }else{
+                        if (waterGenerator.getPermanentlyStabilized()) {
+                            NetworkHooks.openScreen(serverPlayer, waterGenerator, pos);
+                            event.setCancellationResult(InteractionResult.SUCCESS);
+                            event.setCanceled(true);
+                            return;
+                        }
                     }
                 }
             }

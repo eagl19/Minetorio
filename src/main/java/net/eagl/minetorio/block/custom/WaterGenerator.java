@@ -5,14 +5,15 @@ import net.eagl.minetorio.block.entity.WaterGeneratorBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.material.MapColor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -22,10 +23,15 @@ public class WaterGenerator extends Block implements EntityBlock {
 
 
     public WaterGenerator() {
-        super(Properties.copy(Blocks.WATER)
+        super(Properties.of()
+                .mapColor(MapColor.WATER)
+                .liquid()
+                .sound(SoundType.EMPTY)
                 .noCollission()
                 .strength(100.0F)
-                .noLootTable());
+                .noLootTable()
+                .isViewBlocking((state, reader, pos) -> false)
+                .isSuffocating((state, world, pos) -> false));
         this.registerDefaultState(this.stateDefinition.any().setValue(STATE, GeneratorState.UNSTABLE));
     }
 
