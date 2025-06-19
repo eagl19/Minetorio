@@ -91,19 +91,23 @@ public class PlayerClickEvents {
             }
 
             //Lava Generator
-            if(state.is(MinetorioBlocks.LAVA_GENERATOR.get())){
-                if(state.getValue(LavaGenerator.STATE) == GeneratorState.UNSTABLE){
-
-                    level.setBlockAndUpdate(pos, state.setValue(LavaGenerator.STATE, GeneratorState.STABILIZED));
-
-                    if (level.getBlockEntity(pos) instanceof LavaGenetatorBlockEntity be) {
+            if (state.is(MinetorioBlocks.LAVA_GENERATOR.get())) {
+                if (level.getBlockEntity(pos) instanceof LavaGenetatorBlockEntity lavaGenerator) {
+                    if (state.getValue(LavaGenerator.STATE) == GeneratorState.UNSTABLE) {
+                        level.setBlockAndUpdate(pos, state.setValue(LavaGenerator.STATE, GeneratorState.STABILIZED));
                         serverPlayer.getCapability(MinetorioCapabilities.TECHNOLOGY_PROGRESS).ifPresent(techCap -> {
                             if (techCap.hasLearned(Technologies.FIRE.getId())) {
-                                be.setPermanentlyStabilized(true);
+                                lavaGenerator.setPermanentlyStabilized(true);
                             }
                         });
+                    }else{
+                        if (lavaGenerator.getPermanentlyStabilized()) {
+                            NetworkHooks.openScreen(serverPlayer, lavaGenerator, pos);
+                            event.setCancellationResult(InteractionResult.SUCCESS);
+                            event.setCanceled(true);
+                            return;
+                        }
                     }
-
                 }
             }
 

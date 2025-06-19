@@ -5,6 +5,7 @@ import net.eagl.minetorio.block.entity.MinetorioBlockEntities;
 import net.eagl.minetorio.block.renderer.PatternCollectorBlockRenderer;
 import net.eagl.minetorio.block.renderer.ResearcherBlockRenderer;
 import net.eagl.minetorio.gui.MinetorioMenus;
+import net.eagl.minetorio.gui.screen.LavaGeneratorScreen;
 import net.eagl.minetorio.gui.screen.PatternsCollectorScreen;
 import net.eagl.minetorio.gui.screen.ResearcherScreen;
 import net.eagl.minetorio.gui.screen.WaterGeneratorScreen;
@@ -39,6 +40,7 @@ public class ClientEvents {
                     MenuScreens.register(MinetorioMenus.PATTERNS_COLLECTOR_MENU.get(), PatternsCollectorScreen::new);
                     MenuScreens.register(MinetorioMenus.RESEARCHER_MENU.get(), ResearcherScreen::new);
                     MenuScreens.register(MinetorioMenus.WATER_GENERATOR_MENU.get(), WaterGeneratorScreen::new);
+                    MenuScreens.register(MinetorioMenus.LAVA_GENERATOR_MENU.get(), LavaGeneratorScreen::new);
                 }
         );
 
