@@ -9,6 +9,7 @@ import net.eagl.minetorio.util.storage.MinetorioFluidStorage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
@@ -102,13 +103,39 @@ public class WaterGeneratorBlockEntity extends BlockEntity implements MenuProvid
     @Override
     public void saveAdditional(@NotNull CompoundTag tag) {
         super.saveAdditional(tag);
+
         tag.putBoolean("PermanentlyStabilized", this.permanentlyStabilized);
+        tag.putInt("currentTime", this.currentTime);
+        tag.putInt("currentTransfer", this.currentTransfer);
+
+        tag.put("Energy", energyStorage.serializeNBT());
+
+        tag.put("Fluid", fluidStorage.serializeNBT());
     }
 
     @Override
     public void load(@NotNull CompoundTag tag) {
         super.load(tag);
-        this.permanentlyStabilized = tag.getBoolean("PermanentlyStabilized");
+
+        if(tag.contains("PermanentlyStabilized")) {
+            this.permanentlyStabilized = tag.getBoolean("PermanentlyStabilized");
+        }
+
+        if(tag.contains("currentTime")) {
+            this.currentTime = tag.getInt("currentTime");
+        }
+
+        if(tag.contains("currentTransfer")) {
+            this.currentTransfer = tag.getInt("currentTransfer");
+        }
+
+        if (tag.contains("Energy")) {
+            energyStorage.deserializeNBT(tag.get("Energy"));
+        }
+
+        if (tag.contains("Fluid", Tag.TAG_COMPOUND)) {
+            fluidStorage.deserializeNBT(tag.getCompound("Fluid"));
+        }
     }
 
     @Override
