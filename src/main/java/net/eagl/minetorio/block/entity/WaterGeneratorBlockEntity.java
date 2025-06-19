@@ -29,6 +29,8 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 public class WaterGeneratorBlockEntity extends BlockEntity implements MenuProvider {
 
     public static final int ENERGY = 0;
@@ -160,6 +162,7 @@ public class WaterGeneratorBlockEntity extends BlockEntity implements MenuProvid
     }
 
     public void tickServer() {
+        boolean changed = false;
         if (this.getBlockState().getValue(WaterGenerator.STATE) == GeneratorState.STABILIZED) {
 
             this.currentTransfer--;
@@ -170,30 +173,45 @@ public class WaterGeneratorBlockEntity extends BlockEntity implements MenuProvid
                 fluidStorage.fill(FluidType.WATER, GENERATE_AMOUNT, IFluidHandler.FluidAction.EXECUTE);
                 energyStorage.extractEnergy(1, false);
                 this.currentTime = GENERATE_INTERVAL;
+                changed = true;
             }
             updateContainerData();
             if (this.currentTransfer < 1) {
                 Level level = this.getLevel();
                 if (level != null) {
-                    BlockPos targetPos = worldPosition.relative(Direction.EAST);
-                    BlockEntity targetBE = level.getBlockEntity(targetPos);
-
-                    if (targetBE instanceof ResearcherBlockEntity researcher) {
-                        LazyOptional<IFluidHandler> optionalFrom = this.getCapability(ForgeCapabilities.FLUID_HANDLER, Direction.EAST);
-                        LazyOptional<IFluidHandler> optionalTo = researcher.getCapability(ForgeCapabilities.FLUID_HANDLER, Direction.WEST);
-
-                        optionalFrom.ifPresent(from -> optionalTo.ifPresent(to ->
-                                FluidUtil.tryFluidTransfer(to, from, MAX_TRANSFER_AMOUNT, true).getAmount()));
-
-                    }
 
                     if (!permanentlyStabilized) {
                         level.setBlockAndUpdate(this.getBlockPos(), this.getBlockState().setValue(WaterGenerator.STATE, GeneratorState.UNSTABLE));
                     }
-                    this.currentTransfer = TRANSFER_TIME;
+                    if (transferFluidToNeighbors()) {
+                        this.currentTransfer = TRANSFER_TIME;
+                        changed = true;
+                    }
                 }
             }
         }
+        if(changed){
+            setChanged();
+        }
+    }
+
+    private boolean transferFluidToNeighbors() {
+        Level level = this.getLevel();
+        if (level == null) return false;
+        AtomicBoolean transferred = new AtomicBoolean(false);
+        LazyOptional<IFluidHandler> optionalFrom = this.getCapability(ForgeCapabilities.FLUID_HANDLER, null);
+
+        for (Direction direction : Direction.values()) {
+            BlockEntity targetBE = level.getBlockEntity(worldPosition.relative(direction));
+            if (targetBE == null) continue;
+
+            LazyOptional<IFluidHandler> optionalTo = targetBE.getCapability(ForgeCapabilities.FLUID_HANDLER, direction.getOpposite());
+            optionalFrom.ifPresent(from -> optionalTo.ifPresent(to -> {
+                int moved = FluidUtil.tryFluidTransfer(to, from, MAX_TRANSFER_AMOUNT, true).getAmount();
+                if (moved > 0) transferred.set(true);
+            }));
+        }
+        return transferred.get();
     }
 
     public void setPermanentlyStabilized(boolean value) {
