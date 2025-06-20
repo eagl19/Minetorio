@@ -1,6 +1,7 @@
 package net.eagl.minetorio.gui.screen;
 
 import net.eagl.minetorio.gui.WaterGeneratorMenu;
+import net.eagl.minetorio.gui.widget.RemovableItemWidget;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -19,6 +20,27 @@ public class WaterGeneratorScreen extends AbstractContainerScreen<WaterGenerator
         super(pMenu, pPlayerInventory, pTitle);
         this.imageHeight = 222;
         this.imageWidth = 176;
+    }
+
+    @Override
+    protected void init() {
+        super.init();
+
+        for(int i=0; i<3; i++){
+            this.addRenderableWidget(new RemovableItemWidget(
+                    leftPos - 10 + i * 18, topPos + 23,
+                    menu.getItemFromFluidTarget(i),
+                    () -> openFlaskAction(),
+                    () -> removeFlaskAction()
+            ));
+        }
+    }
+    private void openFlaskAction(){
+
+    }
+
+    private void removeFlaskAction(){
+
     }
 
     @Override

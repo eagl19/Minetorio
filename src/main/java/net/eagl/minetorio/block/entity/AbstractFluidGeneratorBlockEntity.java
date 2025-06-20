@@ -204,12 +204,23 @@ public abstract class AbstractFluidGeneratorBlockEntity extends BlockEntity impl
     public boolean getPermanentlyStabilized(){
         return this.permanentlyStabilized;
     }
-    public abstract void tickClient();
-    protected abstract MinetorioEnergyStorage getEnergyStorage();
-    protected abstract MinetorioFluidStorage getFluidStorage();
+
+    public List<BlockPos> getCachedFluidTargets() {
+        return cachedFluidTargets;
+    }
+
+    public void setCachedFluidTargets(List<BlockPos> list) {
+        cachedFluidTargets.clear();
+        cachedFluidTargets.addAll(list);
+    }
+
     protected int getProduceTime(){
         return currentTime;
     }
+
+    public abstract void tickClient();
+    protected abstract MinetorioEnergyStorage getEnergyStorage();
+    protected abstract MinetorioFluidStorage getFluidStorage();
     protected abstract int getGenerateAmount();
     protected abstract int getGenerateInterval();
     protected abstract int getTransferTime();

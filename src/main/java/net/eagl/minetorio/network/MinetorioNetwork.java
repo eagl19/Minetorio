@@ -1,5 +1,6 @@
 package net.eagl.minetorio.network;
 
+import net.eagl.minetorio.network.client.CachedFluidTargetsSyncToClientPacket;
 import net.eagl.minetorio.network.client.ResearchListSyncToClientPacket;
 import net.eagl.minetorio.network.client.SyncTechnologyProgressPacket;
 import net.eagl.minetorio.network.server.AddResearcherPlanPacket;
@@ -66,7 +67,13 @@ public class MinetorioNetwork {
                 SyncTechnologyProgressPacket.class,
                 SyncTechnologyProgressPacket::encode,
                 SyncTechnologyProgressPacket::decode,
-                SyncTechnologyProgressPacket::handle);
+                SyncTechnologyProgressPacket::handle
+        );
+        CHANNEL.registerMessage(packetId++,
+                CachedFluidTargetsSyncToClientPacket.class,
+                CachedFluidTargetsSyncToClientPacket::encode,
+                CachedFluidTargetsSyncToClientPacket::decode,
+                CachedFluidTargetsSyncToClientPacket::handle);
 
     }
 
