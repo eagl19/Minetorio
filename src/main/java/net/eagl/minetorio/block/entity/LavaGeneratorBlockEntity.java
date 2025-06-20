@@ -1,8 +1,8 @@
 package net.eagl.minetorio.block.entity;
 
 import net.eagl.minetorio.block.custom.GeneratorState;
-import net.eagl.minetorio.block.custom.WaterGenerator;
-import net.eagl.minetorio.gui.WaterGeneratorMenu;
+import net.eagl.minetorio.block.custom.LavaGenerator;
+import net.eagl.minetorio.gui.LavaGeneratorMenu;
 import net.eagl.minetorio.util.enums.FluidType;
 import net.eagl.minetorio.util.storage.MinetorioEnergyStorage;
 import net.eagl.minetorio.util.storage.MinetorioFluidStorage;
@@ -22,8 +22,7 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class WaterGeneratorBlockEntity extends AbstractFluidGeneratorBlockEntity {
-
+public class LavaGeneratorBlockEntity extends AbstractFluidGeneratorBlockEntity{
 
     private static final int GENERATE_INTERVAL = 100;
     private static final int GENERATE_AMOUNT = 2000;
@@ -32,17 +31,17 @@ public class WaterGeneratorBlockEntity extends AbstractFluidGeneratorBlockEntity
     private static final int TRANSFER_TIME = 100;
 
     private static final int MAX_ENERGY_STORAGE = 1000000;
-    private static final int MAX_WATER_STORAGE = 1000000;
+    private static final int MAX_LAVA_STORAGE = 1000000;
 
     private static final int MAX_RECEIVE_ENERGY = 100;
     private static final int MAX_EXTRACT_ENERGY = 100;
 
     private static final int START_ENERGY_STORAGE = 250000;
-    private static final int START_WATER_STORAGE = 250000;
+    private static final int START_LAVA_STORAGE = 250000;
 
     private final MinetorioFluidStorage fluidStorage = new MinetorioFluidStorage(1,
-            new int[]{MAX_WATER_STORAGE}, new FluidType[]{FluidType.WATER},
-            new int[]{START_WATER_STORAGE}, this::setChanged);
+            new int[]{MAX_LAVA_STORAGE}, new FluidType[]{FluidType.LAVA},
+            new int[]{START_LAVA_STORAGE}, this::setChanged);
 
     private final LazyOptional<IFluidHandler> optionalFluid = LazyOptional.of(() -> fluidStorage);
 
@@ -51,21 +50,18 @@ public class WaterGeneratorBlockEntity extends AbstractFluidGeneratorBlockEntity
 
     private final LazyOptional<IEnergyStorage> optionalEnergy = LazyOptional.of(() -> energyStorage);
 
-
-    public WaterGeneratorBlockEntity(BlockPos pPos, BlockState pBlockState) {
-        super(MinetorioBlockEntities.WATER_GENERATOR_ENTITY.get(), pPos, pBlockState,
-                GENERATE_INTERVAL, FluidType.WATER);
-
+    public LavaGeneratorBlockEntity(BlockPos pPos, BlockState pBlockState) {
+        super(MinetorioBlockEntities.LAVA_GENERATOR_ENTITY.get(), pPos, pBlockState, GENERATE_INTERVAL, FluidType.LAVA);
     }
 
     @Override
     public @NotNull Component getDisplayName() {
-        return Component.translatable("block.minetorio.water_generator");
+        return Component.translatable("block.minetorio.lava_generator");
     }
 
     @Override
     public @Nullable AbstractContainerMenu createMenu(int pContainerId, @NotNull Inventory pPlayerInventory, @NotNull Player pPlayer) {
-        return new WaterGeneratorMenu(pContainerId, pPlayerInventory,this);
+        return new LavaGeneratorMenu(pContainerId, pPlayerInventory, this);
     }
 
     @Override
@@ -121,11 +117,12 @@ public class WaterGeneratorBlockEntity extends AbstractFluidGeneratorBlockEntity
 
     @Override
     protected GeneratorState getGeneratorStateProperty() {
-        return getBlockState().getValue(WaterGenerator.STATE);
+        return getBlockState().getValue(LavaGenerator.STATE);
     }
 
     @Override
     protected Property<GeneratorState> getGeneratorStatePropertyKey() {
-        return WaterGenerator.STATE;
+        return LavaGenerator.STATE;
     }
+
 }

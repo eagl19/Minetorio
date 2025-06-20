@@ -34,9 +34,9 @@ public class MinetorioBlockEntities {
                     BlockEntityType.Builder.of(WaterGeneratorBlockEntity::new, MinetorioBlocks.WATER_GENERATOR.get()).build(null));
 
     @SuppressWarnings("DataFlowIssue")
-    public static final RegistryObject<BlockEntityType<LavaGenetatorBlockEntity>> LAVA_GENERATOR_ENTITY =
+    public static final RegistryObject<BlockEntityType<LavaGeneratorBlockEntity>> LAVA_GENERATOR_ENTITY =
             BLOCK_ENTITIES.register("lava_generator", () ->
-                    BlockEntityType.Builder.of(LavaGenetatorBlockEntity::new, MinetorioBlocks.LAVA_GENERATOR.get()).build(null));
+                    BlockEntityType.Builder.of(LavaGeneratorBlockEntity::new, MinetorioBlocks.LAVA_GENERATOR.get()).build(null));
 
 
     public static void register(IEventBus eventBus) {

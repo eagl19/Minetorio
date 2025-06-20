@@ -3,7 +3,7 @@ package net.eagl.minetorio.event;
 import net.eagl.minetorio.Minetorio;
 import net.eagl.minetorio.block.MinetorioBlocks;
 import net.eagl.minetorio.block.custom.*;
-import net.eagl.minetorio.block.entity.LavaGenetatorBlockEntity;
+import net.eagl.minetorio.block.entity.LavaGeneratorBlockEntity;
 import net.eagl.minetorio.block.entity.PatternsCollectorBlockEntity;
 import net.eagl.minetorio.block.entity.ResearcherBlockEntity;
 import net.eagl.minetorio.block.entity.WaterGeneratorBlockEntity;
@@ -92,7 +92,7 @@ public class PlayerClickEvents {
 
             //Lava Generator
             if (state.is(MinetorioBlocks.LAVA_GENERATOR.get())) {
-                if (level.getBlockEntity(pos) instanceof LavaGenetatorBlockEntity lavaGenerator) {
+                if (level.getBlockEntity(pos) instanceof LavaGeneratorBlockEntity lavaGenerator) {
                     if (state.getValue(LavaGenerator.STATE) == GeneratorState.UNSTABLE) {
                         level.setBlockAndUpdate(pos, state.setValue(LavaGenerator.STATE, GeneratorState.STABILIZED));
                         serverPlayer.getCapability(MinetorioCapabilities.TECHNOLOGY_PROGRESS).ifPresent(techCap -> {

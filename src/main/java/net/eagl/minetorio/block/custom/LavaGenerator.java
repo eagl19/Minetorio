@@ -1,6 +1,6 @@
 package net.eagl.minetorio.block.custom;
 
-import net.eagl.minetorio.block.entity.LavaGenetatorBlockEntity;
+import net.eagl.minetorio.block.entity.LavaGeneratorBlockEntity;
 import net.eagl.minetorio.block.entity.MinetorioBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
@@ -37,7 +37,7 @@ public class LavaGenerator extends Block implements EntityBlock {
 
     @Override
     public @Nullable BlockEntity newBlockEntity(@NotNull BlockPos pPos, @NotNull BlockState pState) {
-        return new LavaGenetatorBlockEntity(pPos, pState);
+        return new LavaGeneratorBlockEntity(pPos, pState);
     }
     @Override
     public @Nullable <T extends BlockEntity> BlockEntityTicker<T> getTicker(
@@ -47,8 +47,8 @@ public class LavaGenerator extends Block implements EntityBlock {
     ) {
         if (pBlockEntityType == MinetorioBlockEntities.LAVA_GENERATOR_ENTITY.get()) {
             return pLevel.isClientSide
-                    ? (lvl, pos, blockState, be) -> ((LavaGenetatorBlockEntity) be).tickClient()
-                    : (lvl, pos, blockState, be) -> ((LavaGenetatorBlockEntity) be).tickServer();
+                    ? (lvl, pos, blockState, be) -> ((LavaGeneratorBlockEntity) be).tickClient()
+                    : (lvl, pos, blockState, be) -> ((LavaGeneratorBlockEntity) be).tickServer();
         }
         return null;
     }

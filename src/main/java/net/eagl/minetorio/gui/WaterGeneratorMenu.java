@@ -62,10 +62,10 @@ public class WaterGeneratorMenu extends AbstractContainerMenu {
     }
 
     public int getWater() {
-        return data.get(WaterGeneratorBlockEntity.WATER);
+        return data.get(WaterGeneratorBlockEntity.FLUID);
     }
     public int getMaxWaterStorage(){
-        return data.get(WaterGeneratorBlockEntity.MAX_WATER);
+        return data.get(WaterGeneratorBlockEntity.MAX_FLUID);
     }
 
     public int getProduce() {

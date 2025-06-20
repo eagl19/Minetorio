@@ -1,7 +1,7 @@
 package net.eagl.minetorio.gui;
 
 import net.eagl.minetorio.block.MinetorioBlocks;
-import net.eagl.minetorio.block.entity.LavaGenetatorBlockEntity;
+import net.eagl.minetorio.block.entity.LavaGeneratorBlockEntity;
 import net.eagl.minetorio.util.InventorySlot;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
@@ -26,7 +26,7 @@ public class LavaGeneratorMenu extends AbstractContainerMenu {
         this.access = ContainerLevelAccess.create(Objects.requireNonNull(entity.getLevel()), entity.getBlockPos());
 
         InventorySlot.addHotbarAndPlayerInventorySlots(this::addSlot, playerInventory, 0, 8, 140, 3, 9, 18, 18, 58);
-        if (entity instanceof LavaGenetatorBlockEntity lavaGenerator) {
+        if (entity instanceof LavaGeneratorBlockEntity lavaGenerator) {
 
             this.data = lavaGenerator.getContainerData();
             addDataSlots(this.data);
@@ -53,24 +53,24 @@ public class LavaGeneratorMenu extends AbstractContainerMenu {
     }
 
     public  int getMaxEnergyStorage(){
-        return data.get(LavaGenetatorBlockEntity.MAX_ENERGY);
+        return data.get(LavaGeneratorBlockEntity.MAX_ENERGY);
     }
 
     public int getEnergy(){
-        return data.get(LavaGenetatorBlockEntity.ENERGY);
+        return data.get(LavaGeneratorBlockEntity.ENERGY);
     }
 
     public int getLava() {
-        return data.get(LavaGenetatorBlockEntity.LAVA);
+        return data.get(LavaGeneratorBlockEntity.FLUID);
     }
     public int getMaxLavaStorage(){
-        return data.get(LavaGenetatorBlockEntity.MAX_LAVA);
+        return data.get(LavaGeneratorBlockEntity.MAX_FLUID);
     }
 
     public int getProduce() {
-        return data.get(LavaGenetatorBlockEntity.PRODUCE);
+        return data.get(LavaGeneratorBlockEntity.PRODUCE);
     }
     public int getMaxProduce(){
-        return data.get(LavaGenetatorBlockEntity.MAX_PRODUCE);
+        return data.get(LavaGeneratorBlockEntity.MAX_PRODUCE);
     }
 }
