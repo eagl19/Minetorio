@@ -94,6 +94,14 @@ public class LavaGeneratorScreen extends AbstractContainerScreen<LavaGeneratorMe
     }
 
     @Override
+    public void render(@NotNull GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
+        renderBackground(pGuiGraphics);
+        super.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
+        renderTooltip(pGuiGraphics, pMouseX, pMouseY);
+
+    }
+
+    @Override
     protected void renderLabels(@NotNull GuiGraphics pGuiGraphics, int pMouseX, int pMouseY) {
 
     }

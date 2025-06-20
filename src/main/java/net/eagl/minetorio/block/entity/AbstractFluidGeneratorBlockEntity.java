@@ -89,7 +89,7 @@ public abstract class AbstractFluidGeneratorBlockEntity extends BlockEntity impl
                         LazyOptional<IFluidHandler> cap = be.getCapability(ForgeCapabilities.FLUID_HANDLER, null);
                         cap.ifPresent(handler -> {
                             for (int tank = 0; tank < handler.getTanks(); tank++) {
-                                if (handler.getFluidInTank(tank).getFluid().isSame(getFluidStorage().getFluidInTank(0).getFluid()) ||
+                                if (handler.getFluidInTank(tank).getFluid().isSame(getFluidStorage().getFluidInTank(0).getFluid()) &&
                                         handler.getTankCapacity(tank) > 0) {
                                     cachedFluidTargets.add(checkPos.immutable());
                                     break;

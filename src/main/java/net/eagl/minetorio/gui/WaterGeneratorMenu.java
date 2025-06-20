@@ -51,7 +51,7 @@ public class WaterGeneratorMenu extends AbstractContainerMenu {
 
     public ItemStack getItemFromFluidTarget(int target) {
         List<BlockPos> targets = blockEntity.getCachedFluidTargets();
-        if (!targets.isEmpty() && targets.size() >= target) {
+        if (!targets.isEmpty() && targets.size() > target) {
             BlockPos pos = targets.get(target);
             Level beLevel = blockEntity.getLevel();
             if(beLevel != null) {
