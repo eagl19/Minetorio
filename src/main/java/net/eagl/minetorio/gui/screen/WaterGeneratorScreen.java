@@ -26,20 +26,20 @@ public class WaterGeneratorScreen extends AbstractContainerScreen<WaterGenerator
     protected void init() {
         super.init();
 
-        for(int i=0; i<3; i++){
+        for(int i=0; i<6; i++){
             this.addRenderableWidget(new RemovableItemWidget(
                     leftPos - 10 + i * 18, topPos + 23,
                     menu.getItemFromFluidTarget(i),
-                    () -> openFlaskAction(),
-                    () -> removeFlaskAction()
+                    () -> openAction(),
+                    () -> removeAction()
             ));
         }
     }
-    private void openFlaskAction(){
+    private void openAction(){
 
     }
 
-    private void removeFlaskAction(){
+    private void removeAction(){
 
     }
 
