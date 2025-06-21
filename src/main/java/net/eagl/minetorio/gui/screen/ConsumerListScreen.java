@@ -2,6 +2,8 @@ package net.eagl.minetorio.gui.screen;
 
 import net.eagl.minetorio.gui.WaterGeneratorMenu;
 import net.eagl.minetorio.gui.widget.FluidTargetWidget;
+import net.eagl.minetorio.network.MinetorioNetwork;
+import net.eagl.minetorio.network.server.AddConsumersPacket;
 import net.eagl.minetorio.util.CachedBlockPos;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -66,12 +68,17 @@ public class ConsumerListScreen extends Screen {
         fluidWidgets.clear();
 
         List<BlockPos> list = menu.getFluidTargets().getListPos();
+        List<BlockPos> consumers = menu.getFluidTargets().getConsumers();
+        int i = 0;
         for (BlockPos pos : list) {
             ItemStack stack = menu.getItemFromBlockPos(pos);
             if (!stack.isEmpty()) {
-                FluidTargetWidget widget = new FluidTargetWidget(0, 0, 0, 0, stack, pos);
+
+                FluidTargetWidget widget = new FluidTargetWidget(0, 0, 0, 0, stack, pos, i);
+                widget.setSelected(consumers.contains(pos));
                 fluidWidgets.add(widget);
                 addRenderableWidget(widget);
+                i++;
             }
         }
 
@@ -210,7 +217,16 @@ public class ConsumerListScreen extends Screen {
     }
 
     private void onOkButtonClicked() {
-
+        List<Integer> newConsumers = new ArrayList<>();
+        for (FluidTargetWidget widget : fluidWidgets) {
+            if (widget.isSelected()) {
+                newConsumers.add(widget.getId());
+            }
+        }
+        if(!newConsumers.isEmpty()) {
+            MinetorioNetwork.CHANNEL.sendToServer(new AddConsumersPacket(menu.getBlockEntity().getBlockPos(), newConsumers));
+        }
+        Minecraft.getInstance().setScreen(new WaterGeneratorScreen(menu, this.playerInventory, this.title));
     }
 
     private void onCancelButtonClicked() {

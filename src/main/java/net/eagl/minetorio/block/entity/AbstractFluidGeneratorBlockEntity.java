@@ -40,7 +40,7 @@ public abstract class AbstractFluidGeneratorBlockEntity extends BlockEntity impl
     private boolean permanentlyStabilized = false;
 
     private final CachedBlockPos cachedFluidTargets = new CachedBlockPos();
-    private boolean initializedTargets = false;
+
 
     private final FluidType fluidType;
 
@@ -71,10 +71,11 @@ public abstract class AbstractFluidGeneratorBlockEntity extends BlockEntity impl
     @Override
     public void onLoad() {
         super.onLoad();
-        if (!initializedTargets && level != null && !level.isClientSide) {
-            initializedTargets();
-            initializedTargets = true;
+        initializedTargets();
+        if(cachedFluidTargets.getConsumers().isEmpty() && !cachedFluidTargets.getListPos().isEmpty()){
+            cachedFluidTargets.getConsumers().add(cachedFluidTargets.getListPos().get(0));
         }
+
     }
 
 

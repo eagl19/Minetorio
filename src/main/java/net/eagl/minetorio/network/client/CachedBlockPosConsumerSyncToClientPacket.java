@@ -40,7 +40,7 @@ public class CachedBlockPosConsumerSyncToClientPacket {
     public static void handle(CachedBlockPosConsumerSyncToClientPacket msg, Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> Minecraft.getInstance().execute(() -> {
             if (Minecraft.getInstance().screen instanceof WaterGeneratorScreen screen) {
-                screen.getFluidTargets().setConsumers(msg.targetPositions);
+                screen.getMenu().getFluidTargets().setConsumers(msg.targetPositions);
                 screen.update();
             }
         }));

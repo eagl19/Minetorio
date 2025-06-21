@@ -17,12 +17,14 @@ public class FluidTargetWidget extends AbstractWidget {
     private final ItemStack stack;
     private final BlockPos pos;
     private boolean selected;
+    private final int id;
 
-    public FluidTargetWidget(int x, int y, int width, int height, ItemStack stack, BlockPos pos) {
+    public FluidTargetWidget(int x, int y, int width, int height, ItemStack stack, BlockPos pos, int id) {
         super(x, y, width, height, Component.empty());
         this.stack = stack;
         this.pos = pos;
         this.selected = false;
+        this.id = id;
     }
 
     @Override
@@ -51,6 +53,10 @@ public class FluidTargetWidget extends AbstractWidget {
         selected = !selected;
     }
 
+    public void setSelected(boolean b){
+        selected = b;
+    }
+
     @Override
     protected void updateWidgetNarration(@NotNull NarrationElementOutput pNarrationElementOutput) {
 
@@ -60,7 +66,9 @@ public class FluidTargetWidget extends AbstractWidget {
         return selected;
     }
 
-
+    public int getId(){
+        return id;
+    }
 
     public BlockPos getPos() {
         return pos;

@@ -4,10 +4,7 @@ import net.eagl.minetorio.network.client.CachedBlockPosConsumerSyncToClientPacke
 import net.eagl.minetorio.network.client.CachedBlockPosListPosSyncToClientPacket;
 import net.eagl.minetorio.network.client.ResearchListSyncToClientPacket;
 import net.eagl.minetorio.network.client.SyncTechnologyProgressPacket;
-import net.eagl.minetorio.network.server.AddResearcherPlanPacket;
-import net.eagl.minetorio.network.server.RemoveResearcherPlanPacket;
-import net.eagl.minetorio.network.server.ResearcherButtonPacket;
-import net.eagl.minetorio.network.server.WaterGeneratorInitializePacket;
+import net.eagl.minetorio.network.server.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkRegistry;
@@ -90,6 +87,20 @@ public class MinetorioNetwork {
                 WaterGeneratorInitializePacket::encode,
                 WaterGeneratorInitializePacket::decode,
                 WaterGeneratorInitializePacket::handle,
+                Optional.of(NetworkDirection.PLAY_TO_SERVER)
+        );
+        CHANNEL.registerMessage(packetId++,
+                AddConsumersPacket.class,
+                AddConsumersPacket::encode,
+                AddConsumersPacket::new,
+                AddConsumersPacket::handle,
+                Optional.of(NetworkDirection.PLAY_TO_SERVER)
+        );
+        CHANNEL.registerMessage(packetId++,
+                RemoveConsumersPacket.class,
+                RemoveConsumersPacket::toBytes,
+                RemoveConsumersPacket::new,
+                RemoveConsumersPacket::handle,
                 Optional.of(NetworkDirection.PLAY_TO_SERVER)
         );
 

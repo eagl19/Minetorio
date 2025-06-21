@@ -22,13 +22,16 @@ public class CachedBlockPos {
         listConsumers = new ArrayList<>();
     }
 
-    public void setConsumersById(List<Integer> list){
+    public boolean setConsumersById(List<Integer> list){
         listConsumers.clear();
+        boolean g = false;
         for (int id:list){
             if(id<listPos.size()) {
                 listConsumers.add(listPos.get(id));
+                g = true;
             }
         }
+        return g;
     }
 
     public void setConsumers(List<BlockPos> list){
@@ -82,11 +85,16 @@ public class CachedBlockPos {
             }
         }
         validateConsumers();
-        if (!listPos.isEmpty() && listConsumers.isEmpty()){
-            listConsumers.add(listPos.get(0));
-        }
     }
     private void validateConsumers(){
         listConsumers.removeIf(pos -> !listPos.contains(pos));
+    }
+
+    public boolean removeConsumer(int index) {
+        if(listConsumers.size() > index){
+            listConsumers.remove(listConsumers.get(index));
+            return true;
+        }
+        return false;
     }
 }

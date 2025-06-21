@@ -1,10 +1,12 @@
 package net.eagl.minetorio.gui.screen;
 
 import net.eagl.minetorio.gui.WaterGeneratorMenu;
+import net.eagl.minetorio.gui.widget.ItemIconWidget;
 import net.eagl.minetorio.gui.widget.RemovableItemWidget;
+import net.eagl.minetorio.item.MinetorioItems;
 import net.eagl.minetorio.network.MinetorioNetwork;
+import net.eagl.minetorio.network.server.RemoveConsumersPacket;
 import net.eagl.minetorio.network.server.WaterGeneratorInitializePacket;
-import net.eagl.minetorio.util.CachedBlockPos;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -13,6 +15,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.text.DecimalFormat;
@@ -126,16 +129,57 @@ public class WaterGeneratorScreen extends AbstractContainerScreen<WaterGenerator
     }
 
     public void update() {
-        List<BlockPos> list = menu.getFluidTargets().getConsumers();
-        int maxI = Math.min(6, list.size());
 
-        for(int i = 0; i < maxI; i++){
-            this.addRenderableWidget(new RemovableItemWidget(
-                    leftPos + 27 + i * 18, topPos + 5,
-                    menu.getItemFromBlockPos(list.get(i)),
-                    () -> openAction(),
-                    () -> removeAction()
-            ));
+        this.clearWidgets();
+
+        this.addRenderableWidget(new ItemIconWidget(
+                leftPos + 8 , topPos + 5,
+                new ItemStack(MinetorioItems.PATTERN_WATER.get()),
+                null
+        ));
+
+        List<BlockPos> list = menu.getFluidTargets().getConsumers();
+
+        for(int i = 0; i < 6; i++){
+            if(i < list.size()) {
+                int finalI = i;
+                this.addRenderableWidget(new RemovableItemWidget(
+                        leftPos + 27 + i * 18, topPos + 5,
+                        menu.getItemFromBlockPos(list.get(i)),
+                        this::openAction,
+                        () -> removeAction(finalI)
+                ));
+            }else {
+                this.addRenderableWidget(new ItemIconWidget(
+                        leftPos + 27 + i * 18, topPos + 5,
+                        new ItemStack(MinetorioItems.PATTERN_WATER.get()),
+                        this::openAction
+                ));
+            }
+        }
+
+        this.addRenderableWidget(new ItemIconWidget(
+                leftPos + 8 , topPos + 117,
+                new ItemStack(MinetorioItems.PATTERN_INFINITY.get()),
+                null
+        ));
+
+        for(int i = 0; i < 6; i++){
+            if( i + 6 < list.size()) {
+                int finalI = i;
+                this.addRenderableWidget(new RemovableItemWidget(
+                        leftPos + 27 + i * 18, topPos + 117,
+                        menu.getItemFromBlockPos(list.get(i + 6)),
+                        this::openAction,
+                        () -> removeAction(finalI)
+                ));
+            }else {
+                this.addRenderableWidget(new ItemIconWidget(
+                        leftPos + 27 + i * 18, topPos + 117,
+                        new ItemStack(MinetorioItems.PATTERN_WATER.get()),
+                        this::openAction
+                ));
+            }
         }
     }
 
@@ -145,11 +189,12 @@ public class WaterGeneratorScreen extends AbstractContainerScreen<WaterGenerator
         Minecraft.getInstance().setScreen(new ConsumerListScreen(menu, this.playerInventory, this.title));
     }
 
-    private void removeAction(){
-
+    private void removeAction(int index){
+        MinetorioNetwork.CHANNEL.sendToServer(new RemoveConsumersPacket(menu.getBlockEntity().getBlockPos(), index));
     }
 
-    public CachedBlockPos getFluidTargets() {
-        return menu.getFluidTargets();
+    public @NotNull WaterGeneratorMenu getMenu(){
+        return menu;
     }
+
 }
