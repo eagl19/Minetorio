@@ -1,6 +1,7 @@
 package net.eagl.minetorio.block.entity;
 
 import net.eagl.minetorio.block.custom.GeneratorState;
+import net.eagl.minetorio.util.CachedBlockPos;
 import net.eagl.minetorio.util.enums.FluidType;
 import net.eagl.minetorio.util.storage.MinetorioEnergyStorage;
 import net.eagl.minetorio.util.storage.MinetorioFluidStorage;
@@ -21,8 +22,6 @@ import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public abstract class AbstractFluidGeneratorBlockEntity extends BlockEntity implements MenuProvider {
@@ -40,7 +39,7 @@ public abstract class AbstractFluidGeneratorBlockEntity extends BlockEntity impl
     private int currentTransfer;
     private boolean permanentlyStabilized = false;
 
-    private final List<BlockPos> cachedFluidTargets = new ArrayList<>();
+    private final CachedBlockPos cachedFluidTargets = new CachedBlockPos();
     private boolean initializedTargets = false;
 
     private final FluidType fluidType;
@@ -65,40 +64,16 @@ public abstract class AbstractFluidGeneratorBlockEntity extends BlockEntity impl
         containerData.set(MAX_PRODUCE, getGenerateInterval());
     }
 
+    public void initializedTargets() {
+        cachedFluidTargets.initialize(level, getBlockPos(), getFluidStorage().getFluidInTank(0).getFluid());
+    }
+
     @Override
     public void onLoad() {
         super.onLoad();
         if (!initializedTargets && level != null && !level.isClientSide) {
-            initializeFluidTargets();
+            initializedTargets();
             initializedTargets = true;
-        }
-    }
-
-    private void initializeFluidTargets() {
-        cachedFluidTargets.clear();
-        BlockPos center = this.getBlockPos();
-        if (level != null) {
-            for (int dx = -8; dx <= 8; dx++) {
-                for (int dy = -8; dy <= 8; dy++) {
-                    for (int dz = -8; dz <= 8; dz++) {
-                        BlockPos checkPos = center.offset(dx, dy, dz);
-
-                        BlockEntity be = level.getBlockEntity(checkPos);
-                        if (be == null || be == this) continue;
-
-                        LazyOptional<IFluidHandler> cap = be.getCapability(ForgeCapabilities.FLUID_HANDLER, null);
-                        cap.ifPresent(handler -> {
-                            for (int tank = 0; tank < handler.getTanks(); tank++) {
-                                if (handler.getFluidInTank(tank).getFluid().isSame(getFluidStorage().getFluidInTank(0).getFluid()) &&
-                                        handler.getTankCapacity(tank) > 0) {
-                                    cachedFluidTargets.add(checkPos.immutable());
-                                    break;
-                                }
-                            }
-                        });
-                    }
-                }
-            }
         }
     }
 
@@ -182,7 +157,7 @@ public abstract class AbstractFluidGeneratorBlockEntity extends BlockEntity impl
 
         LazyOptional<IFluidHandler> optionalFrom = this.getCapability(ForgeCapabilities.FLUID_HANDLER, null);
         optionalFrom.ifPresent(from -> {
-            for (BlockPos pos : cachedFluidTargets) {
+            for (BlockPos pos : cachedFluidTargets.getConsumers()) {
                 BlockEntity targetBE = level.getBlockEntity(pos);
                 if (targetBE == null) continue;
 
@@ -197,21 +172,16 @@ public abstract class AbstractFluidGeneratorBlockEntity extends BlockEntity impl
         return transferred.get();
     }
 
+    public CachedBlockPos getCachedFluidTargets(){
+        return cachedFluidTargets;
+    }
+
     public void setPermanentlyStabilized(boolean value) {
         this.permanentlyStabilized = value;
     }
 
     public boolean getPermanentlyStabilized(){
         return this.permanentlyStabilized;
-    }
-
-    public List<BlockPos> getCachedFluidTargets() {
-        return cachedFluidTargets;
-    }
-
-    public void setCachedFluidTargets(List<BlockPos> list) {
-        cachedFluidTargets.clear();
-        cachedFluidTargets.addAll(list);
     }
 
     protected int getProduceTime(){

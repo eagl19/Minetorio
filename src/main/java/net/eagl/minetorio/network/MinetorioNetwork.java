@@ -1,11 +1,13 @@
 package net.eagl.minetorio.network;
 
-import net.eagl.minetorio.network.client.CachedFluidTargetsSyncToClientPacket;
+import net.eagl.minetorio.network.client.CachedBlockPosConsumerSyncToClientPacket;
+import net.eagl.minetorio.network.client.CachedBlockPosListPosSyncToClientPacket;
 import net.eagl.minetorio.network.client.ResearchListSyncToClientPacket;
 import net.eagl.minetorio.network.client.SyncTechnologyProgressPacket;
 import net.eagl.minetorio.network.server.AddResearcherPlanPacket;
 import net.eagl.minetorio.network.server.RemoveResearcherPlanPacket;
 import net.eagl.minetorio.network.server.ResearcherButtonPacket;
+import net.eagl.minetorio.network.server.WaterGeneratorInitializePacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkRegistry;
@@ -70,10 +72,26 @@ public class MinetorioNetwork {
                 SyncTechnologyProgressPacket::handle
         );
         CHANNEL.registerMessage(packetId++,
-                CachedFluidTargetsSyncToClientPacket.class,
-                CachedFluidTargetsSyncToClientPacket::encode,
-                CachedFluidTargetsSyncToClientPacket::decode,
-                CachedFluidTargetsSyncToClientPacket::handle);
+                CachedBlockPosListPosSyncToClientPacket.class,
+                CachedBlockPosListPosSyncToClientPacket::encode,
+                CachedBlockPosListPosSyncToClientPacket::decode,
+                CachedBlockPosListPosSyncToClientPacket::handle,
+                Optional.of(NetworkDirection.PLAY_TO_CLIENT)
+        );
+        CHANNEL.registerMessage(packetId++,
+                CachedBlockPosConsumerSyncToClientPacket.class,
+                CachedBlockPosConsumerSyncToClientPacket::encode,
+                CachedBlockPosConsumerSyncToClientPacket::decode,
+                CachedBlockPosConsumerSyncToClientPacket::handle,
+                Optional.of(NetworkDirection.PLAY_TO_CLIENT)
+        );
+        CHANNEL.registerMessage(packetId++,
+                WaterGeneratorInitializePacket.class,
+                WaterGeneratorInitializePacket::encode,
+                WaterGeneratorInitializePacket::decode,
+                WaterGeneratorInitializePacket::handle,
+                Optional.of(NetworkDirection.PLAY_TO_SERVER)
+        );
 
     }
 

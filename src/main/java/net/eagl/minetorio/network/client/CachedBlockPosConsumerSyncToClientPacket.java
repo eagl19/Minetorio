@@ -1,26 +1,25 @@
 package net.eagl.minetorio.network.client;
 
-import net.eagl.minetorio.block.entity.AbstractFluidGeneratorBlockEntity;
+import net.eagl.minetorio.gui.screen.WaterGeneratorScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.world.level.Level;
 import net.minecraftforge.network.NetworkEvent;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
-public class CachedFluidTargetsSyncToClientPacket {
+public class CachedBlockPosConsumerSyncToClientPacket {
     private final BlockPos generatorPos;
     private final List<BlockPos> targetPositions;
 
-    public CachedFluidTargetsSyncToClientPacket(BlockPos generatorPos, List<BlockPos> targetPositions) {
+    public CachedBlockPosConsumerSyncToClientPacket(BlockPos generatorPos, List<BlockPos> targetPositions) {
         this.generatorPos = generatorPos;
         this.targetPositions = targetPositions;
     }
 
-    public static void encode(CachedFluidTargetsSyncToClientPacket msg, FriendlyByteBuf buf) {
+    public static void encode(CachedBlockPosConsumerSyncToClientPacket msg, FriendlyByteBuf buf) {
         buf.writeBlockPos(msg.generatorPos);
         buf.writeInt(msg.targetPositions.size());
         for (BlockPos pos : msg.targetPositions) {
@@ -28,25 +27,23 @@ public class CachedFluidTargetsSyncToClientPacket {
         }
     }
 
-    public static CachedFluidTargetsSyncToClientPacket decode(FriendlyByteBuf buf) {
+    public static CachedBlockPosConsumerSyncToClientPacket decode(FriendlyByteBuf buf) {
         BlockPos generatorPos = buf.readBlockPos();
         int size = buf.readInt();
         List<BlockPos> targets = new ArrayList<>();
         for (int i = 0; i < size; i++) {
             targets.add(buf.readBlockPos());
         }
-        return new CachedFluidTargetsSyncToClientPacket(generatorPos, targets);
+        return new CachedBlockPosConsumerSyncToClientPacket(generatorPos, targets);
     }
 
-    public static void handle(CachedFluidTargetsSyncToClientPacket msg, Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
-            Level level = Minecraft.getInstance().level;
-            if (level != null && level.getBlockEntity(msg.generatorPos) instanceof AbstractFluidGeneratorBlockEntity be) {
-                be.setCachedFluidTargets(msg.targetPositions);
-
-
+    public static void handle(CachedBlockPosConsumerSyncToClientPacket msg, Supplier<NetworkEvent.Context> ctx) {
+        ctx.get().enqueueWork(() -> Minecraft.getInstance().execute(() -> {
+            if (Minecraft.getInstance().screen instanceof WaterGeneratorScreen screen) {
+                screen.getFluidTargets().setConsumers(msg.targetPositions);
+                screen.update();
             }
-        });
+        }));
         ctx.get().setPacketHandled(true);
     }
 }

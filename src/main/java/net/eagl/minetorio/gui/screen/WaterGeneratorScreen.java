@@ -2,46 +2,41 @@ package net.eagl.minetorio.gui.screen;
 
 import net.eagl.minetorio.gui.WaterGeneratorMenu;
 import net.eagl.minetorio.gui.widget.RemovableItemWidget;
+import net.eagl.minetorio.network.MinetorioNetwork;
+import net.eagl.minetorio.network.server.WaterGeneratorInitializePacket;
+import net.eagl.minetorio.util.CachedBlockPos;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import org.jetbrains.annotations.NotNull;
 
 import java.text.DecimalFormat;
+import java.util.List;
 
 public class WaterGeneratorScreen extends AbstractContainerScreen<WaterGeneratorMenu> {
 
     private static final ResourceLocation GUI_TEXTURE = ResourceLocation.fromNamespaceAndPath("minetorio", "textures/gui/water_generator.png");
+    private final Inventory playerInventory;
 
     public WaterGeneratorScreen(WaterGeneratorMenu pMenu, Inventory pPlayerInventory, Component pTitle) {
         super(pMenu, pPlayerInventory, pTitle);
         this.imageHeight = 222;
         this.imageWidth = 176;
+        this.playerInventory = pPlayerInventory;
     }
 
     @Override
     protected void init() {
         super.init();
 
-        for(int i=0; i<6; i++){
-            this.addRenderableWidget(new RemovableItemWidget(
-                    leftPos - 10 + i * 18, topPos + 23,
-                    menu.getItemFromFluidTarget(i),
-                    () -> openAction(),
-                    () -> removeAction()
-            ));
-        }
-    }
-    private void openAction(){
-
+        update();
     }
 
-    private void removeAction(){
-
-    }
 
     @Override
     protected void renderBg(@NotNull GuiGraphics pGuiGraphics, float pPartialTick, int pMouseX, int pMouseY) {
@@ -128,5 +123,33 @@ public class WaterGeneratorScreen extends AbstractContainerScreen<WaterGenerator
     @Override
     protected void renderLabels(@NotNull GuiGraphics pGuiGraphics, int pMouseX, int pMouseY) {
 
+    }
+
+    public void update() {
+        List<BlockPos> list = menu.getFluidTargets().getConsumers();
+        int maxI = Math.min(6, list.size());
+
+        for(int i = 0; i < maxI; i++){
+            this.addRenderableWidget(new RemovableItemWidget(
+                    leftPos + 27 + i * 18, topPos + 5,
+                    menu.getItemFromBlockPos(list.get(i)),
+                    () -> openAction(),
+                    () -> removeAction()
+            ));
+        }
+    }
+
+    private void openAction(){
+
+        MinetorioNetwork.CHANNEL.sendToServer(new WaterGeneratorInitializePacket(menu.getBlockEntity().getBlockPos()));
+        Minecraft.getInstance().setScreen(new ConsumerListScreen(menu, this.playerInventory, this.title));
+    }
+
+    private void removeAction(){
+
+    }
+
+    public CachedBlockPos getFluidTargets() {
+        return menu.getFluidTargets();
     }
 }

@@ -3,7 +3,9 @@ package net.eagl.minetorio.gui;
 import net.eagl.minetorio.block.MinetorioBlocks;
 import net.eagl.minetorio.block.entity.WaterGeneratorBlockEntity;
 import net.eagl.minetorio.network.MinetorioNetwork;
-import net.eagl.minetorio.network.client.CachedFluidTargetsSyncToClientPacket;
+import net.eagl.minetorio.network.client.CachedBlockPosConsumerSyncToClientPacket;
+import net.eagl.minetorio.network.client.CachedBlockPosListPosSyncToClientPacket;
+import net.eagl.minetorio.util.CachedBlockPos;
 import net.eagl.minetorio.util.InventorySlot;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
@@ -19,7 +21,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
 import java.util.Objects;
 
 public class WaterGeneratorMenu extends AbstractContainerMenu {
@@ -42,26 +43,35 @@ public class WaterGeneratorMenu extends AbstractContainerMenu {
             throw new IllegalStateException("Invalid block entity for Water Generator");
         }
         if (playerInventory.player instanceof ServerPlayer serverPlayer) {
+            blockEntity.initializedTargets();
             MinetorioNetwork.CHANNEL.send(
                     PacketDistributor.PLAYER.with(() -> serverPlayer),
-                    new CachedFluidTargetsSyncToClientPacket(blockEntity.getBlockPos(), blockEntity.getCachedFluidTargets())
+                    new CachedBlockPosConsumerSyncToClientPacket(blockEntity.getBlockPos(), blockEntity.getCachedFluidTargets().getConsumers())
+            );
+            MinetorioNetwork.CHANNEL.send(
+                    PacketDistributor.PLAYER.with(() -> serverPlayer),
+                    new CachedBlockPosListPosSyncToClientPacket(blockEntity.getBlockPos(), blockEntity.getCachedFluidTargets().getListPos())
             );
         }
     }
 
-    public ItemStack getItemFromFluidTarget(int target) {
-        List<BlockPos> targets = blockEntity.getCachedFluidTargets();
-        if (!targets.isEmpty() && targets.size() > target) {
-            BlockPos pos = targets.get(target);
-            Level beLevel = blockEntity.getLevel();
-            if(beLevel != null) {
-                BlockEntity be = beLevel.getBlockEntity(pos);
-                if (be != null) {
-                    return be.getBlockState().getBlock().asItem().getDefaultInstance();
-                }
+    public CachedBlockPos getFluidTargets(){
+        return blockEntity.getCachedFluidTargets();
+    }
+
+    public ItemStack getItemFromBlockPos(BlockPos target) {
+        Level beLevel = blockEntity.getLevel();
+        if (beLevel != null) {
+            BlockEntity be = beLevel.getBlockEntity(target);
+            if (be != null) {
+                return be.getBlockState().getBlock().asItem().getDefaultInstance();
             }
         }
         return ItemStack.EMPTY;
+    }
+
+    public BlockEntity getBlockEntity(){
+        return blockEntity;
     }
 
     public ContainerData getData() {
