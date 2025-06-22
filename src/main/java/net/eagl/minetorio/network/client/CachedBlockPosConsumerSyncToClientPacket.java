@@ -1,7 +1,7 @@
 package net.eagl.minetorio.network.client;
 
 import net.eagl.minetorio.block.entity.AbstractFluidGeneratorBlockEntity;
-import net.eagl.minetorio.gui.screen.WaterGeneratorScreen;
+import net.eagl.minetorio.gui.screen.AbstractFluidGeneratorScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
@@ -47,7 +47,7 @@ public class CachedBlockPosConsumerSyncToClientPacket {
             }
 
             Minecraft.getInstance().execute(() -> {
-                if (Minecraft.getInstance().screen instanceof WaterGeneratorScreen screen) {
+                if (Minecraft.getInstance().screen instanceof AbstractFluidGeneratorScreen<?> screen) {
                     screen.update();
                 }
             });

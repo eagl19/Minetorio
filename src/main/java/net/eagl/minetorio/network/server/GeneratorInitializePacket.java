@@ -1,6 +1,6 @@
 package net.eagl.minetorio.network.server;
 
-import net.eagl.minetorio.block.entity.WaterGeneratorBlockEntity;
+import net.eagl.minetorio.block.entity.AbstractFluidGeneratorBlockEntity;
 import net.eagl.minetorio.network.MinetorioNetwork;
 import net.eagl.minetorio.network.client.CachedBlockPosConsumerSyncToClientPacket;
 import net.eagl.minetorio.network.client.CachedBlockPosListPosSyncToClientPacket;
@@ -13,28 +13,28 @@ import net.minecraftforge.network.PacketDistributor;
 
 import java.util.function.Supplier;
 
-public class WaterGeneratorInitializePacket {
+public class GeneratorInitializePacket {
     private final BlockPos pos;
 
-    public WaterGeneratorInitializePacket(BlockPos pos) {
+    public GeneratorInitializePacket(BlockPos pos) {
         this.pos = pos;
     }
 
-    public static void encode(WaterGeneratorInitializePacket msg, FriendlyByteBuf buf) {
+    public static void encode(GeneratorInitializePacket msg, FriendlyByteBuf buf) {
         buf.writeBlockPos(msg.pos);
     }
 
-    public static WaterGeneratorInitializePacket decode(FriendlyByteBuf buf) {
-        return new WaterGeneratorInitializePacket(buf.readBlockPos());
+    public static GeneratorInitializePacket decode(FriendlyByteBuf buf) {
+        return new GeneratorInitializePacket(buf.readBlockPos());
     }
 
-    public static void handle(WaterGeneratorInitializePacket msg, Supplier<NetworkEvent.Context> ctx) {
+    public static void handle(GeneratorInitializePacket msg, Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
             ServerPlayer player = ctx.get().getSender();
 
             if (player != null) {
                 BlockEntity be =  player.level().getBlockEntity(msg.pos);
-                if (be instanceof WaterGeneratorBlockEntity blockEntity) {
+                if (be instanceof AbstractFluidGeneratorBlockEntity blockEntity) {
                     blockEntity.initializedTargets();
 
                     MinetorioNetwork.CHANNEL.send(

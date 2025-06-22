@@ -83,10 +83,10 @@ public class MinetorioNetwork {
                 Optional.of(NetworkDirection.PLAY_TO_CLIENT)
         );
         CHANNEL.registerMessage(packetId++,
-                WaterGeneratorInitializePacket.class,
-                WaterGeneratorInitializePacket::encode,
-                WaterGeneratorInitializePacket::decode,
-                WaterGeneratorInitializePacket::handle,
+                GeneratorInitializePacket.class,
+                GeneratorInitializePacket::encode,
+                GeneratorInitializePacket::decode,
+                GeneratorInitializePacket::handle,
                 Optional.of(NetworkDirection.PLAY_TO_SERVER)
         );
         CHANNEL.registerMessage(packetId++,

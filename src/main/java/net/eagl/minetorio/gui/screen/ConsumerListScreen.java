@@ -1,5 +1,7 @@
 package net.eagl.minetorio.gui.screen;
 
+import net.eagl.minetorio.gui.AbstractFluidGeneratorMenu;
+import net.eagl.minetorio.gui.LavaGeneratorMenu;
 import net.eagl.minetorio.gui.WaterGeneratorMenu;
 import net.eagl.minetorio.gui.widget.FluidTargetWidget;
 import net.eagl.minetorio.network.MinetorioNetwork;
@@ -30,7 +32,7 @@ public class ConsumerListScreen extends Screen {
 
 
     private  int selectedWidget;
-    private final WaterGeneratorMenu menu;
+    private final AbstractFluidGeneratorMenu<?> menu;
     private final Inventory playerInventory;
     private final Component title;
 
@@ -50,7 +52,7 @@ public class ConsumerListScreen extends Screen {
 
     private final Component name;
 
-    protected ConsumerListScreen(WaterGeneratorMenu pMenu, Inventory pPlayerInventory, Component pTitle, Component name) {
+    protected ConsumerListScreen(AbstractFluidGeneratorMenu<?> pMenu, Inventory pPlayerInventory, Component pTitle, Component name) {
         super(pTitle);
         this.menu = pMenu;
         this.playerInventory = pPlayerInventory;
@@ -225,13 +227,21 @@ public class ConsumerListScreen extends Screen {
             }
         }
         if(!newConsumers.isEmpty()) {
-            MinetorioNetwork.CHANNEL.sendToServer(new AddConsumersPacket(menu.getBlockEntity().getBlockPos(), newConsumers));
+            MinetorioNetwork.CHANNEL.sendToServer(new AddConsumersPacket(menu.getGeneratorBlockEntity().getBlockPos(), newConsumers));
         }
-        Minecraft.getInstance().setScreen(new WaterGeneratorScreen(menu, this.playerInventory, this.title));
+        setScreen();
     }
 
     private void onCancelButtonClicked() {
-        Minecraft.getInstance().setScreen(new WaterGeneratorScreen(menu, this.playerInventory, this.title));
+        setScreen();
+    }
+
+    private void setScreen(){
+        if(menu instanceof WaterGeneratorMenu pMenu) {
+            Minecraft.getInstance().setScreen(new WaterGeneratorScreen(pMenu, this.playerInventory, this.title));
+        }else if(menu instanceof LavaGeneratorMenu pMenu){
+            Minecraft.getInstance().setScreen(new LavaGeneratorScreen(pMenu, this.playerInventory, this.title));
+        }
     }
 
     private boolean isMouseOver(float mx, float my, int x, int y, int width, int height) {

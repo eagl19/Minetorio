@@ -1,136 +1,22 @@
 package net.eagl.minetorio.gui;
 
-import net.eagl.minetorio.block.MinetorioBlocks;
 import net.eagl.minetorio.block.entity.WaterGeneratorBlockEntity;
-import net.eagl.minetorio.capability.MinetorioCapabilities;
-import net.eagl.minetorio.network.MinetorioNetwork;
-import net.eagl.minetorio.network.client.CachedBlockPosConsumerSyncToClientPacket;
-import net.eagl.minetorio.network.client.CachedBlockPosListPosSyncToClientPacket;
-import net.eagl.minetorio.util.CachedBlockPos;
-import net.eagl.minetorio.util.InventorySlot;
 import net.eagl.minetorio.util.Technologies;
-import net.eagl.minetorio.util.Technology;
-import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ContainerData;
-import net.minecraft.world.inventory.ContainerLevelAccess;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.network.PacketDistributor;
-import org.jetbrains.annotations.NotNull;
+
 
 import java.util.Objects;
 
-public class WaterGeneratorMenu extends AbstractContainerMenu {
-
-    private final ContainerLevelAccess access;
-    private final ContainerData data;
-    private final WaterGeneratorBlockEntity blockEntity;
-    private int consumersCount = 6;
-    private final Technology  tech = Technologies.WATER;
+public class WaterGeneratorMenu extends AbstractFluidGeneratorMenu<WaterGeneratorBlockEntity> {
 
     public WaterGeneratorMenu(int id, Inventory playerInventory, BlockEntity entity) {
-        super(MinetorioMenus.WATER_GENERATOR_MENU.get(), id);
-
-        this.access = ContainerLevelAccess.create(Objects.requireNonNull(entity.getLevel()), entity.getBlockPos());
-
-        InventorySlot.addHotbarAndPlayerInventorySlots(this::addSlot, playerInventory, 0, 8, 140, 3, 9, 18, 18, 58);
-        if (entity instanceof WaterGeneratorBlockEntity waterGenerator) {
-            this.blockEntity = waterGenerator;
-            this.data = waterGenerator.getContainerData();
-
-
-            if (playerInventory.player instanceof ServerPlayer serverPlayer) {
-                waterGenerator.initializedTargets();
-                MinetorioNetwork.CHANNEL.send(
-                        PacketDistributor.PLAYER.with(() -> serverPlayer),
-                        new CachedBlockPosConsumerSyncToClientPacket(waterGenerator.getBlockPos(), waterGenerator.getCachedFluidTargets().getConsumers())
-                );
-                MinetorioNetwork.CHANNEL.send(
-                        PacketDistributor.PLAYER.with(() -> serverPlayer),
-                        new CachedBlockPosListPosSyncToClientPacket(waterGenerator.getBlockPos(), waterGenerator.getCachedFluidTargets().getListPos())
-                );
-                serverPlayer.getCapability(MinetorioCapabilities.TECHNOLOGY_PROGRESS).ifPresent(techCap -> {
-                    if (techCap.hasLearned(tech.getId())) {
-                        consumersCount = 12;
-                    }
-                });
-            }
-            this.data.set(WaterGeneratorBlockEntity.MAX_CONSUMERS, consumersCount);
-            addDataSlots(this.data);
-        } else {
-            throw new IllegalStateException("Invalid block entity for Water Generator");
-        }
-    }
-
-    public CachedBlockPos getFluidTargets(){
-        return blockEntity.getCachedFluidTargets();
-    }
-
-    public ItemStack getItemFromBlockPos(BlockPos target) {
-        Level beLevel = blockEntity.getLevel();
-        if (beLevel != null) {
-            BlockEntity be = beLevel.getBlockEntity(target);
-            if (be != null) {
-                return be.getBlockState().getBlock().asItem().getDefaultInstance();
-            }
-        }
-        return ItemStack.EMPTY;
-    }
-
-    public BlockEntity getBlockEntity(){
-        return blockEntity;
-    }
-
-    public ContainerData getData() {
-        return this.data;
+        super(id, playerInventory, (WaterGeneratorBlockEntity) entity, MinetorioMenus.WATER_GENERATOR_MENU.get(), Technologies.WATER);
     }
 
     public WaterGeneratorMenu (int id, Inventory inv, FriendlyByteBuf extraData){
         this(id, inv, Objects.requireNonNull(inv.player.level().getBlockEntity(extraData.readBlockPos())));
     }
-    @Override
-    public @NotNull ItemStack quickMoveStack(@NotNull Player pPlayer, int pIndex) {
-        return ItemStack.EMPTY;
-    }
 
-    @Override
-    public boolean stillValid(@NotNull Player pPlayer) {
-        return stillValid(access, pPlayer, MinetorioBlocks.WATER_GENERATOR.get());
-    }
-
-    public  int getMaxEnergyStorage(){
-        return data.get(WaterGeneratorBlockEntity.MAX_ENERGY);
-    }
-
-    public int getEnergy(){
-        return data.get(WaterGeneratorBlockEntity.ENERGY);
-    }
-
-    public int getWater() {
-        return data.get(WaterGeneratorBlockEntity.FLUID);
-    }
-    public int getMaxWaterStorage(){
-        return data.get(WaterGeneratorBlockEntity.MAX_FLUID);
-    }
-
-    public int getProduce() {
-        return data.get(WaterGeneratorBlockEntity.PRODUCE);
-    }
-    public int getMaxProduce(){
-        return data.get(WaterGeneratorBlockEntity.MAX_PRODUCE);
-    }
-
-    public int getConsumersCount() {
-        return data.get(WaterGeneratorBlockEntity.MAX_CONSUMERS);
-    }
-
-    public Technology getTech(){
-        return tech;
-    }
 }
