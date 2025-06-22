@@ -1,14 +1,12 @@
 package net.eagl.minetorio.gui;
 
 import net.eagl.minetorio.block.entity.AbstractFluidGeneratorBlockEntity;
-import net.eagl.minetorio.block.entity.WaterGeneratorBlockEntity;
 import net.eagl.minetorio.capability.MinetorioCapabilities;
 import net.eagl.minetorio.network.MinetorioNetwork;
 import net.eagl.minetorio.network.client.CachedBlockPosConsumerSyncToClientPacket;
 import net.eagl.minetorio.network.client.CachedBlockPosListPosSyncToClientPacket;
 import net.eagl.minetorio.util.CachedBlockPos;
 import net.eagl.minetorio.util.InventorySlot;
-import net.eagl.minetorio.util.Technologies;
 import net.eagl.minetorio.util.Technology;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
