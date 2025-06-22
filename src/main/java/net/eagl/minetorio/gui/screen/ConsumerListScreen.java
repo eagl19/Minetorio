@@ -4,7 +4,6 @@ import net.eagl.minetorio.gui.WaterGeneratorMenu;
 import net.eagl.minetorio.gui.widget.FluidTargetWidget;
 import net.eagl.minetorio.network.MinetorioNetwork;
 import net.eagl.minetorio.network.server.AddConsumersPacket;
-import net.eagl.minetorio.util.CachedBlockPos;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
@@ -41,20 +40,22 @@ public class ConsumerListScreen extends Screen {
     private final int maxVisibleWidgets = 6;
     private final int widgetHeight = 28;
 
-    float okX;
-    float okY;
-    float cancelX;
-    float cancelY;
+    private float okX;
+    private float okY;
+    private float cancelX;
+    private float cancelY;
 
-    float btnWidth;
-    float btnHeight;
+    private float btnWidth;
+    private float btnHeight;
 
+    private final Component name;
 
-    protected ConsumerListScreen(WaterGeneratorMenu pMenu, Inventory pPlayerInventory, Component pTitle) {
+    protected ConsumerListScreen(WaterGeneratorMenu pMenu, Inventory pPlayerInventory, Component pTitle, Component name) {
         super(pTitle);
         this.menu = pMenu;
         this.playerInventory = pPlayerInventory;
         this.title = pTitle;
+        this.name = name;
     }
 
     @Override
@@ -152,7 +153,6 @@ public class ConsumerListScreen extends Screen {
     }
 
     private void renderName(GuiGraphics guiGraphics) {
-        String name = "Water Consumer";
         int x = TEXTURE_WIDTH / 2;
         int y = 40;
         float scale = 2;
@@ -161,7 +161,8 @@ public class ConsumerListScreen extends Screen {
         drawString(guiGraphics, name, nameX, nameY, scale);
     }
 
-    private void drawString(GuiGraphics guiGraphics, String text, int dx, int dy, float scale) {
+    private void drawString(GuiGraphics guiGraphics, Component text, int dx, int dy, float scale) {
+
         int dz = 0;
         guiGraphics.pose().pushPose();
         guiGraphics.pose().translate(dx, dy, dz);
@@ -277,9 +278,5 @@ public class ConsumerListScreen extends Screen {
                 widget.setVisible(false);
             }
         }
-    }
-
-    public CachedBlockPos getFluidTargets() {
-        return menu.getFluidTargets();
     }
 }

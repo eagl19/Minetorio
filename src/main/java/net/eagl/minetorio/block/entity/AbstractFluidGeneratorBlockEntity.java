@@ -72,7 +72,7 @@ public abstract class AbstractFluidGeneratorBlockEntity extends BlockEntity impl
     public void onLoad() {
         super.onLoad();
         initializedTargets();
-        if(cachedFluidTargets.getConsumers().isEmpty() && !cachedFluidTargets.getListPos().isEmpty()){
+        if (cachedFluidTargets.getConsumers().isEmpty() && !cachedFluidTargets.getListPos().isEmpty()) {
             cachedFluidTargets.getConsumers().add(cachedFluidTargets.getListPos().get(0));
         }
 

@@ -35,10 +35,8 @@ public class CachedBlockPos {
     }
 
     public void setConsumers(List<BlockPos> list){
-        if(!list.isEmpty()) {
-            listConsumers.clear();
-            listConsumers.addAll(list);
-        }
+        listConsumers.clear();
+        listConsumers.addAll(list);
     }
 
     public List<BlockPos> getConsumers(){
@@ -49,12 +47,9 @@ public class CachedBlockPos {
         return listPos;
     }
 
-    public void setPos(List<BlockPos> list){
-        if(!list.isEmpty()) {
-            listPos.clear();
-            listPos.addAll(list);
-        }
-
+    public void setPos(List<BlockPos> list) {
+        listPos.clear();
+        listPos.addAll(list);
     }
 
     public void initialize(Level level, BlockPos center, Fluid fluidToMatch) {
@@ -92,7 +87,7 @@ public class CachedBlockPos {
 
     public boolean removeConsumer(int index) {
         if(listConsumers.size() > index){
-            listConsumers.remove(listConsumers.get(index));
+            listConsumers.remove(index);
             return true;
         }
         return false;

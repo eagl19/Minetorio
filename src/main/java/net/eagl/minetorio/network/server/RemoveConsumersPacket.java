@@ -39,7 +39,6 @@ public class RemoveConsumersPacket {
             if (player == null) return;
 
             Level level = player.level();
-            if (!level.isLoaded(blockPos)) return;
 
             if (level.getBlockEntity(blockPos) instanceof WaterGeneratorBlockEntity waterGenerator) {
                 boolean changed = waterGenerator.getCachedFluidTargets().removeConsumer(index);

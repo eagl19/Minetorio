@@ -20,7 +20,9 @@ public class ItemIconWidget extends AbstractWidget {
 
     @Override
     public void onClick(double pMouseX, double pMouseY) {
-        onClickIcon.run();
+        if(onClickIcon != null) {
+            onClickIcon.run();
+        }
     }
 
     @Override

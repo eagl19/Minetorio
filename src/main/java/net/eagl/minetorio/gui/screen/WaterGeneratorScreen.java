@@ -171,7 +171,7 @@ public class WaterGeneratorScreen extends AbstractContainerScreen<WaterGenerator
                         leftPos + 27 + i * 18, topPos + 117,
                         menu.getItemFromBlockPos(list.get(i + 6)),
                         this::openAction,
-                        () -> removeAction(finalI)
+                        () -> removeAction(finalI + 6)
                 ));
             }else {
                 this.addRenderableWidget(new ItemIconWidget(
@@ -186,7 +186,8 @@ public class WaterGeneratorScreen extends AbstractContainerScreen<WaterGenerator
     private void openAction(){
 
         MinetorioNetwork.CHANNEL.sendToServer(new WaterGeneratorInitializePacket(menu.getBlockEntity().getBlockPos()));
-        Minecraft.getInstance().setScreen(new ConsumerListScreen(menu, this.playerInventory, this.title));
+        Minecraft.getInstance().setScreen(new ConsumerListScreen(menu, this.playerInventory, this.title,
+                Component.translatable("tooltip.minetorio.water_generator.consumers").withStyle(ChatFormatting.DARK_AQUA)));
     }
 
     private void removeAction(int index){

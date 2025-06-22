@@ -38,6 +38,7 @@
 
   "creativetab.minetorio_tab": "Minetorio",
 
+  "tooltip.minetorio.water_generator.consumers": "Water Consumers",
   "tooltip.minetorio.researcher_gui.button_learn": "Learn",
   "tooltip.minetorio.learned": "Learned",
   "tooltip.minetorio.unlearned":"Unlearned",
