@@ -2,11 +2,14 @@ package net.eagl.minetorio.gui;
 
 import net.eagl.minetorio.block.MinetorioBlocks;
 import net.eagl.minetorio.block.entity.WaterGeneratorBlockEntity;
+import net.eagl.minetorio.capability.MinetorioCapabilities;
 import net.eagl.minetorio.network.MinetorioNetwork;
 import net.eagl.minetorio.network.client.CachedBlockPosConsumerSyncToClientPacket;
 import net.eagl.minetorio.network.client.CachedBlockPosListPosSyncToClientPacket;
 import net.eagl.minetorio.util.CachedBlockPos;
 import net.eagl.minetorio.util.InventorySlot;
+import net.eagl.minetorio.util.Technologies;
+import net.eagl.minetorio.util.Technology;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
@@ -28,6 +31,8 @@ public class WaterGeneratorMenu extends AbstractContainerMenu {
     private final ContainerLevelAccess access;
     private final ContainerData data;
     private final WaterGeneratorBlockEntity blockEntity;
+    private int consumersCount = 6;
+    private final Technology  tech = Technologies.WATER;
 
     public WaterGeneratorMenu(int id, Inventory playerInventory, BlockEntity entity) {
         super(MinetorioMenus.WATER_GENERATOR_MENU.get(), id);
@@ -38,20 +43,28 @@ public class WaterGeneratorMenu extends AbstractContainerMenu {
         if (entity instanceof WaterGeneratorBlockEntity waterGenerator) {
             this.blockEntity = waterGenerator;
             this.data = waterGenerator.getContainerData();
+
+
+            if (playerInventory.player instanceof ServerPlayer serverPlayer) {
+                waterGenerator.initializedTargets();
+                MinetorioNetwork.CHANNEL.send(
+                        PacketDistributor.PLAYER.with(() -> serverPlayer),
+                        new CachedBlockPosConsumerSyncToClientPacket(waterGenerator.getBlockPos(), waterGenerator.getCachedFluidTargets().getConsumers())
+                );
+                MinetorioNetwork.CHANNEL.send(
+                        PacketDistributor.PLAYER.with(() -> serverPlayer),
+                        new CachedBlockPosListPosSyncToClientPacket(waterGenerator.getBlockPos(), waterGenerator.getCachedFluidTargets().getListPos())
+                );
+                serverPlayer.getCapability(MinetorioCapabilities.TECHNOLOGY_PROGRESS).ifPresent(techCap -> {
+                    if (techCap.hasLearned(tech.getId())) {
+                        consumersCount = 12;
+                    }
+                });
+            }
+            this.data.set(WaterGeneratorBlockEntity.MAX_CONSUMERS, consumersCount);
             addDataSlots(this.data);
-        }else {
+        } else {
             throw new IllegalStateException("Invalid block entity for Water Generator");
-        }
-        if (playerInventory.player instanceof ServerPlayer serverPlayer) {
-            blockEntity.initializedTargets();
-            MinetorioNetwork.CHANNEL.send(
-                    PacketDistributor.PLAYER.with(() -> serverPlayer),
-                    new CachedBlockPosConsumerSyncToClientPacket(blockEntity.getBlockPos(), blockEntity.getCachedFluidTargets().getConsumers())
-            );
-            MinetorioNetwork.CHANNEL.send(
-                    PacketDistributor.PLAYER.with(() -> serverPlayer),
-                    new CachedBlockPosListPosSyncToClientPacket(blockEntity.getBlockPos(), blockEntity.getCachedFluidTargets().getListPos())
-            );
         }
     }
 
@@ -111,5 +124,13 @@ public class WaterGeneratorMenu extends AbstractContainerMenu {
     }
     public int getMaxProduce(){
         return data.get(WaterGeneratorBlockEntity.MAX_PRODUCE);
+    }
+
+    public int getConsumersCount() {
+        return data.get(WaterGeneratorBlockEntity.MAX_CONSUMERS);
+    }
+
+    public Technology getTech(){
+        return tech;
     }
 }

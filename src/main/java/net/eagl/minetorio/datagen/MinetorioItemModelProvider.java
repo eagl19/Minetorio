@@ -39,6 +39,7 @@ public class MinetorioItemModelProvider extends ItemModelProvider {
         simplePatternItem(MinetorioItems.PATTERN_SUN);
         simplePatternItem(MinetorioItems.PATTERN_VOID);
         simplePatternItem(MinetorioItems.PATTERN_WATER);
+        simplePatternItem(MinetorioItems.PATTERN_WATER_CONSUMER);
 
         simpleFlaskItem(MinetorioItems.FLASK_BLACK);
         simpleFlaskItem(MinetorioItems.FLASK_BLUE);

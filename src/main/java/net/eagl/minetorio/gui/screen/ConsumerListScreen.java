@@ -273,7 +273,7 @@ public class ConsumerListScreen extends Screen {
                 widget.setY(dy);
                 widget.setWidth(w);
                 widget.setHeight(h);
-                widget.setVisible(widget.isSelected() || selectedWidget < 6);
+                widget.setVisible(widget.isSelected() || selectedWidget < menu.getConsumersCount());
             }else {
                 widget.setVisible(false);
             }

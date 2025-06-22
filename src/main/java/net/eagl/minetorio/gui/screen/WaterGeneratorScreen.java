@@ -31,6 +31,7 @@ public class WaterGeneratorScreen extends AbstractContainerScreen<WaterGenerator
         this.imageHeight = 222;
         this.imageWidth = 176;
         this.playerInventory = pPlayerInventory;
+
     }
 
     @Override
@@ -152,7 +153,7 @@ public class WaterGeneratorScreen extends AbstractContainerScreen<WaterGenerator
             }else {
                 this.addRenderableWidget(new ItemIconWidget(
                         leftPos + 27 + i * 18, topPos + 5,
-                        new ItemStack(MinetorioItems.PATTERN_WATER.get()),
+                        new ItemStack(MinetorioItems.PATTERN_WATER_CONSUMER.get()),
                         this::openAction
                 ));
             }
@@ -160,7 +161,7 @@ public class WaterGeneratorScreen extends AbstractContainerScreen<WaterGenerator
 
         this.addRenderableWidget(new ItemIconWidget(
                 leftPos + 8 , topPos + 117,
-                new ItemStack(MinetorioItems.PATTERN_INFINITY.get()),
+                new ItemStack(menu.getTech().getDisplayIcon()),
                 null
         ));
 
@@ -176,7 +177,7 @@ public class WaterGeneratorScreen extends AbstractContainerScreen<WaterGenerator
             }else {
                 this.addRenderableWidget(new ItemIconWidget(
                         leftPos + 27 + i * 18, topPos + 117,
-                        new ItemStack(MinetorioItems.PATTERN_WATER.get()),
+                        new ItemStack(MinetorioItems.PATTERN_WATER_CONSUMER.get()),
                         this::openAction
                 ));
             }

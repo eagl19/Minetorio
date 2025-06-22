@@ -2,17 +2,22 @@ package net.eagl.minetorio.util;
 
 import net.eagl.minetorio.block.entity.AbstractFluidGeneratorBlockEntity;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtUtils;
+import net.minecraft.nbt.Tag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class CachedBlockPos {
+public class CachedBlockPos implements INBTSerializable<CompoundTag> {
 
     private final List<BlockPos> listPos;
     private final List<BlockPos> listConsumers;
@@ -91,5 +96,28 @@ public class CachedBlockPos {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public CompoundTag serializeNBT() {
+        CompoundTag tag = new CompoundTag();
+
+        ListTag consumersList = new ListTag();
+        for (BlockPos pos : listConsumers) {
+            consumersList.add(NbtUtils.writeBlockPos(pos));
+        }
+        tag.put("Consumers", consumersList);
+
+        return tag;
+    }
+
+    @Override
+    public void deserializeNBT(CompoundTag tag) {
+
+        listConsumers.clear();
+        ListTag consumersList = tag.getList("Consumers", Tag.TAG_COMPOUND);
+        for (Tag t : consumersList) {
+            listConsumers.add(NbtUtils.readBlockPos((CompoundTag) t));
+        }
     }
 }

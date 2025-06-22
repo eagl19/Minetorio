@@ -32,8 +32,9 @@ public abstract class AbstractFluidGeneratorBlockEntity extends BlockEntity impl
     public static final int MAX_FLUID = 3;
     public static final int PRODUCE = 4;
     public static final int MAX_PRODUCE = 5;
+    public static final int MAX_CONSUMERS = 6;
 
-    private final ContainerData containerData = new SimpleContainerData(6);
+    private final ContainerData containerData = new SimpleContainerData(7);
 
     private int currentTime;
     private int currentTransfer;
@@ -90,6 +91,8 @@ public abstract class AbstractFluidGeneratorBlockEntity extends BlockEntity impl
         tag.put("Energy", getEnergyStorage().serializeNBT());
 
         tag.put("Fluid", getFluidStorage().serializeNBT());
+
+        tag.put("cachedFluidTargets", cachedFluidTargets.serializeNBT());
     }
 
     @Override
@@ -114,6 +117,9 @@ public abstract class AbstractFluidGeneratorBlockEntity extends BlockEntity impl
 
         if (tag.contains("Fluid", Tag.TAG_COMPOUND)) {
             getFluidStorage().deserializeNBT(tag.getCompound("Fluid"));
+        }
+        if (tag.contains("cachedFluidTargets")){
+            cachedFluidTargets.deserializeNBT(tag.getCompound("cachedFluidTargets"));
         }
     }
 
