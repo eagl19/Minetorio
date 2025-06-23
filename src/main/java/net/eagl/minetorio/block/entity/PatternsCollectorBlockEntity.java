@@ -1,6 +1,6 @@
 package net.eagl.minetorio.block.entity;
 
-import net.eagl.minetorio.gui.PatternsCollectorMenu;
+import net.eagl.minetorio.gui.menu.PatternsCollectorMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;

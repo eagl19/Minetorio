@@ -1,7 +1,7 @@
 package net.eagl.minetorio.block.entity;
 
 import net.eagl.minetorio.capability.MinetorioCapabilities;
-import net.eagl.minetorio.gui.ResearcherMenu;
+import net.eagl.minetorio.gui.menu.ResearcherMenu;
 import net.eagl.minetorio.network.MinetorioNetwork;
 import net.eagl.minetorio.network.client.ResearchListSyncToClientPacket;
 import net.eagl.minetorio.network.client.SyncTechnologyProgressPacket;

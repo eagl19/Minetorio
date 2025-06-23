@@ -39,6 +39,13 @@ public class MinetorioBlockEntities {
                     BlockEntityType.Builder.of(LavaGeneratorBlockEntity::new, MinetorioBlocks.LAVA_GENERATOR.get()).build(null));
 
 
+    @SuppressWarnings("DataFlowIssue")
+    public static final RegistryObject<BlockEntityType<EnergyGeneratorBlockEntity>> ENERGY_GENERATOR_ENTITY =
+            BLOCK_ENTITIES.register("energy_generator", () ->
+                    BlockEntityType.Builder.of(EnergyGeneratorBlockEntity::new, MinetorioBlocks.ENERGY_GENERATOR.get()).build(null));
+
+
+
     public static void register(IEventBus eventBus) {
         BLOCK_ENTITIES.register(eventBus);
     }

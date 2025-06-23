@@ -1,9 +1,10 @@
-package net.eagl.minetorio.gui;
+package net.eagl.minetorio.gui.menu;
 
 import net.eagl.minetorio.block.MinetorioBlocks;
 import net.eagl.minetorio.block.entity.ResearcherBlockEntity;
 import net.eagl.minetorio.capability.MinetorioCapabilities;
 import net.eagl.minetorio.datagen.MinetorioItemTagGenerator;
+import net.eagl.minetorio.gui.MinetorioMenus;
 import net.eagl.minetorio.gui.slot.FlaskSlot;
 import net.eagl.minetorio.network.MinetorioNetwork;
 import net.eagl.minetorio.network.client.ResearchListSyncToClientPacket;

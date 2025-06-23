@@ -1,6 +1,7 @@
-package net.eagl.minetorio.gui;
+package net.eagl.minetorio.gui.menu;
 
 import net.eagl.minetorio.block.entity.WaterGeneratorBlockEntity;
+import net.eagl.minetorio.gui.MinetorioMenus;
 import net.eagl.minetorio.util.Technologies;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;

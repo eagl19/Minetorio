@@ -4,7 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.eagl.minetorio.gui.widget.ButtonWidget;
 import net.eagl.minetorio.gui.widget.ItemIconWidget;
 import net.eagl.minetorio.gui.widget.RemovableItemWidget;
-import net.eagl.minetorio.gui.ResearcherMenu;
+import net.eagl.minetorio.gui.menu.ResearcherMenu;
 import net.eagl.minetorio.gui.slot.FlaskSlot;
 import net.eagl.minetorio.network.MinetorioNetwork;
 import net.eagl.minetorio.network.server.RemoveResearcherPlanPacket;

@@ -35,6 +35,8 @@ public class MinetorioBlocks {
     public static final RegistryObject<Block> LAVA_GENERATOR = registerBlock("lava_generator",
             LavaGenerator::new);
 
+    public static final RegistryObject<Block> ENERGY_GENERATOR = registerBlock("energy_generator",
+            EnergyGenerator::new);
 
     private static <T extends Block> RegistryObject<T> registerBlock(String name, Supplier<T> block){
         RegistryObject<T> toReturn = BLOCKS.register(name,block);

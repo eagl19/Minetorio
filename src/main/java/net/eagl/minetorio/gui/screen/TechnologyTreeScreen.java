@@ -2,7 +2,7 @@ package net.eagl.minetorio.gui.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.eagl.minetorio.capability.MinetorioCapabilities;
-import net.eagl.minetorio.gui.ResearcherMenu;
+import net.eagl.minetorio.gui.menu.ResearcherMenu;
 import net.eagl.minetorio.network.MinetorioNetwork;
 import net.eagl.minetorio.network.server.AddResearcherPlanPacket;
 import net.eagl.minetorio.util.*;

@@ -2,9 +2,7 @@ package net.eagl.minetorio.datagen;
 
 import net.eagl.minetorio.Minetorio;
 import net.eagl.minetorio.block.MinetorioBlocks;
-import net.eagl.minetorio.block.custom.GlowingBedrockBlock;
-import net.eagl.minetorio.block.custom.LavaGenerator;
-import net.eagl.minetorio.block.custom.WaterGenerator;
+import net.eagl.minetorio.block.custom.*;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
@@ -16,6 +14,7 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import net.minecraft.data.PackOutput;
+import org.jetbrains.annotations.NotNull;
 
 
 public class MinetorioBlockStateProvider extends BlockStateProvider {
@@ -48,8 +47,46 @@ public class MinetorioBlockStateProvider extends BlockStateProvider {
 
         blockWithStatesAndItem(MinetorioBlocks.WATER_GENERATOR.get(), WaterGenerator.STATE);
         blockWithStatesAndItem(MinetorioBlocks.LAVA_GENERATOR.get(), LavaGenerator.STATE);
+        blockWithStatesCustomSidesAndItem(MinetorioBlocks.ENERGY_GENERATOR.get(), EnergyGenerator.STATE,
+                "item/patterns/void",
+                "block/solar_panel",
+                "item/patterns/sun",
+                "item/patterns/sun",
+                "item/patterns/sun",
+                "item/patterns/sun");
 
         blockWithItem(MinetorioBlocks.PORTAL);
+    }
+
+    private void blockWithStatesCustomSidesAndItem(Block block, EnumProperty<?> property, String pDown,String pUp,String pNorth,String pSouth,String pWest,String pEst) {
+
+        getVariantBuilder(block).forAllStates(state -> {
+            String variant = state.getValue(property).getSerializedName();
+            String name = blockName(block) + "_" + variant;
+            ModelFile modelFile;
+
+            if (variant.equals("stabilized")) {
+                modelFile = models()
+                        .withExistingParent(name, mcLoc("block/cube"))
+                        .texture("down", modLoc(pDown))
+                        .texture("up", modLoc(pUp))
+                        .texture("north", modLoc(pNorth))
+                        .texture("south", modLoc(pSouth))
+                        .texture("west", modLoc(pWest))
+                        .texture("east", modLoc(pEst));
+            } else {
+                modelFile = models().cubeAll(name, modLoc("block/" + name));
+            }
+
+            return ConfiguredModel.builder()
+                    .modelFile(modelFile)
+                    .build();
+        });
+
+        String defaultState = block.defaultBlockState().getValue(property).getSerializedName();
+        itemModels().getBuilder(blockName(block))
+                .parent(models().getExistingFile(modLoc("block/" + blockName(block) + "_" + defaultState)));
+
     }
 
 

@@ -1,6 +1,10 @@
 package net.eagl.minetorio.gui;
 
 import net.eagl.minetorio.Minetorio;
+import net.eagl.minetorio.gui.menu.LavaGeneratorMenu;
+import net.eagl.minetorio.gui.menu.PatternsCollectorMenu;
+import net.eagl.minetorio.gui.menu.ResearcherMenu;
+import net.eagl.minetorio.gui.menu.WaterGeneratorMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraftforge.eventbus.api.IEventBus;

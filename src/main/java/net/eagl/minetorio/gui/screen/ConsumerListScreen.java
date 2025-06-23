@@ -1,8 +1,8 @@
 package net.eagl.minetorio.gui.screen;
 
-import net.eagl.minetorio.gui.AbstractFluidGeneratorMenu;
-import net.eagl.minetorio.gui.LavaGeneratorMenu;
-import net.eagl.minetorio.gui.WaterGeneratorMenu;
+import net.eagl.minetorio.gui.menu.AbstractFluidGeneratorMenu;
+import net.eagl.minetorio.gui.menu.LavaGeneratorMenu;
+import net.eagl.minetorio.gui.menu.WaterGeneratorMenu;
 import net.eagl.minetorio.gui.widget.FluidTargetWidget;
 import net.eagl.minetorio.network.MinetorioNetwork;
 import net.eagl.minetorio.network.server.AddConsumersPacket;

@@ -2,7 +2,7 @@ package net.eagl.minetorio.block.entity;
 
 import net.eagl.minetorio.block.custom.GeneratorState;
 import net.eagl.minetorio.block.custom.LavaGenerator;
-import net.eagl.minetorio.gui.LavaGeneratorMenu;
+import net.eagl.minetorio.gui.menu.LavaGeneratorMenu;
 import net.eagl.minetorio.util.enums.FluidType;
 import net.eagl.minetorio.util.storage.MinetorioEnergyStorage;
 import net.eagl.minetorio.util.storage.MinetorioFluidStorage;

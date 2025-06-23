@@ -1,6 +1,6 @@
 package net.eagl.minetorio.gui.screen;
 
-import net.eagl.minetorio.gui.WaterGeneratorMenu;
+import net.eagl.minetorio.gui.menu.WaterGeneratorMenu;
 import net.eagl.minetorio.item.MinetorioItems;
 import net.eagl.minetorio.network.MinetorioNetwork;
 import net.eagl.minetorio.network.server.RemoveConsumersPacket;

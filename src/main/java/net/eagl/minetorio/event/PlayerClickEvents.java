@@ -3,10 +3,7 @@ package net.eagl.minetorio.event;
 import net.eagl.minetorio.Minetorio;
 import net.eagl.minetorio.block.MinetorioBlocks;
 import net.eagl.minetorio.block.custom.*;
-import net.eagl.minetorio.block.entity.LavaGeneratorBlockEntity;
-import net.eagl.minetorio.block.entity.PatternsCollectorBlockEntity;
-import net.eagl.minetorio.block.entity.ResearcherBlockEntity;
-import net.eagl.minetorio.block.entity.WaterGeneratorBlockEntity;
+import net.eagl.minetorio.block.entity.*;
 import net.eagl.minetorio.capability.MinetorioCapabilities;
 import net.eagl.minetorio.item.MinetorioItems;
 import net.eagl.minetorio.util.Technologies;
@@ -103,6 +100,27 @@ public class PlayerClickEvents {
                     }else{
                         if (lavaGenerator.getPermanentlyStabilized()) {
                             NetworkHooks.openScreen(serverPlayer, lavaGenerator, pos);
+                            event.setCancellationResult(InteractionResult.SUCCESS);
+                            event.setCanceled(true);
+                            return;
+                        }
+                    }
+                }
+            }
+
+            //Energy Generator
+            if (state.is(MinetorioBlocks.ENERGY_GENERATOR.get())) {
+                if (level.getBlockEntity(pos) instanceof EnergyGeneratorBlockEntity energyGenerator) {
+                    if (state.getValue(EnergyGenerator.STATE) == GeneratorState.UNSTABLE) {
+                        level.setBlockAndUpdate(pos, state.setValue(EnergyGenerator.STATE, GeneratorState.STABILIZED));
+                        serverPlayer.getCapability(MinetorioCapabilities.TECHNOLOGY_PROGRESS).ifPresent(techCap -> {
+                            if (techCap.hasLearned(Technologies.SUN.getId())) {
+                                energyGenerator.setPermanentlyStabilized(true);
+                            }
+                        });
+                    }else{
+                        if (energyGenerator.getPermanentlyStabilized()) {
+                            NetworkHooks.openScreen(serverPlayer, energyGenerator, pos);
                             event.setCancellationResult(InteractionResult.SUCCESS);
                             event.setCanceled(true);
                             return;

@@ -62,6 +62,7 @@ public class MinetorioCreativeModTabs {
 
                         pOutput.accept(MinetorioBlocks.LAVA_GENERATOR.get());
                         pOutput.accept(MinetorioBlocks.WATER_GENERATOR.get());
+                        pOutput.accept(MinetorioBlocks.ENERGY_GENERATOR.get());
 
 
                     })

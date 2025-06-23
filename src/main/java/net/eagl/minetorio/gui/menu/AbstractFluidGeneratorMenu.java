@@ -1,4 +1,4 @@
-package net.eagl.minetorio.gui;
+package net.eagl.minetorio.gui.menu;
 
 import net.eagl.minetorio.block.entity.AbstractFluidGeneratorBlockEntity;
 import net.eagl.minetorio.capability.MinetorioCapabilities;

@@ -1,6 +1,6 @@
 package net.eagl.minetorio.network.server;
 
-import net.eagl.minetorio.gui.ResearcherMenu;
+import net.eagl.minetorio.gui.menu.ResearcherMenu;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
