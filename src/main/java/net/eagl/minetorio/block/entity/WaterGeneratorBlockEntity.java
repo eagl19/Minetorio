@@ -4,6 +4,7 @@ import net.eagl.minetorio.block.custom.GeneratorState;
 import net.eagl.minetorio.block.custom.WaterGenerator;
 import net.eagl.minetorio.gui.menu.WaterGeneratorMenu;
 import net.eagl.minetorio.util.enums.FluidType;
+import net.eagl.minetorio.util.enums.ResourceType;
 import net.eagl.minetorio.util.storage.MinetorioEnergyStorage;
 import net.eagl.minetorio.util.storage.MinetorioFluidStorage;
 import net.minecraft.core.BlockPos;
@@ -87,6 +88,11 @@ public class WaterGeneratorBlockEntity extends AbstractFluidGeneratorBlockEntity
     }
 
     public void tickClient() {
+    }
+
+    @Override
+    public ResourceType getResourceType() {
+        return ResourceType.WATER;
     }
 
     @Override

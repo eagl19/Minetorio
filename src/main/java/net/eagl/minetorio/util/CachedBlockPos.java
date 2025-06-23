@@ -1,6 +1,7 @@
 package net.eagl.minetorio.util;
 
 import net.eagl.minetorio.block.entity.AbstractFluidGeneratorBlockEntity;
+import net.eagl.minetorio.util.enums.ResourceType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -8,11 +9,7 @@ import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.material.Fluid;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.INBTSerializable;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,30 +54,21 @@ public class CachedBlockPos implements INBTSerializable<CompoundTag> {
         listPos.addAll(list);
     }
 
-    public void initialize(Level level, BlockPos center, Fluid fluidToMatch) {
+    public void initialize(Level level, BlockPos center, ResourceType resourceType) {
         listPos.clear();
 
-        if (level == null || center == null || fluidToMatch == null) return;
+        if (level == null || center == null || resourceType == null) return;
 
         for (int dx = -8; dx <= 8; dx++) {
             for (int dy = -8; dy <= 8; dy++) {
                 for (int dz = -8; dz <= 8; dz++) {
                     BlockPos checkPos = center.offset(dx, dy, dz);
                     BlockEntity be = level.getBlockEntity(checkPos);
-                    if (be == null) continue;
+                    if (be == null || be instanceof AbstractFluidGeneratorBlockEntity) continue;
 
-                    if (be instanceof AbstractFluidGeneratorBlockEntity) continue;
-
-                    LazyOptional<IFluidHandler> cap = be.getCapability(ForgeCapabilities.FLUID_HANDLER, null);
-                    cap.ifPresent(handler -> {
-                        for (int tank = 0; tank < handler.getTanks(); tank++) {
-                            if (handler.getFluidInTank(tank).getFluid().isSame(fluidToMatch) &&
-                                    handler.getTankCapacity(tank) > 0) {
-                                listPos.add(checkPos.immutable());
-                                break;
-                            }
-                        }
-                    });
+                    if(resourceType.matches(be)){
+                        listPos.add(checkPos.immutable());
+                    }
                 }
             }
         }

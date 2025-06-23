@@ -4,6 +4,7 @@ import net.eagl.minetorio.block.custom.GeneratorState;
 import net.eagl.minetorio.block.custom.LavaGenerator;
 import net.eagl.minetorio.gui.menu.LavaGeneratorMenu;
 import net.eagl.minetorio.util.enums.FluidType;
+import net.eagl.minetorio.util.enums.ResourceType;
 import net.eagl.minetorio.util.storage.MinetorioEnergyStorage;
 import net.eagl.minetorio.util.storage.MinetorioFluidStorage;
 import net.minecraft.core.BlockPos;
@@ -83,6 +84,11 @@ public class LavaGeneratorBlockEntity extends AbstractFluidGeneratorBlockEntity{
     }
 
     public void tickClient() {
+    }
+
+    @Override
+    public ResourceType getResourceType() {
+        return ResourceType.LAVA;
     }
 
     @Override

@@ -3,6 +3,7 @@ package net.eagl.minetorio.block.entity;
 import net.eagl.minetorio.block.custom.GeneratorState;
 import net.eagl.minetorio.util.CachedBlockPos;
 import net.eagl.minetorio.util.enums.FluidType;
+import net.eagl.minetorio.util.enums.ResourceType;
 import net.eagl.minetorio.util.storage.MinetorioEnergyStorage;
 import net.eagl.minetorio.util.storage.MinetorioFluidStorage;
 import net.minecraft.core.BlockPos;
@@ -40,7 +41,7 @@ public abstract class AbstractFluidGeneratorBlockEntity extends BlockEntity impl
     private int currentTransfer;
     private boolean permanentlyStabilized = false;
 
-    private final CachedBlockPos cachedFluidTargets = new CachedBlockPos();
+    protected final CachedBlockPos cachedFluidTargets = new CachedBlockPos();
 
 
     private final FluidType fluidType;
@@ -65,8 +66,10 @@ public abstract class AbstractFluidGeneratorBlockEntity extends BlockEntity impl
         containerData.set(MAX_PRODUCE, getGenerateInterval());
     }
 
+
+
     public void initializedTargets() {
-        cachedFluidTargets.initialize(level, getBlockPos(), getFluidStorage().getFluidInTank(0).getFluid());
+        cachedFluidTargets.initialize(level, getBlockPos(), getResourceType());
     }
 
     @Override
@@ -195,6 +198,7 @@ public abstract class AbstractFluidGeneratorBlockEntity extends BlockEntity impl
         return currentTime;
     }
 
+    public abstract ResourceType getResourceType();
     public abstract void tickClient();
     protected abstract MinetorioEnergyStorage getEnergyStorage();
     protected abstract MinetorioFluidStorage getFluidStorage();
