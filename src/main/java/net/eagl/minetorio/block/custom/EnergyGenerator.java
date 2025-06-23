@@ -1,7 +1,6 @@
 package net.eagl.minetorio.block.custom;
 
 import net.eagl.minetorio.block.entity.EnergyGeneratorBlockEntity;
-import net.eagl.minetorio.block.entity.LavaGeneratorBlockEntity;
 import net.eagl.minetorio.block.entity.MinetorioBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
