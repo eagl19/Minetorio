@@ -76,7 +76,7 @@ public class WaterGeneratorScreen extends AbstractFluidGeneratorScreen<WaterGene
     @Override
     protected void sendOpenPacket() {
         MinetorioNetwork.CHANNEL.sendToServer(new GeneratorInitializePacket(menu.getGeneratorBlockEntity().getBlockPos()));
-        Minecraft.getInstance().setScreen(new ConsumerListScreen(menu, this.playerInventory, this.title,
+        Minecraft.getInstance().setScreen(new ConsumerListScreen<>(menu, this.playerInventory, this.title,
                 Component.translatable("tooltip.minetorio.water_generator.consumers").withStyle(ChatFormatting.DARK_AQUA)));
     }
 

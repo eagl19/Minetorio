@@ -76,7 +76,7 @@ public class LavaGeneratorScreen extends AbstractFluidGeneratorScreen<LavaGenera
     @Override
     protected void sendOpenPacket() {
         MinetorioNetwork.CHANNEL.sendToServer(new GeneratorInitializePacket(menu.getGeneratorBlockEntity().getBlockPos()));
-        Minecraft.getInstance().setScreen(new ConsumerListScreen(menu, this.playerInventory, this.title,
+        Minecraft.getInstance().setScreen(new ConsumerListScreen<>(menu, this.playerInventory, this.title,
                 Component.translatable("tooltip.minetorio.lava_generator.consumers").withStyle(ChatFormatting.DARK_RED)));
     }
 
