@@ -1,6 +1,7 @@
 package net.eagl.minetorio.gui.screen;
 
-import net.eagl.minetorio.gui.menu.AbstractFluidGeneratorMenu;
+import net.eagl.minetorio.gui.menu.EnergyGeneratorMenu;
+import net.eagl.minetorio.gui.menu.IGeneratorMenu;
 import net.eagl.minetorio.gui.menu.LavaGeneratorMenu;
 import net.eagl.minetorio.gui.menu.WaterGeneratorMenu;
 import net.eagl.minetorio.gui.widget.FluidTargetWidget;
@@ -13,13 +14,14 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ConsumerListScreen extends Screen {
+public class ConsumerListScreen <T extends AbstractContainerMenu> extends Screen {
 
     private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath("minetorio", "textures/gui/tech_details.png");
     private static final int TEXTURE_WIDTH = 289;
@@ -32,7 +34,7 @@ public class ConsumerListScreen extends Screen {
 
 
     private  int selectedWidget;
-    private final AbstractFluidGeneratorMenu<?> menu;
+    private final T menu;
     private final Inventory playerInventory;
     private final Component title;
 
@@ -52,7 +54,7 @@ public class ConsumerListScreen extends Screen {
 
     private final Component name;
 
-    protected ConsumerListScreen(AbstractFluidGeneratorMenu<?> pMenu, Inventory pPlayerInventory, Component pTitle, Component name) {
+    protected ConsumerListScreen(T pMenu, Inventory pPlayerInventory, Component pTitle, Component name) {
         super(pTitle);
         this.menu = pMenu;
         this.playerInventory = pPlayerInventory;
@@ -70,18 +72,21 @@ public class ConsumerListScreen extends Screen {
         this.clearWidgets();
         fluidWidgets.clear();
 
-        List<BlockPos> list = menu.getFluidTargets().getListPos();
-        List<BlockPos> consumers = menu.getFluidTargets().getConsumers();
-        int i = 0;
-        for (BlockPos pos : list) {
-            ItemStack stack = menu.getItemFromBlockPos(pos);
-            if (!stack.isEmpty()) {
+        if(menu instanceof IGeneratorMenu pMenu) {
 
-                FluidTargetWidget widget = new FluidTargetWidget(0, 0, 0, 0, stack, pos, i);
-                widget.setSelected(consumers.contains(pos));
-                fluidWidgets.add(widget);
-                addRenderableWidget(widget);
-                i++;
+            List<BlockPos> list = pMenu.getTargetsList();
+            List<BlockPos> consumers = pMenu.getConsumersList();
+            int i = 0;
+            for (BlockPos pos : list) {
+                ItemStack stack = pMenu.getItemFromBlockPos(pos);
+                if (!stack.isEmpty()) {
+
+                    FluidTargetWidget widget = new FluidTargetWidget(0, 0, 0, 0, stack, pos, i);
+                    widget.setSelected(consumers.contains(pos));
+                    fluidWidgets.add(widget);
+                    addRenderableWidget(widget);
+                    i++;
+                }
             }
         }
 
@@ -226,8 +231,8 @@ public class ConsumerListScreen extends Screen {
                 newConsumers.add(widget.getId());
             }
         }
-        if(!newConsumers.isEmpty()) {
-            MinetorioNetwork.CHANNEL.sendToServer(new AddConsumersPacket(menu.getGeneratorBlockEntity().getBlockPos(), newConsumers));
+        if(menu instanceof IGeneratorMenu pMenu) {
+            MinetorioNetwork.CHANNEL.sendToServer(new AddConsumersPacket(pMenu.getBlockPos(), newConsumers));
         }
         setScreen();
     }
@@ -241,6 +246,8 @@ public class ConsumerListScreen extends Screen {
             Minecraft.getInstance().setScreen(new WaterGeneratorScreen(pMenu, this.playerInventory, this.title));
         }else if(menu instanceof LavaGeneratorMenu pMenu){
             Minecraft.getInstance().setScreen(new LavaGeneratorScreen(pMenu, this.playerInventory, this.title));
+        }else if(menu instanceof EnergyGeneratorMenu pMenu){
+            Minecraft.getInstance().setScreen(new EnergyGeneratorScreen(pMenu, this.playerInventory, this.title));
         }
     }
 
@@ -265,28 +272,30 @@ public class ConsumerListScreen extends Screen {
     }
 
     private void updateWidgetPositions() {
-        float scale = (float) this.height / TEXTURE_HEIGHT;
-        float x = (this.width - TEXTURE_WIDTH * scale) / 2;
-        float y = (this.height - TEXTURE_HEIGHT * scale) / 2;
+       if(menu instanceof IGeneratorMenu pMenu) {
+           float scale = (float) this.height / TEXTURE_HEIGHT;
+           float x = (this.width - TEXTURE_WIDTH * scale) / 2;
+           float y = (this.height - TEXTURE_HEIGHT * scale) / 2;
 
-        float minDY = y + 60 * scale;
-        float maxDY = y + (60 + 6 * widgetHeight) * scale;
+           float minDY = y + 60 * scale;
+           float maxDY = y + (60 + 6 * widgetHeight) * scale;
 
-        for (int i = 0; i < fluidWidgets.size(); i++) {
-            FluidTargetWidget widget = fluidWidgets.get(i);
-            int dx = (int) (x + 30 * scale);
-            int dy = (int) (y + (70 + i * widgetHeight - scrollOffsetY) * scale);
-            int w = (int) ((TEXTURE_WIDTH - 60) * scale);
-            int h = (int) (24 * scale);
-            if(dy > minDY && dy < maxDY) {
-                widget.setX(dx);
-                widget.setY(dy);
-                widget.setWidth(w);
-                widget.setHeight(h);
-                widget.setVisible(widget.isSelected() || selectedWidget < menu.getConsumersCount());
-            }else {
-                widget.setVisible(false);
-            }
-        }
+           for (int i = 0; i < fluidWidgets.size(); i++) {
+               FluidTargetWidget widget = fluidWidgets.get(i);
+               int dx = (int) (x + 30 * scale);
+               int dy = (int) (y + (70 + i * widgetHeight - scrollOffsetY) * scale);
+               int w = (int) ((TEXTURE_WIDTH - 60) * scale);
+               int h = (int) (24 * scale);
+               if (dy > minDY && dy < maxDY) {
+                   widget.setX(dx);
+                   widget.setY(dy);
+                   widget.setWidth(w);
+                   widget.setHeight(h);
+                   widget.setVisible(widget.isSelected() || selectedWidget < pMenu.getConsumersCount());
+               } else {
+                   widget.setVisible(false);
+               }
+           }
+       }
     }
 }

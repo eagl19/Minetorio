@@ -25,7 +25,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public abstract class AbstractFluidGeneratorBlockEntity extends BlockEntity implements MenuProvider {
+public abstract class AbstractFluidGeneratorBlockEntity extends BlockEntity implements MenuProvider, IGeneratorBlockEntity {
 
     public static final int ENERGY = 0;
     public static final int MAX_ENERGY = 1;
@@ -182,7 +182,7 @@ public abstract class AbstractFluidGeneratorBlockEntity extends BlockEntity impl
         return transferred.get();
     }
 
-    public CachedBlockPos getCachedFluidTargets(){
+    public CachedBlockPos getCachedTargets(){
         return cachedFluidTargets;
     }
 

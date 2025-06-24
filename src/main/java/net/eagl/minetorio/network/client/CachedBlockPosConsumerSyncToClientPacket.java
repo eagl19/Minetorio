@@ -1,7 +1,7 @@
 package net.eagl.minetorio.network.client;
 
-import net.eagl.minetorio.block.entity.AbstractFluidGeneratorBlockEntity;
-import net.eagl.minetorio.gui.screen.AbstractFluidGeneratorScreen;
+import net.eagl.minetorio.block.entity.IGeneratorBlockEntity;
+import net.eagl.minetorio.gui.screen.IGeneratorScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
@@ -42,12 +42,12 @@ public class CachedBlockPosConsumerSyncToClientPacket {
     public static void handle(CachedBlockPosConsumerSyncToClientPacket msg, Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
             Level level = Minecraft.getInstance().level;
-            if (level != null && level.getBlockEntity(msg.generatorPos) instanceof AbstractFluidGeneratorBlockEntity be) {
-                be.getCachedFluidTargets().setConsumers(msg.targetPositions);
+            if (level != null && level.getBlockEntity(msg.generatorPos) instanceof IGeneratorBlockEntity be) {
+                be.getCachedTargets().setConsumers(msg.targetPositions);
             }
 
             Minecraft.getInstance().execute(() -> {
-                if (Minecraft.getInstance().screen instanceof AbstractFluidGeneratorScreen<?> screen) {
+                if (Minecraft.getInstance().screen instanceof IGeneratorScreen screen) {
                     screen.update();
                 }
             });

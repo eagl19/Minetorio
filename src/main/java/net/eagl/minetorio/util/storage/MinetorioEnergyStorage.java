@@ -1,5 +1,6 @@
 package net.eagl.minetorio.util.storage;
 
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraftforge.energy.EnergyStorage;
 
@@ -15,7 +16,7 @@ public class MinetorioEnergyStorage extends EnergyStorage {
     @Override
     public int receiveEnergy(int maxReceive, boolean simulate) {
         int received = super.receiveEnergy(maxReceive, simulate);
-        if (received > 0 && !simulate) {
+        if (received > 0 && !simulate && onEnergyChanged != null) {
             onEnergyChanged.run();
         }
         return received;
@@ -24,7 +25,7 @@ public class MinetorioEnergyStorage extends EnergyStorage {
     @Override
     public int extractEnergy(int maxExtract, boolean simulate) {
         int extracted = super.extractEnergy(maxExtract, simulate);
-        if (extracted > 0 && !simulate) {
+        if (extracted > 0 && !simulate && onEnergyChanged != null) {
             onEnergyChanged.run();
         }
         return extracted;
@@ -32,13 +33,19 @@ public class MinetorioEnergyStorage extends EnergyStorage {
 
     @Override
     public Tag serializeNBT() {
-        return super.serializeNBT();
+        CompoundTag tag = new CompoundTag();
+        tag.putInt("Energy", energy);
+        return tag;
     }
 
     @Override
-    public void deserializeNBT(Tag tag) {
-        super.deserializeNBT(tag);
-        onEnergyChanged.run();
+    public void deserializeNBT(Tag nbt) {
+        if (nbt instanceof CompoundTag tag) {
+            this.energy = tag.getInt("Energy");
+        }
+        if (onEnergyChanged != null) {
+            onEnergyChanged.run();
+        }
     }
 
 }

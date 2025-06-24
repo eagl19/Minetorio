@@ -17,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
 import java.text.DecimalFormat;
 import java.util.List;
 
-public abstract class AbstractFluidGeneratorScreen<T extends AbstractContainerMenu> extends AbstractContainerScreen<T> {
+public abstract class AbstractFluidGeneratorScreen<T extends AbstractContainerMenu> extends AbstractContainerScreen<T> implements IGeneratorScreen {
 
     private final ResourceLocation texture;
 
@@ -51,7 +51,7 @@ public abstract class AbstractFluidGeneratorScreen<T extends AbstractContainerMe
 
     protected abstract ItemStack getItemFromBlockPos(BlockPos pos);
 
-    protected abstract ItemStack geUpdateIcon();
+    protected abstract ItemStack getUpdateIcon();
 
     protected abstract void sendOpenPacket();
     protected abstract void sendRemovePacket(int index);
@@ -144,7 +144,7 @@ public abstract class AbstractFluidGeneratorScreen<T extends AbstractContainerMe
 
         this.addRenderableWidget(new ItemIconWidget(
                 leftPos + 8 , topPos + 117,
-                geUpdateIcon(),
+                getUpdateIcon(),
                 null
         ));
 

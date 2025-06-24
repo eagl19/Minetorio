@@ -5,10 +5,7 @@ import net.eagl.minetorio.block.entity.MinetorioBlockEntities;
 import net.eagl.minetorio.block.renderer.PatternCollectorBlockRenderer;
 import net.eagl.minetorio.block.renderer.ResearcherBlockRenderer;
 import net.eagl.minetorio.gui.MinetorioMenus;
-import net.eagl.minetorio.gui.screen.LavaGeneratorScreen;
-import net.eagl.minetorio.gui.screen.PatternsCollectorScreen;
-import net.eagl.minetorio.gui.screen.ResearcherScreen;
-import net.eagl.minetorio.gui.screen.WaterGeneratorScreen;
+import net.eagl.minetorio.gui.screen.*;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
@@ -41,6 +38,7 @@ public class ClientEvents {
                     MenuScreens.register(MinetorioMenus.RESEARCHER_MENU.get(), ResearcherScreen::new);
                     MenuScreens.register(MinetorioMenus.WATER_GENERATOR_MENU.get(), WaterGeneratorScreen::new);
                     MenuScreens.register(MinetorioMenus.LAVA_GENERATOR_MENU.get(), LavaGeneratorScreen::new);
+                    MenuScreens.register(MinetorioMenus.ENERGY_GENERATOR_MENU.get(), EnergyGeneratorScreen::new);
                 }
         );
 

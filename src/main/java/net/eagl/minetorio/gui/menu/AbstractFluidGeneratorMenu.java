@@ -19,9 +19,10 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
 import java.util.Objects;
 
-public abstract class AbstractFluidGeneratorMenu<T extends AbstractFluidGeneratorBlockEntity> extends AbstractContainerMenu {
+public abstract class AbstractFluidGeneratorMenu<T extends AbstractFluidGeneratorBlockEntity> extends AbstractContainerMenu implements IGeneratorMenu{
 
     protected final ContainerLevelAccess access;
     protected final ContainerData data;
@@ -44,11 +45,11 @@ public abstract class AbstractFluidGeneratorMenu<T extends AbstractFluidGenerato
                 blockEntity.initializedTargets();
                 MinetorioNetwork.CHANNEL.send(
                         PacketDistributor.PLAYER.with(() -> serverPlayer),
-                        new CachedBlockPosConsumerSyncToClientPacket(blockEntity.getBlockPos(), blockEntity.getCachedFluidTargets().getConsumers())
+                        new CachedBlockPosConsumerSyncToClientPacket(blockEntity.getBlockPos(), blockEntity.getCachedTargets().getConsumers())
                 );
                 MinetorioNetwork.CHANNEL.send(
                         PacketDistributor.PLAYER.with(() -> serverPlayer),
-                        new CachedBlockPosListPosSyncToClientPacket(blockEntity.getBlockPos(), blockEntity.getCachedFluidTargets().getListPos())
+                        new CachedBlockPosListPosSyncToClientPacket(blockEntity.getBlockPos(), blockEntity.getCachedTargets().getListPos())
                 );
                 serverPlayer.getCapability(MinetorioCapabilities.TECHNOLOGY_PROGRESS).ifPresent(techCap -> {
                     if (techCap.hasLearned(tech.getId())) {
@@ -61,8 +62,21 @@ public abstract class AbstractFluidGeneratorMenu<T extends AbstractFluidGenerato
 
     }
 
-    public CachedBlockPos getFluidTargets(){
-        return blockEntity.getCachedFluidTargets();
+    public CachedBlockPos getTargets() {
+        return blockEntity.getCachedTargets();
+    }
+
+    public List<BlockPos> getTargetsList() {
+        return this.getTargets().getListPos();
+    }
+
+    public List<BlockPos> getConsumersList() {
+        return this.getTargets().getConsumers();
+    }
+
+    @Override
+    public BlockPos getBlockPos() {
+        return blockEntity.getBlockPos();
     }
 
     public ItemStack getItemFromBlockPos(BlockPos target) {
@@ -150,5 +164,6 @@ public abstract class AbstractFluidGeneratorMenu<T extends AbstractFluidGenerato
     public Technology getTech(){
         return tech;
     }
+
 }
 

@@ -60,7 +60,7 @@ public class LavaGeneratorScreen extends AbstractFluidGeneratorScreen<LavaGenera
 
     @Override
     protected List<BlockPos> getGeneratorConsumers() {
-        return menu.getFluidTargets().getConsumers();
+        return menu.getTargets().getConsumers();
     }
 
     @Override
@@ -69,7 +69,7 @@ public class LavaGeneratorScreen extends AbstractFluidGeneratorScreen<LavaGenera
     }
 
     @Override
-    protected ItemStack geUpdateIcon() {
+    protected ItemStack getUpdateIcon() {
         return new ItemStack(menu.getTech().getDisplayIcon());
     }
 

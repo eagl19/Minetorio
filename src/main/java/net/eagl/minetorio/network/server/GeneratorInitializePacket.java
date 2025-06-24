@@ -1,6 +1,6 @@
 package net.eagl.minetorio.network.server;
 
-import net.eagl.minetorio.block.entity.AbstractFluidGeneratorBlockEntity;
+import net.eagl.minetorio.block.entity.IGeneratorBlockEntity;
 import net.eagl.minetorio.network.MinetorioNetwork;
 import net.eagl.minetorio.network.client.CachedBlockPosConsumerSyncToClientPacket;
 import net.eagl.minetorio.network.client.CachedBlockPosListPosSyncToClientPacket;
@@ -34,16 +34,16 @@ public class GeneratorInitializePacket {
 
             if (player != null) {
                 BlockEntity be =  player.level().getBlockEntity(msg.pos);
-                if (be instanceof AbstractFluidGeneratorBlockEntity blockEntity) {
+                if (be instanceof IGeneratorBlockEntity blockEntity) {
                     blockEntity.initializedTargets();
 
                     MinetorioNetwork.CHANNEL.send(
                             PacketDistributor.PLAYER.with(() -> player),
-                            new CachedBlockPosListPosSyncToClientPacket(msg.pos, blockEntity.getCachedFluidTargets().getListPos())
+                            new CachedBlockPosListPosSyncToClientPacket(msg.pos, blockEntity.getCachedTargets().getListPos())
                     );
                     MinetorioNetwork.CHANNEL.send(
                             PacketDistributor.PLAYER.with(() -> player),
-                            new CachedBlockPosConsumerSyncToClientPacket(msg.pos, blockEntity.getCachedFluidTargets().getConsumers())
+                            new CachedBlockPosConsumerSyncToClientPacket(msg.pos, blockEntity.getCachedTargets().getConsumers())
                     );
                 }
             }

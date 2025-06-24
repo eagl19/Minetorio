@@ -1,6 +1,5 @@
 package net.eagl.minetorio.util;
 
-import net.eagl.minetorio.block.entity.AbstractFluidGeneratorBlockEntity;
 import net.eagl.minetorio.util.enums.ResourceType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -26,7 +25,7 @@ public class CachedBlockPos implements INBTSerializable<CompoundTag> {
 
     public boolean setConsumersById(List<Integer> list){
         listConsumers.clear();
-        boolean g = false;
+        boolean g = list.isEmpty();
         for (int id:list){
             if(id<listPos.size()) {
                 listConsumers.add(listPos.get(id));
@@ -64,7 +63,8 @@ public class CachedBlockPos implements INBTSerializable<CompoundTag> {
                 for (int dz = -8; dz <= 8; dz++) {
                     BlockPos checkPos = center.offset(dx, dy, dz);
                     BlockEntity be = level.getBlockEntity(checkPos);
-                    if (be == null || be instanceof AbstractFluidGeneratorBlockEntity) continue;
+
+                    if (be == null || resourceType.isGenerator(be)) continue;
 
                     if(resourceType.matches(be)){
                         listPos.add(checkPos.immutable());

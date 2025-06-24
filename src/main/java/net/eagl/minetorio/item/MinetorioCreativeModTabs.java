@@ -39,6 +39,7 @@ public class MinetorioCreativeModTabs {
                         pOutput.accept(MinetorioItems.PATTERN_WATER.get());
                         pOutput.accept(MinetorioItems.PATTERN_WATER_CONSUMER.get());
                         pOutput.accept(MinetorioItems.PATTERN_LAVA_CONSUMER.get());
+                        pOutput.accept(MinetorioItems.PATTERN_ENERGY_CONSUMER.get());
 
 
                         pOutput.accept(MinetorioItems.FLASK_BLACK.get());

@@ -94,7 +94,7 @@ public class TechnologyRegistry {
         register(
                 TechnologyBuilder.create("cloud")
                         .pattern(MinetorioItems.PATTERN_CLOUD.get())
-                        .requires("fire","water")
+                        .requires("fire", "water")
                         .flasks(new FlasksField.Builder()
                                 .set(FlaskColor.RED, 12)
                                 .set(FlaskColor.GREEN, 11)
@@ -169,7 +169,7 @@ public class TechnologyRegistry {
                                 .set(FlaskColor.GREEN, 2)
                                 .set(FlaskColor.BLACK, 1)
                                 .build())
-                        .duration(10000)
+                        .duration(500)
                         .tier(3)
                         .pos(310, -30)
                         .build()

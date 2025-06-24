@@ -25,6 +25,7 @@
   "item.minetorio.pattern_water": "Water",
   "item.minetorio.pattern_water_consumer": "Water Consumer",
   "item.minetorio.pattern_lava_consumer": "Lava Consumer",
+  "item.minetorio.pattern_energy_consumer": "Energy Consumer",
 
   "item.minetorio.flask_black": "Black flask",
   "item.minetorio.flask_blue": "Blue flask",
@@ -43,6 +44,7 @@
 
   "tooltip.minetorio.water_generator.consumers": "Water Consumers",
   "tooltip.minetorio.lava_generator.consumers": "Lava Consumers",
+  "tooltip.minetorio.energy_generator.consumers": "Energy Consumers",
   "tooltip.minetorio.researcher_gui.button_learn": "Learn",
   "tooltip.minetorio.learned": "Learned",
   "tooltip.minetorio.unlearned":"Unlearned",
@@ -69,6 +71,7 @@
   "pattern.minetorio.pattern_water.benefit": "Stabilizes the Water Generator",
   "pattern.minetorio.pattern_water_consumer.benefit": "Water Consumer Benefit",
   "pattern.minetorio.pattern_lava_consumer.benefit": "Lava Consumer Benefit",
+  "pattern.minetorio.pattern_energy_consumer.benefit": "Energy Consumer Benefit",
 
   "pattern.minetorio.pattern_air.how_to_learn": "Air How To Learn",
   "pattern.minetorio.pattern_battery.how_to_learn": "Battery How To Learn",
@@ -86,5 +89,6 @@
   "pattern.minetorio.pattern_void.how_to_learn": "Void How To Learn",
   "pattern.minetorio.pattern_water.how_to_learn": "Water How To Learn",
   "pattern.minetorio.pattern_water_consumer.how_to_learn": "Water Consumer How To Learn",
-  "pattern.minetorio.pattern_lava_consumer.how_to_learn": "Lava Consumer How To Learn"
+  "pattern.minetorio.pattern_lava_consumer.how_to_learn": "Lava Consumer How To Learn",
+  "pattern.minetorio.pattern_energy_consumer.how_to_learn": "Energy Consumer How To Learn"
 }
