@@ -21,6 +21,12 @@ public class MinetorioCreativeModTabs {
                     .displayItems((pParameters,pOutput) ->{
                         pOutput.accept(MinetorioItems.SAPPHIRE.get());
 
+                        pOutput.accept(MinetorioItems.COOLING_CORE.get());
+                        pOutput.accept(MinetorioItems.DEW_COLLECTOR.get());
+                        pOutput.accept(MinetorioItems.ENCHANTED_PIPE.get());
+                        pOutput.accept(MinetorioItems.FILTERED_NOZZLE.get());
+                        pOutput.accept(MinetorioItems.HYDRO_CATALYST.get());
+
                         pOutput.accept(MinetorioItems.PATTERN_AIR.get());
                         pOutput.accept(MinetorioItems.PATTERN_BATTERY.get());
                         pOutput.accept(MinetorioItems.PATTERN_CLOUD.get());

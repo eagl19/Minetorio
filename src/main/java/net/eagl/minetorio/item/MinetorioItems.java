@@ -54,6 +54,16 @@ public class MinetorioItems {
     public static final RegistryObject<Item> PATTERN_ENERGY_CONSUMER = ITEMS.register("pattern_energy_consumer",
             ()-> new Item(new Item.Properties()));
 
+    public static final RegistryObject<Item> COOLING_CORE = ITEMS.register("cooling_core",
+            ()-> new Item(new Item.Properties().stacksTo(1)));
+    public static final RegistryObject<Item> DEW_COLLECTOR = ITEMS.register("dew_collector",
+            ()-> new Item(new Item.Properties().stacksTo(1)));
+    public static final RegistryObject<Item> ENCHANTED_PIPE = ITEMS.register("enchanted_pipe",
+            ()-> new Item(new Item.Properties().stacksTo(1)));
+    public static final RegistryObject<Item> FILTERED_NOZZLE = ITEMS.register("filtered_nozzle",
+            ()-> new Item(new Item.Properties().stacksTo(1)));
+    public static final RegistryObject<Item> HYDRO_CATALYST = ITEMS.register("hydro_catalyst",
+            ()-> new Item(new Item.Properties().stacksTo(1)));
 
     public static final RegistryObject<Item> FLASK_BLACK = ITEMS.register("flask_black",
             ()-> new Item(new Item.Properties()));

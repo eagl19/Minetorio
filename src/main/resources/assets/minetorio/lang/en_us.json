@@ -7,6 +7,11 @@
   "block.minetorio.energy_generator": "Energy Generator",
 
   "item.minetorio.sapphire": "Sapphire",
+  "item.minetorio.cooling_core": "Cooling Core",
+  "item.minetorio.dew_collector": "Dew Collector",
+  "item.minetorio.enchanted_pipe": "Enchanted Pipe",
+  "item.minetorio.filtered_nozzle": "Filtered Nozzle",
+  "item.minetorio.hydro_catalyst": "Hydro Catalyst",
 
   "item.minetorio.pattern_air": "Air",
   "item.minetorio.pattern_battery": "Battery",

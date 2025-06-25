@@ -22,6 +22,11 @@ public class MinetorioItemModelProvider extends ItemModelProvider {
     protected void registerModels() {
 
         simpleItem(MinetorioItems.SAPPHIRE);
+        simpleItem(MinetorioItems.COOLING_CORE);
+        simpleItem(MinetorioItems.DEW_COLLECTOR);
+        simpleItem(MinetorioItems.ENCHANTED_PIPE);
+        simpleItem(MinetorioItems.FILTERED_NOZZLE);
+        simpleItem(MinetorioItems.HYDRO_CATALYST);
 
         simplePatternItem(MinetorioItems.PATTERN_AIR);
         simplePatternItem(MinetorioItems.PATTERN_BATTERY);
