@@ -1,6 +1,7 @@
 package net.eagl.minetorio.item;
 
 import net.eagl.minetorio.Minetorio;
+import net.eagl.minetorio.item.custom.UpgradeItem;
 import net.minecraft.world.item.*;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
@@ -55,15 +56,26 @@ public class MinetorioItems {
             ()-> new Item(new Item.Properties()));
 
     public static final RegistryObject<Item> COOLING_CORE = ITEMS.register("cooling_core",
-            ()-> new Item(new Item.Properties().stacksTo(1)));
+            ()-> new UpgradeItem(0.15f));
     public static final RegistryObject<Item> DEW_COLLECTOR = ITEMS.register("dew_collector",
-            ()-> new Item(new Item.Properties().stacksTo(1)));
+            ()-> new UpgradeItem(0.25f));
     public static final RegistryObject<Item> ENCHANTED_PIPE = ITEMS.register("enchanted_pipe",
-            ()-> new Item(new Item.Properties().stacksTo(1)));
+            ()-> new UpgradeItem(0.2f));
     public static final RegistryObject<Item> FILTERED_NOZZLE = ITEMS.register("filtered_nozzle",
-            ()-> new Item(new Item.Properties().stacksTo(1)));
+            ()-> new UpgradeItem(0.1f));
     public static final RegistryObject<Item> HYDRO_CATALYST = ITEMS.register("hydro_catalyst",
-            ()-> new Item(new Item.Properties().stacksTo(1)));
+            ()-> new UpgradeItem(0.5f));
+
+    public static final RegistryObject<Item> ABYSSAL_STONE = ITEMS.register("abyssal_stone",
+            ()-> new UpgradeItem(0.2f));
+    public static final RegistryObject<Item> BLAZE_CRYSTAL = ITEMS.register("blaze_crystal",
+            ()-> new UpgradeItem(0.25f));
+    public static final RegistryObject<Item> INFERNAL_CATALYST = ITEMS.register("infernal_catalyst",
+            ()-> new UpgradeItem(0.5f));
+    public static final RegistryObject<Item> MAGMATIC_CORE = ITEMS.register("magmatic_core",
+            ()-> new UpgradeItem(0.15f));
+    public static final RegistryObject<Item> VOLCANO_ESSENCE = ITEMS.register("volcano_essence",
+            ()-> new UpgradeItem(0.1f));
 
     public static final RegistryObject<Item> FLASK_BLACK = ITEMS.register("flask_black",
             ()-> new Item(new Item.Properties()));

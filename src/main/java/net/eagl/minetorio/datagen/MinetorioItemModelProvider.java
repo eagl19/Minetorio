@@ -27,6 +27,11 @@ public class MinetorioItemModelProvider extends ItemModelProvider {
         simpleItem(MinetorioItems.ENCHANTED_PIPE);
         simpleItem(MinetorioItems.FILTERED_NOZZLE);
         simpleItem(MinetorioItems.HYDRO_CATALYST);
+        simpleItem(MinetorioItems.ABYSSAL_STONE);
+        simpleItem(MinetorioItems.BLAZE_CRYSTAL);
+        simpleItem(MinetorioItems.INFERNAL_CATALYST);
+        simpleItem(MinetorioItems.MAGMATIC_CORE);
+        simpleItem(MinetorioItems.VOLCANO_ESSENCE);
 
         simplePatternItem(MinetorioItems.PATTERN_AIR);
         simplePatternItem(MinetorioItems.PATTERN_BATTERY);

@@ -27,6 +27,12 @@ public class MinetorioCreativeModTabs {
                         pOutput.accept(MinetorioItems.FILTERED_NOZZLE.get());
                         pOutput.accept(MinetorioItems.HYDRO_CATALYST.get());
 
+                        pOutput.accept(MinetorioItems.ABYSSAL_STONE.get());
+                        pOutput.accept(MinetorioItems.BLAZE_CRYSTAL.get());
+                        pOutput.accept(MinetorioItems.INFERNAL_CATALYST.get());
+                        pOutput.accept(MinetorioItems.MAGMATIC_CORE.get());
+                        pOutput.accept(MinetorioItems.VOLCANO_ESSENCE.get());
+
                         pOutput.accept(MinetorioItems.PATTERN_AIR.get());
                         pOutput.accept(MinetorioItems.PATTERN_BATTERY.get());
                         pOutput.accept(MinetorioItems.PATTERN_CLOUD.get());

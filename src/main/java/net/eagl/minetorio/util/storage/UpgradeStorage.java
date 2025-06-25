@@ -1,7 +1,6 @@
 package net.eagl.minetorio.util.storage;
 
-import net.eagl.minetorio.item.MinetorioItems;
-import net.minecraft.world.item.Item;
+import net.eagl.minetorio.item.custom.UpgradeItem;
 import net.minecraftforge.items.ItemStackHandler;
 
 import java.util.Arrays;
@@ -23,30 +22,12 @@ public class UpgradeStorage extends ItemStackHandler {
     protected void onContentsChanged(int slot) {
         super.onContentsChanged(slot);
 
-        Item item = getStackInSlot(slot).getItem();
-
-        if(getStackInSlot(slot).isEmpty()){
+        if (getStackInSlot(slot).getItem() instanceof UpgradeItem item) {
+            multiplier[slot] = item.getMultiplier();
+        }else {
             multiplier[slot] = 0.0f;
         }
-        else if(item == MinetorioItems.COOLING_CORE.get()){
-           multiplier[slot] = 0.15f;
-        }
-       else if(item == MinetorioItems.HYDRO_CATALYST.get()){
-           multiplier[slot] = 0.5f;
-       }
-       else if(item == MinetorioItems.FILTERED_NOZZLE.get()){
-           multiplier[slot] = 0.1f;
-       }
-       else if(item == MinetorioItems.ENCHANTED_PIPE.get()){
-           multiplier[slot] = 0.2f;
-       }
-       else if(item == MinetorioItems.DEW_COLLECTOR.get()){
-           multiplier[slot] = 0.25f;
-       }
-       else {
-           multiplier[slot] = 0.0f;
-       }
-        if(onChange !=null) {
+        if (onChange != null) {
             this.onChange.run();
         }
     }
@@ -56,9 +37,9 @@ public class UpgradeStorage extends ItemStackHandler {
     }
 
     public float getMultiplier(){
-        float mul = 1;
+        float mul = 1f;
         for (int i=0; i<size; i++){
-            mul = mul * (1 + multiplier[i]);
+            mul = mul * (1f + multiplier[i]);
         }
         return mul;
     }

@@ -12,6 +12,11 @@
   "item.minetorio.enchanted_pipe": "Enchanted Pipe",
   "item.minetorio.filtered_nozzle": "Filtered Nozzle",
   "item.minetorio.hydro_catalyst": "Hydro Catalyst",
+  "item.minetorio.abyssal_stone": "Abyssal Stone",
+  "item.minetorio.blaze_crystal": "Blaze Crystal",
+  "item.minetorio.infernal_catalyst": "Infernal Catalyst",
+  "item.minetorio.magmatic_core": "Magmatic Core",
+  "item.minetorio.volcano_essence": "Volcano Essence",
 
   "item.minetorio.pattern_air": "Air",
   "item.minetorio.pattern_battery": "Battery",
@@ -58,6 +63,7 @@
   "tooltip.minetorio.learn_time": "Time to learn",
   "tooltip.minetorio.cost": "Cost",
   "tooltip.minetorio.how_to_learn": "How To Learn",
+  "tooltip.minetorio.upgrade.multiplier": "Efficiency Bonus: +%s%%",
 
   "pattern.minetorio.pattern_air.benefit": "Stabilizes the Energy Generator",
   "pattern.minetorio.pattern_battery.benefit": "Battery Benefit",
