@@ -1,6 +1,7 @@
 package net.eagl.minetorio.gui.screen;
 
 
+import net.eagl.minetorio.gui.slot.FlaskSlot;
 import net.eagl.minetorio.gui.widget.ItemIconWidget;
 import net.eagl.minetorio.gui.widget.RemovableItemWidget;
 import net.minecraft.ChatFormatting;
@@ -11,6 +12,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -110,7 +112,14 @@ public abstract class AbstractFluidGeneratorScreen<T extends AbstractContainerMe
     }
 
     @Override
-    protected void renderLabels(@NotNull GuiGraphics g, int mx, int my) {}
+    protected void renderLabels(@NotNull GuiGraphics pGuiGraphics, int mx, int my) {
+        for (Slot slot : menu.slots) {
+            if (slot instanceof FlaskSlot flask && !flask.isVisible()) {
+                pGuiGraphics.renderItem(new ItemStack(flask.getFlask()),slot.x, slot.y);
+                pGuiGraphics.fill(slot.x, slot.y, slot.x + 16, slot.y + 16, 0x88000000);
+            }
+        }
+    }
 
     public void update() {
 

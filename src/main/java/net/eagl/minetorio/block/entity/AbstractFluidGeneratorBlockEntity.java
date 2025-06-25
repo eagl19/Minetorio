@@ -6,6 +6,7 @@ import net.eagl.minetorio.util.enums.FluidType;
 import net.eagl.minetorio.util.enums.ResourceType;
 import net.eagl.minetorio.util.storage.MinetorioEnergyStorage;
 import net.eagl.minetorio.util.storage.MinetorioFluidStorage;
+import net.eagl.minetorio.util.storage.UpgradeStorage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
@@ -46,6 +47,10 @@ public abstract class AbstractFluidGeneratorBlockEntity extends BlockEntity impl
 
     private final FluidType fluidType;
 
+    private final UpgradeStorage upgrades = new UpgradeStorage(5, this::onUpdateChange);
+
+    private int generateAmount;
+
     public AbstractFluidGeneratorBlockEntity(BlockEntityType<?> pType, BlockPos pPos,
                                              BlockState pBlockState, int currentTime, FluidType fluid) {
         super(pType, pPos, pBlockState);
@@ -79,7 +84,7 @@ public abstract class AbstractFluidGeneratorBlockEntity extends BlockEntity impl
         if (cachedFluidTargets.getConsumers().isEmpty() && !cachedFluidTargets.getListPos().isEmpty()) {
             cachedFluidTargets.getConsumers().add(cachedFluidTargets.getListPos().get(0));
         }
-
+        onUpdateChange();
     }
 
 
@@ -96,6 +101,8 @@ public abstract class AbstractFluidGeneratorBlockEntity extends BlockEntity impl
         tag.put("Fluid", getFluidStorage().serializeNBT());
 
         tag.put("cachedFluidTargets", cachedFluidTargets.serializeNBT());
+
+        tag.put("upgrades", upgrades.serializeNBT());
     }
 
     @Override
@@ -124,6 +131,9 @@ public abstract class AbstractFluidGeneratorBlockEntity extends BlockEntity impl
         if (tag.contains("cachedFluidTargets")){
             cachedFluidTargets.deserializeNBT(tag.getCompound("cachedFluidTargets"));
         }
+        if (tag.contains("upgrades")){
+            upgrades.deserializeNBT(tag.getCompound("upgrades"));
+        }
     }
 
 
@@ -137,7 +147,7 @@ public abstract class AbstractFluidGeneratorBlockEntity extends BlockEntity impl
             boolean canEnergy = getEnergyStorage().extractEnergy(1, true) >= 1;
             boolean canWater = getFluidStorage().fill(fluidType, 1, IFluidHandler.FluidAction.SIMULATE) >= 1;
             if (canEnergy && canWater && currentTime < 1) {
-                getFluidStorage().fill(fluidType, getGenerateAmount(), IFluidHandler.FluidAction.EXECUTE);
+                getFluidStorage().fill(fluidType, generateAmount, IFluidHandler.FluidAction.EXECUTE);
                 getEnergyStorage().extractEnergy(1, false);
                 this.currentTime = getGenerateInterval();
                 changed = true;
@@ -198,11 +208,18 @@ public abstract class AbstractFluidGeneratorBlockEntity extends BlockEntity impl
         return currentTime;
     }
 
+    private void onUpdateChange(){
+        generateAmount = Math.round(getBaseGenerateAmount() * upgrades.getMultiplier());
+    }
+
+    public UpgradeStorage getUpgrades(){
+        return upgrades;
+    }
     public abstract ResourceType getResourceType();
     public abstract void tickClient();
     protected abstract MinetorioEnergyStorage getEnergyStorage();
     protected abstract MinetorioFluidStorage getFluidStorage();
-    protected abstract int getGenerateAmount();
+    protected abstract int getBaseGenerateAmount();
     protected abstract int getGenerateInterval();
     protected abstract int getTransferTime();
     protected abstract int getMaxTransferAmount();

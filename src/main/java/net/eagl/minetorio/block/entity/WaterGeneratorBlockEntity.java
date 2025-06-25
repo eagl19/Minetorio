@@ -106,7 +106,7 @@ public class WaterGeneratorBlockEntity extends AbstractFluidGeneratorBlockEntity
     }
 
     @Override
-    protected int getGenerateAmount() {
+    protected int getBaseGenerateAmount() {
         return GENERATE_AMOUNT;
     }
 

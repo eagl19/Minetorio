@@ -102,7 +102,7 @@ public class LavaGeneratorBlockEntity extends AbstractFluidGeneratorBlockEntity{
     }
 
     @Override
-    protected int getGenerateAmount() {
+    protected int getBaseGenerateAmount() {
         return GENERATE_AMOUNT;
     }
 

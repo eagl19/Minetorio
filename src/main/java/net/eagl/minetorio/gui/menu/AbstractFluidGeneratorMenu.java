@@ -111,17 +111,23 @@ public abstract class AbstractFluidGeneratorMenu<T extends AbstractFluidGenerato
         ItemStack copy = originalStack.copy();
 
         if (index >= 9 && index < 36) {
-
-            if (!moveItemStackTo(originalStack, 0, 9, false)) {
+            if (!moveItemStackTo(originalStack, 36, 41, false) &&
+                    !moveItemStackTo(originalStack, 0, 9, false)) {
                 return ItemStack.EMPTY;
             }
 
         } else if (index >= 0 && index < 9) {
 
-            if (!moveItemStackTo(originalStack, 9, 36, false)) {
+            if (!moveItemStackTo(originalStack, 36, 41, false) &&
+                    !moveItemStackTo(originalStack, 9, 36, false)) {
                 return ItemStack.EMPTY;
             }
 
+        }else if (index >= 36 && index < 41) {
+            if (!moveItemStackTo(originalStack, 0, 9, false) &&
+                    !moveItemStackTo(originalStack, 9, 36, false)) {
+                return ItemStack.EMPTY;
+            }
         }
 
         if (originalStack.isEmpty()) {
