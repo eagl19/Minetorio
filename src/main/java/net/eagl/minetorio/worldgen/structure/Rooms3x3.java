@@ -57,6 +57,8 @@ public class Rooms3x3 {
         level.setBlockAndUpdate(ROOMS_POSITIONS.get(4).offset(-1, 0, 0), MinetorioBlocks.WATER_GENERATOR.get().defaultBlockState());
         level.setBlockAndUpdate(ROOMS_POSITIONS.get(4).offset(1,  0, 0), MinetorioBlocks.LAVA_GENERATOR.get().defaultBlockState());
         level.setBlockAndUpdate(ROOMS_POSITIONS.get(4).offset(0,  1, 0), MinetorioBlocks.ENERGY_GENERATOR.get().defaultBlockState());
+        level.setBlockAndUpdate(ROOMS_POSITIONS.get(4).offset(1,  1, 0), MinetorioBlocks.ENERGY_GENERATOR.get().defaultBlockState());
+        level.setBlockAndUpdate(ROOMS_POSITIONS.get(4).offset(-1, 1, 0), MinetorioBlocks.ENERGY_GENERATOR.get().defaultBlockState());
 
         room(level, ROOMS_POSITIONS.get(5), Blocks.ACACIA_PLANKS.defaultBlockState(),       ROOMS_POSITIONS.get(2), ROOMS_POSITIONS.get(8), ROOMS_POSITIONS.get(3), ROOMS_POSITIONS.get(4));// room (5)
         room(level, ROOMS_POSITIONS.get(6), Blocks.EMERALD_BLOCK.defaultBlockState(),       ROOMS_POSITIONS.get(3), ROOMS_POSITIONS.get(0), ROOMS_POSITIONS.get(7), ROOMS_POSITIONS.get(8));// room (6)

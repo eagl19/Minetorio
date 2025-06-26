@@ -25,6 +25,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
@@ -85,9 +86,6 @@ public class ResearcherBlockEntity extends BlockEntity implements MenuProvider {
         return containerData;
     }
 
-    public int getLearnTime(){
-        return learnTechnology.getCurrentTime();
-    }
     public void updateContainerData() {
         containerData.set(ENERGY, energyStorage.getEnergyStored());
         containerData.set(MAX_ENERGY, energyStorage.getMaxEnergyStored());
@@ -246,6 +244,21 @@ public class ResearcherBlockEntity extends BlockEntity implements MenuProvider {
 
             setChanged();
             updateContainerData();
+        }
+    }
+
+    public ItemStack getRendererItemStack() {
+        return researchPlan.getFirst().getDisplayIcon().getDefaultInstance();
+    }
+
+    @Override
+    public void onLoad() {
+        super.onLoad();
+        if (level != null && !level.isClientSide && getResearchPlan() != null) {
+            MinetorioNetwork.CHANNEL.send(
+                    PacketDistributor.TRACKING_CHUNK.with(() -> level.getChunkAt(getBlockPos())),
+                    new ResearchListSyncToClientPacket(this.getBlockPos(), this.getResearchPlan().getPlan())
+            );
         }
     }
 }
