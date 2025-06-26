@@ -114,9 +114,12 @@ public abstract class AbstractFluidGeneratorScreen<T extends AbstractContainerMe
     @Override
     protected void renderLabels(@NotNull GuiGraphics pGuiGraphics, int mx, int my) {
         for (Slot slot : menu.slots) {
-            if (slot instanceof FlaskSlot flask && !flask.isVisible()) {
-                pGuiGraphics.renderItem(new ItemStack(flask.getFlask()),slot.x, slot.y);
+            if (slot instanceof FlaskSlot flask && flask.isVisible()) {
+                pGuiGraphics.renderItem(new ItemStack(flask.getFlask()), slot.x, slot.y);
                 pGuiGraphics.fill(slot.x, slot.y, slot.x + 16, slot.y + 16, 0x88000000);
+                if (this.isHovering(slot.x, slot.y, 16, 16, mx, my)) {
+                    pGuiGraphics.renderTooltip(font, flask.getFlask().getDefaultInstance().getHoverName(), mx - leftPos, my - topPos);
+                }
             }
         }
     }

@@ -77,6 +77,17 @@ public class MinetorioItems {
     public static final RegistryObject<Item> VOLCANO_ESSENCE = ITEMS.register("volcano_essence",
             ()-> new UpgradeItem(0.1f));
 
+    public static final RegistryObject<Item> BATTERY_BUSTER = ITEMS.register("battery_buster",
+            ()-> new UpgradeItem(0.2f));
+    public static final RegistryObject<Item> MICRO_INVERTER = ITEMS.register("micro_inverter",
+            ()-> new UpgradeItem(0.5f));
+    public static final RegistryObject<Item> NANO_ENCHANTER = ITEMS.register("nano_enchanter",
+            ()-> new UpgradeItem(0.25f));
+    public static final RegistryObject<Item> PHOTON_AMPLIFIER = ITEMS.register("photon_amplifier",
+            ()-> new UpgradeItem(0.15f));
+    public static final RegistryObject<Item> QUARTZ_LENS = ITEMS.register("quartz_lens",
+            ()-> new UpgradeItem(0.1f));
+
     public static final RegistryObject<Item> FLASK_BLACK = ITEMS.register("flask_black",
             ()-> new Item(new Item.Properties()));
     public static final RegistryObject<Item> FLASK_BLUE = ITEMS.register("flask_blue",

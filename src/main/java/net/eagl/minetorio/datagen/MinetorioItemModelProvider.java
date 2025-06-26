@@ -32,6 +32,12 @@ public class MinetorioItemModelProvider extends ItemModelProvider {
         simpleItem(MinetorioItems.INFERNAL_CATALYST);
         simpleItem(MinetorioItems.MAGMATIC_CORE);
         simpleItem(MinetorioItems.VOLCANO_ESSENCE);
+        simpleItem(MinetorioItems.MICRO_INVERTER);
+        simpleItem(MinetorioItems.BATTERY_BUSTER);
+        simpleItem(MinetorioItems.NANO_ENCHANTER);
+        simpleItem(MinetorioItems.PHOTON_AMPLIFIER);
+        simpleItem(MinetorioItems.QUARTZ_LENS);
+
 
         simplePatternItem(MinetorioItems.PATTERN_AIR);
         simplePatternItem(MinetorioItems.PATTERN_BATTERY);

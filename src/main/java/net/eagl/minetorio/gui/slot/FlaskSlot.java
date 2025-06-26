@@ -29,7 +29,7 @@ public class FlaskSlot extends SlotItemHandler {
     }
 
     public boolean isVisible() {
-        return !getItem().isEmpty();
+        return getItem().isEmpty();
     }
 
     public Item getFlask(){

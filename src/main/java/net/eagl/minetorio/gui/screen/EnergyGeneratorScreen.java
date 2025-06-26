@@ -1,6 +1,7 @@
 package net.eagl.minetorio.gui.screen;
 
 import net.eagl.minetorio.gui.menu.EnergyGeneratorMenu;
+import net.eagl.minetorio.gui.slot.FlaskSlot;
 import net.eagl.minetorio.gui.widget.ItemIconWidget;
 import net.eagl.minetorio.gui.widget.RemovableItemWidget;
 import net.eagl.minetorio.item.MinetorioItems;
@@ -15,6 +16,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -70,6 +72,16 @@ public class EnergyGeneratorScreen extends AbstractContainerScreen<EnergyGenerat
 
     @Override
     protected void renderLabels(@NotNull GuiGraphics pGuiGraphics, int pMouseX, int pMouseY) {
+        for (Slot slot : menu.slots) {
+            if (slot instanceof FlaskSlot flask && flask.isVisible()) {
+                pGuiGraphics.renderItem(new ItemStack(flask.getFlask()),slot.x, slot.y);
+                pGuiGraphics.fill(slot.x, slot.y, slot.x + 16, slot.y + 16, 0x88000000);
+
+                if (this.isHovering(slot.x, slot.y, 16, 16, pMouseX, pMouseY)) {
+                    pGuiGraphics.renderTooltip(font, flask.getFlask().getDefaultInstance().getHoverName(), pMouseX - leftPos, pMouseY - topPos);
+                }
+            }
+        }
     }
 
     @Override
@@ -119,14 +131,14 @@ public class EnergyGeneratorScreen extends AbstractContainerScreen<EnergyGenerat
             if( i + 7 < list.size()) {
                 int finalI = i;
                 this.addRenderableWidget(new RemovableItemWidget(
-                        leftPos + 26 + i * 18, topPos + 116,
+                        leftPos + 26 + i * 18, topPos + 118,
                         menu.getItemFromBlockPos(list.get(i + 7)),
                         this::openAction,
                         () -> removeAction(finalI + 7)
                 ));
             }else {
                 this.addRenderableWidget(new ItemIconWidget(
-                        leftPos + 26 + i * 18, topPos + 116,
+                        leftPos + 26 + i * 18, topPos + 118,
                         new ItemStack(MinetorioItems.PATTERN_ENERGY_CONSUMER.get()),
                         this::openAction
                 ));

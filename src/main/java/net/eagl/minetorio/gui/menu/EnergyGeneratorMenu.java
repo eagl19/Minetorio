@@ -4,6 +4,8 @@ import net.eagl.minetorio.block.MinetorioBlocks;
 import net.eagl.minetorio.block.entity.EnergyGeneratorBlockEntity;
 import net.eagl.minetorio.capability.MinetorioCapabilities;
 import net.eagl.minetorio.gui.MinetorioMenus;
+import net.eagl.minetorio.gui.slot.FlaskSlot;
+import net.eagl.minetorio.item.MinetorioItems;
 import net.eagl.minetorio.network.MinetorioNetwork;
 import net.eagl.minetorio.network.client.CachedBlockPosConsumerSyncToClientPacket;
 import net.eagl.minetorio.network.client.CachedBlockPosListPosSyncToClientPacket;
@@ -11,6 +13,7 @@ import net.eagl.minetorio.util.CachedBlockPos;
 import net.eagl.minetorio.util.InventorySlot;
 import net.eagl.minetorio.util.Technologies;
 import net.eagl.minetorio.util.Technology;
+import net.eagl.minetorio.util.storage.UpgradeStorage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
@@ -46,6 +49,15 @@ public class EnergyGeneratorMenu extends AbstractContainerMenu implements IGener
         if (entity instanceof EnergyGeneratorBlockEntity energyGenerator) {
             be = energyGenerator;
             this.data = energyGenerator.getContainerData();
+
+            UpgradeStorage container = energyGenerator.getUpgrades();
+
+            this.addSlot(new FlaskSlot(container, 0, 8, 27 , MinetorioItems.BATTERY_BUSTER.get()));
+            this.addSlot(new FlaskSlot(container, 1, 8, 45 , MinetorioItems.MICRO_INVERTER.get()));
+            this.addSlot(new FlaskSlot(container, 2, 8, 63 , MinetorioItems.NANO_ENCHANTER.get()));
+            this.addSlot(new FlaskSlot(container, 3, 8, 81 , MinetorioItems.PHOTON_AMPLIFIER.get()));
+            this.addSlot(new FlaskSlot(container, 4, 8, 99 , MinetorioItems.QUARTZ_LENS.get()));
+
             if (playerInventory.player instanceof ServerPlayer serverPlayer) {
                 energyGenerator.initializedTargets();
                 MinetorioNetwork.CHANNEL.send(
@@ -82,17 +94,23 @@ public class EnergyGeneratorMenu extends AbstractContainerMenu implements IGener
         ItemStack copy = originalStack.copy();
 
         if (pIndex >= 9 && pIndex < 36) {
-
-            if (!moveItemStackTo(originalStack, 0, 9, false)) {
+            if (!moveItemStackTo(originalStack, 36, 41, false) &&
+                    !moveItemStackTo(originalStack, 0, 9, false)) {
                 return ItemStack.EMPTY;
             }
 
         } else if (pIndex >= 0 && pIndex < 9) {
 
-            if (!moveItemStackTo(originalStack, 9, 36, false)) {
+            if (!moveItemStackTo(originalStack, 36, 41, false) &&
+                    !moveItemStackTo(originalStack, 9, 36, false)) {
                 return ItemStack.EMPTY;
             }
 
+        }else if (pIndex >= 36 && pIndex < 41) {
+            if (!moveItemStackTo(originalStack, 0, 9, false) &&
+                    !moveItemStackTo(originalStack, 9, 36, false)) {
+                return ItemStack.EMPTY;
+            }
         }
 
         if (originalStack.isEmpty()) {

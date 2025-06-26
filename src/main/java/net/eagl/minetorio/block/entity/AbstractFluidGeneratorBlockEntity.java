@@ -84,7 +84,7 @@ public abstract class AbstractFluidGeneratorBlockEntity extends BlockEntity impl
         if (cachedFluidTargets.getConsumers().isEmpty() && !cachedFluidTargets.getListPos().isEmpty()) {
             cachedFluidTargets.getConsumers().add(cachedFluidTargets.getListPos().get(0));
         }
-        onUpdateChange();
+
     }
 
 
@@ -133,6 +133,7 @@ public abstract class AbstractFluidGeneratorBlockEntity extends BlockEntity impl
         }
         if (tag.contains("upgrades")){
             upgrades.deserializeNBT(tag.getCompound("upgrades"));
+            onUpdateChange();
         }
     }
 

@@ -33,6 +33,12 @@ public class MinetorioCreativeModTabs {
                         pOutput.accept(MinetorioItems.MAGMATIC_CORE.get());
                         pOutput.accept(MinetorioItems.VOLCANO_ESSENCE.get());
 
+                        pOutput.accept(MinetorioItems.BATTERY_BUSTER.get());
+                        pOutput.accept(MinetorioItems.MICRO_INVERTER.get());
+                        pOutput.accept(MinetorioItems.NANO_ENCHANTER.get());
+                        pOutput.accept(MinetorioItems.PHOTON_AMPLIFIER.get());
+                        pOutput.accept(MinetorioItems.QUARTZ_LENS.get());
+
                         pOutput.accept(MinetorioItems.PATTERN_AIR.get());
                         pOutput.accept(MinetorioItems.PATTERN_BATTERY.get());
                         pOutput.accept(MinetorioItems.PATTERN_CLOUD.get());

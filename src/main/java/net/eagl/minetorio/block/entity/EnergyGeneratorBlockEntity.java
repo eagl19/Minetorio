@@ -6,6 +6,7 @@ import net.eagl.minetorio.gui.menu.EnergyGeneratorMenu;
 import net.eagl.minetorio.util.CachedBlockPos;
 import net.eagl.minetorio.util.enums.ResourceType;
 import net.eagl.minetorio.util.storage.MinetorioEnergyStorage;
+import net.eagl.minetorio.util.storage.UpgradeStorage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -39,13 +40,15 @@ public class EnergyGeneratorBlockEntity extends BlockEntity implements MenuProvi
 
     public static final int MAX_ENERGY_STORAGE = 1000000;
 
-    public static final int MAX_RECEIVE_ENERGY = 1000;
-    public static final int MAX_EXTRACT_ENERGY = 1000;
+    public static final int MAX_RECEIVE_ENERGY = 1000000;
+    public static final int MAX_EXTRACT_ENERGY = 1000000;
 
     public static final int START_ENERGY_STORAGE = 250000;
 
     private static final int MAX_TRANSFER_AMOUNT = 1000;
     private static final int TRANSFER_TIME = 100;
+
+    private static final int BASE_GENERATE_AMOUNT = 1000;
 
     private final MinetorioEnergyStorage energyStorage = new MinetorioEnergyStorage(MAX_ENERGY_STORAGE,
             MAX_RECEIVE_ENERGY, MAX_EXTRACT_ENERGY, START_ENERGY_STORAGE, this::setChanged);
@@ -57,7 +60,9 @@ public class EnergyGeneratorBlockEntity extends BlockEntity implements MenuProvi
     private int currentTransfer;
     private final int timeInterval = 100;
     private boolean permanentlyStabilized;
+    private int generateAmount;
 
+    private final UpgradeStorage upgrades = new UpgradeStorage(5, this::onUpdateChange);
 
     public EnergyGeneratorBlockEntity(BlockPos pPos, BlockState pBlockState) {
         super(MinetorioBlockEntities.ENERGY_GENERATOR_ENTITY.get(), pPos, pBlockState);
@@ -85,6 +90,10 @@ public class EnergyGeneratorBlockEntity extends BlockEntity implements MenuProvi
         }
     }
 
+    private void onUpdateChange(){
+        generateAmount = Math.round(BASE_GENERATE_AMOUNT * upgrades.getMultiplier());
+    }
+
     @Override
     public @Nullable AbstractContainerMenu createMenu(int pContainerId, @NotNull Inventory pPlayerInventory, @NotNull Player pPlayer) {
         return new EnergyGeneratorMenu(pContainerId, pPlayerInventory, this);
@@ -109,6 +118,7 @@ public class EnergyGeneratorBlockEntity extends BlockEntity implements MenuProvi
 
         tag.put("Energy", energyStorage.serializeNBT());
         tag.put("cachedEnergyTargets", cachedEnergyTargets.serializeNBT());
+        tag.put("upgrades", upgrades.serializeNBT());
     }
 
     @Override
@@ -134,6 +144,15 @@ public class EnergyGeneratorBlockEntity extends BlockEntity implements MenuProvi
         if (tag.contains("cachedEnergyTargets")){
             cachedEnergyTargets.deserializeNBT(tag.getCompound("cachedEnergyTargets"));
         }
+
+        if (tag.contains("upgrades")){
+            upgrades.deserializeNBT(tag.getCompound("upgrades"));
+            onUpdateChange();
+        }
+    }
+
+    public UpgradeStorage getUpgrades(){
+        return upgrades;
     }
 
     public ContainerData getContainerData() {
@@ -155,7 +174,7 @@ public class EnergyGeneratorBlockEntity extends BlockEntity implements MenuProvi
         if(getBlockState().getValue(EnergyGenerator.STATE) == GeneratorState.STABILIZED) {
             this.currentTime--;
             this.currentTransfer--;
-            int energy = energyStorage.receiveEnergy(1000, true);
+            int energy = energyStorage.receiveEnergy(generateAmount, true);
             if (energy > 0 && currentTime < 1) {
                 energyStorage.receiveEnergy(energy, false);
                 this.currentTime = timeInterval;
@@ -185,28 +204,30 @@ public class EnergyGeneratorBlockEntity extends BlockEntity implements MenuProvi
     }
 
     private boolean transferEnergyToTargets() {
-            if (level == null) return false;
-            AtomicBoolean transferred = new AtomicBoolean(false);
-            LazyOptional<IEnergyStorage> optionalFrom = this.getCapability(ForgeCapabilities.ENERGY, null);
-            optionalFrom.ifPresent(from -> {
-                for (BlockPos pos : cachedEnergyTargets.getConsumers()) {
-                    BlockEntity targetBE = level.getBlockEntity(pos);
-                    if (targetBE == null) continue;
+        if (level == null) return false;
+        AtomicBoolean transferred = new AtomicBoolean(false);
+        LazyOptional<IEnergyStorage> optionalFrom = this.getCapability(ForgeCapabilities.ENERGY, null);
+        optionalFrom.ifPresent(from -> {
 
-                    LazyOptional<IEnergyStorage> optionalTo = targetBE.getCapability(ForgeCapabilities.ENERGY, null);
-                    optionalTo.ifPresent(to -> {
-                        int toReceive = to.receiveEnergy(MAX_TRANSFER_AMOUNT, true);
-                        if (toReceive > 0) {
-                            int extracted = from.extractEnergy(toReceive, false);
-                            to.receiveEnergy(extracted, false);
-                            if (extracted > 0) {
-                                transferred.set(true);
-                            }
+            for (BlockPos pos : cachedEnergyTargets.getConsumers()) {
+                BlockEntity targetBE = level.getBlockEntity(pos);
+                if (targetBE == null) continue;
+
+                LazyOptional<IEnergyStorage> optionalTo = targetBE.getCapability(ForgeCapabilities.ENERGY, null);
+                optionalTo.ifPresent(to -> {
+                    int toReceive = to.receiveEnergy(MAX_TRANSFER_AMOUNT, true);
+                    if (toReceive > 0) {
+                        int extracted = from.extractEnergy(toReceive, false);
+                        to.receiveEnergy(extracted, false);
+                        if (extracted > 0) {
+                            transferred.set(true);
                         }
-                    });
-                }
-            });
-            return transferred.get();
+                    }
+                });
+
+            }
+        });
+        return transferred.get();
     }
 
     public boolean getPermanentlyStabilized(){

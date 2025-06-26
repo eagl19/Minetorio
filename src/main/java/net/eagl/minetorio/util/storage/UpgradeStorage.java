@@ -1,6 +1,7 @@
 package net.eagl.minetorio.util.storage;
 
 import net.eagl.minetorio.item.custom.UpgradeItem;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.items.ItemStackHandler;
 
 import java.util.Arrays;
@@ -42,5 +43,15 @@ public class UpgradeStorage extends ItemStackHandler {
             mul = mul * (1f + multiplier[i]);
         }
         return mul;
+    }
+
+    @Override
+    public void deserializeNBT(CompoundTag nbt) {
+        super.deserializeNBT(nbt);
+        for(int i = 0; i < this.getSlots(); i++){
+            if(getStackInSlot(i).getItem() instanceof UpgradeItem item) {
+                multiplier[i] = item.getMultiplier();
+            }
+        }
     }
 }

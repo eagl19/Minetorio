@@ -240,14 +240,17 @@ public class ResearcherScreen extends AbstractContainerScreen<ResearcherMenu> {
     }
 
 
-
     @Override
     protected void renderLabels(@NotNull GuiGraphics pGuiGraphics, int pMouseX, int pMouseY) {
 
         for (Slot slot : menu.slots) {
-            if (slot instanceof FlaskSlot flask && !flask.isVisible()) {
-               pGuiGraphics.renderItem(new ItemStack(flask.getFlask()),slot.x, slot.y);
+            if (slot instanceof FlaskSlot flask && flask.isVisible()) {
+                pGuiGraphics.renderItem(new ItemStack(flask.getFlask()), slot.x, slot.y);
                 pGuiGraphics.fill(slot.x, slot.y, slot.x + 16, slot.y + 16, 0x88000000);
+
+                if (isHovering(slot.x, slot.y, 16, 16, pMouseX, pMouseY)) {
+                    pGuiGraphics.renderTooltip(font, flask.getFlask().getDefaultInstance().getHoverName(), pMouseX - leftPos, pMouseY - topPos);
+                }
             }
         }
 

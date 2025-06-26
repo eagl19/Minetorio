@@ -176,6 +176,7 @@ public class ResearcherBlockEntity extends BlockEntity implements MenuProvider {
     private void onResearcherPlanChange(){
         learnTechnology.setTech(researchPlan.getFirst());
         setChanged();
+        updateContainerData();
     }
     public void researchTechnologyDone(Player player) {
         if(learnTechnology.isDone()) {
