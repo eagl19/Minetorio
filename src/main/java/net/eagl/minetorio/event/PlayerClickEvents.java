@@ -70,7 +70,7 @@ public class PlayerClickEvents {
             if (state.is(MinetorioBlocks.WATER_GENERATOR.get())) {
                 if (level.getBlockEntity(pos) instanceof WaterGeneratorBlockEntity waterGenerator) {
                     if (state.getValue(WaterGenerator.STATE) == GeneratorState.UNSTABLE) {
-                        level.setBlockAndUpdate(pos, state.setValue(WaterGenerator.STATE, GeneratorState.STABILIZED));
+                        level.setBlock(pos, state.setValue(WaterGenerator.STATE, GeneratorState.STABILIZED),2);
                         serverPlayer.getCapability(MinetorioCapabilities.TECHNOLOGY_PROGRESS).ifPresent(techCap -> {
                             if (techCap.hasLearned(Technologies.WATER.getId())) {
                                 waterGenerator.setPermanentlyStabilized(true);
@@ -91,7 +91,7 @@ public class PlayerClickEvents {
             if (state.is(MinetorioBlocks.LAVA_GENERATOR.get())) {
                 if (level.getBlockEntity(pos) instanceof LavaGeneratorBlockEntity lavaGenerator) {
                     if (state.getValue(LavaGenerator.STATE) == GeneratorState.UNSTABLE) {
-                        level.setBlockAndUpdate(pos, state.setValue(LavaGenerator.STATE, GeneratorState.STABILIZED));
+                        level.setBlock(pos, state.setValue(LavaGenerator.STATE, GeneratorState.STABILIZED),2);
                         serverPlayer.getCapability(MinetorioCapabilities.TECHNOLOGY_PROGRESS).ifPresent(techCap -> {
                             if (techCap.hasLearned(Technologies.FIRE.getId())) {
                                 lavaGenerator.setPermanentlyStabilized(true);
@@ -112,7 +112,7 @@ public class PlayerClickEvents {
             if (state.is(MinetorioBlocks.ENERGY_GENERATOR.get())) {
                 if (level.getBlockEntity(pos) instanceof EnergyGeneratorBlockEntity energyGenerator) {
                     if (state.getValue(EnergyGenerator.STATE) == GeneratorState.UNSTABLE) {
-                        level.setBlockAndUpdate(pos, state.setValue(EnergyGenerator.STATE, GeneratorState.STABILIZED));
+                        level.setBlock(pos, state.setValue(EnergyGenerator.STATE, GeneratorState.STABILIZED), 2);
                         serverPlayer.getCapability(MinetorioCapabilities.TECHNOLOGY_PROGRESS).ifPresent(techCap -> {
                             if (techCap.hasLearned(Technologies.SUN.getId())) {
                                 energyGenerator.setPermanentlyStabilized(true);
@@ -128,6 +128,22 @@ public class PlayerClickEvents {
                     }
                 }
             }
+
+            //Barrier
+            if (state.is(MinetorioBlocks.BARRIER.get())) {
+                System.out.println("Barrier");
+                if (level.getBlockEntity(pos) instanceof BarrierBlockEntity barrier) {
+                    System.out.println("Barrier1");
+                    if (state.getValue(Barrier.STATE) == GeneratorState.STABILIZED) {
+                        System.out.println("Barrier2");
+                        level.setBlock(pos, state.setValue(Barrier.STATE, GeneratorState.UNSTABLE), 2);
+                        event.setCancellationResult(InteractionResult.SUCCESS);
+                        event.setCanceled(true);
+                        return;
+                    }
+                }
+            }
+
 
             // перевірка на SHIFT
             if (serverPlayer.isCrouching()) {

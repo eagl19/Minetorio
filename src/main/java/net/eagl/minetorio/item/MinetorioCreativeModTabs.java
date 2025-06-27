@@ -75,6 +75,7 @@ public class MinetorioCreativeModTabs {
 
 
                         pOutput.accept(MinetorioBlocks.GLOWING_BEDROCK.get());
+                        pOutput.accept(MinetorioBlocks.BARRIER.get());
                         pOutput.accept(MinetorioBlocks.PATTERNS_COLLECTOR.get());
                         pOutput.accept(MinetorioBlocks.PORTAL.get());
                         pOutput.accept(MinetorioBlocks.RESEARCHER.get());

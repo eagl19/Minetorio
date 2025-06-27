@@ -185,7 +185,7 @@ public class EnergyGeneratorBlockEntity extends BlockEntity implements MenuProvi
             if(currentTransfer < 1){
                 Level level = getLevel();
                 if (!permanentlyStabilized && level != null) {
-                    level.setBlockAndUpdate(getBlockPos(), getBlockState().setValue(EnergyGenerator.STATE, GeneratorState.UNSTABLE));
+                    level.setBlock(getBlockPos(), getBlockState().setValue(EnergyGenerator.STATE, GeneratorState.UNSTABLE), 2);
                     currentTime = timeInterval;
                 }
                 if (transferEnergyToTargets()) {

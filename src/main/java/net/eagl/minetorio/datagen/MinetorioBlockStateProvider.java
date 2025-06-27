@@ -27,6 +27,8 @@ public class MinetorioBlockStateProvider extends BlockStateProvider {
 
         blockWithStatesAndItem(MinetorioBlocks.GLOWING_BEDROCK.get(),GlowingBedrockBlock.STATE);
 
+        blockWithStatesAndItem(MinetorioBlocks.BARRIER.get(), Barrier.STATE);
+
         blockWithCustomSides(MinetorioBlocks.PATTERNS_COLLECTOR.get(),
                 "item/patterns/void",
                 "item/patterns/infinity",
@@ -112,21 +114,26 @@ public class MinetorioBlockStateProvider extends BlockStateProvider {
 
             ModelFile modelFile;
             if (variant.equals("stabilized")) {
-                modelFile = models()
-                        .withExistingParent(name, mcLoc("block/block"))
-                        .texture("texture", modLoc("block/" + name))
-                        .element()
-                        .from(0, 0, 0)
-                        .to(16, 16, 16)
-                        .face(Direction.DOWN).texture("#texture").cullface(Direction.DOWN).end()
-                        .face(Direction.UP).texture("#texture").cullface(Direction.UP).end()
-                        .face(Direction.NORTH).texture("#texture").cullface(Direction.NORTH).end()
-                        .face(Direction.SOUTH).texture("#texture").cullface(Direction.SOUTH).end()
-                        .face(Direction.WEST).texture("#texture").cullface(Direction.WEST).end()
-                        .face(Direction.EAST).texture("#texture").cullface(Direction.EAST).end()
-                        .end();
-            } else {
-                modelFile = models().cubeAll(name, modLoc("block/" + name));
+                if (block == MinetorioBlocks.BARRIER.get()) {
+                    modelFile = models().withExistingParent("invisible", mcLoc("block/block"));
+                } else {
+                    modelFile = models()
+                            .withExistingParent(name, mcLoc("block/block"))
+                            .texture("texture", modLoc("block/" + name))
+                            .element()
+                            .from(0, 0, 0)
+                            .to(16, 16, 16)
+                            .face(Direction.DOWN).texture("#texture").cullface(Direction.DOWN).end()
+                            .face(Direction.UP).texture("#texture").cullface(Direction.UP).end()
+                            .face(Direction.NORTH).texture("#texture").cullface(Direction.NORTH).end()
+                            .face(Direction.SOUTH).texture("#texture").cullface(Direction.SOUTH).end()
+                            .face(Direction.WEST).texture("#texture").cullface(Direction.WEST).end()
+                            .face(Direction.EAST).texture("#texture").cullface(Direction.EAST).end()
+                            .end();
+                }
+            }
+            else{
+                    modelFile = models().cubeAll(name, modLoc("block/" + name));
             }
 
             return ConfiguredModel.builder()
@@ -135,8 +142,14 @@ public class MinetorioBlockStateProvider extends BlockStateProvider {
         });
 
         String defaultState = block.defaultBlockState().getValue(property).getSerializedName();
-        itemModels().getBuilder(blockName(block))
-                .parent(models().getExistingFile(modLoc("block/" + blockName(block) + "_" + defaultState)));
+        if(block == MinetorioBlocks.BARRIER.get()){
+            itemModels().getBuilder(blockName(block))
+                    .parent(models().getExistingFile(mcLoc("item/generated")))
+                    .texture("layer0", modLoc("block/" + blockName(block) + "_" + defaultState));
+        }else {
+            itemModels().getBuilder(blockName(block))
+                    .parent(models().getExistingFile(modLoc("block/" + blockName(block) + "_" + defaultState)));
+        }
     }
 
     private String blockName(Block block) {

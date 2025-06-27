@@ -158,7 +158,7 @@ public abstract class AbstractFluidGeneratorBlockEntity extends BlockEntity impl
                 Level level = getLevel();
 
                 if (!permanentlyStabilized && level != null) {
-                    level.setBlockAndUpdate(getBlockPos(), getBlockState().setValue(getGeneratorStatePropertyKey(), GeneratorState.UNSTABLE));
+                    level.setBlock(getBlockPos(), getBlockState().setValue(getGeneratorStatePropertyKey(), GeneratorState.UNSTABLE), 2);
                 }
                 if (transferFluidToTargets()) {
                     this.currentTransfer = getTransferTime();

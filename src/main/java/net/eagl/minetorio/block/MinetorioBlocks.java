@@ -20,6 +20,9 @@ public class MinetorioBlocks {
     public static final RegistryObject<Block> GLOWING_BEDROCK = registerBlock("glowing_bedrock",
              GlowingBedrockBlock::new);
 
+    public static final RegistryObject<Block> BARRIER = registerBlock("barrier",
+            Barrier::new);
+
     public static final RegistryObject<Block> PATTERNS_COLLECTOR = registerBlock("patterns_collector",
             PatternsCollectorBlock::new);
 

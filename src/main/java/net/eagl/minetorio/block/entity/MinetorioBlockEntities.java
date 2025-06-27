@@ -44,7 +44,10 @@ public class MinetorioBlockEntities {
             BLOCK_ENTITIES.register("energy_generator", () ->
                     BlockEntityType.Builder.of(EnergyGeneratorBlockEntity::new, MinetorioBlocks.ENERGY_GENERATOR.get()).build(null));
 
-
+    @SuppressWarnings("DataFlowIssue")
+    public static final RegistryObject<BlockEntityType<BarrierBlockEntity>> BARRIER_ENTITY =
+            BLOCK_ENTITIES.register("barrier", () ->
+                    BlockEntityType.Builder.of(BarrierBlockEntity::new, MinetorioBlocks.BARRIER.get()).build(null));
 
     public static void register(IEventBus eventBus) {
         BLOCK_ENTITIES.register(eventBus);
