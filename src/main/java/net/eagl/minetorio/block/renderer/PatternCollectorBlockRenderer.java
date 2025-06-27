@@ -29,9 +29,9 @@ public class PatternCollectorBlockRenderer implements BlockEntityRenderer<Patter
 
     private static final Map<Direction, ItemStack> PATTERN_ITEMS_EW = Map.of(
             Direction.UP,    new ItemStack(MinetorioItems.PATTERN_CLOUD.get()),
-            Direction.DOWN,  new ItemStack(MinetorioItems.PATTERN_CLOUD.get()),
-            Direction.NORTH, new ItemStack(MinetorioItems.PATTERN_CLOUD.get()),
-            Direction.SOUTH, new ItemStack(MinetorioItems.PATTERN_CLOUD.get()),
+            Direction.DOWN,  new ItemStack(MinetorioItems.PATTERN_SUN.get()),
+            Direction.NORTH, new ItemStack(MinetorioItems.PATTERN_SNOW.get()),
+            Direction.SOUTH, new ItemStack(MinetorioItems.PATTERN_SNOWFLAKE.get()),
             Direction.WEST,  ItemStack.EMPTY,
             Direction.EAST,  ItemStack.EMPTY
     );
@@ -39,10 +39,10 @@ public class PatternCollectorBlockRenderer implements BlockEntityRenderer<Patter
     private static final Map<Direction, ItemStack> PATTERN_ITEMS_UD = Map.of(
             Direction.UP,    ItemStack.EMPTY,
             Direction.DOWN,  ItemStack.EMPTY,
-            Direction.NORTH, new ItemStack(MinetorioItems.PATTERN_AIR.get()),
-            Direction.SOUTH, new ItemStack(MinetorioItems.PATTERN_FIRE.get()),
-            Direction.WEST,  new ItemStack(MinetorioItems.PATTERN_EARTH.get()),
-            Direction.EAST,  new ItemStack(MinetorioItems.PATTERN_WATER.get())
+            Direction.NORTH, new ItemStack(MinetorioItems.PATTERN_RAIN.get()),
+            Direction.SOUTH, new ItemStack(MinetorioItems.PATTERN_RESEARCH_BOOK.get()),
+            Direction.WEST,  new ItemStack(MinetorioItems.PATTERN_BATTERY.get()),
+            Direction.EAST,  new ItemStack(MinetorioItems.PATTERN_LIGHTNING.get())
     );
 
     public float ringYOffset = 0.0f;

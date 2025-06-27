@@ -28,8 +28,8 @@ public class PatternsCollectorBlockEntity extends BlockEntity implements MenuPro
     public PatternsCollectorBlockEntity(BlockPos pPos, BlockState pBlockState) {
         super(MinetorioBlockEntities.PATTERNS_COLLECTOR.get(), pPos, pBlockState);
 
-        RandomSource rand = RandomSource.create(pPos.asLong()); // Детермінований для кожного блоку
-        this.speedX = 0.5f + rand.nextFloat(); // від 0.5 до 1.5
+        RandomSource rand = RandomSource.create(pPos.asLong());
+        this.speedX = 0.5f + rand.nextFloat();
         this.speedY = 0.5f + rand.nextFloat();
         this.speedZ = 0.5f + rand.nextFloat();
     }
