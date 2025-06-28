@@ -37,7 +37,7 @@ public class PlayerLoginEvents {
                         spawnPos,
                         0.0F,
                         true,
-                        true
+                        false
                 );
 
             player.teleportTo(minetorioLevel,
