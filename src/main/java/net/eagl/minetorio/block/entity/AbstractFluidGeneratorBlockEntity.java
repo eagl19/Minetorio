@@ -55,6 +55,7 @@ public abstract class AbstractFluidGeneratorBlockEntity extends BlockEntity impl
                                              BlockState pBlockState, int currentTime, FluidType fluid) {
         super(pType, pPos, pBlockState);
         this.currentTime = currentTime;
+        this.currentTransfer = currentTime;
         this.fluidType = fluid;
     }
 

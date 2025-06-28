@@ -49,6 +49,11 @@ public class MinetorioBlockEntities {
             BLOCK_ENTITIES.register("barrier", () ->
                     BlockEntityType.Builder.of(BarrierBlockEntity::new, MinetorioBlocks.BARRIER.get()).build(null));
 
+    @SuppressWarnings("DataFlowIssue")
+    public static final RegistryObject<BlockEntityType<GlowingBedrockBlockEntity>> GLOWING_BEDROCK_ENTITY =
+            BLOCK_ENTITIES.register("glowing_bedrock", () ->
+                    BlockEntityType.Builder.of(GlowingBedrockBlockEntity::new, MinetorioBlocks.GLOWING_BEDROCK.get()).build(null));
+
     public static void register(IEventBus eventBus) {
         BLOCK_ENTITIES.register(eventBus);
     }

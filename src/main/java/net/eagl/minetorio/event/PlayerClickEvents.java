@@ -13,16 +13,12 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.network.NetworkHooks;
-import org.jetbrains.annotations.NotNull;
 
 @Mod.EventBusSubscriber(modid = Minetorio.MOD_ID)
 public class PlayerClickEvents {
@@ -131,12 +127,21 @@ public class PlayerClickEvents {
 
             //Barrier
             if (state.is(MinetorioBlocks.BARRIER.get())) {
-                System.out.println("Barrier");
-                if (level.getBlockEntity(pos) instanceof BarrierBlockEntity barrier) {
-                    System.out.println("Barrier1");
+                if (level.getBlockEntity(pos) instanceof BarrierBlockEntity) {
                     if (state.getValue(Barrier.STATE) == GeneratorState.STABILIZED) {
-                        System.out.println("Barrier2");
                         level.setBlock(pos, state.setValue(Barrier.STATE, GeneratorState.UNSTABLE), 2);
+                        event.setCancellationResult(InteractionResult.SUCCESS);
+                        event.setCanceled(true);
+                        return;
+                    }
+                }
+            }
+
+            //Glowing bedrock
+            if (state.is(MinetorioBlocks.GLOWING_BEDROCK.get())) {
+                if (level.getBlockEntity(pos) instanceof GlowingBedrockBlockEntity) {
+                    if (state.getValue(GlowingBedrockBlock.STATE) == GeneratorState.STABILIZED) {
+                        level.setBlock(pos, state.setValue(GlowingBedrockBlock.STATE, GeneratorState.UNSTABLE), 2);
                         event.setCancellationResult(InteractionResult.SUCCESS);
                         event.setCanceled(true);
                         return;
@@ -159,59 +164,6 @@ public class PlayerClickEvents {
 
                 }
             }
-            if (state.is(MinetorioBlocks.GLOWING_BEDROCK.get())) {
-                switch (state.getValue(GlowingBedrockBlock.STATE)) {
-                    case BEDROCK -> {
-
-                        level.setBlock(pos,
-                                MinetorioBlocks.GLOWING_BEDROCK.get()
-                                        .defaultBlockState()
-                                        .setValue(GlowingBedrockBlock.STATE, GlowingBedrockBlockState.INFINITY), 3);
-
-                        Timer.addTimer(
-                                pos,
-                                MinetorioBlocks.GLOWING_BEDROCK.get().defaultBlockState().setValue(
-                                        GlowingBedrockBlock.STATE,
-                                        GlowingBedrockBlockState.BEDROCK),
-                                level.dimension(),
-                                200);
-                        event.setCancellationResult(InteractionResult.SUCCESS);
-                        event.setCanceled(true);
-
-                    }
-                    case INFINITY -> {
-
-                        addItemIfNotContains(serverPlayer, MinetorioItems.PATTERN_INFINITY.get());
-                        event.setCanceled(true);
-
-                    }
-                    case VOID -> {
-
-                        addItemIfNotContains(serverPlayer, MinetorioItems.PATTERN_VOID.get());
-                        event.setCanceled(true);
-                    }
-                }
-
-            } else if (state.is(Blocks.BARRIER)){
-                level.setBlock(pos,
-                        MinetorioBlocks.GLOWING_BEDROCK.get()
-                                .defaultBlockState()
-                                .setValue(GlowingBedrockBlock.STATE, GlowingBedrockBlockState.VOID), 3);
-
-                Timer.addTimer(
-                        pos,
-                        Blocks.BARRIER.defaultBlockState(),
-                        level.dimension(),
-                        200);
-                event.setCancellationResult(InteractionResult.SUCCESS);
-                event.setCanceled(true);
-            }
-        }
-    }
-
-    private static void addItemIfNotContains(ServerPlayer serverPlayer, @NotNull Item item) {
-        if(!serverPlayer.getInventory().contains(new ItemStack(item))){
-            serverPlayer.getInventory().add(new ItemStack(item, 1));
         }
     }
 }

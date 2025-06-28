@@ -67,6 +67,7 @@ public class EnergyGeneratorBlockEntity extends BlockEntity implements MenuProvi
     public EnergyGeneratorBlockEntity(BlockPos pPos, BlockState pBlockState) {
         super(MinetorioBlockEntities.ENERGY_GENERATOR_ENTITY.get(), pPos, pBlockState);
         this.currentTime = timeInterval;
+        this.currentTransfer = timeInterval;
         this.permanentlyStabilized = false;
     }
 

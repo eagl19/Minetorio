@@ -1,8 +1,7 @@
 package net.eagl.minetorio.worldgen.structure;
 
 import net.eagl.minetorio.block.MinetorioBlocks;
-import net.eagl.minetorio.block.custom.GlowingBedrockBlock;
-import net.eagl.minetorio.block.custom.GlowingBedrockBlockState;
+
 import net.eagl.minetorio.block.entity.PortalBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -44,7 +43,7 @@ public class Rooms3x3 {
         pPosition.offset(1000,  0,1000)    //collector room (8)
         );
 
-        BlockState glowingBedrock = MinetorioBlocks.GLOWING_BEDROCK.get().defaultBlockState().setValue(GlowingBedrockBlock.STATE, GlowingBedrockBlockState.BEDROCK);
+        BlockState glowingBedrock = MinetorioBlocks.GLOWING_BEDROCK.get().defaultBlockState();
 
         room(level, ROOMS_POSITIONS.get(0), Blocks.ICE.defaultBlockState(),                 ROOMS_POSITIONS.get(6), ROOMS_POSITIONS.get(3), ROOMS_POSITIONS.get(1), ROOMS_POSITIONS.get(2));// room (0)
         room(level, ROOMS_POSITIONS.get(1), Blocks.COPPER_BLOCK.defaultBlockState(),        ROOMS_POSITIONS.get(7), ROOMS_POSITIONS.get(4), ROOMS_POSITIONS.get(2), ROOMS_POSITIONS.get(0));// room (1)
@@ -65,7 +64,7 @@ public class Rooms3x3 {
         room(level, ROOMS_POSITIONS.get(7), Blocks.DIAMOND_BLOCK.defaultBlockState(),       ROOMS_POSITIONS.get(4), ROOMS_POSITIONS.get(1), ROOMS_POSITIONS.get(8), ROOMS_POSITIONS.get(6));// room (7)
 
         // collector room (8)
-        room(level, ROOMS_POSITIONS.get(8), Blocks.BARRIER.defaultBlockState(), ROOMS_POSITIONS.get(5), ROOMS_POSITIONS.get(2), ROOMS_POSITIONS.get(6), ROOMS_POSITIONS.get(7));
+        room(level, ROOMS_POSITIONS.get(8), MinetorioBlocks.BARRIER.get().defaultBlockState(), ROOMS_POSITIONS.get(5), ROOMS_POSITIONS.get(2), ROOMS_POSITIONS.get(6), ROOMS_POSITIONS.get(7));
         level.setBlockAndUpdate(ROOMS_POSITIONS.get(8).offset(0, 2, 0), MinetorioBlocks.PATTERNS_COLLECTOR.get().defaultBlockState());
 
     }
@@ -78,15 +77,15 @@ public class Rooms3x3 {
                 for(int dy=0; dy<=16; dy++) {
                     level.setBlockAndUpdate(roomCenter.offset(dx, dy, dz), Blocks.AIR.defaultBlockState());
                 }
-                level.setBlockAndUpdate(roomCenter.offset(dx,  17, dz), Blocks.BARRIER.defaultBlockState());
+                level.setBlockAndUpdate(roomCenter.offset(dx,  17, dz), MinetorioBlocks.BARRIER.get().defaultBlockState());
             }
         }
 
         for(int dx = 9; dx >= -9; dx-- ) {
             for (int dy=0; dy<=16; dy++) {
 
-                level.setBlockAndUpdate(roomCenter.offset(dx, dy,  10), Blocks.BARRIER.defaultBlockState());
-                level.setBlockAndUpdate(roomCenter.offset(dx, dy, -10), Blocks.BARRIER.defaultBlockState());
+                level.setBlockAndUpdate(roomCenter.offset(dx, dy,  10), MinetorioBlocks.BARRIER.get().defaultBlockState());
+                level.setBlockAndUpdate(roomCenter.offset(dx, dy, -10), MinetorioBlocks.BARRIER.get().defaultBlockState());
 
                 setBlockPortalBlock(level, roomCenter.offset(dx, dy, 9),  south);
                 setBlockPortalBlock(level, roomCenter.offset(dx, dy, -9), north);
@@ -96,8 +95,8 @@ public class Rooms3x3 {
         for(int dz = 9; dz >= -9; dz-- ) {
             for (int dy=0; dy<=16; dy++) {
 
-                level.setBlockAndUpdate(roomCenter.offset(10,  dy, dz),  Blocks.BARRIER.defaultBlockState());
-                level.setBlockAndUpdate(roomCenter.offset(-10, dy, dz), Blocks.BARRIER.defaultBlockState());
+                level.setBlockAndUpdate(roomCenter.offset(10,  dy, dz), MinetorioBlocks.BARRIER.get().defaultBlockState());
+                level.setBlockAndUpdate(roomCenter.offset(-10, dy, dz), MinetorioBlocks.BARRIER.get().defaultBlockState());
 
                 setBlockPortalBlock(level, roomCenter.offset(9,  dy, dz),  east);
                 setBlockPortalBlock(level, roomCenter.offset(-9, dy, dz), west);

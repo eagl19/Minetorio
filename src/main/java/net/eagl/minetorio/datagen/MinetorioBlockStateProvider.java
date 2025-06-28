@@ -25,9 +25,9 @@ public class MinetorioBlockStateProvider extends BlockStateProvider {
     @Override
     protected void registerStatesAndModels() {
 
-        blockWithStatesAndItem(MinetorioBlocks.GLOWING_BEDROCK.get(),GlowingBedrockBlock.STATE);
+        blockWithMatrixStatesAndItem(MinetorioBlocks.GLOWING_BEDROCK.get(),GlowingBedrockBlock.STATE, false);
 
-        blockWithStatesAndItem(MinetorioBlocks.BARRIER.get(), Barrier.STATE);
+        blockWithMatrixStatesAndItem(MinetorioBlocks.BARRIER.get(), Barrier.STATE, true);
 
         blockWithCustomSides(MinetorioBlocks.PATTERNS_COLLECTOR.get(),
                 "item/patterns/void",
@@ -107,6 +107,39 @@ public class MinetorioBlockStateProvider extends BlockStateProvider {
                 .parent(models().getExistingFile(modLoc("block/" + name)));
     }
 
+    private void blockWithMatrixStatesAndItem(Block block, EnumProperty<?> property, boolean invisible) {
+        getVariantBuilder(block).forAllStates(state -> {
+            String variant = state.getValue(property).getSerializedName();
+            String name = blockName(block) + "_" + variant;
+
+            ModelFile modelFile;
+            if (variant.equals("unstable")) {
+                modelFile = animatedState("matrix");
+            } else {
+                if(invisible) {
+                    modelFile = models().withExistingParent(name, mcLoc("block/block"));
+                }else{
+                    modelFile = models().cubeAll(name, modLoc("block/" + name));
+                }
+            }
+
+            return ConfiguredModel.builder()
+                    .modelFile(modelFile)
+                    .build();
+        });
+
+        if(invisible) {
+            itemModels().getBuilder(blockName(block))
+                    .parent(models().getExistingFile(mcLoc("item/generated")))
+                    .texture("layer0", modLoc("item/" + blockName(block)));
+        }else {
+            String defaultState = block.defaultBlockState().getValue(property).getSerializedName();
+            itemModels().getBuilder(blockName(block))
+                    .parent(models().getExistingFile(modLoc("block/" + blockName(block) + "_" + defaultState)));
+        }
+
+    }
+
     private void blockWithStatesAndItem(Block block, EnumProperty<?> property) {
         getVariantBuilder(block).forAllStates(state -> {
             String variant = state.getValue(property).getSerializedName();
@@ -114,26 +147,9 @@ public class MinetorioBlockStateProvider extends BlockStateProvider {
 
             ModelFile modelFile;
             if (variant.equals("stabilized")) {
-                if (block == MinetorioBlocks.BARRIER.get()) {
-                    modelFile = models().withExistingParent("invisible", mcLoc("block/block"));
-                } else {
-                    modelFile = models()
-                            .withExistingParent(name, mcLoc("block/block"))
-                            .texture("texture", modLoc("block/" + name))
-                            .element()
-                            .from(0, 0, 0)
-                            .to(16, 16, 16)
-                            .face(Direction.DOWN).texture("#texture").cullface(Direction.DOWN).end()
-                            .face(Direction.UP).texture("#texture").cullface(Direction.UP).end()
-                            .face(Direction.NORTH).texture("#texture").cullface(Direction.NORTH).end()
-                            .face(Direction.SOUTH).texture("#texture").cullface(Direction.SOUTH).end()
-                            .face(Direction.WEST).texture("#texture").cullface(Direction.WEST).end()
-                            .face(Direction.EAST).texture("#texture").cullface(Direction.EAST).end()
-                            .end();
-                }
-            }
-            else{
-                    modelFile = models().cubeAll(name, modLoc("block/" + name));
+                modelFile = animatedState(name);
+            } else {
+                modelFile = models().cubeAll(name, modLoc("block/" + name));
             }
 
             return ConfiguredModel.builder()
@@ -142,14 +158,25 @@ public class MinetorioBlockStateProvider extends BlockStateProvider {
         });
 
         String defaultState = block.defaultBlockState().getValue(property).getSerializedName();
-        if(block == MinetorioBlocks.BARRIER.get()){
-            itemModels().getBuilder(blockName(block))
-                    .parent(models().getExistingFile(mcLoc("item/generated")))
-                    .texture("layer0", modLoc("block/" + blockName(block) + "_" + defaultState));
-        }else {
-            itemModels().getBuilder(blockName(block))
-                    .parent(models().getExistingFile(modLoc("block/" + blockName(block) + "_" + defaultState)));
-        }
+        itemModels().getBuilder(blockName(block))
+                .parent(models().getExistingFile(modLoc("block/" + blockName(block) + "_" + defaultState)));
+
+    }
+
+    private ModelFile animatedState(String name){
+        return models()
+                .withExistingParent(name, mcLoc("block/block"))
+                .texture("texture", modLoc("block/" + name))
+                .element()
+                .from(0, 0, 0)
+                .to(16, 16, 16)
+                .face(Direction.DOWN).texture("#texture").cullface(Direction.DOWN).end()
+                .face(Direction.UP).texture("#texture").cullface(Direction.UP).end()
+                .face(Direction.NORTH).texture("#texture").cullface(Direction.NORTH).end()
+                .face(Direction.SOUTH).texture("#texture").cullface(Direction.SOUTH).end()
+                .face(Direction.WEST).texture("#texture").cullface(Direction.WEST).end()
+                .face(Direction.EAST).texture("#texture").cullface(Direction.EAST).end()
+                .end();
     }
 
     private String blockName(Block block) {

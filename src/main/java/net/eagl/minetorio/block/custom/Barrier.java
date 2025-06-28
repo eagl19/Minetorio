@@ -4,7 +4,6 @@ import net.eagl.minetorio.block.entity.BarrierBlockEntity;
 import net.eagl.minetorio.block.entity.MinetorioBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.BarrierBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -18,7 +17,7 @@ import net.minecraft.world.level.material.PushReaction;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class Barrier extends BarrierBlock implements EntityBlock {
+public class Barrier extends Block implements EntityBlock {
 
     public static final EnumProperty<GeneratorState> STATE = EnumProperty.create("state", GeneratorState.class);
 
