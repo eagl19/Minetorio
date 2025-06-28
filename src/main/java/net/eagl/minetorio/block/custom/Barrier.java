@@ -19,7 +19,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class Barrier extends Block implements EntityBlock {
 
-    public static final EnumProperty<GeneratorState> STATE = EnumProperty.create("state", GeneratorState.class);
+    public static final EnumProperty<MinetorioBlockState> STATE = EnumProperty.create("state", MinetorioBlockState.class);
 
     public Barrier() {
         super(BlockBehaviour.Properties.of()
@@ -30,7 +30,7 @@ public class Barrier extends Block implements EntityBlock {
                 .noParticlesOnBreak()
                 .pushReaction(PushReaction.BLOCK));
 
-        this.registerDefaultState(this.stateDefinition.any().setValue(STATE, GeneratorState.STABILIZED));
+        this.registerDefaultState(this.stateDefinition.any().setValue(STATE, MinetorioBlockState.STABILIZED));
 
     }
 

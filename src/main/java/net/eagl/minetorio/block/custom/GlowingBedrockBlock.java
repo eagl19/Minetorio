@@ -20,7 +20,7 @@ import org.jetbrains.annotations.Nullable;
 public class GlowingBedrockBlock extends Block implements EntityBlock {
 
 
-    public static final EnumProperty<GeneratorState> STATE = EnumProperty.create("state", GeneratorState.class);
+    public static final EnumProperty<MinetorioBlockState> STATE = EnumProperty.create("state", MinetorioBlockState.class);
 
     public GlowingBedrockBlock() {
         super(BlockBehaviour.Properties.of()
@@ -30,7 +30,7 @@ public class GlowingBedrockBlock extends Block implements EntityBlock {
                 .lightLevel(state -> 15)
                 .noOcclusion()
         );
-        this.registerDefaultState(this.stateDefinition.any().setValue(STATE, GeneratorState.STABILIZED));
+        this.registerDefaultState(this.stateDefinition.any().setValue(STATE, MinetorioBlockState.STABILIZED));
     }
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {

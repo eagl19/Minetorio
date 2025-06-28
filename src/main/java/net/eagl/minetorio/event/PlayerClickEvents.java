@@ -65,8 +65,8 @@ public class PlayerClickEvents {
             //Water Generator
             if (state.is(MinetorioBlocks.WATER_GENERATOR.get())) {
                 if (level.getBlockEntity(pos) instanceof WaterGeneratorBlockEntity waterGenerator) {
-                    if (state.getValue(WaterGenerator.STATE) == GeneratorState.UNSTABLE) {
-                        level.setBlock(pos, state.setValue(WaterGenerator.STATE, GeneratorState.STABILIZED),2);
+                    if (state.getValue(WaterGenerator.STATE) == MinetorioBlockState.UNSTABLE) {
+                        level.setBlock(pos, state.setValue(WaterGenerator.STATE, MinetorioBlockState.STABILIZED),2);
                         serverPlayer.getCapability(MinetorioCapabilities.TECHNOLOGY_PROGRESS).ifPresent(techCap -> {
                             if (techCap.hasLearned(Technologies.WATER.getId())) {
                                 waterGenerator.setPermanentlyStabilized(true);
@@ -86,8 +86,8 @@ public class PlayerClickEvents {
             //Lava Generator
             if (state.is(MinetorioBlocks.LAVA_GENERATOR.get())) {
                 if (level.getBlockEntity(pos) instanceof LavaGeneratorBlockEntity lavaGenerator) {
-                    if (state.getValue(LavaGenerator.STATE) == GeneratorState.UNSTABLE) {
-                        level.setBlock(pos, state.setValue(LavaGenerator.STATE, GeneratorState.STABILIZED),2);
+                    if (state.getValue(LavaGenerator.STATE) == MinetorioBlockState.UNSTABLE) {
+                        level.setBlock(pos, state.setValue(LavaGenerator.STATE, MinetorioBlockState.STABILIZED),2);
                         serverPlayer.getCapability(MinetorioCapabilities.TECHNOLOGY_PROGRESS).ifPresent(techCap -> {
                             if (techCap.hasLearned(Technologies.FIRE.getId())) {
                                 lavaGenerator.setPermanentlyStabilized(true);
@@ -107,8 +107,8 @@ public class PlayerClickEvents {
             //Energy Generator
             if (state.is(MinetorioBlocks.ENERGY_GENERATOR.get())) {
                 if (level.getBlockEntity(pos) instanceof EnergyGeneratorBlockEntity energyGenerator) {
-                    if (state.getValue(EnergyGenerator.STATE) == GeneratorState.UNSTABLE) {
-                        level.setBlock(pos, state.setValue(EnergyGenerator.STATE, GeneratorState.STABILIZED), 2);
+                    if (state.getValue(EnergyGenerator.STATE) == MinetorioBlockState.UNSTABLE) {
+                        level.setBlock(pos, state.setValue(EnergyGenerator.STATE, MinetorioBlockState.STABILIZED), 2);
                         serverPlayer.getCapability(MinetorioCapabilities.TECHNOLOGY_PROGRESS).ifPresent(techCap -> {
                             if (techCap.hasLearned(Technologies.SUN.getId())) {
                                 energyGenerator.setPermanentlyStabilized(true);
@@ -128,8 +128,8 @@ public class PlayerClickEvents {
             //Barrier
             if (state.is(MinetorioBlocks.BARRIER.get())) {
                 if (level.getBlockEntity(pos) instanceof BarrierBlockEntity) {
-                    if (state.getValue(Barrier.STATE) == GeneratorState.STABILIZED) {
-                        level.setBlock(pos, state.setValue(Barrier.STATE, GeneratorState.UNSTABLE), 2);
+                    if (state.getValue(Barrier.STATE) == MinetorioBlockState.STABILIZED) {
+                        level.setBlock(pos, state.setValue(Barrier.STATE, MinetorioBlockState.UNSTABLE), 2);
                         event.setCancellationResult(InteractionResult.SUCCESS);
                         event.setCanceled(true);
                         return;
@@ -140,8 +140,8 @@ public class PlayerClickEvents {
             //Glowing bedrock
             if (state.is(MinetorioBlocks.GLOWING_BEDROCK.get())) {
                 if (level.getBlockEntity(pos) instanceof GlowingBedrockBlockEntity) {
-                    if (state.getValue(GlowingBedrockBlock.STATE) == GeneratorState.STABILIZED) {
-                        level.setBlock(pos, state.setValue(GlowingBedrockBlock.STATE, GeneratorState.UNSTABLE), 2);
+                    if (state.getValue(GlowingBedrockBlock.STATE) == MinetorioBlockState.STABILIZED) {
+                        level.setBlock(pos, state.setValue(GlowingBedrockBlock.STATE, MinetorioBlockState.UNSTABLE), 2);
                         event.setCancellationResult(InteractionResult.SUCCESS);
                         event.setCanceled(true);
                         return;

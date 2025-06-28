@@ -2,8 +2,10 @@ package net.eagl.minetorio.worldgen.structure;
 
 import net.eagl.minetorio.block.MinetorioBlocks;
 
+import net.eagl.minetorio.block.custom.PortalBlock;
 import net.eagl.minetorio.block.entity.PortalBlockEntity;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -18,9 +20,9 @@ public class Rooms3x3 {
 
         rooms(pLevel, pPosition);
     }
-    private static void setBlockPortalBlock(ServerLevel level, BlockPos blockPos, BlockPos teleportPos){
+    private static void setBlockPortalBlock(ServerLevel level, BlockPos blockPos, BlockPos teleportPos, Direction.Axis axis){
 
-        level.setBlockAndUpdate(blockPos, MinetorioBlocks.PORTAL.get().defaultBlockState());
+        level.setBlock(blockPos, MinetorioBlocks.PORTAL.get().defaultBlockState().setValue(PortalBlock.AXIS, axis), 3);
         BlockEntity be = level.getBlockEntity(blockPos);
 
         if (be instanceof PortalBlockEntity portalBE) {
@@ -52,12 +54,12 @@ public class Rooms3x3 {
 
        //spawn room (4)
         room(level, ROOMS_POSITIONS.get(4), glowingBedrock,                                 ROOMS_POSITIONS.get(1), ROOMS_POSITIONS.get(7), ROOMS_POSITIONS.get(5), ROOMS_POSITIONS.get(3));//spawn room (4)
-        level.setBlockAndUpdate(ROOMS_POSITIONS.get(4),                                 MinetorioBlocks.RESEARCHER.get().defaultBlockState());
-        level.setBlockAndUpdate(ROOMS_POSITIONS.get(4).offset(-1, 0, 0), MinetorioBlocks.WATER_GENERATOR.get().defaultBlockState());
-        level.setBlockAndUpdate(ROOMS_POSITIONS.get(4).offset(1,  0, 0), MinetorioBlocks.LAVA_GENERATOR.get().defaultBlockState());
-        level.setBlockAndUpdate(ROOMS_POSITIONS.get(4).offset(0,  1, 0), MinetorioBlocks.ENERGY_GENERATOR.get().defaultBlockState());
-        level.setBlockAndUpdate(ROOMS_POSITIONS.get(4).offset(1,  1, 0), MinetorioBlocks.ENERGY_GENERATOR.get().defaultBlockState());
-        level.setBlockAndUpdate(ROOMS_POSITIONS.get(4).offset(-1, 1, 0), MinetorioBlocks.ENERGY_GENERATOR.get().defaultBlockState());
+        level.setBlock(ROOMS_POSITIONS.get(4),                                 MinetorioBlocks.RESEARCHER.get().defaultBlockState(),2);
+        level.setBlock(ROOMS_POSITIONS.get(4).offset(-1, 0, 0), MinetorioBlocks.WATER_GENERATOR.get().defaultBlockState(),2);
+        level.setBlock(ROOMS_POSITIONS.get(4).offset(1,  0, 0), MinetorioBlocks.LAVA_GENERATOR.get().defaultBlockState(),2);
+        level.setBlock(ROOMS_POSITIONS.get(4).offset(0,  1, 0), MinetorioBlocks.ENERGY_GENERATOR.get().defaultBlockState(),2);
+        level.setBlock(ROOMS_POSITIONS.get(4).offset(1,  1, 0), MinetorioBlocks.ENERGY_GENERATOR.get().defaultBlockState(),2);
+        level.setBlock(ROOMS_POSITIONS.get(4).offset(-1, 1, 0), MinetorioBlocks.ENERGY_GENERATOR.get().defaultBlockState(),2);
 
         room(level, ROOMS_POSITIONS.get(5), Blocks.ACACIA_PLANKS.defaultBlockState(),       ROOMS_POSITIONS.get(2), ROOMS_POSITIONS.get(8), ROOMS_POSITIONS.get(3), ROOMS_POSITIONS.get(4));// room (5)
         room(level, ROOMS_POSITIONS.get(6), Blocks.EMERALD_BLOCK.defaultBlockState(),       ROOMS_POSITIONS.get(3), ROOMS_POSITIONS.get(0), ROOMS_POSITIONS.get(7), ROOMS_POSITIONS.get(8));// room (6)
@@ -65,7 +67,7 @@ public class Rooms3x3 {
 
         // collector room (8)
         room(level, ROOMS_POSITIONS.get(8), MinetorioBlocks.BARRIER.get().defaultBlockState(), ROOMS_POSITIONS.get(5), ROOMS_POSITIONS.get(2), ROOMS_POSITIONS.get(6), ROOMS_POSITIONS.get(7));
-        level.setBlockAndUpdate(ROOMS_POSITIONS.get(8).offset(0, 2, 0), MinetorioBlocks.PATTERNS_COLLECTOR.get().defaultBlockState());
+        level.setBlock(ROOMS_POSITIONS.get(8).offset(0, 2, 0), MinetorioBlocks.PATTERNS_COLLECTOR.get().defaultBlockState(),2);
 
     }
 
@@ -73,34 +75,42 @@ public class Rooms3x3 {
 
         for (int dx = 10; dx >= -10; dx--) {
             for (int dz = 10; dz >= -10; dz--) {
-                level.setBlockAndUpdate(roomCenter.offset(dx, -1, dz), floor);
+                level.setBlock(roomCenter.offset(dx, -1, dz), floor, 2);
                 for(int dy=0; dy<=16; dy++) {
-                    level.setBlockAndUpdate(roomCenter.offset(dx, dy, dz), Blocks.AIR.defaultBlockState());
+                    level.setBlock(roomCenter.offset(dx, dy, dz), Blocks.AIR.defaultBlockState(),2);
                 }
-                level.setBlockAndUpdate(roomCenter.offset(dx,  17, dz), MinetorioBlocks.BARRIER.get().defaultBlockState());
+                level.setBlock(roomCenter.offset(dx,  17, dz), MinetorioBlocks.BARRIER.get().defaultBlockState(),2);
             }
         }
 
-        for(int dx = 9; dx >= -9; dx-- ) {
+        for(int dy = 0; dy <= 16; dy++){
+            level.setBlock(roomCenter.offset(9,   dy, 9),  MinetorioBlocks.BARRIER.get().defaultBlockState(), 2);
+            level.setBlock(roomCenter.offset(9,   dy, -9), MinetorioBlocks.BARRIER.get().defaultBlockState(), 2);
+            level.setBlock(roomCenter.offset(-9,  dy, 9),  MinetorioBlocks.BARRIER.get().defaultBlockState(), 2);
+            level.setBlock(roomCenter.offset(-9,  dy, -9), MinetorioBlocks.BARRIER.get().defaultBlockState(), 2);
+        }
+
+        for(int dx = 8; dx >= -8; dx-- ) {
             for (int dy=0; dy<=16; dy++) {
 
-                level.setBlockAndUpdate(roomCenter.offset(dx, dy,  10), MinetorioBlocks.BARRIER.get().defaultBlockState());
-                level.setBlockAndUpdate(roomCenter.offset(dx, dy, -10), MinetorioBlocks.BARRIER.get().defaultBlockState());
+                level.setBlock(roomCenter.offset(dx, dy,  10), MinetorioBlocks.BARRIER.get().defaultBlockState(),2);
+                level.setBlock(roomCenter.offset(dx, dy, -10), MinetorioBlocks.BARRIER.get().defaultBlockState(),2);
 
-                setBlockPortalBlock(level, roomCenter.offset(dx, dy, 9),  south);
-                setBlockPortalBlock(level, roomCenter.offset(dx, dy, -9), north);
+                setBlockPortalBlock(level, roomCenter.offset(dx, dy, 9),  south, Direction.Axis.X);
+                setBlockPortalBlock(level, roomCenter.offset(dx, dy, -9), north, Direction.Axis.X);
             }
         }
 
-        for(int dz = 9; dz >= -9; dz-- ) {
+        for(int dz = 8; dz >= -8; dz-- ) {
             for (int dy=0; dy<=16; dy++) {
 
-                level.setBlockAndUpdate(roomCenter.offset(10,  dy, dz), MinetorioBlocks.BARRIER.get().defaultBlockState());
-                level.setBlockAndUpdate(roomCenter.offset(-10, dy, dz), MinetorioBlocks.BARRIER.get().defaultBlockState());
+                level.setBlock(roomCenter.offset(10,  dy, dz), MinetorioBlocks.BARRIER.get().defaultBlockState(), 2);
+                level.setBlock(roomCenter.offset(-10, dy, dz), MinetorioBlocks.BARRIER.get().defaultBlockState(), 2);
 
-                setBlockPortalBlock(level, roomCenter.offset(9,  dy, dz),  east);
-                setBlockPortalBlock(level, roomCenter.offset(-9, dy, dz), west);
+                setBlockPortalBlock(level, roomCenter.offset(9,  dy, dz),  east, Direction.Axis.Z);
+                setBlockPortalBlock(level, roomCenter.offset(-9, dy, dz), west, Direction.Axis.Z);
             }
         }
+
     }
 }

@@ -1,6 +1,6 @@
 package net.eagl.minetorio.block.entity;
 
-import net.eagl.minetorio.block.custom.GeneratorState;
+import net.eagl.minetorio.block.custom.MinetorioBlockState;
 import net.eagl.minetorio.block.custom.WaterGenerator;
 import net.eagl.minetorio.gui.menu.WaterGeneratorMenu;
 import net.eagl.minetorio.util.enums.FluidType;
@@ -126,12 +126,12 @@ public class WaterGeneratorBlockEntity extends AbstractFluidGeneratorBlockEntity
     }
 
     @Override
-    protected GeneratorState getGeneratorStateProperty() {
+    protected MinetorioBlockState getGeneratorStateProperty() {
         return getBlockState().getValue(WaterGenerator.STATE);
     }
 
     @Override
-    protected Property<GeneratorState> getGeneratorStatePropertyKey() {
+    protected Property<MinetorioBlockState> getGeneratorStatePropertyKey() {
         return WaterGenerator.STATE;
     }
 }

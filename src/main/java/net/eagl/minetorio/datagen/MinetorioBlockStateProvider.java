@@ -6,6 +6,7 @@ import net.eagl.minetorio.block.custom.*;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.NetherPortalBlock;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
@@ -56,7 +57,38 @@ public class MinetorioBlockStateProvider extends BlockStateProvider {
                 "item/patterns/sun",
                 "item/patterns/sun");
 
-        blockWithItem(MinetorioBlocks.PORTAL);
+        portalBlockWithAxisModels(MinetorioBlocks.PORTAL.get());
+    }
+
+    private void portalBlockWithAxisModels(Block block) {
+        String name = blockName(block);
+        String textureName = "portal";
+        ModelFile modelNS = models().withExistingParent(name + "_ns", mcLoc("block/block"))
+                .texture("portal", modLoc("block/" + textureName))
+                .texture("particle", modLoc("block/" + textureName))
+                .element()
+                .from(0, 0, 6).to(16, 16, 10)
+                .face(Direction.NORTH).uvs(0, 0, 16, 16).texture("#portal").end()
+                .face(Direction.SOUTH).uvs(0, 0, 16, 16).texture("#portal").end()
+                .end();
+
+        ModelFile modelEW = models().withExistingParent(name + "_ew", mcLoc("block/block"))
+                .texture("portal", modLoc("block/" + textureName))
+                .texture("particle", modLoc("block/" + textureName))
+                .element()
+                .from(6, 0, 0).to(10, 16, 16)
+                .face(Direction.EAST).uvs(0, 0, 16, 16).texture("#portal").end()
+                .face(Direction.WEST).uvs(0, 0, 16, 16).texture("#portal").end()
+                .end();
+
+        getVariantBuilder(block)
+                .partialState().with(PortalBlock.AXIS, Direction.Axis.X)
+                .modelForState().modelFile(modelNS).addModel()
+                .partialState().with(PortalBlock.AXIS, Direction.Axis.Z)
+                .modelForState().modelFile(modelEW).addModel();
+
+        itemModels().getBuilder(name)
+                .parent(models().getExistingFile(modLoc("block/" + name + "_ns")));
     }
 
     private void blockWithStatesCustomSidesAndItem(Block block, EnumProperty<?> property, String pDown,String pUp,String pNorth,String pSouth,String pWest,String pEst) {

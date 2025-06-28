@@ -1,7 +1,7 @@
 package net.eagl.minetorio.block.entity;
 
 import net.eagl.minetorio.block.custom.Barrier;
-import net.eagl.minetorio.block.custom.GeneratorState;
+import net.eagl.minetorio.block.custom.MinetorioBlockState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -18,10 +18,10 @@ public class BarrierBlockEntity extends BlockEntity {
     }
 
     public void tickServer() {
-        if (getBlockState().getValue(Barrier.STATE) == GeneratorState.UNSTABLE) {
+        if (getBlockState().getValue(Barrier.STATE) == MinetorioBlockState.UNSTABLE) {
             this.currentTime--;
             if (level != null && currentTime < 1) {
-                level.setBlock(getBlockPos(), getBlockState().setValue(Barrier.STATE, GeneratorState.STABILIZED), 2);
+                level.setBlock(getBlockPos(), getBlockState().setValue(Barrier.STATE, MinetorioBlockState.STABILIZED), 2);
                 currentTime = timeInterval;
             }
         }

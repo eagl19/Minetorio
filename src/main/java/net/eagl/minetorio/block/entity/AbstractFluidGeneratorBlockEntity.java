@@ -1,6 +1,6 @@
 package net.eagl.minetorio.block.entity;
 
-import net.eagl.minetorio.block.custom.GeneratorState;
+import net.eagl.minetorio.block.custom.MinetorioBlockState;
 import net.eagl.minetorio.util.CachedBlockPos;
 import net.eagl.minetorio.util.enums.FluidType;
 import net.eagl.minetorio.util.enums.ResourceType;
@@ -142,7 +142,7 @@ public abstract class AbstractFluidGeneratorBlockEntity extends BlockEntity impl
 
     public void tickServer() {
         boolean changed = false;
-        if (getGeneratorStateProperty().equals(GeneratorState.STABILIZED)) {
+        if (getGeneratorStateProperty().equals(MinetorioBlockState.STABILIZED)) {
 
             this.currentTransfer--;
             this.currentTime--;
@@ -159,7 +159,7 @@ public abstract class AbstractFluidGeneratorBlockEntity extends BlockEntity impl
                 Level level = getLevel();
 
                 if (!permanentlyStabilized && level != null) {
-                    level.setBlock(getBlockPos(), getBlockState().setValue(getGeneratorStatePropertyKey(), GeneratorState.UNSTABLE), 2);
+                    level.setBlock(getBlockPos(), getBlockState().setValue(getGeneratorStatePropertyKey(), MinetorioBlockState.UNSTABLE), 2);
                 }
                 if (transferFluidToTargets()) {
                     this.currentTransfer = getTransferTime();
@@ -225,7 +225,7 @@ public abstract class AbstractFluidGeneratorBlockEntity extends BlockEntity impl
     protected abstract int getGenerateInterval();
     protected abstract int getTransferTime();
     protected abstract int getMaxTransferAmount();
-    protected abstract GeneratorState getGeneratorStateProperty();
-    protected abstract Property<GeneratorState> getGeneratorStatePropertyKey();
+    protected abstract MinetorioBlockState getGeneratorStateProperty();
+    protected abstract Property<MinetorioBlockState> getGeneratorStatePropertyKey();
 }
 

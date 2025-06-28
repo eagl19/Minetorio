@@ -102,25 +102,24 @@ public class PatternCollectorBlockRenderer implements BlockEntityRenderer<Patter
 
     private void renderSphere(PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay) {
 
-        double radius = 14;
-
+        double radius = 9;
         poseStack.pushPose();
-        renderRing(poseStack, buffer, packedLight, packedOverlay, PATTERN_ITEMS_MAIN,0,0,0, 4f, radius);
-        renderRing(poseStack, buffer, packedLight, packedOverlay, PATTERN_ITEMS_UD,0,45,0, 4f, radius);
+        renderRing(poseStack, buffer, packedLight, packedOverlay, PATTERN_ITEMS_MAIN,0,0,0, 3f, radius);
+        renderRing(poseStack, buffer, packedLight, packedOverlay, PATTERN_ITEMS_UD,0,45,0, 3f, radius);
         poseStack.pushPose();
-        renderRing(poseStack, buffer, packedLight, packedOverlay, PATTERN_ITEMS_EW,45,0,0, 4f, radius);
+        renderRing(poseStack, buffer, packedLight, packedOverlay, PATTERN_ITEMS_EW,45,0,0, 3f, radius);
         poseStack.popPose();
         poseStack.mulPose(Axis.YP.rotationDegrees(45));
         poseStack.pushPose();
-        renderRing(poseStack, buffer, packedLight, packedOverlay, PATTERN_ITEMS_EW,45,0,0, 4f, radius);
+        renderRing(poseStack, buffer, packedLight, packedOverlay, PATTERN_ITEMS_EW,45,0,0, 3f, radius);
         poseStack.popPose();
         poseStack.mulPose(Axis.YP.rotationDegrees(45));
         poseStack.pushPose();
-        renderRing(poseStack, buffer, packedLight, packedOverlay, PATTERN_ITEMS_EW,45,0,0, 4f, radius);
+        renderRing(poseStack, buffer, packedLight, packedOverlay, PATTERN_ITEMS_EW,45,0,0, 3f, radius);
         poseStack.popPose();
         poseStack.mulPose(Axis.YP.rotationDegrees(45));
         poseStack.pushPose();
-        renderRing(poseStack, buffer, packedLight, packedOverlay, PATTERN_ITEMS_EW,45,0,0, 4f, radius);
+        renderRing(poseStack, buffer, packedLight, packedOverlay, PATTERN_ITEMS_EW,45,0,0, 3f, radius);
         poseStack.popPose();
         poseStack.popPose();
     }

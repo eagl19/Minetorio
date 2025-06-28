@@ -19,7 +19,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class LavaGenerator extends Block implements EntityBlock {
 
-    public static final EnumProperty<GeneratorState> STATE = EnumProperty.create("state", GeneratorState.class);
+    public static final EnumProperty<MinetorioBlockState> STATE = EnumProperty.create("state", MinetorioBlockState.class);
 
     public LavaGenerator() {
         super(Properties.of()
@@ -32,7 +32,7 @@ public class LavaGenerator extends Block implements EntityBlock {
                 .isViewBlocking((state, reader, pos) -> false)
                 .isSuffocating((state, world, pos) -> false));
 
-        this.registerDefaultState(this.stateDefinition.any().setValue(STATE, GeneratorState.UNSTABLE));
+        this.registerDefaultState(this.stateDefinition.any().setValue(STATE, MinetorioBlockState.UNSTABLE));
     }
 
     @Override

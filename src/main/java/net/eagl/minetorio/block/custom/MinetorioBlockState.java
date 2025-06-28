@@ -3,7 +3,7 @@ package net.eagl.minetorio.block.custom;
 import net.minecraft.util.StringRepresentable;
 import org.jetbrains.annotations.NotNull;
 
-public enum GeneratorState implements StringRepresentable {
+public enum MinetorioBlockState implements StringRepresentable {
     STABILIZED,
     UNSTABLE;
 

@@ -1,7 +1,7 @@
 package net.eagl.minetorio.block.entity;
 
 import net.eagl.minetorio.block.custom.EnergyGenerator;
-import net.eagl.minetorio.block.custom.GeneratorState;
+import net.eagl.minetorio.block.custom.MinetorioBlockState;
 import net.eagl.minetorio.gui.menu.EnergyGeneratorMenu;
 import net.eagl.minetorio.util.CachedBlockPos;
 import net.eagl.minetorio.util.enums.ResourceType;
@@ -172,7 +172,7 @@ public class EnergyGeneratorBlockEntity extends BlockEntity implements MenuProvi
 
     public void tickServer() {
         boolean changed = false;
-        if(getBlockState().getValue(EnergyGenerator.STATE) == GeneratorState.STABILIZED) {
+        if(getBlockState().getValue(EnergyGenerator.STATE) == MinetorioBlockState.STABILIZED) {
             this.currentTime--;
             this.currentTransfer--;
             int energy = energyStorage.receiveEnergy(generateAmount, true);
@@ -186,7 +186,7 @@ public class EnergyGeneratorBlockEntity extends BlockEntity implements MenuProvi
             if(currentTransfer < 1){
                 Level level = getLevel();
                 if (!permanentlyStabilized && level != null) {
-                    level.setBlock(getBlockPos(), getBlockState().setValue(EnergyGenerator.STATE, GeneratorState.UNSTABLE), 2);
+                    level.setBlock(getBlockPos(), getBlockState().setValue(EnergyGenerator.STATE, MinetorioBlockState.UNSTABLE), 2);
                     currentTime = timeInterval;
                 }
                 if (transferEnergyToTargets()) {
