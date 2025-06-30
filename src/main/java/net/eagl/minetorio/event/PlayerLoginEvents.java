@@ -5,9 +5,7 @@ import net.eagl.minetorio.capability.MinetorioCapabilities;
 import net.eagl.minetorio.network.MinetorioNetwork;
 import net.eagl.minetorio.network.PatternLearnSyncPacket;
 import net.eagl.minetorio.util.PatternItemsCollector;
-import net.eagl.minetorio.worldgen.dimension.MinetorioDimensions;
-import net.minecraft.core.BlockPos;
-import net.minecraft.server.level.ServerLevel;
+import net.eagl.minetorio.worldgen.dimension.custom.DimensionManager;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -27,25 +25,7 @@ public class PlayerLoginEvents {
 
         if (!player.getPersistentData().getBoolean("minetorio_teleported")) {
 
-            ServerLevel minetorioLevel = player.server.getLevel(MinetorioDimensions.MINETORIO_DIM_EMPTY_LEVEL_KEY);
-
-            if (minetorioLevel == null) return;
-
-            BlockPos spawnPos = new BlockPos(0, 100, 0);
-            player.setRespawnPosition(
-                    minetorioLevel.dimension(),
-                        spawnPos,
-                        0.0F,
-                        true,
-                        false
-                );
-
-            player.teleportTo(minetorioLevel,
-                    spawnPos.getX() + 0.5,
-                    spawnPos.getY() + 0.5,
-                    spawnPos.getZ() + 0.5,
-                    player.getYRot(),
-                    player.getXRot());
+            DimensionManager.teleportToPlayerDimension(player);
 
             player.getPersistentData().putBoolean("minetorio_teleported", true);
         }

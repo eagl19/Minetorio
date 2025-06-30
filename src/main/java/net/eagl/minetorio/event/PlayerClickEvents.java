@@ -39,15 +39,13 @@ public class PlayerClickEvents {
             //Pattern collector
             if (state.getBlock() instanceof PatternsCollector) {
                 if (level.getBlockEntity(pos) instanceof PatternsCollectorBlockEntity collector) {
-                    float yOffset = collector.getCurrentYOffset();
-                    if (Math.abs(yOffset) < 0.1f) {
 
-                        NetworkHooks.openScreen(serverPlayer, collector, pos);
+                    NetworkHooks.openScreen(serverPlayer, collector, pos);
 
-                        event.setCancellationResult(InteractionResult.SUCCESS);
-                        event.setCanceled(true);
-                        return;
-                    }
+                    event.setCancellationResult(InteractionResult.SUCCESS);
+                    event.setCanceled(true);
+                    return;
+
                 }
             }
 

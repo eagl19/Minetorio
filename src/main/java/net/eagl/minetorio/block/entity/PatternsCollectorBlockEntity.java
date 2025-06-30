@@ -34,8 +34,6 @@ public class PatternsCollectorBlockEntity extends BlockEntity implements MenuPro
         this.speedZ = 0.5f + rand.nextFloat();
     }
 
-
-
     public void tickClient() {
         rotation += 1.0f;
     }
@@ -48,7 +46,6 @@ public class PatternsCollectorBlockEntity extends BlockEntity implements MenuPro
     public @NotNull Component getDisplayName() {
         return Component.translatable("block.minetorio.patterns_collector");
     }
-
 
     @Override
     public @Nullable AbstractContainerMenu createMenu(int pContainerId, @NotNull Inventory pPlayerInventory, @NotNull Player pPlayer) {
