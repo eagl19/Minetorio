@@ -11,12 +11,16 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class PatternsCollectorBlock extends Block implements EntityBlock {
+public class PatternsCollector extends Block implements EntityBlock {
 
-    public PatternsCollectorBlock() {
+    public static final EnumProperty<MinetorioBlockState> STATE = EnumProperty.create("state", MinetorioBlockState.class);
+
+    public PatternsCollector() {
         super(BlockBehaviour.Properties.of()
                 .noCollission()
                 .strength(-1.0F, 3600000.0F)
@@ -25,14 +29,13 @@ public class PatternsCollectorBlock extends Block implements EntityBlock {
                 .isViewBlocking((state, reader, pos) -> false)
                 .isSuffocating((state, world, pos) -> false));
 
+        this.registerDefaultState(this.stateDefinition.any().setValue(STATE, MinetorioBlockState.UNSTABLE));
     }
 
-    @SuppressWarnings("deprecation")
     @Override
-    public @NotNull RenderShape getRenderShape(@NotNull BlockState state) {
-        return RenderShape.INVISIBLE;
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder) {
+        pBuilder.add(STATE);
     }
-
 
     @Override
     public boolean propagatesSkylightDown(@NotNull BlockState state, @NotNull BlockGetter reader, @NotNull BlockPos pos) {

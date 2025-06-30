@@ -6,7 +6,6 @@ import net.eagl.minetorio.block.custom.*;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.NetherPortalBlock;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
@@ -26,17 +25,11 @@ public class MinetorioBlockStateProvider extends BlockStateProvider {
     @Override
     protected void registerStatesAndModels() {
 
-        blockWithMatrixStatesAndItem(MinetorioBlocks.GLOWING_BEDROCK.get(),GlowingBedrockBlock.STATE, false);
+        blockWithMatrixStatesAndItem(MinetorioBlocks.GLOWING_BEDROCK.get(), GlowingBedrockBlock.STATE, false);
 
         blockWithMatrixStatesAndItem(MinetorioBlocks.BARRIER.get(), Barrier.STATE, true);
 
-        blockWithCustomSides(MinetorioBlocks.PATTERNS_COLLECTOR.get(),
-                "item/patterns/void",
-                "item/patterns/infinity",
-                "item/patterns/air",
-                "item/patterns/fire",
-                "item/patterns/earth",
-                "item/patterns/water");
+        blockWithMatrixStatesAndItem(MinetorioBlocks.PATTERNS_COLLECTOR.get(), PatternsCollector.STATE, true);
 
 
         blockWithCustomSides(MinetorioBlocks.RESEARCHER.get(),
@@ -62,33 +55,34 @@ public class MinetorioBlockStateProvider extends BlockStateProvider {
 
     private void portalBlockWithAxisModels(Block block) {
         String name = blockName(block);
-        String textureName = "portal";
-        ModelFile modelNS = models().withExistingParent(name + "_ns", mcLoc("block/block"))
-                .texture("portal", modLoc("block/" + textureName))
-                .texture("particle", modLoc("block/" + textureName))
-                .element()
-                .from(0, 0, 6).to(16, 16, 10)
-                .face(Direction.NORTH).uvs(0, 0, 16, 16).texture("#portal").end()
-                .face(Direction.SOUTH).uvs(0, 0, 16, 16).texture("#portal").end()
-                .end();
+        ModelFile modelNS = createPortalModel(name + "_ns", Direction.NORTH, Direction.SOUTH, true);
 
-        ModelFile modelEW = models().withExistingParent(name + "_ew", mcLoc("block/block"))
-                .texture("portal", modLoc("block/" + textureName))
-                .texture("particle", modLoc("block/" + textureName))
-                .element()
-                .from(6, 0, 0).to(10, 16, 16)
-                .face(Direction.EAST).uvs(0, 0, 16, 16).texture("#portal").end()
-                .face(Direction.WEST).uvs(0, 0, 16, 16).texture("#portal").end()
-                .end();
+        ModelFile modelEW =createPortalModel(name + "_ew", Direction.EAST, Direction.WEST, false);
 
         getVariantBuilder(block)
-                .partialState().with(PortalBlock.AXIS, Direction.Axis.X)
-                .modelForState().modelFile(modelNS).addModel()
-                .partialState().with(PortalBlock.AXIS, Direction.Axis.Z)
-                .modelForState().modelFile(modelEW).addModel();
+                .partialState().with(PortalBlock.AXIS, Direction.Axis.X).modelForState().modelFile(modelNS).addModel()
+                .partialState().with(PortalBlock.AXIS, Direction.Axis.Z).modelForState().modelFile(modelEW).addModel();
 
-        itemModels().getBuilder(name)
-                .parent(models().getExistingFile(modLoc("block/" + name + "_ns")));
+        itemModels().getBuilder(name).parent(modelNS);
+    }
+
+    private ModelFile createPortalModel(String name, Direction dir1, Direction dir2, boolean isNS) {
+        return models().withExistingParent(name, mcLoc("block/block"))
+                .texture("portal", modLoc("block/portal"))
+                .texture("particle", modLoc("block/portal"))
+                .element()
+                .from(isNS ? 0 : 6, 0, isNS ? 6 : 0)
+                .to(isNS ? 16 : 10, 16, isNS ? 10 : 16)
+                .face(dir1).uvs(0, 0, 16, 16).texture("#portal").end()
+                .face(dir2).uvs(0, 0, 16, 16).texture("#portal").end()
+                .end();
+    }
+
+    private void blockWithCustomSides(Block block, String pDown,String pUp,String pNorth,String pSouth,String pWest,String pEst) {
+        String name = blockName(block);
+        ModelFile model = cubeModelWithCustomSides(name, pDown, pUp, pNorth, pSouth, pWest, pEst);
+        simpleBlock(block, model);
+        itemModels().getBuilder(name).parent(model);
     }
 
     private void blockWithStatesCustomSidesAndItem(Block block, EnumProperty<?> property, String pDown,String pUp,String pNorth,String pSouth,String pWest,String pEst) {
@@ -96,78 +90,40 @@ public class MinetorioBlockStateProvider extends BlockStateProvider {
         getVariantBuilder(block).forAllStates(state -> {
             String variant = state.getValue(property).getSerializedName();
             String name = blockName(block) + "_" + variant;
-            ModelFile modelFile;
-
-            if (variant.equals("stabilized")) {
-                modelFile = models()
-                        .withExistingParent(name, mcLoc("block/cube"))
-                        .texture("down", modLoc(pDown))
-                        .texture("up", modLoc(pUp))
-                        .texture("north", modLoc(pNorth))
-                        .texture("south", modLoc(pSouth))
-                        .texture("west", modLoc(pWest))
-                        .texture("east", modLoc(pEst));
-            } else {
-                modelFile = models().cubeAll(name, modLoc("block/" + name));
-            }
-
-            return ConfiguredModel.builder()
-                    .modelFile(modelFile)
-                    .build();
+            ModelFile model = variant.equals("stabilized")
+                    ? cubeModelWithCustomSides(name, pDown, pUp, pNorth, pSouth, pWest, pEst)
+                    : models().cubeAll(name, modLoc("block/" + name));
+            return ConfiguredModel.builder().modelFile(model).build();
         });
 
-        String defaultState = block.defaultBlockState().getValue(property).getSerializedName();
         itemModels().getBuilder(blockName(block))
-                .parent(models().getExistingFile(modLoc("block/" + blockName(block) + "_" + defaultState)));
-
+                .parent(models().getExistingFile(modLoc("block/" + blockName(block) + "_" +
+                        block.defaultBlockState().getValue(property).getSerializedName())));
     }
 
 
-    private void blockWithCustomSides(Block block, String pDown,String pUp,String pNorth,String pSouth,String pWest,String pEst) {
-        String name = blockName(block);
-        models().withExistingParent(name, mcLoc("block/cube"))
-                .texture("down", modLoc(pDown))
-                .texture("up", modLoc(pUp))
-                .texture("north", modLoc(pNorth))
-                .texture("south", modLoc(pSouth))
-                .texture("west", modLoc(pWest))
-                .texture("east", modLoc(pEst));
 
-        simpleBlock(block, models().getExistingFile(modLoc("block/" + name)));
-
-        itemModels().getBuilder(name)
-                .parent(models().getExistingFile(modLoc("block/" + name)));
-    }
 
     private void blockWithMatrixStatesAndItem(Block block, EnumProperty<?> property, boolean invisible) {
         getVariantBuilder(block).forAllStates(state -> {
             String variant = state.getValue(property).getSerializedName();
             String name = blockName(block) + "_" + variant;
-
-            ModelFile modelFile;
-            if (variant.equals("unstable")) {
-                modelFile = animatedState("matrix");
-            } else {
-                if(invisible) {
-                    modelFile = models().withExistingParent(name, mcLoc("block/block"));
-                }else{
-                    modelFile = models().cubeAll(name, modLoc("block/" + name));
-                }
-            }
-
-            return ConfiguredModel.builder()
-                    .modelFile(modelFile)
-                    .build();
+            ModelFile model = switch (variant) {
+                case "unstable" -> animatedState("matrix");
+                default -> invisible
+                        ? models().withExistingParent(name, mcLoc("block/block"))
+                        : models().cubeAll(name, modLoc("block/" + name));
+            };
+            return ConfiguredModel.builder().modelFile(model).build();
         });
 
-        if(invisible) {
-            itemModels().getBuilder(blockName(block))
-                    .parent(models().getExistingFile(mcLoc("item/generated")))
+        var itemBuilder = itemModels().getBuilder(blockName(block));
+        if (invisible) {
+            itemBuilder.parent(models().getExistingFile(mcLoc("item/generated")))
                     .texture("layer0", modLoc("item/" + blockName(block)));
-        }else {
-            String defaultState = block.defaultBlockState().getValue(property).getSerializedName();
-            itemModels().getBuilder(blockName(block))
-                    .parent(models().getExistingFile(modLoc("block/" + blockName(block) + "_" + defaultState)));
+        } else {
+            itemBuilder.parent(models().getExistingFile(modLoc("block/" + blockName(block) + "_" +
+                    block.defaultBlockState().getValue(property).getSerializedName())));
         }
 
     }
@@ -176,38 +132,33 @@ public class MinetorioBlockStateProvider extends BlockStateProvider {
         getVariantBuilder(block).forAllStates(state -> {
             String variant = state.getValue(property).getSerializedName();
             String name = blockName(block) + "_" + variant;
-
-            ModelFile modelFile;
-            if (variant.equals("stabilized")) {
-                modelFile = animatedState(name);
-            } else {
-                modelFile = models().cubeAll(name, modLoc("block/" + name));
-            }
-
-            return ConfiguredModel.builder()
-                    .modelFile(modelFile)
-                    .build();
+            ModelFile model = variant.equals("stabilized")
+                    ? animatedState(name)
+                    : models().cubeAll(name, modLoc("block/" + name));
+            return ConfiguredModel.builder().modelFile(model).build();
         });
 
-        String defaultState = block.defaultBlockState().getValue(property).getSerializedName();
         itemModels().getBuilder(blockName(block))
-                .parent(models().getExistingFile(modLoc("block/" + blockName(block) + "_" + defaultState)));
+                .parent(models().getExistingFile(modLoc("block/" + blockName(block) + "_" +
+                        block.defaultBlockState().getValue(property).getSerializedName())));
+    }
 
+    private ModelFile cubeModelWithCustomSides(String name, String down, String up, String north, String south, String west, String east) {
+        return models().withExistingParent(name, mcLoc("block/cube"))
+                .texture("down", modLoc(down))
+                .texture("up", modLoc(up))
+                .texture("north", modLoc(north))
+                .texture("south", modLoc(south))
+                .texture("west", modLoc(west))
+                .texture("east", modLoc(east));
     }
 
     private ModelFile animatedState(String name){
-        return models()
-                .withExistingParent(name, mcLoc("block/block"))
+        return models().withExistingParent(name, mcLoc("block/block"))
                 .texture("texture", modLoc("block/" + name))
                 .element()
-                .from(0, 0, 0)
-                .to(16, 16, 16)
-                .face(Direction.DOWN).texture("#texture").cullface(Direction.DOWN).end()
-                .face(Direction.UP).texture("#texture").cullface(Direction.UP).end()
-                .face(Direction.NORTH).texture("#texture").cullface(Direction.NORTH).end()
-                .face(Direction.SOUTH).texture("#texture").cullface(Direction.SOUTH).end()
-                .face(Direction.WEST).texture("#texture").cullface(Direction.WEST).end()
-                .face(Direction.EAST).texture("#texture").cullface(Direction.EAST).end()
+                .from(0, 0, 0).to(16, 16, 16)
+                .allFaces((dir, face) -> face.texture("#texture").cullface(dir))
                 .end();
     }
 

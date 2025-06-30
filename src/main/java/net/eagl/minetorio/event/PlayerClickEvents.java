@@ -37,7 +37,7 @@ public class PlayerClickEvents {
 
 
             //Pattern collector
-            if (state.getBlock() instanceof PatternsCollectorBlock) {
+            if (state.getBlock() instanceof PatternsCollector) {
                 if (level.getBlockEntity(pos) instanceof PatternsCollectorBlockEntity collector) {
                     float yOffset = collector.getCurrentYOffset();
                     if (Math.abs(yOffset) < 0.1f) {

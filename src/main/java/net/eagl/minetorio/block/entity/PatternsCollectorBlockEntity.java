@@ -50,7 +50,7 @@ public class PatternsCollectorBlockEntity extends BlockEntity implements MenuPro
 
     @Override
     public @NotNull Component getDisplayName() {
-        return Component.literal("Patterns Collector");
+        return Component.translatable("block.minetorio.patterns_collector");
     }
 
 

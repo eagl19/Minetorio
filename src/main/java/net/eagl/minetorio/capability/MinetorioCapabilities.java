@@ -17,6 +17,7 @@ public class MinetorioCapabilities {
     public static final Capability<ITechnologyProgress> TECHNOLOGY_PROGRESS =
             CapabilityManager.get(new CapabilityToken<>() {});
 
+    @SuppressWarnings("unused")
     @SubscribeEvent
     public static void onRegisterCapabilities(RegisterCapabilitiesEvent event) {
         event.register(IPatternLearn.class);

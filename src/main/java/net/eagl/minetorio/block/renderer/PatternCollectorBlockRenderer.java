@@ -13,36 +13,61 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.EnumMap;
 import java.util.Map;
 
 public class PatternCollectorBlockRenderer implements BlockEntityRenderer<PatternsCollectorBlockEntity> {
 
-
-    private static final Map<Direction, ItemStack> PATTERN_ITEMS_MAIN = Map.of(
-            Direction.UP,    new ItemStack(MinetorioItems.PATTERN_INFINITY.get()),
-            Direction.DOWN,  new ItemStack(MinetorioItems.PATTERN_VOID.get()),
-            Direction.NORTH, new ItemStack(MinetorioItems.PATTERN_AIR.get()),
-            Direction.SOUTH, new ItemStack(MinetorioItems.PATTERN_FIRE.get()),
-            Direction.WEST,  new ItemStack(MinetorioItems.PATTERN_EARTH.get()),
-            Direction.EAST,  new ItemStack(MinetorioItems.PATTERN_WATER.get())
+    private static final Map<Direction, ItemStack> PATTERN_ITEMS_MAIN = createPatternMap(
+            MinetorioItems.PATTERN_INFINITY.get().getDefaultInstance(),
+            MinetorioItems.PATTERN_VOID.get().getDefaultInstance(),
+            MinetorioItems.PATTERN_AIR.get().getDefaultInstance(),
+            MinetorioItems.PATTERN_FIRE.get().getDefaultInstance(),
+            MinetorioItems.PATTERN_EARTH.get().getDefaultInstance(),
+            MinetorioItems.PATTERN_WATER.get().getDefaultInstance()
     );
 
-    private static final Map<Direction, ItemStack> PATTERN_ITEMS_EW = Map.of(
-            Direction.UP,    new ItemStack(MinetorioItems.PATTERN_CLOUD.get()),
-            Direction.DOWN,  new ItemStack(MinetorioItems.PATTERN_SUN.get()),
-            Direction.NORTH, new ItemStack(MinetorioItems.PATTERN_SNOW.get()),
-            Direction.SOUTH, new ItemStack(MinetorioItems.PATTERN_SNOWFLAKE.get()),
-            Direction.WEST,  ItemStack.EMPTY,
-            Direction.EAST,  ItemStack.EMPTY
+    private static final Map<Direction, ItemStack> PATTERN_ITEMS_EW0 = createPatternMap(
+            MinetorioItems.PATTERN_CLOUD.get().getDefaultInstance(),
+            MinetorioItems.PATTERN_SUN.get().getDefaultInstance(),
+            MinetorioItems.PATTERN_SNOW.get().getDefaultInstance(),
+            MinetorioItems.PATTERN_SNOWFLAKE.get().getDefaultInstance(),
+            ItemStack.EMPTY,
+            ItemStack.EMPTY
     );
 
-    private static final Map<Direction, ItemStack> PATTERN_ITEMS_UD = Map.of(
-            Direction.UP,    ItemStack.EMPTY,
-            Direction.DOWN,  ItemStack.EMPTY,
-            Direction.NORTH, new ItemStack(MinetorioItems.PATTERN_RAIN.get()),
-            Direction.SOUTH, new ItemStack(MinetorioItems.PATTERN_RESEARCH_BOOK.get()),
-            Direction.WEST,  new ItemStack(MinetorioItems.PATTERN_BATTERY.get()),
-            Direction.EAST,  new ItemStack(MinetorioItems.PATTERN_LIGHTNING.get())
+    private static final Map<Direction, ItemStack> PATTERN_ITEMS_EW1 = createPatternMap(
+            MinetorioItems.PATTERN_ENERGY_CONSUMER.get().getDefaultInstance(),
+            MinetorioItems.PATTERN_WATER_CONSUMER.get().getDefaultInstance(),
+            MinetorioItems.PATTERN_LAVA_CONSUMER.get().getDefaultInstance(),
+            MinetorioItems.PATTERN_MINETORIO.get().getDefaultInstance(),
+            ItemStack.EMPTY,
+            ItemStack.EMPTY
+    );
+    private static final Map<Direction, ItemStack> PATTERN_ITEMS_EW2 = createPatternMap(
+            MinetorioItems.PATTERN_CLOUD.get().getDefaultInstance(),
+            MinetorioItems.PATTERN_SUN.get().getDefaultInstance(),
+            MinetorioItems.PATTERN_SNOW.get().getDefaultInstance(),
+            MinetorioItems.PATTERN_SNOWFLAKE.get().getDefaultInstance(),
+            ItemStack.EMPTY,
+            ItemStack.EMPTY
+    );
+    private static final Map<Direction, ItemStack> PATTERN_ITEMS_EW3 = createPatternMap(
+            MinetorioItems.PATTERN_CLOUD.get().getDefaultInstance(),
+            MinetorioItems.PATTERN_SUN.get().getDefaultInstance(),
+            MinetorioItems.PATTERN_SNOW.get().getDefaultInstance(),
+            MinetorioItems.PATTERN_SNOWFLAKE.get().getDefaultInstance(),
+            ItemStack.EMPTY,
+            ItemStack.EMPTY
+    );
+
+    private static final Map<Direction, ItemStack> PATTERN_ITEMS_UD = createPatternMap(
+            ItemStack.EMPTY,
+            ItemStack.EMPTY,
+            MinetorioItems.PATTERN_RAIN.get().getDefaultInstance(),
+            MinetorioItems.PATTERN_RESEARCH_BOOK.get().getDefaultInstance(),
+            MinetorioItems.PATTERN_BATTERY.get().getDefaultInstance(),
+            MinetorioItems.PATTERN_LIGHTNING.get().getDefaultInstance()
     );
 
     public float ringYOffset = 0.0f;
@@ -52,19 +77,15 @@ public class PatternCollectorBlockRenderer implements BlockEntityRenderer<Patter
     }
 
     @SuppressWarnings("unused")
-    public PatternCollectorBlockRenderer(BlockEntityRendererProvider.Context context) {}
+    public PatternCollectorBlockRenderer(BlockEntityRendererProvider.Context context) {
+
+    }
 
     @Override
     public void render(@NotNull PatternsCollectorBlockEntity blockEntity, float partialTicks, @NotNull PoseStack poseStack,
                        @NotNull MultiBufferSource buffer, int packedLight, int packedOverlay) {
 
-
         float offset = 7.0f;
-
-        poseStack.pushPose();
-        poseStack.translate(0.5, 0.5+ offset, 0.5);
-
-
         ringYOffset = getCurrentYOffset(blockEntity, ringYOffset, offset);
 
         blockEntity.setCurrentOffset(ringYOffset);
@@ -74,9 +95,9 @@ public class PatternCollectorBlockRenderer implements BlockEntityRenderer<Patter
         float rotationY = (baseRotation * blockEntity.getSpeedY()) % 360.0f;
         float rotationZ = (baseRotation * blockEntity.getSpeedZ()) % 360.0f;
 
+        poseStack.pushPose();
+        poseStack.translate(0.5, 0.5+ offset, 0.5);
         renderScene(poseStack, buffer, packedLight, packedOverlay, rotationX, rotationY,rotationZ);
-
-
         poseStack.popPose();
 
     }
@@ -107,19 +128,19 @@ public class PatternCollectorBlockRenderer implements BlockEntityRenderer<Patter
         renderRing(poseStack, buffer, packedLight, packedOverlay, PATTERN_ITEMS_MAIN,0,0,0, 3f, radius);
         renderRing(poseStack, buffer, packedLight, packedOverlay, PATTERN_ITEMS_UD,0,45,0, 3f, radius);
         poseStack.pushPose();
-        renderRing(poseStack, buffer, packedLight, packedOverlay, PATTERN_ITEMS_EW,45,0,0, 3f, radius);
+        renderRing(poseStack, buffer, packedLight, packedOverlay, PATTERN_ITEMS_EW0,45,0,0, 3f, radius);
         poseStack.popPose();
         poseStack.mulPose(Axis.YP.rotationDegrees(45));
         poseStack.pushPose();
-        renderRing(poseStack, buffer, packedLight, packedOverlay, PATTERN_ITEMS_EW,45,0,0, 3f, radius);
+        renderRing(poseStack, buffer, packedLight, packedOverlay, PATTERN_ITEMS_EW1,45,0,0, 3f, radius);
         poseStack.popPose();
         poseStack.mulPose(Axis.YP.rotationDegrees(45));
         poseStack.pushPose();
-        renderRing(poseStack, buffer, packedLight, packedOverlay, PATTERN_ITEMS_EW,45,0,0, 3f, radius);
+        renderRing(poseStack, buffer, packedLight, packedOverlay, PATTERN_ITEMS_EW2,45,0,0, 3f, radius);
         poseStack.popPose();
         poseStack.mulPose(Axis.YP.rotationDegrees(45));
         poseStack.pushPose();
-        renderRing(poseStack, buffer, packedLight, packedOverlay, PATTERN_ITEMS_EW,45,0,0, 3f, radius);
+        renderRing(poseStack, buffer, packedLight, packedOverlay, PATTERN_ITEMS_EW3,45,0,0, 3f, radius);
         poseStack.popPose();
         poseStack.popPose();
     }
@@ -175,30 +196,25 @@ public class PatternCollectorBlockRenderer implements BlockEntityRenderer<Patter
 
     private static float getCurrentYOffset(@NotNull PatternsCollectorBlockEntity blockEntity, float previousYOffset, float offset) {
         Minecraft mc = Minecraft.getInstance();
+        if (mc.player == null) return previousYOffset;
+        double dx = blockEntity.getBlockPos().getX() + 0.5 - mc.player.getX();
+        double dy = blockEntity.getBlockPos().getY() + 0.5 - (mc.player.getY() + mc.player.getEyeHeight());
+        double dz = blockEntity.getBlockPos().getZ() + 0.5 - mc.player.getZ();
 
-        float targetYOffset = 0f;
+        double distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
+        float targetYOffset = (distance < 3.0) ? -offset : 0f;
+        return previousYOffset + (targetYOffset - previousYOffset) * 0.1f;
+    }
 
-        if (mc.player != null) {
-            double blockX = blockEntity.getBlockPos().getX() + 0.5;
-            double blockY = blockEntity.getBlockPos().getY() + 0.5;
-            double blockZ = blockEntity.getBlockPos().getZ() + 0.5;
-
-            double playerX = mc.player.getX();
-            double playerY = mc.player.getY() + mc.player.getEyeHeight(); // очі
-            double playerZ = mc.player.getZ();
-
-            double dx = blockX - playerX;
-            double dy = blockY - playerY;
-            double dz = blockZ - playerZ;
-
-            double distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
-
-            if (distance < 3.0) {
-                targetYOffset = -offset;
-            }
-        }
-
-        float smoothing = 0.1f;
-        return previousYOffset + (targetYOffset - previousYOffset) * smoothing;
+    private static Map<Direction, ItemStack> createPatternMap(ItemStack up, ItemStack down, ItemStack north,
+                                                              ItemStack south, ItemStack west, ItemStack east) {
+        Map<Direction, ItemStack> map = new EnumMap<>(Direction.class);
+        map.put(Direction.UP, up);
+        map.put(Direction.DOWN, down);
+        map.put(Direction.NORTH, north);
+        map.put(Direction.SOUTH, south);
+        map.put(Direction.WEST, west);
+        map.put(Direction.EAST, east);
+        return map;
     }
 }

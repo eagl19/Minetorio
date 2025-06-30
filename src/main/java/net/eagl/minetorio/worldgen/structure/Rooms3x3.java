@@ -2,6 +2,8 @@ package net.eagl.minetorio.worldgen.structure;
 
 import net.eagl.minetorio.block.MinetorioBlocks;
 
+import net.eagl.minetorio.block.custom.MinetorioBlockState;
+import net.eagl.minetorio.block.custom.PatternsCollector;
 import net.eagl.minetorio.block.custom.PortalBlock;
 import net.eagl.minetorio.block.entity.PortalBlockEntity;
 import net.minecraft.core.BlockPos;
@@ -67,7 +69,7 @@ public class Rooms3x3 {
 
         // collector room (8)
         room(level, ROOMS_POSITIONS.get(8), MinetorioBlocks.BARRIER.get().defaultBlockState(), ROOMS_POSITIONS.get(5), ROOMS_POSITIONS.get(2), ROOMS_POSITIONS.get(6), ROOMS_POSITIONS.get(7));
-        level.setBlock(ROOMS_POSITIONS.get(8).offset(0, 2, 0), MinetorioBlocks.PATTERNS_COLLECTOR.get().defaultBlockState(),2);
+        level.setBlock(ROOMS_POSITIONS.get(8).offset(0, 2, 0), MinetorioBlocks.PATTERNS_COLLECTOR.get().defaultBlockState().setValue(PatternsCollector.STATE, MinetorioBlockState.STABILIZED),2);
 
     }
 

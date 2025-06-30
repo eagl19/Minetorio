@@ -24,7 +24,7 @@ public class MinetorioBlocks {
             Barrier::new);
 
     public static final RegistryObject<Block> PATTERNS_COLLECTOR = registerBlock("patterns_collector",
-            PatternsCollectorBlock::new);
+            PatternsCollector::new);
 
     public static final RegistryObject<Block> PORTAL = registerBlock("portal",
             PortalBlock::new);
