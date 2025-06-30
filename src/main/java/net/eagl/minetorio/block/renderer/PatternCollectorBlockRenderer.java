@@ -15,6 +15,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.EnumMap;
 import java.util.Map;
+import java.util.*;
 
 public class PatternCollectorBlockRenderer implements BlockEntityRenderer<PatternsCollectorBlockEntity> {
 
@@ -26,39 +27,39 @@ public class PatternCollectorBlockRenderer implements BlockEntityRenderer<Patter
             MinetorioItems.PATTERN_EARTH.get().getDefaultInstance(),
             MinetorioItems.PATTERN_WATER.get().getDefaultInstance()
     );
-
-    private static final Map<Direction, ItemStack> PATTERN_ITEMS_EW0 = createPatternMap(
-            MinetorioItems.PATTERN_CLOUD.get().getDefaultInstance(),
-            MinetorioItems.PATTERN_SUN.get().getDefaultInstance(),
-            MinetorioItems.PATTERN_SNOW.get().getDefaultInstance(),
-            MinetorioItems.PATTERN_SNOWFLAKE.get().getDefaultInstance(),
-            ItemStack.EMPTY,
-            ItemStack.EMPTY
-    );
-
-    private static final Map<Direction, ItemStack> PATTERN_ITEMS_EW1 = createPatternMap(
-            MinetorioItems.PATTERN_ENERGY_CONSUMER.get().getDefaultInstance(),
-            MinetorioItems.PATTERN_WATER_CONSUMER.get().getDefaultInstance(),
-            MinetorioItems.PATTERN_LAVA_CONSUMER.get().getDefaultInstance(),
-            MinetorioItems.PATTERN_MINETORIO.get().getDefaultInstance(),
-            ItemStack.EMPTY,
-            ItemStack.EMPTY
-    );
-    private static final Map<Direction, ItemStack> PATTERN_ITEMS_EW2 = createPatternMap(
-            MinetorioItems.PATTERN_CLOUD.get().getDefaultInstance(),
-            MinetorioItems.PATTERN_SUN.get().getDefaultInstance(),
-            MinetorioItems.PATTERN_SNOW.get().getDefaultInstance(),
-            MinetorioItems.PATTERN_SNOWFLAKE.get().getDefaultInstance(),
-            ItemStack.EMPTY,
-            ItemStack.EMPTY
-    );
-    private static final Map<Direction, ItemStack> PATTERN_ITEMS_EW3 = createPatternMap(
-            MinetorioItems.PATTERN_CLOUD.get().getDefaultInstance(),
-            MinetorioItems.PATTERN_SUN.get().getDefaultInstance(),
-            MinetorioItems.PATTERN_SNOW.get().getDefaultInstance(),
-            MinetorioItems.PATTERN_SNOWFLAKE.get().getDefaultInstance(),
-            ItemStack.EMPTY,
-            ItemStack.EMPTY
+    private static final List<Map<Direction, ItemStack>> PATTERN_ITEMS_EW_LIST = List.of(
+            createPatternMap(
+                    MinetorioItems.PATTERN_CLOUD.get().getDefaultInstance(),
+                    MinetorioItems.PATTERN_SUN.get().getDefaultInstance(),
+                    MinetorioItems.PATTERN_SNOW.get().getDefaultInstance(),
+                    MinetorioItems.PATTERN_SNOWFLAKE.get().getDefaultInstance(),
+                    ItemStack.EMPTY,
+                    ItemStack.EMPTY
+            ),
+            createPatternMap(
+                    MinetorioItems.PATTERN_ENERGY_CONSUMER.get().getDefaultInstance(),
+                    MinetorioItems.PATTERN_WATER_CONSUMER.get().getDefaultInstance(),
+                    MinetorioItems.PATTERN_LAVA_CONSUMER.get().getDefaultInstance(),
+                    MinetorioItems.PATTERN_MINETORIO.get().getDefaultInstance(),
+                    ItemStack.EMPTY,
+                    ItemStack.EMPTY
+            ),
+            createPatternMap(
+                    MinetorioItems.PATTERN_CLOUD.get().getDefaultInstance(),
+                    MinetorioItems.PATTERN_SUN.get().getDefaultInstance(),
+                    MinetorioItems.PATTERN_SNOW.get().getDefaultInstance(),
+                    MinetorioItems.PATTERN_SNOWFLAKE.get().getDefaultInstance(),
+                    ItemStack.EMPTY,
+                    ItemStack.EMPTY
+            ),
+            createPatternMap(
+                    MinetorioItems.PATTERN_CLOUD.get().getDefaultInstance(),
+                    MinetorioItems.PATTERN_SUN.get().getDefaultInstance(),
+                    MinetorioItems.PATTERN_SNOW.get().getDefaultInstance(),
+                    MinetorioItems.PATTERN_SNOWFLAKE.get().getDefaultInstance(),
+                    ItemStack.EMPTY,
+                    ItemStack.EMPTY
+            )
     );
 
     private static final Map<Direction, ItemStack> PATTERN_ITEMS_UD = createPatternMap(
@@ -69,8 +70,6 @@ public class PatternCollectorBlockRenderer implements BlockEntityRenderer<Patter
             MinetorioItems.PATTERN_BATTERY.get().getDefaultInstance(),
             MinetorioItems.PATTERN_LIGHTNING.get().getDefaultInstance()
     );
-
-    public float ringYOffset = 0.0f;
 
     public static ItemStack getPatternItem(Map<Direction, ItemStack> itemsMap,Direction direction) {
         return itemsMap.getOrDefault(direction, ItemStack.EMPTY);
@@ -85,24 +84,25 @@ public class PatternCollectorBlockRenderer implements BlockEntityRenderer<Patter
     public void render(@NotNull PatternsCollectorBlockEntity blockEntity, float partialTicks, @NotNull PoseStack poseStack,
                        @NotNull MultiBufferSource buffer, int packedLight, int packedOverlay) {
 
-        float offset = 7.0f;
-        ringYOffset = getCurrentYOffset(blockEntity, ringYOffset, offset);
+
+        float offset = 5.0f;
+        float ringYOffset = getCurrentYOffset(blockEntity, blockEntity.getCurrentYOffset(), offset);
 
         blockEntity.setCurrentOffset(ringYOffset);
         float baseRotation = blockEntity.getRotation() + partialTicks;
 
-        float rotationX = (baseRotation * blockEntity.getSpeedX()) % 360.0f;
-        float rotationY = (baseRotation * blockEntity.getSpeedY()) % 360.0f;
-        float rotationZ = (baseRotation * blockEntity.getSpeedZ()) % 360.0f;
+        float rotationX = (baseRotation * blockEntity.getSpeedX());
+        float rotationY = (baseRotation * blockEntity.getSpeedY());
+        float rotationZ = (baseRotation * blockEntity.getSpeedZ());
 
         poseStack.pushPose();
         poseStack.translate(0.5, 0.5+ offset, 0.5);
-        renderScene(poseStack, buffer, packedLight, packedOverlay, rotationX, rotationY,rotationZ);
+        renderScene(poseStack, buffer, packedLight, packedOverlay, rotationX, rotationY, rotationZ, ringYOffset);
         poseStack.popPose();
 
     }
 
-    private void renderScene (PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay, float rotationX, float rotationY, float rotationZ){
+    private void renderScene (PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay, float rotationX, float rotationY, float rotationZ, float ringYOffset){
 
         poseStack.pushPose();
 
@@ -112,9 +112,9 @@ public class PatternCollectorBlockRenderer implements BlockEntityRenderer<Patter
         renderRing(poseStack, buffer, packedLight, packedOverlay, PATTERN_ITEMS_MAIN, -rotationX, -rotationY, -rotationZ, 1,  1);
         poseStack.popPose();
 
-        poseStack.mulPose(Axis.XP.rotationDegrees(rotationX % 360.0f));
-        poseStack.mulPose(Axis.YP.rotationDegrees(rotationY % 360.0f));
-        poseStack.mulPose(Axis.ZP.rotationDegrees(rotationZ % 360.0f));
+        poseStack.mulPose(Axis.XP.rotationDegrees(rotationX));
+        poseStack.mulPose(Axis.YP.rotationDegrees(rotationY));
+        poseStack.mulPose(Axis.ZP.rotationDegrees(rotationZ));
         renderSphere(poseStack, buffer, packedLight, packedOverlay);
 
         poseStack.popPose();
@@ -127,21 +127,14 @@ public class PatternCollectorBlockRenderer implements BlockEntityRenderer<Patter
         poseStack.pushPose();
         renderRing(poseStack, buffer, packedLight, packedOverlay, PATTERN_ITEMS_MAIN,0,0,0, 3f, radius);
         renderRing(poseStack, buffer, packedLight, packedOverlay, PATTERN_ITEMS_UD,0,45,0, 3f, radius);
-        poseStack.pushPose();
-        renderRing(poseStack, buffer, packedLight, packedOverlay, PATTERN_ITEMS_EW0,45,0,0, 3f, radius);
-        poseStack.popPose();
-        poseStack.mulPose(Axis.YP.rotationDegrees(45));
-        poseStack.pushPose();
-        renderRing(poseStack, buffer, packedLight, packedOverlay, PATTERN_ITEMS_EW1,45,0,0, 3f, radius);
-        poseStack.popPose();
-        poseStack.mulPose(Axis.YP.rotationDegrees(45));
-        poseStack.pushPose();
-        renderRing(poseStack, buffer, packedLight, packedOverlay, PATTERN_ITEMS_EW2,45,0,0, 3f, radius);
-        poseStack.popPose();
-        poseStack.mulPose(Axis.YP.rotationDegrees(45));
-        poseStack.pushPose();
-        renderRing(poseStack, buffer, packedLight, packedOverlay, PATTERN_ITEMS_EW3,45,0,0, 3f, radius);
-        poseStack.popPose();
+
+        for (int i = 0; i < PATTERN_ITEMS_EW_LIST.size(); i++) {
+            poseStack.pushPose();
+            poseStack.mulPose(Axis.YP.rotationDegrees(45 * i));
+            renderRing(poseStack, buffer, packedLight, packedOverlay, PATTERN_ITEMS_EW_LIST.get(i), 45, 0, 0, 3f, radius);
+            poseStack.popPose();
+        }
+
         poseStack.popPose();
     }
 
@@ -151,9 +144,9 @@ public class PatternCollectorBlockRenderer implements BlockEntityRenderer<Patter
 
         poseStack.pushPose();
 
-        poseStack.mulPose(Axis.XP.rotationDegrees(rotationX % 360.0f));
-        poseStack.mulPose(Axis.YP.rotationDegrees(rotationY % 360.0f));
-        poseStack.mulPose(Axis.ZP.rotationDegrees(rotationZ % 360.0f));
+        poseStack.mulPose(Axis.XP.rotationDegrees(rotationX));
+        poseStack.mulPose(Axis.YP.rotationDegrees(rotationY));
+        poseStack.mulPose(Axis.ZP.rotationDegrees(rotationZ));
 
         for (Direction direction : Direction.values()) {
             ItemStack stack = getPatternItem(itemMap, direction);

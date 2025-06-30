@@ -36,10 +36,6 @@ public class PatternsCollectorBlockEntity extends BlockEntity implements MenuPro
 
 
 
-    public void setCurrentOffset(float offset) {
-        this.currentYOffset=offset;
-    }
-
     public void tickClient() {
         rotation += 1.0f;
     }
@@ -62,15 +58,17 @@ public class PatternsCollectorBlockEntity extends BlockEntity implements MenuPro
     @Override
     protected void saveAdditional(@NotNull CompoundTag tag) {
         super.saveAdditional(tag);
-        tag.putFloat("rotation", rotation);
-        tag.putFloat("currentYOffset", currentYOffset);
+
     }
 
     @Override
     public void load(@NotNull CompoundTag tag) {
         super.load(tag);
-        this.rotation = tag.getFloat("rotation");
-        this.currentYOffset = tag.getFloat("currentYOffset");
+
+    }
+
+    public void setCurrentOffset(float offset) {
+        this.currentYOffset=offset;
     }
 
     public float getCurrentYOffset() {
