@@ -1,9 +1,11 @@
 package net.eagl.minetorio.block.entity;
 
 import net.eagl.minetorio.gui.menu.PatternsCollectorMenu;
+import net.eagl.minetorio.worldgen.dimension.custom.DimensionManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
@@ -63,8 +65,9 @@ public class PatternsCollectorBlockEntity extends BlockEntity implements MenuPro
 
     }
 
-    public void teleport(){
+    public void teleport(ServerPlayer player){
         System.out.println("teleport");
+        DimensionManager.teleportToDimension(player, "plain");
     }
 
     public void setCurrentOffset(float offset) {

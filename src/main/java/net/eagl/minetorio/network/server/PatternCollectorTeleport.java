@@ -31,7 +31,7 @@ public class PatternCollectorTeleport {
             ServerPlayer player = ctx.getSender();
             if (player == null) return;
             if (player.level().getBlockEntity(pos) instanceof PatternsCollectorBlockEntity teleporter) {
-                teleporter.teleport();
+                teleporter.teleport(player);
             }
         });
         ctx.setPacketHandled(true);
