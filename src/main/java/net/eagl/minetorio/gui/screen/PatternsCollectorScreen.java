@@ -1,6 +1,8 @@
 package net.eagl.minetorio.gui.screen;
 
 import net.eagl.minetorio.gui.menu.PatternsCollectorMenu;
+import net.eagl.minetorio.network.MinetorioNetwork;
+import net.eagl.minetorio.network.server.PatternCollectorTeleport;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
@@ -40,4 +42,11 @@ public class PatternsCollectorScreen extends AbstractContainerScreen<PatternsCol
 
     }
 
+    @Override
+    public boolean mouseClicked(double pMouseX, double pMouseY, int pButton) {
+        if(isHovering(71,53,35,35, pMouseX, pMouseY)){
+            MinetorioNetwork.CHANNEL.sendToServer(new PatternCollectorTeleport(menu.getBlockEntity().getBlockPos()));
+        }
+        return super.mouseClicked(pMouseX, pMouseY, pButton);
+    }
 }

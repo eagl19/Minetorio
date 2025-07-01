@@ -93,6 +93,13 @@ public class MinetorioNetwork {
                 RemoveConsumersPacket::handle,
                 Optional.of(NetworkDirection.PLAY_TO_SERVER)
         );
+        CHANNEL.registerMessage(packetId++,
+                PatternCollectorTeleport.class,
+                PatternCollectorTeleport::encode,
+                PatternCollectorTeleport::new,
+                PatternCollectorTeleport::handle,
+                Optional.of(NetworkDirection.PLAY_TO_SERVER)
+        );
 
     }
 }

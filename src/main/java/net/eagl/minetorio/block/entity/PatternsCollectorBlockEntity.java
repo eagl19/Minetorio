@@ -21,7 +21,6 @@ public class PatternsCollectorBlockEntity extends BlockEntity implements MenuPro
     private final float speedY;
     private final float speedZ;
     private float rotation = 0;
-
     private float currentYOffset = 0;
 
 
@@ -62,6 +61,10 @@ public class PatternsCollectorBlockEntity extends BlockEntity implements MenuPro
     public void load(@NotNull CompoundTag tag) {
         super.load(tag);
 
+    }
+
+    public void teleport(){
+        System.out.println("teleport");
     }
 
     public void setCurrentOffset(float offset) {
