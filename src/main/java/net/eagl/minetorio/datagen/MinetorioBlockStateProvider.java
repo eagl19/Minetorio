@@ -29,10 +29,16 @@ public class MinetorioBlockStateProvider extends BlockStateProvider {
 
         blockWithMatrixStatesAndItem(MinetorioBlocks.BARRIER.get(), Barrier.STATE, true);
 
-        blockWithMatrixStatesAndItem(MinetorioBlocks.PATTERNS_COLLECTOR.get(), PatternsCollector.STATE, true);
+        blockWithMatrixStatesAndCustomSidesAndItem(MinetorioBlocks.PATTERNS_COLLECTOR.get(), PatternsCollector.STATE, true,
+                "item/patterns/void",
+                "item/patterns/infinity",
+                "item/patterns/air",
+                "item/patterns/water",
+                "item/patterns/fire",
+                "item/patterns/earth");
 
 
-        blockWithCustomSides(MinetorioBlocks.RESEARCHER.get(),
+        blockWithCustomSidesAndItem(MinetorioBlocks.RESEARCHER.get(),
                 "item/patterns/void",
                 "item/patterns/sun",
                 "item/patterns/research_book",
@@ -78,11 +84,11 @@ public class MinetorioBlockStateProvider extends BlockStateProvider {
                 .end();
     }
 
-    private void blockWithCustomSides(Block block, String pDown,String pUp,String pNorth,String pSouth,String pWest,String pEst) {
+    private void blockWithCustomSidesAndItem(Block block, String pDown, String pUp, String pNorth, String pSouth, String pWest, String pEst) {
         String name = blockName(block);
         ModelFile model = cubeModelWithCustomSides(name, pDown, pUp, pNorth, pSouth, pWest, pEst);
         simpleBlock(block, model);
-        itemModels().getBuilder(name).parent(model);
+        customBlockItem(name, model);
     }
 
     private void blockWithStatesCustomSidesAndItem(Block block, EnumProperty<?> property, String pDown,String pUp,String pNorth,String pSouth,String pWest,String pEst) {
@@ -96,36 +102,48 @@ public class MinetorioBlockStateProvider extends BlockStateProvider {
             return ConfiguredModel.builder().modelFile(model).build();
         });
 
-        itemModels().getBuilder(blockName(block))
-                .parent(models().getExistingFile(modLoc("block/" + blockName(block) + "_" +
-                        block.defaultBlockState().getValue(property).getSerializedName())));
+        customBlockDefaultStateItem(block, property);
     }
 
+    private void blockWithMatrixStatesAndCustomSidesAndItem(Block block, EnumProperty<?> property, boolean invisible, String pDown,String pUp,String pNorth,String pSouth,String pWest,String pEst) {
+        blockWithMatrixStates(block, property, invisible);
+        customBlockItem(blockName(block), cubeModelWithCustomSides(blockName(block), pDown, pUp, pNorth, pSouth, pWest, pEst));
+    }
 
+    private void customBlockItem(String name, ModelFile model){
+        itemModels().getBuilder(name).parent(model);
+    }
 
+    private void customBlockDefaultStateItem(Block block, EnumProperty<?> property){
+        itemModels().getBuilder(blockName(block)).parent(models().getExistingFile(modLoc("block/" + blockName(block) + "_" +
+                block.defaultBlockState().getValue(property).getSerializedName())));
+    }
 
-    private void blockWithMatrixStatesAndItem(Block block, EnumProperty<?> property, boolean invisible) {
+    private void customItem(String name, ModelFile model){
+        itemModels().getBuilder(name).parent(model).texture("layer0", modLoc("item/" + name));;
+    }
+
+    private void blockWithMatrixStates(Block block, EnumProperty<?> property, boolean invisible) {
         getVariantBuilder(block).forAllStates(state -> {
             String variant = state.getValue(property).getSerializedName();
             String name = blockName(block) + "_" + variant;
-            ModelFile model = switch (variant) {
-                case "unstable" -> animatedState("matrix");
-                default -> invisible
+            ModelFile model = variant.equals("unstable")
+                    ? animatedState("matrix")
+                    : invisible
                         ? models().withExistingParent(name, mcLoc("block/block"))
                         : models().cubeAll(name, modLoc("block/" + name));
-            };
+
             return ConfiguredModel.builder().modelFile(model).build();
         });
+    }
 
-        var itemBuilder = itemModels().getBuilder(blockName(block));
+    private void blockWithMatrixStatesAndItem(Block block, EnumProperty<?> property, boolean invisible) {
+        blockWithMatrixStates(block, property, invisible);
         if (invisible) {
-            itemBuilder.parent(models().getExistingFile(mcLoc("item/generated")))
-                    .texture("layer0", modLoc("item/" + blockName(block)));
+            customItem(blockName(block), models().getExistingFile(mcLoc("item/generated")));
         } else {
-            itemBuilder.parent(models().getExistingFile(modLoc("block/" + blockName(block) + "_" +
-                    block.defaultBlockState().getValue(property).getSerializedName())));
+            customBlockDefaultStateItem(block, property);
         }
-
     }
 
     private void blockWithStatesAndItem(Block block, EnumProperty<?> property) {
@@ -138,9 +156,7 @@ public class MinetorioBlockStateProvider extends BlockStateProvider {
             return ConfiguredModel.builder().modelFile(model).build();
         });
 
-        itemModels().getBuilder(blockName(block))
-                .parent(models().getExistingFile(modLoc("block/" + blockName(block) + "_" +
-                        block.defaultBlockState().getValue(property).getSerializedName())));
+        customBlockDefaultStateItem(block, property);
     }
 
     private ModelFile cubeModelWithCustomSides(String name, String down, String up, String north, String south, String west, String east) {

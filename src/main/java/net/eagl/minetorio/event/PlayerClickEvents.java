@@ -7,7 +7,7 @@ import net.eagl.minetorio.block.entity.*;
 import net.eagl.minetorio.capability.MinetorioCapabilities;
 import net.eagl.minetorio.item.MinetorioItems;
 import net.eagl.minetorio.util.Technologies;
-import net.eagl.minetorio.worldgen.dimension.MinetorioDimensions;
+import net.eagl.minetorio.worldgen.dimension.custom.DimensionManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -32,14 +32,14 @@ public class PlayerClickEvents {
 
         if (event.getEntity() instanceof ServerPlayer serverPlayer && !level.isClientSide) {
 
-            if (!level.dimension().equals(MinetorioDimensions.MINETORIO_DIM_EMPTY_LEVEL_KEY)) return;
+            if (!level.dimension().equals(DimensionManager
+                    .getOrCreatePlayerDimension(serverPlayer.server, serverPlayer.getUUID()))) return;
             if (event.getHand() == InteractionHand.MAIN_HAND) return;
 
 
             //Pattern collector
             if (state.getBlock() instanceof PatternsCollector) {
                 if (level.getBlockEntity(pos) instanceof PatternsCollectorBlockEntity collector) {
-
                     NetworkHooks.openScreen(serverPlayer, collector, pos);
 
                     event.setCancellationResult(InteractionResult.SUCCESS);

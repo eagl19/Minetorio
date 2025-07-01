@@ -8,9 +8,7 @@ import net.eagl.minetorio.network.server.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkRegistry;
-import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
-import net.minecraft.server.level.ServerPlayer;
 
 import java.util.Optional;
 
@@ -25,14 +23,6 @@ public class MinetorioNetwork {
     );
 
     public static void register() {
-        CHANNEL.registerMessage(
-                packetId++,
-                PatternLearnSyncPacket.class,
-                PatternLearnSyncPacket::toBytes,
-                PatternLearnSyncPacket::new,
-                PatternLearnSyncPacket::handle,
-                Optional.of(NetworkDirection.PLAY_TO_CLIENT)
-        );
         CHANNEL.registerMessage(
                 packetId++,
                 ResearchListSyncToClientPacket.class,
@@ -105,12 +95,6 @@ public class MinetorioNetwork {
         );
 
     }
-
-
-    public static void sendToClient(ServerPlayer player, PatternLearnSyncPacket packet) {
-        CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), packet);
-    }
-
 }
 
 

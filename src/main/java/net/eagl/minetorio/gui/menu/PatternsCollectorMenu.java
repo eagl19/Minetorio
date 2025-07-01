@@ -2,8 +2,6 @@ package net.eagl.minetorio.gui.menu;
 
 import net.eagl.minetorio.block.MinetorioBlocks;
 import net.eagl.minetorio.gui.MinetorioMenus;
-import net.eagl.minetorio.gui.slot.PatternSlot;
-import net.eagl.minetorio.handler.PatternItemsHandler;
 import net.eagl.minetorio.util.InventorySlot;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
@@ -21,21 +19,12 @@ public class PatternsCollectorMenu extends AbstractContainerMenu {
     private final ContainerLevelAccess access;
 
     public PatternsCollectorMenu(int id, Inventory playerInventory, BlockEntity entity) {
-
         super(MinetorioMenus.PATTERNS_COLLECTOR_MENU.get(), id);
+        System.out.println("Collector Menu");
         this.access = ContainerLevelAccess.create(Objects.requireNonNull(entity.getLevel()), entity.getBlockPos());
-        PatternItemsHandler patternItemsHandler = new PatternItemsHandler();
 
-        InventorySlot.addHotbarAndPlayerInventorySlots(this::addSlot, playerInventory, 0, 8, 140, 3, 9, 18, 18, 48);
+        InventorySlot.addHotbarAndPlayerInventorySlots(this::addSlot, playerInventory, 0, 8, 140, 3, 9, 18, 18, 58);
 
-        int startX = 8;
-        int startY = 18;
-        for (int i = 0; i < patternItemsHandler.getSlots(); i++) {
-            int x = startX + (i % 9) * 18;
-            int y = startY + (i / 9) * 18;
-            this.addSlot(new PatternSlot(patternItemsHandler, i, x, y));
-
-        }
 
     }
 
@@ -70,9 +59,6 @@ public class PatternsCollectorMenu extends AbstractContainerMenu {
             if (!moveItemStackTo(originalStack, playerInventoryStart, playerInventoryEnd, false)) {
                 return ItemStack.EMPTY;
             }
-        }
-        if (slot instanceof PatternSlot) {
-            return ItemStack.EMPTY;
         }
 
         if (originalStack.isEmpty()) {
