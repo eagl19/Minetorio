@@ -120,7 +120,7 @@ public class MinetorioBlockStateProvider extends BlockStateProvider {
     }
 
     private void customItem(String name, ModelFile model){
-        itemModels().getBuilder(name).parent(model).texture("layer0", modLoc("item/" + name));;
+        itemModels().getBuilder(name).parent(model).texture("layer0", modLoc("item/" + name));
     }
 
     private void blockWithMatrixStates(Block block, EnumProperty<?> property, boolean invisible) {
