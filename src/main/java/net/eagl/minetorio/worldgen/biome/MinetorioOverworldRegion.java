@@ -1,6 +1,7 @@
 package net.eagl.minetorio.worldgen.biome;
 
 import com.mojang.datafixers.util.Pair;
+import net.eagl.minetorio.datagen.world.biome.MinetorioBiomes;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;

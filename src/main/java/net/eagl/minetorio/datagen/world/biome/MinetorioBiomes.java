@@ -1,4 +1,4 @@
-package net.eagl.minetorio.worldgen.biome;
+package net.eagl.minetorio.datagen.world.biome;
 
 import net.eagl.minetorio.Minetorio;
 import net.minecraft.core.registries.Registries;

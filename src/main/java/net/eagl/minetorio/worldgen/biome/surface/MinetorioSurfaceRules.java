@@ -1,6 +1,6 @@
 package net.eagl.minetorio.worldgen.biome.surface;
 
-import net.eagl.minetorio.worldgen.biome.MinetorioBiomes;
+import net.eagl.minetorio.datagen.world.biome.MinetorioBiomes;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.SurfaceRules;
