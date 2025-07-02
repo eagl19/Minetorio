@@ -2,6 +2,8 @@ package net.eagl.minetorio.worldgen.dimension.custom;
 
 import net.eagl.minetorio.Minetorio;
 import net.eagl.minetorio.data.MinetorioDimensionSavedData;
+import net.eagl.minetorio.data.PlayerSettings;
+import net.eagl.minetorio.data.PlayerWorldSettingsData;
 import net.eagl.minetorio.datagen.world.MinetorioBiomes;
 import net.eagl.minetorio.worldgen.dimension.MinetorioDimensionTypes;
 import net.eagl.minetorio.worldgen.infiniverse.FlatGeneratorSettings;
@@ -15,6 +17,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
@@ -91,12 +94,20 @@ public class DimensionManager {
 
     public static void teleportToDimension(ServerPlayer player, String dimId) {
 
-        ResourceKey<Level> dimKey = ResourceKey.create(Registries.DIMENSION, ResourceLocation.fromNamespaceAndPath(Minetorio.MOD_ID, dimId));
+        String dimIdd = dimId + "_" + player.getUUID().toString().replace("-", "");
+
+        ResourceKey<Level> dimKey = ResourceKey.create(Registries.DIMENSION, ResourceLocation.fromNamespaceAndPath(Minetorio.MOD_ID, dimIdd));
 
         InfiniverseAPI.get().getOrCreateLevel(player.server, dimKey, () -> flatDimension(player.server));
 
         ServerLevel level = player.server.getLevel(dimKey);
         if (level != null) {
+            PlayerWorldSettingsData data = PlayerWorldSettingsData.get(level);
+            PlayerSettings settings = data.getOrCreate(player.getUUID());
+            settings.getAllowedMobs().add(EntityType.ZOMBIE);
+            settings.setInitialized(true);
+            data.setDirty();
+
             player.teleportTo(level, 0.5, 55.0, 0.5, player.getYRot(), player.getXRot());
         }
     }
@@ -112,7 +123,7 @@ public class DimensionManager {
                 .addLayer(1, Blocks.BEDROCK)
                 .addLayer(2, Blocks.STONE)
                 .addLayer(1, Blocks.GRASS_BLOCK)
-                .setBiome(biomeRegistry.getHolderOrThrow(MinetorioBiomes.VOID_BIOME))
+                .setBiome(biomeRegistry.getHolderOrThrow(MinetorioBiomes.TEST_BIOME))
                 .addStructureSet(BuiltinStructureSets.VILLAGES)
                 .addStructureSet(BuiltinStructureSets.STRONGHOLDS);
 

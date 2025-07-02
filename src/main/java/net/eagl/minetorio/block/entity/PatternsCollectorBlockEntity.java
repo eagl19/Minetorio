@@ -1,16 +1,24 @@
 package net.eagl.minetorio.block.entity;
 
+import net.eagl.minetorio.Minetorio;
+import net.eagl.minetorio.data.PlayerSettings;
+import net.eagl.minetorio.data.PlayerWorldSettingsData;
 import net.eagl.minetorio.gui.menu.PatternsCollectorMenu;
 import net.eagl.minetorio.worldgen.dimension.custom.DimensionManager;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
@@ -67,6 +75,9 @@ public class PatternsCollectorBlockEntity extends BlockEntity implements MenuPro
 
     public void teleport(ServerPlayer player){
         System.out.println("teleport");
+
+
+
         DimensionManager.teleportToDimension(player, "plain");
     }
 
