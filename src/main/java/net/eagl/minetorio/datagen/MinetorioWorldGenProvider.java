@@ -1,7 +1,7 @@
 package net.eagl.minetorio.datagen;
 
 import net.eagl.minetorio.Minetorio;
-import net.eagl.minetorio.datagen.world.biome.MinetorioBiomes;
+import net.eagl.minetorio.datagen.world.MinetorioBiomes;
 import net.eagl.minetorio.worldgen.dimension.MinetorioDimensions;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.RegistrySetBuilder;

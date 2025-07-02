@@ -2,6 +2,7 @@ package net.eagl.minetorio.worldgen.dimension.custom;
 
 import net.eagl.minetorio.Minetorio;
 import net.eagl.minetorio.data.MinetorioDimensionSavedData;
+import net.eagl.minetorio.datagen.world.MinetorioBiomes;
 import net.eagl.minetorio.worldgen.dimension.MinetorioDimensionTypes;
 import net.eagl.minetorio.worldgen.infiniverse.FlatGeneratorSettings;
 import net.eagl.minetorio.worldgen.structure.Rooms3x3;
@@ -104,14 +105,14 @@ public class DimensionManager {
         RegistryAccess access = server.registryAccess();
         Registry<Biome> biomeRegistry = access.registryOrThrow(Registries.BIOME);
         Holder<DimensionType> dimType = access.registryOrThrow(Registries.DIMENSION_TYPE)
-                .getHolderOrThrow(MinetorioDimensionTypes.MINETORIO_DIM_TYPE);
+                .getHolderOrThrow(MinetorioDimensionTypes.VOID_DIM_TYPE);
 
         FlatGeneratorSettings flat = new FlatGeneratorSettings()
                 .addLayer(50, Blocks.AIR)
                 .addLayer(1, Blocks.BEDROCK)
                 .addLayer(2, Blocks.STONE)
                 .addLayer(1, Blocks.GRASS_BLOCK)
-                .setBiome(biomeRegistry.getHolderOrThrow(Biomes.PLAINS))
+                .setBiome(biomeRegistry.getHolderOrThrow(MinetorioBiomes.VOID_BIOME))
                 .addStructureSet(BuiltinStructureSets.VILLAGES)
                 .addStructureSet(BuiltinStructureSets.STRONGHOLDS);
 

@@ -19,22 +19,44 @@ public class MinetorioDimensionTypes {
             ResourceLocation.fromNamespaceAndPath(Minetorio.MOD_ID, "minetorio_dim_type")
     );
 
+    public static final ResourceKey<DimensionType> VOID_DIM_TYPE = ResourceKey.create(
+            Registries.DIMENSION_TYPE,
+            ResourceLocation.fromNamespaceAndPath(Minetorio.MOD_ID, "void_dim_type")
+    );
+
     public static void bootstrap(BootstapContext<DimensionType> context) {
         context.register(MINETORIO_DIM_TYPE, new DimensionType(
-                OptionalLong.of(12000),  // fixedTime
-                false, // hasSkylight
-                false, // hasCeiling
-                false, // ultraWarm
-                false, // natural
-                1.0,   // coordinateScale
-                true,  // bedWorks
-                false, // respawnAnchorWorks
-                0,     // minY
-                256,   // height
-                256,   // logicalHeight
+                OptionalLong.empty(),
+                false,
+                false,
+                false,
+                false,
+                1.0,
+                true,
+                false,
+                0,
+                256,
+                256,
                 BlockTags.INFINIBURN_OVERWORLD,
-                BuiltinDimensionTypes.OVERWORLD_EFFECTS, // effectsLocation
-                1.0f,  // ambientLight
+                BuiltinDimensionTypes.OVERWORLD_EFFECTS,
+                1.0f,
+                new DimensionType.MonsterSettings(false, false, ConstantInt.of(0), 0))
+        );
+        context.register(VOID_DIM_TYPE, new DimensionType(
+                OptionalLong.of(12000),
+                false,
+                false,
+                false,
+                false,
+                1.0,
+                false,
+                false,
+                0,
+                256,
+                256,
+                BlockTags.INFINIBURN_END,
+                BuiltinDimensionTypes.END_EFFECTS,
+                0.0f,
                 new DimensionType.MonsterSettings(false, false, ConstantInt.of(0), 0))
         );
     }

@@ -1,7 +1,7 @@
 package net.eagl.minetorio.worldgen.dimension.custom;
 
 import com.mojang.datafixers.util.Pair;
-import net.eagl.minetorio.datagen.world.biome.MinetorioBiomes;
+import net.eagl.minetorio.datagen.world.MinetorioBiomes;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.biome.Biome;
