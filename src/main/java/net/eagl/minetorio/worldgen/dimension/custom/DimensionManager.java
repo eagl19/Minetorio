@@ -104,7 +104,7 @@ public class DimensionManager {
         if (level != null) {
             PlayerWorldSettingsData data = PlayerWorldSettingsData.get(level);
             PlayerSettings settings = data.getOrCreate(player.getUUID());
-            settings.getAllowedMobs().add(EntityType.ZOMBIE);
+            settings.getAllowedMobs().add(EntityType.CREEPER);
             settings.setInitialized(true);
             data.setDirty();
 
