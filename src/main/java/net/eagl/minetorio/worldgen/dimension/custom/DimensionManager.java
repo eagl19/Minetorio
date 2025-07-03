@@ -18,6 +18,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
@@ -104,11 +105,12 @@ public class DimensionManager {
         if (level != null) {
             PlayerWorldSettingsData data = PlayerWorldSettingsData.get(level);
             PlayerSettings settings = data.getOrCreate(player.getUUID());
-            settings.getAllowedMobs().add(EntityType.CREEPER);
+            settings.getAllowedMobs().add(EntityType.SKELETON);
             settings.setInitialized(true);
             data.setDirty();
-
             player.teleportTo(level, 0.5, 55.0, 0.5, player.getYRot(), player.getXRot());
+            level.getGameRules().getRule(GameRules.RULE_DAYLIGHT).set(true, level.getServer());
+            level.setDayTime(18000);
         }
     }
 
@@ -123,7 +125,7 @@ public class DimensionManager {
                 .addLayer(1, Blocks.BEDROCK)
                 .addLayer(2, Blocks.STONE)
                 .addLayer(1, Blocks.GRASS_BLOCK)
-                .setBiome(biomeRegistry.getHolderOrThrow(MinetorioBiomes.TEST_BIOME))
+                .setBiome(biomeRegistry.getHolderOrThrow(Biomes.PLAINS))
                 .addStructureSet(BuiltinStructureSets.VILLAGES)
                 .addStructureSet(BuiltinStructureSets.STRONGHOLDS);
 

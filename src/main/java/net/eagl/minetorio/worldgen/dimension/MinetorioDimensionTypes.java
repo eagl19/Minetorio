@@ -40,7 +40,7 @@ public class MinetorioDimensionTypes {
                 BlockTags.INFINIBURN_OVERWORLD,
                 BuiltinDimensionTypes.OVERWORLD_EFFECTS,
                 1.0f,
-                new DimensionType.MonsterSettings(false, false, ConstantInt.of(0), 0))
+                new DimensionType.MonsterSettings(false, false, ConstantInt.of(15), 15))
         );
         context.register(VOID_DIM_TYPE, new DimensionType(
                 OptionalLong.of(12000),

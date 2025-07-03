@@ -23,12 +23,9 @@ public class MobSpawnEvent {
 
         PlayerWorldSettingsData data = PlayerWorldSettingsData.get(level);
         PlayerSettings settings = data.getOrCreate(playerId);
-        System.out.println(settings.isInitialized());
         if (!settings.isInitialized()) return;
 
         EntityType<?> type = event.getEntityType();
-        System.out.println(type);
-        System.out.println(settings.getAllowedMobs());
         if (!settings.getAllowedMobs().contains(type)) {
             event.setResult(Event.Result.DENY);
         }
