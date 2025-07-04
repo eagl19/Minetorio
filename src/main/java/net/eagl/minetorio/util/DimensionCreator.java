@@ -1,8 +1,6 @@
 package net.eagl.minetorio.util;
 
 import com.mojang.datafixers.util.Pair;
-import net.eagl.minetorio.datagen.world.MinetorioBiomes;
-import net.eagl.minetorio.worldgen.dimension.MinetorioDimensionTypes;
 import net.eagl.minetorio.worldgen.infiniverse.FlatGeneratorSettings;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
@@ -12,13 +10,11 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.biome.*;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.dimension.LevelStem;
 import net.minecraft.world.level.levelgen.FlatLevelSource;
 import net.minecraft.world.level.levelgen.NoiseBasedChunkGenerator;
 import net.minecraft.world.level.levelgen.NoiseGeneratorSettings;
-import net.minecraft.world.level.levelgen.structure.BuiltinStructureSets;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -100,14 +96,6 @@ public class DimensionCreator {
 
     public List<EntityType<?>> getEntityType(){
         return entityType;
-    }
-
-    public long getTime() {
-        return time;
-    }
-
-    public ResourceKey<DimensionType> getDimType() {
-        return dimType;
     }
 
     public void setDimType(ResourceKey<DimensionType> dimType){
