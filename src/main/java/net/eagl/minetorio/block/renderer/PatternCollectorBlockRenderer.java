@@ -53,10 +53,10 @@ public class PatternCollectorBlockRenderer implements BlockEntityRenderer<Patter
                     ItemStack.EMPTY
             ),
             createPatternMap(
-                    MinetorioItems.PATTERN_CLOUD.get().getDefaultInstance(),
-                    MinetorioItems.PATTERN_SUN.get().getDefaultInstance(),
-                    MinetorioItems.PATTERN_SNOW.get().getDefaultInstance(),
-                    MinetorioItems.PATTERN_SNOWFLAKE.get().getDefaultInstance(),
+                    MinetorioItems.PATTERN_CREEPER.get().getDefaultInstance(),
+                    MinetorioItems.PATTERN_SKELETON.get().getDefaultInstance(),
+                    MinetorioItems.PATTERN_SPIDER.get().getDefaultInstance(),
+                    MinetorioItems.PATTERN_ZOMBIE.get().getDefaultInstance(),
                     ItemStack.EMPTY,
                     ItemStack.EMPTY
             )

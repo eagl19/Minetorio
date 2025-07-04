@@ -55,6 +55,15 @@ public class MinetorioItems {
     public static final RegistryObject<Item> PATTERN_ENERGY_CONSUMER = ITEMS.register("pattern_energy_consumer",
             ()-> new Item(new Item.Properties()));
 
+    public static final RegistryObject<Item> PATTERN_CREEPER = ITEMS.register("pattern_creeper",
+            ()-> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> PATTERN_SKELETON = ITEMS.register("pattern_skeleton",
+            ()-> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> PATTERN_SPIDER = ITEMS.register("pattern_spider",
+            ()-> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> PATTERN_ZOMBIE = ITEMS.register("pattern_zombie",
+            ()-> new Item(new Item.Properties()));
+
     public static final RegistryObject<Item> COOLING_CORE = ITEMS.register("cooling_core",
             ()-> new UpgradeItem(0.15f));
     public static final RegistryObject<Item> DEW_COLLECTOR = ITEMS.register("dew_collector",

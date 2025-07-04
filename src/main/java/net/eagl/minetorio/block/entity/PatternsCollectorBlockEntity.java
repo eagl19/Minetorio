@@ -1,6 +1,7 @@
 package net.eagl.minetorio.block.entity;
 
 import net.eagl.minetorio.gui.menu.PatternsCollectorMenu;
+import net.eagl.minetorio.util.DimensionCreator;
 import net.eagl.minetorio.worldgen.dimension.custom.DimensionManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -70,7 +71,7 @@ public class PatternsCollectorBlockEntity extends BlockEntity implements MenuPro
 
 
 
-        DimensionManager.teleportToDimension(player, "plain");
+        DimensionManager.teleportToDimension(player, "plain", new DimensionCreator());
     }
 
     public void setCurrentOffset(float offset) {

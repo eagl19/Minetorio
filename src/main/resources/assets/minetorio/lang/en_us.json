@@ -41,6 +41,10 @@
   "item.minetorio.pattern_water_consumer": "Water Consumer",
   "item.minetorio.pattern_lava_consumer": "Lava Consumer",
   "item.minetorio.pattern_energy_consumer": "Energy Consumer",
+  "item.minetorio.pattern_creeper": "Creeper",
+  "item.minetorio.pattern_skeleton": "Skeleton",
+  "item.minetorio.pattern_spider": "Spider",
+  "item.minetorio.pattern_zombie": "Zombie",
 
   "item.minetorio.flask_black": "Black flask",
   "item.minetorio.flask_blue": "Blue flask",
@@ -88,6 +92,10 @@
   "pattern.minetorio.pattern_water_consumer.benefit": "Water Consumer Benefit",
   "pattern.minetorio.pattern_lava_consumer.benefit": "Lava Consumer Benefit",
   "pattern.minetorio.pattern_energy_consumer.benefit": "Energy Consumer Benefit",
+  "item.minetorio.pattern_creeper.benefit": "Creeper Benefit",
+  "item.minetorio.pattern_skeleton.benefit": "Skeleton Benefit",
+  "item.minetorio.pattern_spider.benefit": "Spider Benefit",
+  "item.minetorio.pattern_zombie.benefit": "Zombie Benefit",
 
   "pattern.minetorio.pattern_air.how_to_learn": "Air How To Learn",
   "pattern.minetorio.pattern_battery.how_to_learn": "Battery How To Learn",
@@ -106,5 +114,9 @@
   "pattern.minetorio.pattern_water.how_to_learn": "Water How To Learn",
   "pattern.minetorio.pattern_water_consumer.how_to_learn": "Water Consumer How To Learn",
   "pattern.minetorio.pattern_lava_consumer.how_to_learn": "Lava Consumer How To Learn",
-  "pattern.minetorio.pattern_energy_consumer.how_to_learn": "Energy Consumer How To Learn"
+  "pattern.minetorio.pattern_energy_consumer.how_to_learn": "Energy Consumer How To Learn",
+  "item.minetorio.pattern_creeper.how_to_learn": "Creeper How To Learn",
+  "item.minetorio.pattern_skeleton.how_to_learn": "Skeleton How To Learn",
+  "item.minetorio.pattern_spider.how_to_learn": "Spider How To Learn",
+  "item.minetorio.pattern_zombie.how_to_learn": "Zombie How To Learn"
 }

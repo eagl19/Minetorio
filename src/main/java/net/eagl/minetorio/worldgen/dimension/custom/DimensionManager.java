@@ -4,21 +4,17 @@ import net.eagl.minetorio.Minetorio;
 import net.eagl.minetorio.data.MinetorioDimensionSavedData;
 import net.eagl.minetorio.data.PlayerSettings;
 import net.eagl.minetorio.data.PlayerWorldSettingsData;
-import net.eagl.minetorio.datagen.world.MinetorioBiomes;
+import net.eagl.minetorio.util.DimensionCreator;
 import net.eagl.minetorio.worldgen.dimension.MinetorioDimensionTypes;
 import net.eagl.minetorio.worldgen.infiniverse.FlatGeneratorSettings;
 import net.eagl.minetorio.worldgen.structure.Rooms3x3;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
-import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.*;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
@@ -26,9 +22,10 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.dimension.LevelStem;
+import net.minecraft.world.level.levelgen.NoiseBasedChunkGenerator;
+import net.minecraft.world.level.levelgen.NoiseGeneratorSettings;
 import net.minecraft.world.level.levelgen.flat.FlatLevelGeneratorSettings;
 import net.minecraft.world.level.levelgen.FlatLevelSource;
-import net.minecraft.core.Holder;
 
 import commoble.infiniverse.api.InfiniverseAPI;
 import net.minecraft.world.level.levelgen.structure.BuiltinStructureSets;
@@ -93,41 +90,56 @@ public class DimensionManager {
         return new LevelStem(dimType, generator);
     }
 
-    public static void teleportToDimension(ServerPlayer player, String dimId) {
+    public static void teleportToDimension(ServerPlayer player, String dimId, DimensionCreator dimCreator) {
 
         String dimIdd = dimId + "_" + player.getUUID().toString().replace("-", "");
 
         ResourceKey<Level> dimKey = ResourceKey.create(Registries.DIMENSION, ResourceLocation.fromNamespaceAndPath(Minetorio.MOD_ID, dimIdd));
 
-        InfiniverseAPI.get().getOrCreateLevel(player.server, dimKey, () -> flatDimension(player.server));
+        if(dimCreator.isNoise()) {
+            InfiniverseAPI.get().getOrCreateLevel(player.server, dimKey, () -> noiseDimension(player.server, dimCreator));
+        }else {
+            InfiniverseAPI.get().getOrCreateLevel(player.server, dimKey, () -> flatDimension(player.server , dimCreator));
+        }
 
         ServerLevel level = player.server.getLevel(dimKey);
         if (level != null) {
             PlayerWorldSettingsData data = PlayerWorldSettingsData.get(level);
             PlayerSettings settings = data.getOrCreate(player.getUUID());
-            settings.getAllowedMobs().add(EntityType.SKELETON);
+            settings.getAllowedMobs().clear();
+            settings.getAllowedMobs().addAll(dimCreator.getEntityType());
             settings.setInitialized(true);
             data.setDirty();
-            player.teleportTo(level, 0.5, 55.0, 0.5, player.getYRot(), player.getXRot());
-            level.getGameRules().getRule(GameRules.RULE_DAYLIGHT).set(true, level.getServer());
-            level.setDayTime(18000);
+            BlockPos safePos = findSafeGround(level, 0, 0, level.getMinBuildHeight(), level.getMaxBuildHeight());
+
+            if (safePos != null) {
+                player.teleportTo(level,
+                        safePos.getX() + 0.5,
+                        safePos.getY(),
+                        safePos.getZ() + 0.5,
+                        player.getYRot(),
+                        player.getXRot());
+            } else {
+                player.teleportTo(level, 0.5, 100.0, 0.5, player.getYRot(), player.getXRot());
+            }
         }
     }
 
-    public static LevelStem flatDimension(MinecraftServer server){
+    public static LevelStem flatDimension(MinecraftServer server, DimensionCreator dimCreator){
         RegistryAccess access = server.registryAccess();
         Registry<Biome> biomeRegistry = access.registryOrThrow(Registries.BIOME);
         Holder<DimensionType> dimType = access.registryOrThrow(Registries.DIMENSION_TYPE)
-                .getHolderOrThrow(MinetorioDimensionTypes.VOID_DIM_TYPE);
+                .getHolderOrThrow(dimCreator.getDimType());
 
         FlatGeneratorSettings flat = new FlatGeneratorSettings()
                 .addLayer(50, Blocks.AIR)
                 .addLayer(1, Blocks.BEDROCK)
                 .addLayer(2, Blocks.STONE)
                 .addLayer(1, Blocks.GRASS_BLOCK)
-                .setBiome(biomeRegistry.getHolderOrThrow(Biomes.PLAINS))
+                .setBiome(dimCreator.getBiomeHolder(biomeRegistry))
                 .addStructureSet(BuiltinStructureSets.VILLAGES)
                 .addStructureSet(BuiltinStructureSets.STRONGHOLDS);
+
 
         FlatLevelGeneratorSettings settings = flat.build(server.registryAccess());
 
@@ -136,5 +148,45 @@ public class DimensionManager {
         return new LevelStem(dimType, generator);
 
     }
+
+    public static LevelStem noiseDimension(MinecraftServer server, DimensionCreator dimCreator) {
+        RegistryAccess access = server.registryAccess();
+
+        Registry<Biome> biomeRegistry = access.registryOrThrow(Registries.BIOME);
+        Registry<DimensionType> dimTypeRegistry = access.registryOrThrow(Registries.DIMENSION_TYPE);
+        Registry<NoiseGeneratorSettings> noiseSettingsRegistry = access.registryOrThrow(Registries.NOISE_SETTINGS);
+
+        Holder<DimensionType> dimType = dimTypeRegistry
+                .getHolderOrThrow(dimCreator.getDimType());
+
+        Holder<NoiseGeneratorSettings> noiseSettings = noiseSettingsRegistry
+                .getHolderOrThrow(NoiseGeneratorSettings.AMPLIFIED);
+
+
+        NoiseBasedChunkGenerator generator = new NoiseBasedChunkGenerator(
+                dimCreator.getBiomeSource(biomeRegistry),
+                noiseSettings
+        );
+
+        return new LevelStem(
+                dimType,
+                generator
+        );
+    }
+    public static BlockPos findSafeGround(ServerLevel level, int x, int z, int minY, int maxY) {
+        for (int y = maxY; y >= minY; y--) {
+            BlockPos pos = new BlockPos(x, y, z);
+            BlockPos above = pos.above();
+            BlockPos twoAbove = above.above();
+
+            if (!level.getBlockState(pos).getCollisionShape(level, pos).isEmpty()
+                    && level.getBlockState(above).isAir()
+                    && level.getBlockState(twoAbove).isAir()) {
+                return above;
+            }
+        }
+        return null;
+    }
+
 }
 

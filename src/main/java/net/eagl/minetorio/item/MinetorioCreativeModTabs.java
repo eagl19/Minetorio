@@ -59,6 +59,10 @@ public class MinetorioCreativeModTabs {
                         pOutput.accept(MinetorioItems.PATTERN_LAVA_CONSUMER.get());
                         pOutput.accept(MinetorioItems.PATTERN_ENERGY_CONSUMER.get());
 
+                        pOutput.accept(MinetorioItems.PATTERN_CREEPER.get());
+                        pOutput.accept(MinetorioItems.PATTERN_SKELETON.get());
+                        pOutput.accept(MinetorioItems.PATTERN_SPIDER.get());
+                        pOutput.accept(MinetorioItems.PATTERN_ZOMBIE.get());
 
                         pOutput.accept(MinetorioItems.FLASK_BLACK.get());
                         pOutput.accept(MinetorioItems.FLASK_BLUE.get());
