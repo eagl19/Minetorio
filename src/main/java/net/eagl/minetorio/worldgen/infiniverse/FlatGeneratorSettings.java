@@ -61,7 +61,10 @@ public class FlatGeneratorSettings {
                 lakes
         );
 
-        settings.getLayersInfo().addAll(layers);
+        settings.getLayersInfo().clear();
+        if(!layers.isEmpty()) {
+            settings.getLayersInfo().addAll(layers);
+        }
         settings.updateLayers();
         return settings;
     }

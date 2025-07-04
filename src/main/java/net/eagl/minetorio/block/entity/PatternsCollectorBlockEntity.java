@@ -1,7 +1,9 @@
 package net.eagl.minetorio.block.entity;
 
+import net.eagl.minetorio.datagen.world.MinetorioBiomes;
 import net.eagl.minetorio.gui.menu.PatternsCollectorMenu;
 import net.eagl.minetorio.util.DimensionCreator;
+import net.eagl.minetorio.worldgen.dimension.MinetorioDimensionTypes;
 import net.eagl.minetorio.worldgen.dimension.custom.DimensionManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -9,11 +11,14 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.structure.BuiltinStructureSets;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -69,9 +74,22 @@ public class PatternsCollectorBlockEntity extends BlockEntity implements MenuPro
     public void teleport(ServerPlayer player){
         System.out.println("teleport");
 
+        DimensionCreator dimensionCreator = new DimensionCreator(player.server);
+        dimensionCreator.getFlatSettings()
+                .addLayer(50, Blocks.AIR)
+                .addLayer(1,Blocks.BEDROCK)
+                .addLayer(2, Blocks.STONE)
+                .addLayer(1, Blocks.GRASS_BLOCK)
+                .addStructureSet(BuiltinStructureSets.VILLAGES)
+                .addStructureSet(BuiltinStructureSets.STRONGHOLDS);
+        dimensionCreator.setNoise(false);
+        dimensionCreator.setDimType(MinetorioDimensionTypes.VOID_DIM_TYPE);
+        dimensionCreator.getBiome().add(MinetorioBiomes.VOID_BIOME);
+        dimensionCreator.getEntityType().add(EntityType.SKELETON);
+        dimensionCreator.getEntityType().add(EntityType.SHULKER);
+        dimensionCreator.getEntityType().add(EntityType.ZOMBIE);
 
-
-        DimensionManager.teleportToDimension(player, "plain", new DimensionCreator());
+        DimensionManager.teleportToDimension(player, "plain", dimensionCreator);
     }
 
     public void setCurrentOffset(float offset) {

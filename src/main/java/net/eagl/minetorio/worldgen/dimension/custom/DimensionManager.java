@@ -6,7 +6,6 @@ import net.eagl.minetorio.data.PlayerSettings;
 import net.eagl.minetorio.data.PlayerWorldSettingsData;
 import net.eagl.minetorio.util.DimensionCreator;
 import net.eagl.minetorio.worldgen.dimension.MinetorioDimensionTypes;
-import net.eagl.minetorio.worldgen.infiniverse.FlatGeneratorSettings;
 import net.eagl.minetorio.worldgen.structure.Rooms3x3;
 import net.minecraft.core.*;
 import net.minecraft.core.registries.Registries;
@@ -16,22 +15,11 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.chunk.ChunkGenerator;
-import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.dimension.LevelStem;
-import net.minecraft.world.level.levelgen.NoiseBasedChunkGenerator;
-import net.minecraft.world.level.levelgen.NoiseGeneratorSettings;
-import net.minecraft.world.level.levelgen.flat.FlatLevelGeneratorSettings;
-import net.minecraft.world.level.levelgen.FlatLevelSource;
 
 import commoble.infiniverse.api.InfiniverseAPI;
-import net.minecraft.world.level.levelgen.structure.BuiltinStructureSets;
 
-import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 public class DimensionManager {
@@ -67,27 +55,12 @@ public class DimensionManager {
         }
     }
 
-
-
     public static LevelStem createVoidDimension(MinecraftServer server) {
-        RegistryAccess access = server.registryAccess();
-        Registry<Biome> biomeRegistry = access.registryOrThrow(Registries.BIOME);
-        Holder<Biome> biome = biomeRegistry.getHolderOrThrow(Biomes.THE_VOID);
-
-        Holder<DimensionType> dimType = access.registryOrThrow(Registries.DIMENSION_TYPE)
-                .getHolderOrThrow(MinetorioDimensionTypes.MINETORIO_DIM_TYPE);
-
-        FlatLevelGeneratorSettings flatSettings = new FlatLevelGeneratorSettings(
-                Optional.empty(),
-                biome,
-                List.of()
-        );
-        flatSettings.getLayersInfo().clear();
-        flatSettings.updateLayers();
-
-        ChunkGenerator generator = new FlatLevelSource(flatSettings);
-
-        return new LevelStem(dimType, generator);
+        DimensionCreator dimensionCreator = new DimensionCreator(server);
+        dimensionCreator.setNoise(false);
+        dimensionCreator.setDimType(MinetorioDimensionTypes.MINETORIO_DIM_TYPE);
+        dimensionCreator.getBiome().add(Biomes.THE_VOID);
+        return dimensionCreator.flatDimension();
     }
 
     public static void teleportToDimension(ServerPlayer player, String dimId, DimensionCreator dimCreator) {
@@ -97,9 +70,9 @@ public class DimensionManager {
         ResourceKey<Level> dimKey = ResourceKey.create(Registries.DIMENSION, ResourceLocation.fromNamespaceAndPath(Minetorio.MOD_ID, dimIdd));
 
         if(dimCreator.isNoise()) {
-            InfiniverseAPI.get().getOrCreateLevel(player.server, dimKey, () -> noiseDimension(player.server, dimCreator));
+            InfiniverseAPI.get().getOrCreateLevel(player.server, dimKey, dimCreator::noiseDimension);
         }else {
-            InfiniverseAPI.get().getOrCreateLevel(player.server, dimKey, () -> flatDimension(player.server , dimCreator));
+            InfiniverseAPI.get().getOrCreateLevel(player.server, dimKey, dimCreator::flatDimension);
         }
 
         ServerLevel level = player.server.getLevel(dimKey);
@@ -125,54 +98,6 @@ public class DimensionManager {
         }
     }
 
-    public static LevelStem flatDimension(MinecraftServer server, DimensionCreator dimCreator){
-        RegistryAccess access = server.registryAccess();
-        Registry<Biome> biomeRegistry = access.registryOrThrow(Registries.BIOME);
-        Holder<DimensionType> dimType = access.registryOrThrow(Registries.DIMENSION_TYPE)
-                .getHolderOrThrow(dimCreator.getDimType());
-
-        FlatGeneratorSettings flat = new FlatGeneratorSettings()
-                .addLayer(50, Blocks.AIR)
-                .addLayer(1, Blocks.BEDROCK)
-                .addLayer(2, Blocks.STONE)
-                .addLayer(1, Blocks.GRASS_BLOCK)
-                .setBiome(dimCreator.getBiomeHolder(biomeRegistry))
-                .addStructureSet(BuiltinStructureSets.VILLAGES)
-                .addStructureSet(BuiltinStructureSets.STRONGHOLDS);
-
-
-        FlatLevelGeneratorSettings settings = flat.build(server.registryAccess());
-
-        ChunkGenerator generator = new FlatLevelSource(settings);
-
-        return new LevelStem(dimType, generator);
-
-    }
-
-    public static LevelStem noiseDimension(MinecraftServer server, DimensionCreator dimCreator) {
-        RegistryAccess access = server.registryAccess();
-
-        Registry<Biome> biomeRegistry = access.registryOrThrow(Registries.BIOME);
-        Registry<DimensionType> dimTypeRegistry = access.registryOrThrow(Registries.DIMENSION_TYPE);
-        Registry<NoiseGeneratorSettings> noiseSettingsRegistry = access.registryOrThrow(Registries.NOISE_SETTINGS);
-
-        Holder<DimensionType> dimType = dimTypeRegistry
-                .getHolderOrThrow(dimCreator.getDimType());
-
-        Holder<NoiseGeneratorSettings> noiseSettings = noiseSettingsRegistry
-                .getHolderOrThrow(NoiseGeneratorSettings.AMPLIFIED);
-
-
-        NoiseBasedChunkGenerator generator = new NoiseBasedChunkGenerator(
-                dimCreator.getBiomeSource(biomeRegistry),
-                noiseSettings
-        );
-
-        return new LevelStem(
-                dimType,
-                generator
-        );
-    }
     public static BlockPos findSafeGround(ServerLevel level, int x, int z, int minY, int maxY) {
         for (int y = maxY; y >= minY; y--) {
             BlockPos pos = new BlockPos(x, y, z);
